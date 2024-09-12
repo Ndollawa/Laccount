@@ -37,7 +37,7 @@ export class CommentService {
     }
   }
   async create(createCommentData: CreateCommentDto): Promise<Comment> {
-    // const { commentId } = createCommentData;
+    const { authorId } = createCommentData;
 
     try {
       // const existingComment = await this.commentRepository.exists({
@@ -54,6 +54,14 @@ export class CommentService {
       const commentData = {
         ...createCommentData,
         status: CommentStatus.PUBLISHED,
+        authorType:authorId? 'guest':'user',
+        postId:'',
+        parentId:'',
+        firstName:'',
+        lastName:'',
+        email:'',
+        phoneNo:'',
+        for:'',
       };
 
       const newComment = await this.commentRepository.create({

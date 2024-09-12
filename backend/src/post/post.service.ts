@@ -37,7 +37,14 @@ export class PostService {
     }
   }
   async create(createPostData: CreatePostDto): Promise<Post> {
-    const { title } = createPostData;
+    const {
+      title ,
+      body ,
+      description ,
+      image ,
+      tags ,
+      authorId , 
+     } = createPostData;
 
     try {
       const existingPost = await this.postRepository.exists({
@@ -54,6 +61,8 @@ export class PostService {
       const postData = {
         ...createPostData,
         status: PostStatus.PUBLISHED,
+      readCount: 12, 
+      readingTime: '12 minutes' ,
       };
 
       const newPost = await this.postRepository.create({

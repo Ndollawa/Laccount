@@ -1,0 +1,52 @@
+import { Module } from '@nestjs/common';
+import {MailerModule as NestMailerModule}   from '@nestjs-modules/mailer';
+import { join } from 'path';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { MailerService } from './mailer.service';
+import { MailerController } from './mailer.controller';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MailerRepository } from './mailer.repository';
+import { PrismaModule } from '@app/prisma';
+
+@Module({
+  imports: [
+    NestMailerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        transport: {
+          // sendmail: configService.get<boolean>('MAIL_TRANSPORT', true),
+          // newline: configService.get<string>('MAIL_NEWLINE', 'unix'),
+          // path: configService.get<string>('MAIL_PATH', '/usr/sbin/sendmail'),
+
+          // Uncomment and use these settings if you want to configure SMTP
+          host: 'localhost',
+          port: 1025,
+          ignoreTLS: true,
+          secure: false,
+          // host: configService.get<string>('SMTP_HOST'),
+          auth: {
+            user: configService.get<string>('SMTP_USER'),
+            pass: configService.get<string>('SMTP_PASSWORD'),
+          },
+
+        },
+        defaults: {
+          from: '"No Reply" <no-reply@example.com>', // default sender email
+        },
+        template: {
+          path: join(__dirname, 'templates'),
+          dir: join(__dirname, 'templates'),
+          adapter: new HandlebarsAdapter(), // or any other adapter
+          options: {
+            strict: true,
+          },
+        },
+      }),
+      inject: [ConfigService],
+    }),
+    PrismaModule
+  ],
+  controllers: [MailerController],
+  providers: [MailerService,MailerRepository],
+})
+export class MailerModule {}

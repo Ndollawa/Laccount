@@ -1,6 +1,26 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
+
+  postgres_adminer:
+    image: adminer:latest
+    container_name: adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
 
   mysql:
     image: mysql:latest
@@ -33,7 +53,30 @@ services:
     depends_on:
       - mysql
 
+  rabbitmq:
+    image: rabbitmq:3.13.0-rc.3-management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    volumes:
+      - rabbitmq_dir:/var/lib/rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    env_file:
+      - .env
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_db:/data
+
 volumes:
   mysql_db:
-
+  postgres_db:
+  redis_db:
+  rabbitmq_dir:
 

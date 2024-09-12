@@ -19,6 +19,18 @@ export class CreatePostDto {
 
   @IsString()
   @IsNotEmpty()
+  description: string;
+
+  @IsString()
+  @IsNotEmpty()
+  tags: string;
+
+  @IsString()
+  @IsNotEmpty()
+  image: string;
+
+  @IsString()
+  @IsNotEmpty()
   authorId: string;
 
   @IsArray()

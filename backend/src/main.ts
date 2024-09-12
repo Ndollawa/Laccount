@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import * as csurf from 'csurf';
 import {
   ValidationPipe,
   ValidationError,
@@ -6,9 +7,11 @@ import {
   // UnprocessableEntityException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AppModule } from './app.module';
 import * as express from 'express';
-import { CredentialsMiddleware /*, ErrorHandler */ } from '@app/common';
+import * as passport from "passport";
+import * as cookieParser from 'cookie-parser';
+import { AppModule } from './app.module';
+import { CredentialsMiddleware , ErrorHandler } from '@app/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -30,6 +33,9 @@ async function bootstrap() {
   app.use(express.urlencoded({ extended: true, limit: '200mb' }));
   app.use(express.json({ limit: '200mb' }));
   app.use(CredentialsMiddleware);
+  app.use(passport.initialize());
+  app.use(cookieParser());
+  app.use(csurf());
   const devPort = app.get(ConfigService).get('DEVELOPMENT_PORT');
   const port = process.env.PORT || devPort;
   app.enableCors({
@@ -37,7 +43,7 @@ async function bootstrap() {
     credentials: true,
   });
   app.setGlobalPrefix('api/v1');
-  // app.use(ErrorHandler);
+  app.use(ErrorHandler);
   app.enableVersioning();
   await app.listen(port);
 }

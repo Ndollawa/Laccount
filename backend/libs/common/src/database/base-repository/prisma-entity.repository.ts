@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { RepositoryInterface, FF } from '../interfaces/repository.interface';
-import { Prisma } from '@prisma/client';
 
 @Injectable()
 export abstract class PrismaBaseRepository<M, C, R, U, D>
