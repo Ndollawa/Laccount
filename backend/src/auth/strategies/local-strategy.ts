@@ -9,7 +9,10 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
   private readonly logger = new Logger(LocalStrategy.name);
 
   constructor(private readonly authService: AuthService) {
-    super();
+    super({
+      usernameField: 'username', 
+      passwordField: 'password',
+    });
   }
 
   validate = async (username: string, password: string) => {

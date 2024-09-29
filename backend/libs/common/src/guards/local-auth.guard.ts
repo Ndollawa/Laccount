@@ -13,9 +13,10 @@ export class LocalAuthGuard extends AuthGuard('local') {
       throw new UnauthorizedException();
     }
     if (!user) {
-      console.log('No user found:', info); // Debugging log if user is not found
-      throw new UnauthorizedException();
+      console.log('No user found, reason:', info.message); // This shows more useful info
+      throw new UnauthorizedException(info?.message || 'Unauthorized');
     }
+    
     return user;
   }
 }

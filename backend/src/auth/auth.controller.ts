@@ -163,7 +163,8 @@ export class AuthController {
 
   @Post('reset-password')
   async resetPassword(
-    @Req() req: Request,
-    @Res() res: Response,
-  ): Promise<any> {}
+    @Body() resetPasswordDto: ResetPasswordDto,
+  ): Promise<any> {
+    return this.authService.resetPassword(resetPasswordDto);
+  }
 }
