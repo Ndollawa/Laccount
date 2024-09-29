@@ -1,18 +1,19 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { Notification, NotificationStatus } from '@prisma/client';
+import { Notification, ViewState } from '@prisma/client';
 import { handleError } from '@app/common';
 import { CreateNotificationDto, UpdateNotificationDto } from './dto';
 import { NotificationRepository } from './notification.repository';
 
 @Injectable()
 export class NotificationService {
-  constructor(protected readonly notificationReNotificationtory: NotificationRepository) {}
+  constructor(
+    protected readonly notificationReNotificationtory: NotificationRepository,
+  ) {}
 
   async find(id: any): Promise<Notification> {
     try {
       return await this.notificationReNotificationtory.find({
         where: { id },
-        include: { author: true },
       });
     } catch (error) {
       handleError(error);
@@ -35,20 +36,16 @@ export class NotificationService {
       handleError(error);
     }
   }
-  async create(createNotificationData: CreateNotificationDto): Promise<Notification> {
-    const {
-      title ,
-      body ,
-      description ,
-      image ,
-      tags ,
-      authorId , 
-     } = createNotificationData;
+  async create(
+    createNotificationData: CreateNotificationDto,
+  ): Promise<Notification> {
+    const { type, notification, status, receiverId } = createNotificationData;
 
     try {
-      const existingNotification = await this.notificationReNotificationtory.exists({
-        where: { title },
-      });
+      const existingNotification =
+        await this.notificationReNotificationtory.exists({
+          where: { OR: [{ notification }, { receiverId }] },
+        });
 
       if (existingNotification) {
         throw new HttpException(
@@ -59,9 +56,9 @@ export class NotificationService {
 
       const NotificationData = {
         ...createNotificationData,
-        status: NotificationStatus.PUBLISHED,
-      readCount: 12, 
-      readingTime: '12 minutes' ,
+        status: ViewState.UNREAD,
+        readCount: 12,
+        readingTime: '12 minutes',
       };
 
       const newNotification = await this.notificationReNotificationtory.create({
@@ -97,4 +94,3 @@ export class NotificationService {
     }
   }
 }
-

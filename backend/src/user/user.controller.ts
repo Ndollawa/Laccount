@@ -1,31 +1,104 @@
 import {
   Body,
+  ConflictException,
   Controller,
   Delete,
+  forwardRef,
   Get,
   Inject,
   Param,
   Patch,
   Post,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { UserService } from './services/user.service';
-import { handleError } from '@app/common';
-import { User } from '@prisma/client';
+import { handleError, hashData } from '@app/common';
+import * as grpc from '@grpc/grpc-js';
+import { User, WalletType } from '@prisma/client';
 import { CreateUserDto, UpdateUserDto } from './dto';
+import { UserRolesEnum, UserRolesKeysEnum } from './enums/user-roles';
+import { UserService } from './services/user.service';
+const { ALREADY_EXISTS, UNAUTHENTICATED } = grpc.status;
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    @Inject(forwardRef(() => UserService))
+    private readonly userService: UserService,
+  ) {}
   @Post()
-  async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return await this.userService.createUser(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+    const { firstName, lastName, username, email, password, confirmPassword } =
+      createUserDto;
+
+    if (password !== confirmPassword) {
+      throw new UnauthorizedException({
+        code: UNAUTHENTICATED,
+        message: 'Password mismatch',
+      });
+    }
+
+    try {
+      const existingUser = await this.userService.exists({
+        where: { OR: [{ email }, { username }] },
+      });
+
+      if (existingUser) {
+        throw new ConflictException({
+          code: ALREADY_EXISTS,
+          message: 'User with credentials already exists.',
+        });
+      }
+
+      const hashedPassword = await hashData(password, 10);
+      const userData = {
+        username,
+        email,
+        password: hashedPassword,
+        verificationStatus: false,
+        roles: {
+          create: {
+            role: UserRolesKeysEnum.USER,
+            code: UserRolesEnum.USER,
+          },
+        },
+        profile: {
+          create: {
+            firstName,
+            lastName,
+          },
+        },
+        wallet: {
+          createMany: {
+            data: [
+              {
+                balance: 0,
+                type: WalletType.CREDIT,
+                currency: {
+                  name: 'LA',
+                },
+              },
+              {
+                balance: 0,
+                type: WalletType.FIAT,
+                currency: {
+                  name: 'FA',
+                },
+              },
+            ],
+          },
+        },
+      };
+      return await this.userService.create(userData);
+    } catch (error) {
+      handleError(error);
+    }
   }
 
   @Get()
-  async findAllUsers(): Promise<User[]> {
+  async findAll(): Promise<User[]> {
     try {
-      const users = await this.userService.findAllUsers({
+      const users = await this.userService.findAll({
         where: {},
         include: { profile: true, roles: true },
       });
@@ -36,21 +109,30 @@ export class UserController {
   }
 
   @Get(':id')
-  async findUser(@Param('id') id: string): Promise<User> {
-    return await this.userService.findUser(id);
+  async findOne(@Param('id') id: string): Promise<User> {
+    const query = {
+      where: { id },
+      include: {
+        profile: true,
+        roles: true,
+        refreshTokens: true,
+        wallets: true,
+      },
+    };
+    return await this.userService.find(query);
   }
 
   @Patch(':id')
-  async updateUser(
+  async update(
     @Param('id') id: string,
     @Body() data: UpdateUserDto,
   ): Promise<User> {
-    return await this.userService.updateUser(id, data);
+    return await this.userService.update(id, data);
   }
 
   @Delete(':id')
-  async removeUser(@Param('id') id: string): Promise<User> {
-    return await this.userService.removeUser(id);
+  async remove(@Param('id') id: string): Promise<User> {
+    return await this.userService.remove(id);
   }
 
   // queryUsers(paginationDtoStream: PaginationDto):Promise<any> | Observable<any> {

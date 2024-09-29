@@ -16,7 +16,7 @@ export class ProfileService {
     protected readonly eventEmitter: EventEmitter2,
   ) {}
 
-  async createProfile(createProfileData: CreateProfileDto): Promise<Profile> {
+  async create(createProfileData: CreateProfileDto): Promise<Profile> {
     const { userId } = createProfileData;
 
     try {
@@ -67,7 +67,7 @@ export class ProfileService {
     }
   }
 
-  async updateProfile(id:string, updateProfileData: UpdateProfileDto) {
+  async update(id: string, updateProfileData: UpdateProfileDto) {
     Logger.debug(updateProfileData);
 
     try {
@@ -80,7 +80,7 @@ export class ProfileService {
     }
   }
 
-  async upsertProfile(id:string, updateProfileData: UpdateProfileDto) {
+  async upsert(id: string, updateProfileData: UpdateProfileDto) {
     Logger.debug(updateProfileData);
 
     try {

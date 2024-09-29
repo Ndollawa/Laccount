@@ -7,10 +7,11 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import * as grpc from '@grpc/grpc-js';
-import { User,WalletType } from '@prisma/client';
+import { User, WalletType } from '@prisma/client';
 import { hashData, handleError } from '@app/common';
 import { UserRepository } from '../repositories/user.repository';
 import { CreateUserDto, UpdateUserDto } from '../dto';
+import { UserRolesEnum, UserRolesKeysEnum } from '../enums/user-roles';
 
 const { ALREADY_EXISTS, UNAUTHENTICATED } = grpc.status;
 
@@ -21,18 +22,31 @@ export class UserService {
     protected readonly eventEmitter: EventEmitter2,
   ) {}
 
-  async findUser(query: any): Promise<User> {
+  async find(query: any): Promise<User> {
     try {
-      return await this.userRepository.find({
-        where: query,
-        include: { profile: true, roles: true, refreshTokens: true , wallet:true},
-      });
+      return await this.userRepository.find(query);
     } catch (error) {
       handleError(error);
     }
   }
 
-  async findAllUsers(query: any): Promise<User[]> {
+  async findFirst(query: any): Promise<User> {
+    try {
+      return await this.userRepository.findFirst(query);
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async exists(query: any): Promise<boolean> {
+    try {
+      return await this.userRepository.exists(query);
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async findAll(query: any): Promise<User[]> {
     try {
       return await this.userRepository.findMany(query);
     } catch (error) {
@@ -40,60 +54,10 @@ export class UserService {
     }
   }
 
-  async createUser(createUserData: CreateUserDto): Promise<User> {
-    const { firstName, lastName, username, email, password, confirmPassword } =
-      createUserData;
-
-    if (password !== confirmPassword) {
-      throw new UnauthorizedException({
-        code: UNAUTHENTICATED,
-        message: 'Password mismatch',
-      });
-    }
-
+  async create(query: any): Promise<User> {
     try {
-      const existingUser = await this.userRepository.exists({
-        where: { OR: [{ email }, { username }] },
-      });
-
-      if (existingUser) {
-        throw new ConflictException({
-          code: ALREADY_EXISTS,
-          message: 'User with credentials already exists.',
-        });
-      }
-
-      const hashedPassword = await hashData(password, 10);
-      const userData = {
-        username,
-        email,
-        password: hashedPassword,
-        verificationStatus: false,
-        roles: {
-          create: {
-            role: 'user',
-            code: '3000',
-          },
-        },
-        profile: {
-          create: {
-            firstName,
-            lastName,
-          },
-        },
-        wallet:{
-          create:{
-            balance:0,
-            type: WalletType.CREDIT,
-            currency:{
-              name:'LA'
-            }
-          }
-        }
-      };
-
       const newUser = await this.userRepository.create({
-        data: userData,
+        data: query,
       });
 
       delete newUser.password;
@@ -105,7 +69,7 @@ export class UserService {
     }
   }
 
-  async updateUser(id: string, data: UpdateUserDto) {
+  async update(id: string, data: UpdateUserDto) {
     Logger.debug(data);
     try {
       return await this.userRepository.update({
@@ -117,7 +81,7 @@ export class UserService {
     }
   }
 
-  async upsertUser(id: string, data: UpdateUserDto) {
+  async upsert(id: string, data: UpdateUserDto) {
     Logger.debug(data);
     try {
       return await this.userRepository.upsert({
@@ -129,7 +93,7 @@ export class UserService {
     }
   }
 
-  async removeUser(id: string): Promise<User> {
+  async remove(id: string): Promise<User> {
     try {
       return await this.userRepository.delete({
         where: { id },
@@ -138,6 +102,4 @@ export class UserService {
       handleError(error);
     }
   }
-
-
 }

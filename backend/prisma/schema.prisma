@@ -6,11 +6,11 @@ generator client {
 }
 
 datasource db {
-  provider = "postgres"//"mysql"
+  provider = "postgres" // Could be "mysql" if you're using MySQL
   url      = env("DATABASE_URL")
 }
 
-enum PostStatus {
+enum PublishStatus {
   DRAFT
   PUBLISHED
 }
@@ -20,8 +20,6 @@ enum ActiveStatus {
   INACTIVE
   DELETED
 }
-
-
 
 enum CommentStatus {
   DRAFT
@@ -38,15 +36,8 @@ enum SettingsType {
   DASHBOARD
   LANDING
   COMPANY_INFO
-  SITE_IMAGES
-  PAGES
 }
 
-enum MailType {
-  DRAFT
-  PUBLISHED
-  DELETED
-}
 enum WalletType {
   FIAT
   CRYPTO
@@ -54,7 +45,7 @@ enum WalletType {
   TOKEN
 }
 
-enum MessageState {
+enum ViewState {
   READ
   UNREAD
   REMOVED
@@ -64,7 +55,7 @@ enum MessageState {
 enum ProfileStatus {
   DISABLED
   BANNED
-  DIACTIVATED
+  DEACTIVATED
   PAUSED
   ACTIVE
   DELETED
@@ -80,14 +71,6 @@ enum ListingStatus {
   INACTIVE
 }
 
-
-enum TransactionStatus {
-  PENDING
-  COMPLETED
-  FAILED
-  REFUNDED
-}
-
 enum Platform {
   INSTAGRAM
   FACEBOOK
@@ -97,68 +80,252 @@ enum Platform {
   OTHER
 }
 
+enum SubscriptionStatus {
+  ACTIVE
+  INACTIVE
+  CANCELLED
+}
+
+enum SubscriptionType {
+  PLAN
+  TOPUP
+}
+
+enum PaymentFrequency {
+  MONTHLY
+  YEARLY
+  ONE_TIME
+}
+
+enum PlanType {
+  PAID
+  FREE
+  TRIAL
+}
+
+enum PlanStatus {
+  ACTIVE
+  INACTIVE
+  CLOSED
+}
+
+enum TransactionStatus {
+  SUCCESS
+  PAID
+  UNPAID
+  FAILED
+  CANCELLED
+  PENDING
+  COMPLETED
+  REFUNDED
+}
+
+enum OrderStatus {
+  FAILED
+  CANCELLED
+  PENDING
+  COMPLETED
+  REFUNDED
+}
+
+enum TransactionPurpose {
+  PLAN
+  TOPUP
+  PURCHASE
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  PAYPAL
+  CRYPTO
+  CREDIT
+  TOKEN
+}
+
+enum GatewayMode {
+  LIVE
+  SANDBOX
+}
+
+enum AttachmentForEnum {
+  MESSAGE
+  ROOMMESSAGE
+  POST
+  COMMENT
+  TICKETS
+  MAILER
+}
+
+enum CategoryForEnum {
+  POST
+
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum DocumentType {
+  ID
+  BUSINESS_LICENSE
+  DRIVER_LICENSE
+  UTILITY_BILL
+  TAX_CERTIFICATE
+  OTHER
+}
+
+
+
+enum RolesEnum {
+  USER
+  STAFF
+  ADMIN
+  DEV
+}
+
+enum MailerTemplateEnum {
+  SIGNUP_CONFIRMATION
+  PASSWORD_RESET
+  ACCOUNT_VERIFICATION
+  PAYMENT_RECEIPT
+  SUBSCRIPTION_RENEWAL
+  NEWSLETTER
+  SYSTEM_NOTIFICATION
+  PROMOTIONAL_OFFER
+  DEFAULT
+}
+
+enum MailerTemplateStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+enum TicketCategory {
+  BILLING
+  TECHNICAL
+  GENERAL
+  ACCOUNT
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TicketStatus {
+  OPEN
+  PENDING
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
 
 
 model User {
-  id                 String          @id @default(uuid())
-  email              String          @unique
-  username           String          @unique
+  id                 String   @id @default(uuid())
+  email              String   @unique
+  username           String   @unique
   password           String
-  // Relations
-  listings           Listing[]
-  purchases          Transaction[] @relation("buyerTransactions")
-  sales              Transaction[] @relation("sellerTransactions")
-  ratings            Rating[] @relation("sellerRatings")
-  profile            Profile?
-  roles              Role[]
-  refreshTokens      RefreshToken[]
-  posts              Post[]
-  comments           Comment[]
-  conversations      Conversation[]
-  messages           Message[]
-  rooms              Room[]
-  notifications      Notification[]
-  wallets              Wallet[]
   verificationStatus Boolean
-  createdAt          DateTime        @default(now())
-  updatedAt          DateTime        @updatedAt()
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt()
+
+  // Relations
+  listings      Listing[]
+  sellerRatings Rating[]       @relation("sellerRatings")
+  userRatings   Rating[]       @relation("userRatings")
+  profile       Profile?
+  roles         Role[]
+  refreshTokens RefreshToken[]
+  subscriptions Subscription[]
+  posts         Post[]
+  comments      Comment[]
+  conversations Conversation[]
+  transactions  Transaction[]
+  orders        Order[]
+  messagesSent      Message[] @relation("sentMessages")
+  messagesReceived      Message[] @relation("receivedMessages")
+  roomsCreated         Room[] @relation("RoomCreator")
+  rooms         Room[] @relation("RoomsBelongedTo")
+  roomMessages         RoomMessage[]
+  supportTickets         SupportTicket[] 
+  assignedSupportTickets         SupportTicket[] @relation("assignedTickets")
+  notifications Notification[]
+  wallets       Wallet[]
+  vendor        Vendor?
 }
 
 model RefreshToken {
   id           String   @id @default(uuid())
-  user         User     @relation(fields: [userId], references: [id])
-  userId       String
   refreshToken String   @unique @db.Text()
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt()
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 }
 
+model Vendor {
+  id                 String            @id @default(uuid())
+  companyName        String
+  contactEmail       String            @unique
+  phoneNumber        String
+  address            String
+  status             VerificationStatus      @default(PENDING) // Verification status (Pending, Verified, Rejected)
+  verificationReason String?           // Reason for rejection or comments on verification
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt()
+    // Relations
+  user   User   @relation(fields: [userId], references: [id])
+  userId String       @unique
+  documents          Document[]        // Linked to vendor's documents
+}
+
+model Document {
+  id                 String            @id @default(uuid())
+  vendorId           String
+  vendor             Vendor            @relation(fields: [vendorId], references: [id])
+  type               DocumentType      // Type of document (ID, Business License, etc.)
+  fileUrl            String            // URL to the uploaded document
+  status             VerificationStatus    @default(PENDING) // Document verification status
+  reason             String?           // Reason for document rejection
+  uploadedAt         DateTime          @default(now())
+}
+
+
 model Profile {
-  id         String        @id @default(uuid())
-  user       User          @relation(fields: [userId], references: [id])
-  userId     String        @unique
-  firstName  String        @db.VarChar(80)
-  middleName String?        @db.VarChar(80)
-  lastName   String?        @db.VarChar(80)
-  phone      String?
-  dob        String?
-  gender     String?
-  address    String?
-  city       String?
-  state      String?
-  country    String?
-  occupation String?
-  bio        String?
-  image      String?
-  authentication_2FA      Boolean  @default(false)
-  status     ProfileStatus @default(ACTIVE)
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @updatedAt()
-  // @@unique([userId]) 
+  id                 String        @id @default(uuid())
+  firstName          String        @db.VarChar(80)
+  middleName         String?       @db.VarChar(80)
+  lastName           String?       @db.VarChar(80)
+  phone              String?
+  dob                String?
+  gender             String?
+  address            String?
+  city               String?
+  state              String?
+  country            String?
+  occupation         String?
+  bio                String?
+  image              String?
+  authentication_2FA Boolean       @default(false)
+  status             ProfileStatus @default(ACTIVE)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt()
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
 }
 
 model Listing {
-  id            String       @id @default(uuid())
+  id            String        @id @default(uuid())
   listingStatus ListingStatus @default(LISTED)
   sellerId      String
   price         Float
@@ -166,83 +333,107 @@ model Listing {
   updatedAt     DateTime      @updatedAt()
 
   // Relations
-  seller        User          @relation(fields: [sellerId], references: [id])
-  transactions  Transaction[]
-  attachments  Attachment[]
+  seller         User            @relation(fields: [sellerId], references: [id])
+  orders         Order[]
+  attachments    Attachment[]
   accountDetails AccountDetails?
 }
 
 model AccountDetails {
-  id            String     @id @default(uuid())
-  platform      Platform
-  username      String
-  followers     Int
-  engagementRate Float
-  averageLikes  Int
+  id              String   @id @default(uuid())
+  platform        Platform
+  username        String
+  url             String
+  followers       Int
+  engagementRate  Float
+  averageLikes    Int
   averageComments Int
-  bio           String?
-  description   String?
-  // Relations
-  listingId     String? @unique
-  listing       Listing?    @relation(fields: [listingId], references: [id])
-}
-
-model Transaction {
-  id              String           @id @default(uuid())
-  buyerId         String
-  sellerId        String
-  listingId       String
-  transactionDate DateTime         @default(now())
-  amount          Float
-  status          TransactionStatus @default(PENDING)
+  bio             String?
+  description     String?
 
   // Relations
-  buyer           User             @relation("buyerTransactions", fields: [buyerId], references: [id])
-  seller          User             @relation("sellerTransactions", fields: [sellerId], references: [id])
-  listing         Listing          @relation(fields: [listingId], references: [id])
-  rating          Rating?
+  listingId String?  @unique
+  listing   Listing? @relation(fields: [listingId], references: [id])
 }
 
 model Rating {
-  id            String    @id @default(uuid())
-  score         Int        
-  comment       String?
-  transactionId String    @unique // Ensures a rating is tied to only one transaction
-  sellerId      String
-  createdAt     DateTime  @default(now())
+  id       String  @id @default(uuid())
+  score    Int
+  comment  String?
+  orderId  String  @unique // Ensures a rating is tied to only one order
+  sellerId String
+  userId   String
 
   // Relations
-  transaction   Transaction @relation(fields: [transactionId], references: [id])
-  seller        User        @relation("sellerRatings", fields: [sellerId], references: [id])
-}
+  order  Order @relation(fields: [orderId], references: [id])
+  user   User  @relation("userRatings", fields: [userId], references: [id])
+  seller User  @relation("sellerRatings", fields: [sellerId], references: [id])
 
-model Role {
-  id        String   @id @default(uuid())
-  role      String   @db.VarChar(80)
-  code      String    
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
 }
 
+model Transaction {
+  id            String             @id @default(uuid())
+  paymentMethod PaymentMethod? // Nullable
+  status        TransactionStatus
+  amount        Decimal
+  currency      String
+  purpose       TransactionPurpose
+  sessionId     String
+  userId        String
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deletedAt     DateTime? // Nullable, no default
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt()
+}
+
+model Order {
+  id        String      @id @default(uuid())
+  buyerId   String
+  listingId String
+  status    OrderStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt()
+  // Relations
+  buyer     User        @relation(fields: [buyerId], references: [id])
+  listing   Listing     @relation(fields: [listingId], references: [id])
+  rating    Rating?
+}
+
+model Role {
+  id        String    @id @default(uuid())
+  role      RolesEnum 
+  code      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt()
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  @@index([role,code])
+}
+
 model Post {
-  id          String       @id @default(uuid())
-  title       String       @unique
-  body        String       @db.Text
-  description String       @db.Text
+  id          String     @id @default(uuid())
+  title       String     @unique
+  body        String     @db.Text
+  description String     @db.Text
   image       String
   tags        String
-  status      PostStatus   @default(PUBLISHED)
-  categories  Category[]
-  comments    Comment[]
-  attachments Attachment[]
+  status      PublishStatus @default(PUBLISHED)
   readCount   BigInt
   readingTime String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt()
+
+  // Relations
+  categoryId  String
+  comments    Comment[]
+  attachments Attachment[]
   author      User         @relation(fields: [authorId], references: [id])
-  authorId    String      
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt()
+  category      Category         @relation(fields: [categoryId], references: [id])
+  authorId    String
 }
 
 model Comment {
@@ -255,172 +446,267 @@ model Comment {
   email      String?
   phoneNo    String?
   for        String
-  parent     Comment       @relation("commentToComment", fields: [parentId], references: [id])
-  parentId   String        
-  children   Comment[]     @relation("commentToComment")
-  author     User          @relation(fields: [authorId], references: [id])
-  authorId   String        
+  parentId   String?
+  authorId   String
   authorType String
-  post       Post          @relation(fields: [postId], references: [id])
-  postId     String        
+  postId     String
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt()
+
+  // Relations
+  parent   Comment?  @relation("commentToComment", fields: [parentId], references: [id])
+  children Comment[] @relation("commentToComment")
+  author   User      @relation(fields: [authorId], references: [id])
+  post     Post      @relation(fields: [postId], references: [id])
 }
 
 model Category {
   id        String     @id @default(uuid())
   name      String
-  status    PostStatus @default(PUBLISHED)
-  type      String
-  parent    Category   @relation("categoryToCategory", fields: [parentId], references: [id])
-  parentId  String     
-  children  Category[] @relation("categoryToCategory")
-  // user      User       @relation(fields: [userId], references: [id])
-  // userId    String     @unique
-  post      Post?      @relation(fields: [postId], references: [id])
-  postId    String?
+  status    PublishStatus @default(PUBLISHED)
+  for      CategoryForEnum
+  parentId  String?
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt()
+
+  // Relations
+  posts     Post[]
+  parent   Category?  @relation("categoryToCategory", fields: [parentId], references: [id])
+  children Category[] @relation("categoryToCategory")
 }
 
 model Attachment {
-  id        String   @id @default(uuid())
-  fileName  String
-  fileType  String
-  fileUrl   String
-  for       String
-  post      Post?    @relation(fields: [postId], references: [id])
-  listing   Listing? @relation(fields: [listingId], references: [id])
-  service   Service? @relation(fields: [serviceId], references: [id])
-  message   Message? @relation(fields: [messageId], references: [id])
-  notification   Notification? @relation(fields: [notificationId], references: [id])
-  notificationId    String
-  postId    String
-  serviceId String
-  listingId String
-  messageId String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
+  id             String   @id @default(uuid())
+  fileName       String
+  fileType       String
+  fileUrl        String
+  for            AttachmentForEnum
+  postId         String?
+  listingId      String?
+  roomMessageId      String?
+  serviceId      String?
+  messageId      String?
+  notificationId String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt()
+
+  // Relations
+  post         Post?         @relation(fields: [postId], references: [id])
+  listing      Listing?      @relation(fields: [listingId], references: [id])
+  service      Service?      @relation(fields: [serviceId], references: [id])
+  message      Message?      @relation(fields: [messageId], references: [id])
+  roomMessage      RoomMessage?      @relation(fields: [roomMessageId], references: [id])
+  notification Notification? @relation(fields: [notificationId], references: [id])
 }
 
-
-
-
 model Testimonial {
-  id          String       @id @default(uuid())
-  author      String
-  subject     String
-  body        String
-  status      ActiveStatus @default(ACTIVE)
-  // user   user    @relation(fields: [userId], references: [id])
-  // userId String      
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt()
+  id        String       @id @default(uuid())
+  userId    String @unique
+  subject   String
+  body      String
+  status    ActiveStatus @default(ACTIVE)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt()
 }
 
 model Service {
-  id          String       @id @default(uuid())
-  title       String       @unique
-  body        String       @db.Text
-  description String       @db.Text
-  icon        String
-  image       String
-  tags        String
-  status      PostStatus   @default(PUBLISHED)
-  attachments Attachment[] //@relation("serviceToAttachment")
-  // user   user    @relation(fields: [userId], references: [id])
-  // userId String       
+  id          String     @id @default(uuid())
+  title       String     @unique
+  body        String     @db.Text
+  description String?     @db.Text
+  icon        String?
+  image       String?
+  tags        String[]
+  status      PublishStatus @default(PUBLISHED)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt()
+
+  // Relations
+  attachments Attachment[]
+}
+
+model Notification {
+  id           String           @id @default(uuid())
+  type         NotificationType
+  notification String
+  readAt       DateTime?
+  status       ViewState
+  receiverId   String
+  attachments  Attachment[]
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt()
+  // Relations
+  receiver     User             @relation(fields: [receiverId], references: [id])
+}
+
+model Conversation {
+  id        String   @id @default(uuid())
+  status      ActiveStatus @default(ACTIVE)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
+  // Relations
+  messages     Message[]
+  members User[]
 }
+
+model Message {
+  id        String       @id @default(uuid())
+  content   String
+  state     ViewState @default(UNREAD)
+  senderId  String
+  receiverId  String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt()
+
+  // Relations
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  sender         User         @relation("sentMessages", fields: [senderId], references: [id])
+  receiver         User         @relation("receivedMessages", fields: [receiverId], references: [id])
+  attachments    Attachment[]
+}
+model RoomMessage {
+  id        String       @id @default(uuid())
+  content   String
+  state     ViewState @default(UNREAD)
+  senderId  String
+  roomId    String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt()
+
+  // Relations
+  sender         User         @relation(fields: [senderId], references: [id])
+  room           Room         @relation(fields: [roomId], references: [id])
+  attachments    Attachment[]
+}
+
+model Room {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  description String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+
+
+  // Relations
+  messages     RoomMessage[]
+  participants User[] @relation("RoomsBelongedTo")
+  creatorId String
+  creator   User @relation("RoomCreator",fields: [creatorId], references: [id])
+}
+
+model Wallet {
+  id        String     @id @default(uuid())
+  type      WalletType
+  balance   Decimal    @default(0.0)
+  currency  Json
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt()
+
+  // Relations
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Mailer {
+  id        String               @id @default(uuid())
+  type      MailerTemplateEnum
+  template  String
+  body      String
+  name      String
+  data      Json
+  status    MailerTemplateStatus
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt()
+}
+
+model AppSettings {
+  id          String       @id @default(uuid())
+  userDefined Boolean       @default(false)
+  name        String       @unique
+  type        SettingsType @unique
+  default     Json
+  settings    Json
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt()
+
+  @@index([type,id,name])
+}
+
+model Subscription {
+  id            String             @id @default(uuid())
+  userId        String
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId        String
+  plan          SubscriptionPlan   @relation(fields: [planId], references: [id])
+  description   String? // Nullable
+  paymentMethod String? // Nullable
+  status        SubscriptionStatus @default(ACTIVE)
+  amount        Decimal
+  currency      String
+  startsAt      DateTime? // Nullable
+  endsAt        DateTime? // Nullable
+  cancelAt      DateTime? // Nullable
+  cancelledAt   DateTime? // Nullable
+  type          SubscriptionType
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt()
+}
+
+model SubscriptionPlan {
+  id            String           @id @default(uuid())
+  name          String           @unique
+  description   String
+  planType      PlanType
+  status        PlanStatus       @default(ACTIVE)
+  price         Decimal
+  subscriptions Subscription[]
+  frequency     PaymentFrequency
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt()
+}
+
+model PaymentGateway {
+  id                  String      @id @default(uuid())
+  name                String      @unique // e.g., "Stripe", "Paystack"
+  publicKey           String // Public API key or Client key
+  secretKey           String // Secret API key
+  webhookSecret       String? // Webhook secret key (optional)
+  merchantId          String? // Optional Merchant ID for specific gateways
+  mode                GatewayMode @default(LIVE) // LIVE or SANDBOX mode
+  isActive            Boolean     @default(false) // Toggle to activate/deactivate
+  supportedCurrencies String[] // List of currencies the gateway supports
+  country             String? // Country-specific configuration (optional)
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt()
+}
+
+model SupportTicket {
+  id            String         @id @default(uuid())
+  ticketId      String         @unique // Unique ticket identifier
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String         // Foreign key to User model
+  subject       String         // Subject or title of the support issue
+  description   String         // Detailed description of the issue
+  category      TicketCategory // Enum to categorize the issue (e.g., Billing, Technical)
+  priority      TicketPriority // Enum for priority level (e.g., LOW, MEDIUM, HIGH)
+  status        TicketStatus   @default(OPEN) // Current status of the ticket
+  assignedTo    User?          @relation("assignedTickets", fields: [assignedToId], references: [id])
+  assignedToId  String?        // Foreign key to the assigned support staff (optional)
+  resolvedAt    DateTime?      // Timestamp for when the ticket was resolved
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+
+
 
 model Faq {
   id        String       @id @default(uuid())
-  for       String
-  title     String
-  body      String
+  question       String
+  response     String
   status    ActiveStatus
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt()
 }
 
-model Message {
-  id             String       @id @default(uuid())
-  conversation   Conversation @relation(fields: [conversationId], references: [id])
-  conversationId String      
-  sender         User         @relation(fields: [senderId], references: [id])
-  senderId       String      
-  message        String       @db.Text
-  state          MessageState
-  status         ActiveStatus
-  attachments    Attachment[]
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt()
-}
-
-model Conversation {
-  id        String    @id @default(uuid())
-  members   User[]
-  messages  Message[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt()
-}
-
-model Room {
-  id          String       @id @default(uuid())
-  members     User[]
-  title       String
-  description String
-  image       String
-  status      ActiveStatus
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt()
-}
-
-model Wallet {
-  id        String     @id @default(uuid())
-  user      User       @relation(fields: [userId], references: [id])
-  userId    String  
-  balance   Int
-  type      WalletType
-  currency  Json?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt()
-}
-
-model Mailer{
-  id        String     @id @default(uuid())
-  type      MailType
-  template  String
-  name      String
-  data      Json
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-}
-
-
-model AppSettings{
-  id                    String     @id @default(uuid())
-  // user               User       @relation(fields: [userId], references: [id])
- //  userId             String     @unique
-  userDefined           Boolean  
-  name                  String  
-  type                  SettingsType
-  default               Json
-  settings              Json
-  createdAt             DateTime   @default(now())
-  updatedAt             DateTime   @updatedAt
-}
-
-model Notification {
-  id             String       @id @default(uuid())
-  receiver       User         @relation(fields: [receiverId], references: [id])
-  receiverId     String     
-  notification   String       @db.Text
-  type           NotificationType
-  state          MessageState
-  status         ActiveStatus
-  attachments    Attachment[]
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt()
-}

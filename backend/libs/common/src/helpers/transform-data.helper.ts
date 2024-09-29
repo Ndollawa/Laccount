@@ -51,7 +51,7 @@ import { RpcException } from '@nestjs/microservices';
 // };
 
 export const handleError = (error: any) => {
-  throw new HttpException(error.message ? error.message : error,error.code);
+  throw new HttpException(error.message ? error.message : error, error.code);
 };
 
 export const splitRt = (rt: string) => {

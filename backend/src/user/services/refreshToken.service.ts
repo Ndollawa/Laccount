@@ -19,9 +19,9 @@ const { ALREADY_EXISTS, UNAUTHENTICATED } = grpc.status;
 export class RefreshTokenService {
   constructor(
     protected readonly refreshTokenRepository: RefreshTokenRepository,
-    protected readonly eventEmitter: EventEmitter2
+    protected readonly eventEmitter: EventEmitter2,
   ) {}
-  async findRefreshToken( id :string): Promise<RefreshToken> {
+  async find(id: string): Promise<RefreshToken> {
     try {
       return await this.refreshTokenRepository.find({
         where: { id },
@@ -32,7 +32,7 @@ export class RefreshTokenService {
     }
   }
 
-  async findAllRefreshTokens(query: any): Promise<RefreshToken[]> {
+  async findAll(query: any): Promise<RefreshToken[]> {
     try {
       return await this.refreshTokenRepository.findMany(query);
     } catch (error) {
@@ -40,7 +40,7 @@ export class RefreshTokenService {
     }
   }
 
-  async createRefreshToken(
+  async create(
     createRefreshTokenData: CreateRefreshTokenDto,
   ): Promise<RefreshToken> {
     const { userId, refreshToken } = createRefreshTokenData;
@@ -76,10 +76,7 @@ export class RefreshTokenService {
     }
   }
 
-  async updateRefreshToken(
-    id: string,
-    data: UpdateRefreshTokenDto,
-  ) {
+  async update(id: string, data: UpdateRefreshTokenDto) {
     try {
       return await this.refreshTokenRepository.update({
         where: { id },
@@ -90,10 +87,7 @@ export class RefreshTokenService {
     }
   }
 
-  async upsertRefreshToken(
-    id: string,
-    data: UpdateRefreshTokenDto,
-  ) {
+  async upsert(id: string, data: UpdateRefreshTokenDto) {
     Logger.debug(data);
     try {
       return await this.refreshTokenRepository.upsert({
@@ -105,7 +99,7 @@ export class RefreshTokenService {
     }
   }
 
-  async removeRefreshToken(id: string): Promise<RefreshToken> {
+  async remove(id: string): Promise<RefreshToken> {
     try {
       return await this.refreshTokenRepository.delete({
         where: { id },
@@ -115,7 +109,7 @@ export class RefreshTokenService {
     }
   }
 
-  async removeManyRefreshToken(query:any): Promise<RefreshToken[]> {
+  async removeMany(query: any): Promise<RefreshToken[]> {
     try {
       return await this.refreshTokenRepository.deleteMany(query);
     } catch (error) {

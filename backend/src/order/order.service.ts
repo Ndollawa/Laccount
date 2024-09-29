@@ -12,7 +12,6 @@ export class OrderService {
     try {
       return await this.orderRepository.find({
         where: { id },
-        include: { author: true },
       });
     } catch (error) {
       handleError(error);
@@ -36,18 +35,11 @@ export class OrderService {
     }
   }
   async create(createOrderData: CreateOrderDto): Promise<Order> {
-    const {
-      title ,
-      body ,
-      description ,
-      image ,
-      tags ,
-      authorId , 
-     } = createOrderData;
+    const { buyerId, listingId, status } = createOrderData;
 
     try {
       const existingOrder = await this.orderRepository.exists({
-        where: { title },
+        where: { OR: [{ buyerId }, { listingId }] },
       });
 
       if (existingOrder) {
@@ -59,9 +51,7 @@ export class OrderService {
 
       const OrderData = {
         ...createOrderData,
-        status: OrderStatus.PUBLISHED,
-      readCount: 12, 
-      readingTime: '12 minutes' ,
+        status: OrderStatus.PENDING,
       };
 
       const newOrder = await this.orderRepository.create({

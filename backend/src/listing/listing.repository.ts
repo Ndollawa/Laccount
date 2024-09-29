@@ -19,7 +19,9 @@ export class ListingRepository extends PrismaBaseRepository<
   | Prisma.ListingAggregateArgs
   | Prisma.ListingGroupByArgs
   | Prisma.ListingCountArgs,
-  Prisma.ListingUpdateArgs | Prisma.ListingUpdateManyArgs | Prisma.ListingUpsertArgs,
+  | Prisma.ListingUpdateArgs
+  | Prisma.ListingUpdateManyArgs
+  | Prisma.ListingUpsertArgs,
   Prisma.ListingDeleteArgs | Prisma.ListingDeleteManyArgs
 > {
   constructor(private readonly prismaService: PrismaService) {

@@ -15,28 +15,28 @@ import { UpdateRatingDto } from './dto/update-rating.dto';
 export class RatingController {
   constructor(private readonly ratingService: RatingService) {}
 
-  // @Post()
-  // create(@Body() createAccountDto: CreateAccountDto & CreateListingDto) {
-  //   return this.accountService.createAccount(createAccountDto);
-  // }
+  @Post()
+  create(@Body() createRatingDto: CreateRatingDto & CreateRatingDto) {
+    return this.ratingService.create(createRatingDto);
+  }
 
-  // @Get()
-  // findAll() {
-  //   return this.accountService.findAllAccounts({});
-  // }
+  @Get()
+  findAll() {
+    return this.ratingService.findAll({});
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.accountService.findAccount(id);
-  // }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.ratingService.find(id);
+  }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
-  //   return this.accountService.updateAccount(id, updateAccountDto);
-  // }
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateRatingDto: UpdateRatingDto) {
+    return this.ratingService.update(id, updateRatingDto);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.accountService.removeAccount(id);
-  // }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.ratingService.remove(id);
+  }
 }

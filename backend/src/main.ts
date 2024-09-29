@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import * as csurf from 'csurf';
+import csurf from 'csurf';
 import {
   ValidationPipe,
   ValidationError,
@@ -7,11 +7,11 @@ import {
   // UnprocessableEntityException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as express from 'express';
-import * as passport from "passport";
-import * as cookieParser from 'cookie-parser';
+import express from 'express';
+import passport from 'passport';
+import cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
-import { CredentialsMiddleware , ErrorHandler } from '@app/common';
+import { CredentialsMiddleware, ErrorHandler } from '@app/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -35,7 +35,7 @@ async function bootstrap() {
   app.use(CredentialsMiddleware);
   app.use(passport.initialize());
   app.use(cookieParser());
-  app.use(csurf());
+  //app.use(csurf());
   const devPort = app.get(ConfigService).get('DEVELOPMENT_PORT');
   const port = process.env.PORT || devPort;
   app.enableCors({

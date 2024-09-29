@@ -11,3 +11,4 @@ export * from './config';
 export * from './helpers';
 export * from './services';
 export * from './decorators';
+export * from './redis';

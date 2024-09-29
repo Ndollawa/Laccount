@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import {MailerModule as NestMailerModule}   from '@nestjs-modules/mailer';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MailerModule as NestMailerModule } from '@nestjs-modules/mailer';
 import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MailerService } from './mailer.service';
-import { MailerController } from './mailer.controller';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailerRepository } from './mailer.repository';
+import { MailerController } from './mailer.controller';
 import { PrismaModule } from '@app/prisma';
 
 @Module({
@@ -19,16 +19,14 @@ import { PrismaModule } from '@app/prisma';
           // path: configService.get<string>('MAIL_PATH', '/usr/sbin/sendmail'),
 
           // Uncomment and use these settings if you want to configure SMTP
-          host: 'localhost',
-          port: 1025,
           ignoreTLS: true,
           secure: false,
-          // host: configService.get<string>('SMTP_HOST'),
+          host: configService.get<string>('SMTP_HOST'),
+          port: configService.get<string>('SMTP_PORT'),
           auth: {
             user: configService.get<string>('SMTP_USER'),
             pass: configService.get<string>('SMTP_PASSWORD'),
           },
-
         },
         defaults: {
           from: '"No Reply" <no-reply@example.com>', // default sender email
@@ -44,9 +42,10 @@ import { PrismaModule } from '@app/prisma';
       }),
       inject: [ConfigService],
     }),
-    PrismaModule
+    PrismaModule,
   ],
   controllers: [MailerController],
-  providers: [MailerService,MailerRepository],
+  providers: [MailerService, MailerRepository],
+  exports: [MailerService],
 })
 export class MailerModule {}

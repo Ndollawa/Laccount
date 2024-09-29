@@ -12,18 +12,20 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
-import { RegisterUserDto } from './dto/register-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
+import {
+  RegisterUserDto,
+  LoginUserDto,
+  ResetPasswordDto,
+  ResetPasswordRequestDto,
+  VerifyUserEmailDto,
+} from './dto';
 import {
   LocalAuthGuard,
   RefreshJwtAuthGuard,
   splitRt,
-  Tokens
+  Tokens,
 } from '@app/common';
 import { RequestService } from '@app/common/services';
-import { ResetPasswordDto, ResetPasswordRequestDto } from './dto/reset-password.dto';
-import { VerifyUserEmailDto } from './dto/auth.dto';
-
 
 @Controller('auth')
 export class AuthController {
@@ -37,20 +39,19 @@ export class AuthController {
     return await this.authService.register(registerUserDto);
   }
 
-  
   @UseGuards(LocalAuthGuard)
-  @Post('login')
+  @Post('/login')
   async loginUser(
     @Req() req: Request,
     @Res() res: Response,
-    @Body(ValidationPipe) loginUserDto: LoginUserDto,
+    // @Body(ValidationPipe) loginUserDto: LoginUserDto,
   ): Promise<any> {
     const foundUser = (req as any).user;
     if (!foundUser) throw new UnauthorizedException();
     const { cookies } = req;
     if (cookies?.jwt) {
-      const {refreshTokenId, refreshToken} = splitRt(cookies.jwt);
-      const foundUser = await this.authService.findRefreshToken(refreshTokenId);
+      const { refreshTokenId, refreshToken } = splitRt(cookies.jwt);
+      await this.authService.findRefreshToken(refreshTokenId);
       await this.authService.removeRefreshToken(refreshTokenId);
 
       res.clearCookie('jwt', {
@@ -59,12 +60,12 @@ export class AuthController {
         sameSite: 'none',
       });
     }
-    const { accessToken, refreshToken }: Tokens = await this.authService.login(
-      foundUser,
-    );
-    // console.log(foundUser)
+    // const foundUser = await this.authService.validateUser(loginUserDto);
+    const { accessToken, refreshToken }: Tokens =
+      await this.authService.login(foundUser);
+    console.log(foundUser);
     if (accessToken) {
-      this.requestService.setUser(foundUser);
+      // this.requestService.setUser(foundUser);
 
       // Create secure cookie with refresh token
       res.cookie('jwt', refreshToken, {
@@ -113,9 +114,9 @@ export class AuthController {
   async refreshToken(@Req() req: Request, @Res() res: Response): Promise<any> {
     const cookies = req.cookies;
     if (!cookies?.jwt) throw new UnauthorizedException({ message: 'no token' });
-    const {refreshTokenId, refreshToken} = splitRt(cookies.jwt);
+    const { refreshTokenId, refreshToken } = splitRt(cookies.jwt);
     //check for user  in the DB
-    console.log(refreshTokenId)
+    console.log(refreshTokenId);
     // break;
     const foundUser = await this.authService.findRefreshToken(refreshTokenId);
     res.clearCookie('jwt', {
@@ -123,14 +124,13 @@ export class AuthController {
       secure: true,
       sameSite: 'none',
     });
-  
-    
+
     if (!foundUser) {
-      const hackedUser = await this.authService.verifyToken({refreshToken});
+      const hackedUser = await this.authService.verifyToken({ refreshToken });
       console.log('hacked', hackedUser);
       if (hackedUser) {
         await this.authService.removeManyRefreshToken({
-       where:{ userId: hackedUser.id} , 
+          where: { userId: hackedUser.id },
         });
       }
       throw new UnauthorizedException('Unauthorized user');
@@ -148,20 +148,22 @@ export class AuthController {
   }
 
   @Post('reset-password-request')
-  async resetPasswordRequest(@Body() resetPasswordRequestDto: ResetPasswordRequestDto): Promise<any> {
-        return this.authService.resetPasswordRequest(resetPasswordRequestDto)
-
+  async resetPasswordRequest(
+    @Body() resetPasswordRequestDto: ResetPasswordRequestDto,
+  ): Promise<any> {
+    return this.authService.resetPasswordRequest(resetPasswordRequestDto);
   }
 
   @Get('verify-user-email')
-  async verifyUserEmail(@Body() verifyUserEmailDto: VerifyUserEmailDto): Promise<any> {
-        return this.authService.verifyUserEmail(verifyUserEmailDto)
-
+  async verifyUserEmail(
+    @Body() verifyUserEmailDto: VerifyUserEmailDto,
+  ): Promise<any> {
+    return this.authService.verifyUserEmail(verifyUserEmailDto);
   }
-
 
   @Post('reset-password')
-  async resetPassword(@Req() req: Request, @Res() res: Response): Promise<any> {
-
-  }
+  async resetPassword(
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<any> {}
 }

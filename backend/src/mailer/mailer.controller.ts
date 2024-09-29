@@ -1,7 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { MailerService } from './mailer.service';
 import { CreateMailerDto, UpdateMailerDto } from './dto';
-import { } from './dto/update-mailer.dto';
+import {} from './dto/update-mailer.dto';
 
 @Controller('mailer')
 export class MailerController {
@@ -9,26 +17,26 @@ export class MailerController {
 
   @Post()
   create(@Body() createMailerDto: CreateMailerDto) {
-    return this.mailerService.createMailer(createMailerDto);
+    return this.mailerService.create(createMailerDto);
   }
 
   @Get()
   findAll() {
-    return this.mailerService.findAllMailers({});
+    return this.mailerService.findAll({});
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.mailerService.findMailer(id);
+    return this.mailerService.find(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateMailerDto: UpdateMailerDto) {
-    return this.mailerService.updateMailer(id, updateMailerDto);
+    return this.mailerService.update(id, updateMailerDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.mailerService.removeMailer(id);
+    return this.mailerService.remove(id);
   }
 }

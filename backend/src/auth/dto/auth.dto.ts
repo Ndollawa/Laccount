@@ -1,14 +1,13 @@
-import { IsEmail, IsString } from "class-validator";
+import { IsEmail, IsString } from 'class-validator';
 
-export class VerifyUserEmailDto{
-    @IsString()
-    otp:string;
-    
-    @IsString()
-    token:string;
+export class VerifyUserEmailDto {
+  @IsString()
+  otp: string;
 
-    @IsString()
-    @IsEmail()
-    email:string;
+  @IsString()
+  token: string;
 
+  @IsString()
+  @IsEmail()
+  email: string;
 }

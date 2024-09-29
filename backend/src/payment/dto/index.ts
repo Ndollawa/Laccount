@@ -1,2 +1,2 @@
-export * from "./create-payment.dto";
-export * from "./update-payment.dto";
+export * from './create-paymentgateway.dto';
+export * from './update-paymentgateway.dto';

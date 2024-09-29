@@ -1,2 +1,2 @@
-export * from './redis.service';
-export * from './request.service'
+export * from './cache.service';
+export * from './request.service';

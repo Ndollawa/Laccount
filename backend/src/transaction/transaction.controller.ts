@@ -8,35 +8,37 @@ import {
   Delete,
 } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { CreateTransactionDto, UpdateTransactionDto } from './dto/';
 
-@Controller('transaction')
+@Controller('transactions')
 export class TransactionController {
   constructor(private readonly transactionService: TransactionService) {}
 
-  // @Post()
-  // create(@Body() createAccountDto: CreateAccountDto & CreateListingDto) {
-  //   return this.accountService.createAccount(createAccountDto);
-  // }
+  @Post()
+  create(@Body() createTransactionDto: CreateTransactionDto) {
+    return this.transactionService.create(createTransactionDto);
+  }
 
-  // @Get()
-  // findAll() {
-  //   return this.accountService.findAllAccounts({});
-  // }
+  @Get()
+  findAll() {
+    return this.transactionService.findAll({});
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.accountService.findAccount(id);
-  // }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.transactionService.find(id);
+  }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
-  //   return this.accountService.updateAccount(id, updateAccountDto);
-  // }
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateTransactionDto: UpdateTransactionDto,
+  ) {
+    return this.transactionService.update(id, updateTransactionDto);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.accountService.removeAccount(id);
-  // }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.transactionService.remove(id);
+  }
 }

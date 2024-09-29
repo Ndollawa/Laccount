@@ -6,44 +6,41 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
-import * as grpc from '@grpc/grpc-js';
-import { Listing,ListingStatus} from '@prisma/client';
+import { Listing, ListingStatus } from '@prisma/client';
 import { handleError } from '@app/common';
 import { ListingRepository } from './listing.repository';
 import { CreateListingDto, UpdateListingDto } from './dto';
 
-const { ALREADY_EXISTS, UNAUTHENTICATED } = grpc.status;
-
 @Injectable()
 export class ListingService {
   constructor(
-    protected readonly ListingRepository: ListingRepository,
+    protected readonly listingRepository: ListingRepository,
     protected readonly eventEmitter: EventEmitter2,
   ) {}
 
-  async findListing(query: any): Promise<Listing> {
+  async find(query: any): Promise<Listing> {
     try {
-      return await this.ListingRepository.find({
+      return await this.listingRepository.find({
         where: query,
-        include: { seller: true},
+        include: { seller: true },
       });
     } catch (error) {
       handleError(error);
     }
   }
 
-  async findAllListings(query: any): Promise<Listing[]> {
+  async findAll(query: any): Promise<Listing[]> {
     try {
-      return await this.ListingRepository.findMany(query);
+      return await this.listingRepository.findMany(query);
     } catch (error) {
       handleError(error);
     }
   }
 
-  async createListing(createListingData: CreateListingDto): Promise<Listing> {
+  async create(createListingData: CreateListingDto): Promise<Listing> {
     try {
-        const newListing = await this.ListingRepository.create({
-        data:createListingData,
+      const newListing = await this.listingRepository.create({
+        data: createListingData,
       });
 
       this.eventEmitter.emit('Listing-created', newListing);
@@ -54,10 +51,10 @@ export class ListingService {
     }
   }
 
-  async updateListing(id: string, data: UpdateListingDto) {
+  async update(id: string, data: UpdateListingDto) {
     Logger.debug(data);
     try {
-      return await this.ListingRepository.update({
+      return await this.listingRepository.update({
         where: { id },
         data: data,
       });
@@ -66,10 +63,10 @@ export class ListingService {
     }
   }
 
-  async upsertListing(id: string, data: UpdateListingDto) {
+  async upsert(id: string, data: UpdateListingDto) {
     Logger.debug(data);
     try {
-      return await this.ListingRepository.upsert({
+      return await this.listingRepository.upsert({
         where: { id },
         data: data,
       });
@@ -78,9 +75,9 @@ export class ListingService {
     }
   }
 
-  async removeListing(id: string): Promise<Listing> {
+  async remove(id: string): Promise<Listing> {
     try {
-      return await this.ListingRepository.delete({
+      return await this.listingRepository.delete({
         where: { id },
       });
     } catch (error) {

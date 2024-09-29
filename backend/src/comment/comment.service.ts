@@ -1,13 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Comment, CommentStatus } from '@prisma/client';
 import { handleError } from '@app/common';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
+import { CreateCommentDto, UpdateCommentDto } from './dto';
 import { CommentRepository } from './comment.repository';
 
 @Injectable()
 export class CommentService {
-  constructor(protected readonly commentRepository: CommentRepository) {}
+  constructor(private readonly commentRepository: CommentRepository) {}
 
   async find(id: string): Promise<Comment> {
     try {
@@ -54,14 +53,14 @@ export class CommentService {
       const commentData = {
         ...createCommentData,
         status: CommentStatus.PUBLISHED,
-        authorType:authorId? 'guest':'user',
-        postId:'',
-        parentId:'',
-        firstName:'',
-        lastName:'',
-        email:'',
-        phoneNo:'',
-        for:'',
+        authorType: authorId ? 'guest' : 'user',
+        postId: '',
+        parentId: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNo: '',
+        for: '',
       };
 
       const newComment = await this.commentRepository.create({

@@ -1,25 +1,24 @@
 import { ListingStatus } from '@prisma/client';
 import {
-    IsEnum,
-    IsNotEmpty,
-    IsNumber,
-    IsOptional,
-    IsString,
-    IsUUID,
-  } from 'class-validator';
-  
-  export class CreateListingDto {
-    @IsString()
-    @IsUUID()
-    @IsNotEmpty()
-    sellerId:string;
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
-    
-    @IsEnum(ListingStatus)
-    @IsNotEmpty()
-    listingStatus :     ListingStatus;
+export class CreateListingDto {
+  @IsString()
+  @IsUUID()
+  @IsNotEmpty()
+  sellerId: string;
 
-    @IsNumber()
-    @IsNotEmpty()
-    price:number
+  @IsEnum(ListingStatus)
+  @IsNotEmpty()
+  listingStatus: ListingStatus;
+
+  @IsNumber()
+  @IsNotEmpty()
+  price: number;
 }

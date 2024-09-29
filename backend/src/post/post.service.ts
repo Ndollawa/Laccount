@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { Post, PostStatus } from '@prisma/client';
+import { Post, PublishStatus } from '@prisma/client';
 import { handleError } from '@app/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -37,14 +37,7 @@ export class PostService {
     }
   }
   async create(createPostData: CreatePostDto): Promise<Post> {
-    const {
-      title ,
-      body ,
-      description ,
-      image ,
-      tags ,
-      authorId , 
-     } = createPostData;
+    const { title, body, description, image, tags, authorId } = createPostData;
 
     try {
       const existingPost = await this.postRepository.exists({
@@ -60,9 +53,9 @@ export class PostService {
 
       const postData = {
         ...createPostData,
-        status: PostStatus.PUBLISHED,
-      readCount: 12, 
-      readingTime: '12 minutes' ,
+        status: PublishStatus.PUBLISHED,
+        readCount: 12,
+        readingTime: '12 minutes',
       };
 
       const newPost = await this.postRepository.create({

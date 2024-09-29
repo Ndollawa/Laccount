@@ -1,26 +1,100 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { CreateTransactionDto, UpdateTransactionDto } from './dto';
+import { handleError } from '@app/common';
+import { Transaction } from '@prisma/client';
+import { TransactionRepository } from './transaction.repository';
 
 @Injectable()
 export class TransactionService {
-  create(createTransactionDto: CreateTransactionDto) {
-    return 'This action adds a new transaction';
+  constructor(
+    protected readonly transactionRepository: TransactionRepository,
+  ) {}
+
+  async find(id: any): Promise<Transaction> {
+    try {
+      return await this.transactionRepository.find({
+        where: { id },
+      });
+    } catch (error) {
+      handleError(error);
+    }
   }
 
-  findAll() {
-    return `This action returns all transaction`;
+  async findAll(query: any): Promise<Transaction[]> {
+    try {
+      return await this.transactionRepository.findMany(query);
+    } catch (error) {
+      handleError(error);
+    }
+  }
+  async remove(id: string): Promise<Transaction> {
+    try {
+      return await this.transactionRepository.delete({
+        where: { id },
+      });
+    } catch (error) {
+      handleError(error);
+    }
+  }
+  async create(
+    createTransactionData: CreateTransactionDto,
+  ): Promise<Transaction> {
+    const {
+      paymentMethod,
+      status,
+      amount,
+      currency,
+      purpose,
+      sessionId,
+      userId,
+    } = createTransactionData;
+
+    try {
+      const existingTransaction = await this.transactionRepository.exists({
+        where: { OR: [{ userId }, { sessionId }] },
+      });
+
+      if (existingTransaction) {
+        throw new HttpException(
+          'Transaction with credentials already exists.',
+          HttpStatus.CONFLICT,
+        );
+      }
+
+      const TransactionData = {
+        ...createTransactionData,
+      };
+
+      const newTransaction = await this.transactionRepository.create({
+        data: TransactionData,
+      });
+      Logger.debug(newTransaction);
+      return newTransaction;
+    } catch (error) {
+      Logger.log(error);
+      handleError(error);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} transaction`;
+  async update(id: string, updateTransactionData: UpdateTransactionDto) {
+    try {
+      return await this.transactionRepository.update({
+        where: { id },
+        data: updateTransactionData,
+      });
+    } catch (error) {
+      handleError(error);
+    }
   }
 
-  update(id: number, updateTransactionDto: UpdateTransactionDto) {
-    return `This action updates a #${id} transaction`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} transaction`;
+  async upsert(id: string, updateTransactionData: UpdateTransactionDto) {
+    try {
+      return await this.transactionRepository.upsert({
+        where: { id },
+        data: updateTransactionData,
+      });
+    } catch (error) {
+      handleError(error);
+    }
   }
 }

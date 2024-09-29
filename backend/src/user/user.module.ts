@@ -1,19 +1,16 @@
 import { Module } from '@nestjs/common';
-import { COMMUNICATION_SERVICE, RequestService } from '@app/common';
-import { PrismaModule } from '@app/prisma';
+import { RequestService } from '@app/common';
 import { UserRepository } from './repositories/user.repository';
 import { UserService } from './services/user.service';
 import { UserController } from './user.controller';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RefreshTokenService } from './services/refreshToken.service';
 import { ProfileService } from './services/profile.service';
 import { RefreshTokenRepository } from './repositories/refreshToken.repository';
 import { ProfileRepository } from './repositories/profile.repository';
+import { UserSeed } from './seeds/user.seed';
 
 @Module({
   controllers: [UserController],
-  imports: [PrismaModule],
   providers: [
     UserRepository,
     UserService,
@@ -22,7 +19,14 @@ import { ProfileRepository } from './repositories/profile.repository';
     RefreshTokenService,
     ProfileService,
     ProfileRepository,
+    UserSeed,
   ],
-  exports: [UserService],
+  exports: [
+    UserService,
+    UserRepository,
+    RefreshTokenService,
+    ProfileService,
+    UserSeed,
+  ],
 })
 export class UserModule {}
