@@ -6,9 +6,23 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFile,
+  ParseFilePipe,
+  MaxFileSizeValidator,
+  FileTypeValidator,
 } from '@nestjs/common';
+import { join } from 'path';
 import { AppSettingService } from './appsetting.service';
-import { CreateAppSettingsDto, UpdateAppSettingsDto } from './dto';
+import {
+  CreateAppSettingsDto,
+  UpdateAppSettingsDto,
+  SettingFileUploadDto,
+  HomeSlide,
+  SliderDto,
+} from './dto';
+import { FileInterceptor } from '@nestjs/platform-express/multer';
+import { FileOptions2 } from '@app/common/helpers/file-filter.helper';
 
 @Controller('app-settings')
 export class AppSettingController {
@@ -44,5 +58,55 @@ export class AppSettingController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.appSettingsService.remove(id);
+  }
+
+  @Post('slides')
+  @UseInterceptors(
+    FileInterceptor('image', FileOptions2('./uploads/settings/slides')),
+  )
+  updateSlider(
+    @Body()
+    {
+      type,
+      id,
+      slide,
+    }: { id: string; slide: SliderDto } & SettingFileUploadDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          // new MaxFileSizeValidator({ maxSize: 1000 }),
+          // new FileTypeValidator({ fileType: 'image/jpeg' }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    console.log(slide);
+    // console.log(Jso);
+    return this.appSettingsService.updateSlider({ id, type, slide:JSON.parse(slide as string), file });
+  }
+
+  @Post('uploads')
+  @UseInterceptors(FileInterceptor('file', FileOptions2('./uploads/settings/brand')))
+  uploadFile(
+    @Body() { type, id }: SettingFileUploadDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          // new MaxFileSizeValidator({ maxSize: 1000 }),
+          // new FileTypeValidator({ fileType: 'image/jpeg' }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    console.log(file);
+    return this.appSettingsService.upload({ id, type, file });
+  }
+
+  @Post('remove-uploads')
+  removeUploadeFile(@Body() { type, id, file }: SettingFileUploadDto) {
+    console.log(file);
+    return this.appSettingsService.removeUpload({ id, type, file });
   }
 }

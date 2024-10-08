@@ -1,15 +1,15 @@
 import React,{useState,useEffect} from 'react'
 import $ from 'jquery'
 import { Link, useNavigate} from 'react-router-dom'
-import useWindowSize from '../../../app/utils/hooks/useWindowSize'
+import useWindowSize from '../../../app/hooks/useWindowSize'
 import Notification from './NavComponents/Notification'
-import pageProps from '../../../app/utils/props/pageProps'
+import pageProps from '../../../app/props/pageProps'
 import Notice from './NavComponents/Notice'
 import { useSelector} from 'react-redux'
 import { selectCurrentUser } from '../../auth/slices/auth.slice'
-import {useCompanyInfo,useSiteImages} from '../pages/Settings/settingsConfigSlice'
-import { useSendLogoutMutation } from '../../auth/slices/authApiSlice'
-import useUserImage from '../../../app/utils/hooks/useUserImage'
+import {useCompanyInfo,useLandingConfig} from '../pages/Settings/slices/settings.slice'
+import { useSendLogoutMutation } from '../../auth/slices/authApi.slice'
+import useUserImage from '../../../app/hooks/useUserImage'
 
 
 const Nav:React.FC<pageProps> = ({pageData}:pageProps) => {
@@ -19,6 +19,10 @@ const Nav:React.FC<pageProps> = ({pageData}:pageProps) => {
    const navigate = useNavigate()
     const currentUser = useSelector(selectCurrentUser);
     const userImage = useUserImage(currentUser);
+   const {width, height} = useWindowSize();
+   const {settings:{companyDetails:{siteName}={}}={}} = useSelector(useCompanyInfo);
+   const {settings:{siteImages: {logo, logoDark}={}}={}} = useSelector(useLandingConfig);
+
     // console.log(currentUser)
    const [sendLogout,{
     isLoading:isLogoutLoading,
@@ -33,10 +37,6 @@ const Nav:React.FC<pageProps> = ({pageData}:pageProps) => {
    }, [isSuccess,navigate])
 //    if(isLoading) 
 //    if(isError) 
-
-   const {width, height} = useWindowSize()
-   const {siteName} = useSelector(useCompanyInfo)
-   const {logo,logoDark} = useSelector(useSiteImages)
 
    const toggleFullscreen = ()=>{
     if(document.fullscreenElement||(document as any).webkitFullscreenElement||(document as any).mozFullScreenElement||(document as any).msFullscreenElement) { 

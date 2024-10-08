@@ -2,12 +2,12 @@ import React, {useState,useEffect,FormEvent,ChangeEvent, useRef} from 'react'
 import MainBody from '../../components/MainBody'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '../../../auth/slices/auth.slice'
-import useUserImage from '../../../../app/utils/hooks/useUserImage'
+import useUserImage from '../../../../app/hooks/useUserImage'
 import {FaPencilAlt, FaRegTimesCircle} from 'react-icons/fa'
-import showToast from '../../../../app/utils/hooks/showToast'
-import { useUpdateUserMutation } from '../Users/usersApiSlice'
-import { useCheckDuplicateUserMutation } from '../Users/usersApiSlice'
-import {useUserUploadMutation , useUserRemoveFileMutation  } from '../Users/usersApiSlice'
+import showToast from '../../../../app/utils/showToast'
+import { useUpdateUserMutation } from '../Users/slices/usersApi.slice'
+import { useCheckDuplicateUserMutation } from '../Users/slices/usersApi.slice'
+import {useUserUploadMutation , useUserRemoveFileMutation  } from '../Users/slices/usersApi.slice'
 // username regex must start with a lowercase or uppercase laters and must be followed by lower or uppercase or digits,- or _ of 3 to 23 characters
 const USER_REGEX = /^[a-zA-Z][a-zA-z0-9-_]{3,23}$/;
 // requires atleast 0ne uppercase, lowercase,digit, special character and a total of 8 t0 24 characters

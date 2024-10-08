@@ -2,13 +2,13 @@ import React,{useState,useEffect, useRef, ChangeEvent,FormEvent} from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../auth/slices/auth.slice';
-import { useGetMessagesQuery } from '../../pages/Messenger/messagesApiSlice'; 
-import { useGetConversationsQuery } from '../../pages/Messenger/conversationsApiSlice';
-import { useGetUsersQuery } from '../../pages/Users/usersApiSlice';
-import useUserImage from '../../../../app/utils/hooks/useUserImage';
-import messageProps from '../../../../app/utils/props/messageProps';
-import useSocketIO from '../../../../app/utils/hooks/useSocketIO';
-import conversationProps,{conversationIdProps} from '../../../../app/utils/props/conversationProps';
+import { useGetMessagesQuery } from '../../pages/Messenger/slices/messagesApi.slice'; 
+import { useGetConversationsQuery } from '../../pages/Messenger/slices/conversationsApi.slice';
+import { useGetUsersQuery } from '../../pages/Users/slices/usersApi.slice';
+import useUserImage from '../../../../app/hooks/useUserImage';
+import messageProps from '../../../../app/props/messageProps';
+import useSocketIO from '../../../../app/hooks/useSocketIO';
+import conversationProps,{conversationIdProps} from '../../../../app/props/conversationProps';
 import { format } from 'timeago.js';
  
 const ChatModal = ({currentChat, closeChat}:any) => {

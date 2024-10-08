@@ -19,7 +19,8 @@ import {
   RedisModule,
 } from '@app/common';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import redisStore from 'cache-manager-redis-store';
+import { redisStore } from 'cache-manager-redis-store';
+// import type { RedisClientOptions } from 'redis';
 import { PostModule } from './post/post.module';
 import { CommentModule } from './comment/comment.module';
 import { PrismaModule } from '@app/prisma';
@@ -40,9 +41,12 @@ import { ServiceModule } from './services';
 import { SubscriptionModule } from './subscription';
 import { SupportTicketModule } from './support';
 import { TestimonialModule } from './testimonial';
+import { ConversationModule } from './conversation';
 import { CategoryModule } from './category';
 import { SubscriptionPlanModule } from './subscriptionPlan';
 import { SeederModule } from '@app/common/seeder/seeder.module';
+import { FaqModule } from './faq';
+import { TeamModule } from './team';
 
 @Module({
   imports: [
@@ -52,8 +56,12 @@ import { SeederModule } from '@app/common/seeder/seeder.module';
       cache: true,
     }),
     ThrottlerModule.forRoot([{ ttl: 60, limit: 5 }]),
-    MulterModule.register({
-      dest: './uploads',
+    MulterModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        dest: configService.get<string>('MULTER_DEST'),
+      }),
+      inject: [ConfigService],
     }),
     EventEmitterModule.forRoot(),
     ScheduleModule.forRoot(),
@@ -61,10 +69,16 @@ import { SeederModule } from '@app/common/seeder/seeder.module';
     //   imports: [ConfigModule],
     //   inject: [ConfigService],
     //   useFactory: async (configService: ConfigService) => ({
-    //     store: redisStore as any,
-    //     host: configService.get<string>('REDIS_HOST', 'localhost'),
-    //     port: configService.get<number>('REDIS_PORT', 6379),
-    //     ttl: configService.get<number>('CACHE_TTL', 600),
+    //     isGlobal: true,
+    //     max: 10_000,
+    //     store: (): any => redisStore({
+    //       commandsQueueMaxLength: 10_000,
+    //       socket: {
+    //         host: configService.getOrThrow<string>('REDIS_HOST', 'localhost'),
+    //         port: configService.getOrThrow<number>('REDIS_PORT', 6379),
+    //         ttl: configService.getOrThrow<number>('CACHE_TTL', 600),
+    //       }
+    //     })
     //   }),
     // }),
     BullModule.forRootAsync({
@@ -79,8 +93,8 @@ import { SeederModule } from '@app/common/seeder/seeder.module';
     }),
     PrismaModule,
     RedisModule,
-    forwardRef(() => AuthModule),
-    forwardRef(() => UserModule),
+    AuthModule,
+    UserModule,
     MailerModule,
     NotificationModule,
     PostModule,
@@ -99,7 +113,10 @@ import { SeederModule } from '@app/common/seeder/seeder.module';
     RoomModule,
     ServiceModule,
     SubscriptionPlanModule,
+    ConversationModule,
     TestimonialModule,
+    FaqModule,
+    TeamModule,
     forwardRef(() => SeederModule),
   ],
   controllers: [],

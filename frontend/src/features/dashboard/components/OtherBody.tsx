@@ -1,11 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
-import {useCompanyInfo,useDashboardConfig} from '../pages/Settings/settingsConfigSlice';
+import {useCompanyInfo,useDashboardConfig} from '../pages/Settings/slices/settings.slice';
 
 
 const OtherBody = ({children}:{children:React.ReactNode}) => {
-  const {layoutOptions} = useSelector(useDashboardConfig);
-const {
+  const {settings:{dashboardConfig:{layoutOptions:{
     typography,
     version,
     layout,
@@ -18,7 +17,8 @@ const {
     headerPosition,
     containerLayout,
     direction
-} = layoutOptions;
+}={}}={}}={}} = useSelector(useDashboardConfig);
+
 
   return (
     <>

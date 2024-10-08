@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 
 import { apiSlice } from "../api/apiSlice";
 import authReducer from "../../features/auth/slices/auth.slice";
+import settingsSliceReducer from "../../features/dashboard/pages/Settings/slices/settings.slice";
 import preloaderReducer from "../../features/components/preloader/slices/preloader.slice";
 import { setupListeners } from "@reduxjs/toolkit/query";
 
@@ -16,11 +17,12 @@ const persistConfig = {
   key: "rootApp",
   version: 1,
   storage,
-  blacklist: ["auth"],
+  // blacklist: ["auth","appSettings"],
 };
 
 const rootReducer = combineReducers({
   [apiSlice.reducerPath]: apiSlice.reducer,
+  appSettings: settingsSliceReducer,
   auth: authReducer,
   preloader: preloaderReducer,
 });
@@ -38,12 +40,13 @@ export const store = configureStore({
       },
     })
       .concat(apiSlice.middleware)
-      .concat(logger),
+      // .concat(logger)
+      ,
   devTools: process.env.NODE_ENV !== "production",
-  enhancers: (getDefaultEnhancers) =>
-    getDefaultEnhancers({
-      autoBatch: false,
-    }).concat(batchedSubscribe(debounceNotify)),
+  // enhancers: (getDefaultEnhancers) =>
+  //   getDefaultEnhancers({
+  //     autoBatch: false,
+  //   }).concat(batchedSubscribe(debounceNotify)),
 });
 
 export const persistor = persistStore(store);

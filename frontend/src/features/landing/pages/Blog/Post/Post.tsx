@@ -1,19 +1,21 @@
 import React,{useState,FormEvent} from "react";
 import {useParams, useNavigate} from 'react-router-dom'
-import { useGetPostsQuery } from "../../../../dashboard/pages/Post/postApiSlice";
+import { useGetPostsQuery } from "../../../../dashboard/pages/Post/slices/postApi.slice";
 import { useAddNewPostCommentMutation, useGetPostCommentQuery } from "../../../../dashboard/pages/Post/postCommentApiSlice";
-import { useGetUsersQuery } from "../../../../dashboard/pages/Users/usersApiSlice";
-import postCommentProps from "../../../../../app/utils/props/postCommentProps";
-import pageProps from "../../../../../app/utils/props/pageProps";
+import { useGetUsersQuery } from "../../../../dashboard/pages/Users/slices/usersApi.slice";
+import postCommentProps from "../../../../../app/props/postCommentProps";
+import pageProps from "../../../../../app/props/pageProps";
 import Breadcrum from "../../../components/Breadcrum";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../../auth/slices/auth.slice";
-import useLocalStorage from "../../../../../app/utils/hooks/useLocalStorage";
-import showToast from "../../../../../app/utils/hooks/showToast";
-import postProps from "../../../../../app/utils/props/postProps";
+import useLocalStorage from "../../../../../app/hooks/useLocalStorage";
+import showToast from "../../../../../app/utils/showToast";
+import postProps from "../../../../../app/props/postProps";
 import PostComment from "./components/PostComment";
 import PostSidebar from "./components/PostSidebar";
 import { filterPosts } from "../Blog";
+
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Post = ({ pageData }: pageProps) => {
   const {id} = useParams()
@@ -111,7 +113,7 @@ setShowCommentForm(false)
                   <div className="blog-card__image">
                     <div className="post-thumbnail">
                       <img
-                        src={process.env.REACT_APP_BASE_URL+"/uploads/posts/"+post?.coverImage}  
+                        src={BASE_URL+"/uploads/posts/"+post?.coverImage}  
                         className="attachment-post-thumbnail size-post-thumbnail wp-post-image"
                         alt={post?.title}/>
                     </div>

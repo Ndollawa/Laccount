@@ -2,63 +2,43 @@
     import MainBody from '../../components/MainBody'
     import CreateFaqModal from './components/CreateSlideForm'
     import EditSlideForm from './components/EditSlideForm'
-    import { useDispatch } from 'react-redux'
-    import { useGetSlidesQuery } from './slidesApiSlice'
+    import { useDispatch, useSelector } from 'react-redux'
     import { setPreloader } from '../../../components/preloader/slices/preloader.slice'
-    import pageProps from '../../../../app/utils/props/pageProps'
+    import pageProps from '../../../../app/props/pageProps'
     import SlideTableData from './components/SlideTableData'
     import initDataTables,{destroyDataTables} from '../../../../app/utils/initDataTables'
     import $ from 'jquery'
-    import slideProps from '../../../../app/utils/props/slideProps'
+    import {HomeSlide} from '../../../../app/props/settingsProps'
+import { useLandingConfig } from '../Settings/slices/settings.slice'
+import { ModalDataProps } from '../../../../app/props/modalProps'
 
-    
-interface modalDataProps {
-       data:slideProps | null,
-      showModal:boolean,
-    }
+
     const Slide = ({pageData}:pageProps)  => {
-        const dispatch =useDispatch()
-       const {
-        data:slides,
-        isLoading,
-        isSuccess,
-        isError,
-        error
-    } = useGetSlidesQuery('slidesList', {
-        pollingInterval: 15000,
-        refetchOnFocus: true,
-        refetchOnMountOrArgChange: true
-    })
-     const [modalData,setModalData] = useState<modalDataProps>({
+        const { id, settings: {sliders, ...otherSettings } = {} } = useSelector(useLandingConfig);
+     const [modalData,setModalData] = useState<ModalDataProps<HomeSlide>["modalData"]>({
             data:null, 
             showModal:false,
            })
     
-    const showEditForm = (modalData:modalDataProps)=>{
+    const showEditForm = (modalData:ModalDataProps<HomeSlide>["modalData"])=>{
         setModalData(modalData);
         }
 
-        useEffect(() => {
-            dispatch(setPreloader(isLoading?true:false)) 
-             
-            }, [isLoading])
-            useEffect(() => {
+useEffect(() => {
 
-                destroyDataTables($('#dataTable'))
-                  initDataTables($('#dataTable'),"All Slides")
-                return () => {
-                 destroyDataTables($('#dataTable'))
-                }
-              }, [slides])
+destroyDataTables($('#dataTable'))
+initDataTables($('#dataTable'),"All Slides")
+return () => {
+destroyDataTables($('#dataTable'))
+}
+}, [sliders])
 
-    let tableContent
-    if (isSuccess && !isLoading) {
-        const { ids } = slides
-    
-        tableContent = ids?.length
-            ? ids.map((slideId:string ,i:number) =><SlideTableData key={slideId} slideId={slideId} index={i} showEditForm={showEditForm} />) 
+
+       
+        const tableContent = sliders?.length
+            ? sliders.map((slide:HomeSlide ,i:number) =><SlideTableData key={slide.id} slide={slide} index={i} showEditForm={showEditForm} />) 
             : null
-    }
+    
      return (
         <>
         <MainBody>
@@ -85,7 +65,6 @@ interface modalDataProps {
                                                     <th>Sub Heading</th>
                                                     <th>Description</th>
                                                     <th>Status</th>
-                                                    <th>Date Created</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>

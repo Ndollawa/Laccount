@@ -1,10 +1,10 @@
 import React, {FormEvent,useState, useEffect} from 'react'
 import { Editor } from '@tinymce/tinymce-react'
-import { useUpdateFaqMutation } from '../faqApiSlice'
+import { useUpdateFaqMutation } from '../slices/faqApi.slice'
 import { Modal } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import showToast from '../../../../../app/utils/hooks/showToast'
-import { faqProps } from '../../../../../app/utils/props/faqProps'
+import showToast from '../../../../../app/utils/showToast'
+import { faqProps } from '../../../../../app/props/faqProps'
 
 interface modalDataProps {
 viewData:{
@@ -55,7 +55,7 @@ const handleClose = () => setShow(false);
         <Modal.Body>
           <h4 className="heading">Response:</h4>
         <Editor
-        tinymceScriptSrc={process.env.PUBLIC_URL + '/tinymce/tinymce.min.js'}
+        tinymceScriptSrc={process.env.VITE_PUBLIC_URL + '/tinymce/tinymce.min.js'}
       //  onEditorChange={(newValue,editor)=>setBody(newValue)}
        value={response}
        disabled

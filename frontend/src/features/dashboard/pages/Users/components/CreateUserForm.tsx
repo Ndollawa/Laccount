@@ -5,11 +5,11 @@ import React, {
   useEffect,
   useRef,
 } from "react";
-import { useAddNewUserMutation } from "../usersApiSlice";
+import { useAddNewUserMutation } from "../slices/usersApi.slice";
 import { Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import showToast from "../../../../../app/utils/hooks/showToast";
-import useInput from "../../../../../app/utils/hooks/useInput";
+import showToast from "../../../../../app/utils/showToast";
+import useInput from "../../../../../app/hooks/useInput";
 
 const CreateUserForm = () => {
   const [email, setEmail] = useState("");

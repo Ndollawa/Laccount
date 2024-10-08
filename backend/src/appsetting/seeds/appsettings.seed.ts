@@ -20,8 +20,10 @@ export class AppSettingsSeed {
     ) {
       await this.appSettingsService.create({
         type: SettingsType.DASHBOARD,
-        ...dashboardDefault,
-        name: 'Dashboard',
+        settings: dashboardDefault,
+        default: dashboardDefault,
+        name: SettingsType.DASHBOARD,
+        userDefined: false,
       });
     }
     if (
@@ -31,8 +33,10 @@ export class AppSettingsSeed {
     ) {
       await this.appSettingsService.create({
         type: SettingsType.LANDING,
-        ...landingDefault,
-        name: 'Landing',
+        settings: landingDefault,
+        default: landingDefault,
+        name: SettingsType.LANDING,
+        userDefined: false,
       });
     }
     if (
@@ -42,8 +46,10 @@ export class AppSettingsSeed {
     ) {
       await this.appSettingsService.create({
         type: SettingsType.COMPANY_INFO,
-        ...companyInfoDefault,
-        name: 'Company',
+        settings: companyInfoDefault,
+        default: companyInfoDefault,
+        name: SettingsType.COMPANY_INFO,
+        userDefined: false,
       });
     }
   }

@@ -1,11 +1,11 @@
 import React,{FormEvent, useState} from 'react'
 import { useSearchParams,useNavigate } from 'react-router-dom'
 import RecentPostList from '../../components/RecentPostList'
-import postProps from '../../../../../../app/utils/props/postProps'
-import { useGetPostsQuery } from '../../../../../dashboard/pages/Post/postApiSlice'
-import { useGetPostCategoryQuery } from '../../../../../dashboard/pages/PostCategory/postCategoryApiSlice'	
-import postCategoryProps from '../../../../../../app/utils/props/postCategoryProps'
-import useDebounce from '../../../../../../app/utils/hooks/useDebounce'
+import postProps from '../../../../../../app/props/postProps'
+import { useGetPostsQuery } from '../../../../../dashboard/pages/Post/slices/postApi.slice'
+import { useGetPostCategoryQuery } from '../../../../../dashboard/pages/PostCategory/slices/postCategoryApi.slice'	
+import postCategoryProps from '../../../../../../app/props/postCategoryProps'
+import useDebounce from '../../../../../../app/hooks/useDebounce'
 
 
 const PostSidebar = ({posts,filterPosts,setPostList, sFormA =false}:{posts:postProps[],filterPosts:any,setPostList?:any,sFormA?:boolean}) => { 

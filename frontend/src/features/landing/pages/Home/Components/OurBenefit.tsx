@@ -1,14 +1,13 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { useCompanyInfo,useLandingPageConfig, } from '../../../../dashboard/pages/Settings/settingsConfigSlice'
-
+import { useCompanyInfo,useLandingConfig, } from '../../../../dashboard/pages/Settings/slices/settings.slice'
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 
 
 const OurBenefit = () => {
-const {ourBenefitStyle} = useSelector(useLandingPageConfig)
-  const {siteName} = useSelector(useCompanyInfo);  
-const {siteImages:{aboutUsBg, backgroundImage}} = useSelector(useLandingPageConfig); 
+  const {settings:{siteName}={}} = useSelector(useCompanyInfo);  
+const {settings:{landingPageConfig:{ourBenefitStyle}={}, siteImages:{aboutUsBg, backgroundImage}={}}={}} = useSelector(useLandingConfig); 
 
 let ourBenefitSection;
 switch (ourBenefitStyle) {
@@ -24,14 +23,14 @@ switch (ourBenefitStyle) {
           <div className="row row-gutter-y-60">
               <div className="col-lg-6">
                   <div className="benefit-one__image wow fadeInUp image-overlay" data-wow-duration="1500ms" data-wow-delay="500ms">
-                      <img src={process.env.REACT_APP_BASE_URL+"/uploads/settings/"+aboutUsBg} alt={siteName}  />
+                      <img src={BASE_URL+"/uploads/settings/"+aboutUsBg} alt={siteName}  />
                       <div className="benefit-one__image__caption image-caption catptio-left">
                           <h3 className="benefit-one__image__title">99.9%</h3>
                           <p className="benefit-one__image__text">Success Rates Guarantee</p>
                           
                       </div>
                   </div>
-                  {/* <img src={process.env.REACT_APP_BASE_URL+"/uploads/settings/"+backgroundImage} alt={siteName}  /> */}
+                  {/* <img src={BASE_URL+"/uploads/settings/"+backgroundImage} alt={siteName}  /> */}
               </div>
               <div className="col-lg-6">
                   <div className="benefit-one__content">

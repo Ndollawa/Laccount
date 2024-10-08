@@ -1,15 +1,15 @@
 import React, {ChangeEvent,FormEvent,useState,useEffect} from 'react'
 import MainBody from '../../components/MainBody'
 import { useDispatch } from 'react-redux'
-import { useGetPostCategoryQuery, useAddNewPostCategoryMutation } from './postCategoryApiSlice'
+import { useGetPostCategoryQuery, useAddNewPostCategoryMutation } from './slices/postCategoryApi.slice'
 import { setPreloader } from '../../../components/preloader/slices/preloader.slice'
-import pageProps from '../../../../app/utils/props/pageProps'
+import pageProps from '../../../../app/props/pageProps'
 import PostCategoryTableData from './components/PostCategoryTableData'   
-import showToast from '../../../../app/utils/hooks/showToast'
+import showToast from '../../../../app/utils/showToast'
 import initDataTables,{destroyDataTables} from '../../../../app/utils/initDataTables'
 import $ from 'jquery'
 import EditPostCategoryForm from './components/EditPostCategoryForm'
-import postCategoryProps from '../../../../app/utils/props/postCategoryProps'
+import postCategoryProps from '../../../../app/props/postCategoryProps'
 
     
 

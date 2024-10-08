@@ -1,32 +1,31 @@
 import React,{ FormEvent, FormEventHandler, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch,useSelector } from "react-redux";
-import { useDashboardConfigSettingsMutation } from "../pages/Settings/settingApiSlice";
-import { useSettings } from "../pages/Settings/settingsConfigSlice";
-import { setDashboardSetting } from '../pages/Settings/settingsConfigSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { useUpdateSettingMutation } from "../pages/Settings/slices/settingApi.slice";
+import { useDashboardConfig, useSettings } from "../pages/Settings/slices/settings.slice";
+import { setDashboardSetting } from '../pages/Settings/slices/settings.slice';
 import $ from 'jquery';
 
 const AppSettings = () => {
-  const settings = useSelector(useSettings)
-  const {_id,dashboardConfig:{layoutOptions}} =settings
+  const {id, settings:{dashboardConfig, ...otherSettings}={}} = useSelector(useDashboardConfig);
   const body = $('body');
   const html = $('html');
 
-  
 
 const dispatch = useDispatch();
-const [dashboardConfigSetting,isLoading] = useDashboardConfigSettingsMutation();
+const [updateSetting,isLoading] = useUpdateSettingMutation();
  
 //change the theme typography controller
    const typographySelect:FormEventHandler =(e:FormEvent<HTMLInputElement>)=> {
       e.persist();
-        const data = {...layoutOptions,typography:e.currentTarget.value};
         (async()=>{
+          const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, typography:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
           try {
-               await dashboardConfigSetting({_id,data}).unwrap();
-               dispatch(setDashboardSetting(data))
+            console.log(settings)
+            await updateSetting({ id, settings }).unwrap();
+            dispatch(setDashboardSetting(settings));
              } catch (error) {
-            console.log(error)   
+            console.error(error)   
              }
        })(); 
     }
@@ -34,12 +33,14 @@ const [dashboardConfigSetting,isLoading] = useDashboardConfigSettingsMutation();
     //change the theme version controller
   const  versionSelect:FormEventHandler = (e:FormEvent<HTMLInputElement>) =>{
       e.persist();
-      const data = {...layoutOptions,version:e.currentTarget.value};
+     
     
       (async()=>{
-        try {
-             await dashboardConfigSetting({_id,data}).unwrap();
-             dispatch(setDashboardSetting(data))
+          const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, version:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
+          try {
+            console.log(settings)
+            await updateSetting({ id, settings }).unwrap();
+            dispatch(setDashboardSetting(settings));
            } catch (error) {
              
            }
@@ -58,14 +59,15 @@ const [dashboardConfigSetting,isLoading] = useDashboardConfigSettingsMutation();
        if(e.currentTarget.value === "fixed" && body.attr('data-sidebar-style') === "modern" && body.attr('data-layout') === "vertical" ){
         alert("Sorry, Modern sidebar layout dosen't support fixed position!") 
        }else{
-        const data = {...layoutOptions,layout:e.currentTarget.value};
-    
+         
         (async()=>{
-          try {
-               await dashboardConfigSetting({_id,data}).unwrap();
-               dispatch(setDashboardSetting(data))
+            const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, layout:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
+            try {
+              console.log(settings)
+              await updateSetting({ id, settings }).unwrap();
+              dispatch(setDashboardSetting(settings));
              } catch (error) {
-            console.log(error)   
+            console.error(error)   
              }
        })(); 
       }
@@ -74,14 +76,15 @@ const [dashboardConfigSetting,isLoading] = useDashboardConfigSettingsMutation();
     //change the header position controller
   const  headerPositionSelect:FormEventHandler = (e:FormEvent<HTMLInputElement>) =>{
       e.persist();
-      const data = {...layoutOptions,headerPosition:e.currentTarget.value};
-    
+      
       (async()=>{
+        const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, headerPosition:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
         try {
-             await dashboardConfigSetting({_id,data}).unwrap();
-             dispatch(setDashboardSetting(data))
+          console.log(settings)
+          await updateSetting({ id, settings }).unwrap();
+          dispatch(setDashboardSetting(settings));
            } catch (error) {
-             
+             consol.error(error)
            }
      })(); 
     }
@@ -92,14 +95,15 @@ const [dashboardConfigSetting,isLoading] = useDashboardConfigSettingsMutation();
       html.attr('dir', e.currentTarget.value);
         html.attr('class', '');
         html.addClass(`${e.currentTarget.value}`);
-        const data = {...layoutOptions,direction:e.currentTarget.value};
     console.log(e.currentTarget.value);
     (async()=>{
-       try {
-            await dashboardConfigSetting({_id,data}).unwrap();
-            dispatch(setDashboardSetting(data))
+      const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, direction:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
+      try {
+        console.log(settings)
+        await updateSetting({ id, settings }).unwrap();
+        dispatch(setDashboardSetting(settings));
           } catch (error) {
-         console.log(error)   
+         console.error(error)   
           }
     })();   
     }
@@ -108,27 +112,28 @@ const [dashboardConfigSetting,isLoading] = useDashboardConfigSettingsMutation();
     const layoutSelect:FormEventHandler=(e:FormEvent<HTMLInputElement>)=> {
       e.persist();
         if(body.attr('data-sidebar-style') === 'overlay') {
-    const data = {...layoutOptions,sidebarStyle:"full",layout:e.currentTarget.value};
     
     (async()=>{
+      const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, sidebarStyle:"full" as string,layout:e.currentTarget.value! as string}, ...dashboardConfig}, ...otherSettings };
       try {
-           await dashboardConfigSetting({_id,data}).unwrap();
-           dispatch(setDashboardSetting(data))
+        console.log(settings)
+        await updateSetting({ id, settings }).unwrap();
+        dispatch(setDashboardSetting(settings));
          } catch (error) {
-           console.log(error)
+           console.error(error)
          }
    })(); 
             return;
         }
 
-        const data = {...layoutOptions,layout:e.currentTarget.value};
-    
-        (async()=>{
+               (async()=>{
+          const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, layout:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
           try {
-               await dashboardConfigSetting({_id,data}).unwrap();
-               dispatch(setDashboardSetting(data))
+            console.log(settings)
+            await updateSetting({ id, settings }).unwrap();
+            dispatch(setDashboardSetting(settings));
              } catch (error) {
-            console.log(error)   
+            console.error(error)   
              }
        })(); 
     }
@@ -139,14 +144,15 @@ const [dashboardConfigSetting,isLoading] = useDashboardConfigSettingsMutation();
         if(e.currentTarget.value === "boxed") {
 
             if(body.attr('data-layout') === "vertical" && body.attr('data-sidebar-style') === "full") {
-                const data = {...layoutOptions,sidebarStyle:"overlay",containerLayout:e.currentTarget.value};
     
                 (async()=>{
+                  const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, sidebarStyle:"overlay" as string,containerLayout:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
                   try {
-                       await dashboardConfigSetting({_id,data}).unwrap();
-                       dispatch(setDashboardSetting(data))
+                    console.log(settings)
+                    await updateSetting({ id, settings }).unwrap();
+                    dispatch(setDashboardSetting(settings));
                      } catch (error) {
-                       console.log(error)
+                       console.error(error)
                      }
                })();  
                 setTimeout(function(){
@@ -159,14 +165,15 @@ const [dashboardConfigSetting,isLoading] = useDashboardConfigSettingsMutation();
             
         }
 
-        const data = {...layoutOptions,containerLayout:e.currentTarget.value};
     
         (async()=>{
+          const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, containerLayout:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
           try {
-               await dashboardConfigSetting({_id,data}).unwrap();
-               dispatch(setDashboardSetting(data))
+            console.log(settings)
+            await updateSetting({ id, settings }).unwrap();
+            dispatch(setDashboardSetting(settings));
              } catch (error) {
-            console.log(error)   
+            console.error(error)   
              }
        })(); 
     }
@@ -206,15 +213,15 @@ const [dashboardConfigSetting,isLoading] = useDashboardConfigSettingsMutation();
                 return;
             }
         }
-
-        const data = {...layoutOptions,sidebarStyle:e.currentTarget.value};
     
         (async()=>{
+          const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, sidebarStyle:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
           try {
-               await dashboardConfigSetting({_id,data}).unwrap();
-               dispatch(setDashboardSetting(data))
+            console.log(settings)
+            await updateSetting({ id, settings }).unwrap();
+            dispatch(setDashboardSetting(settings));
              } catch (error) {
-            console.log(error)   
+            console.error(error)   
              }
        })(); 
 
@@ -233,12 +240,13 @@ const [dashboardConfigSetting,isLoading] = useDashboardConfigSettingsMutation();
   	//change the nav-header background controller
     $('input[name="navigation_header"]').on('click',(e)=> {
   //  alert(e.currentTarget.value)  
-   const data = {...layoutOptions,navheaderBg:e.currentTarget.getAttribute('value')};
     
   (async()=>{
- try {
-        await dashboardConfigSetting({_id,data}).unwrap();
-        dispatch(setDashboardSetting(data))
+    const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, navheaderBg:e.currentTarget.getAttribute('value')! as string }, ...dashboardConfig}, ...otherSettings };
+    try {
+      console.log(settings)
+      await updateSetting({ id, settings }).unwrap();
+      dispatch(setDashboardSetting(settings));
       } catch (error) {
         
       }
@@ -247,40 +255,43 @@ const [dashboardConfigSetting,isLoading] = useDashboardConfigSettingsMutation();
       });
     
       //change the header background controller
-      $('input[name="header_bg"]').on('click', (e)=> {      
-    const data = {...layoutOptions,headerBg:e.currentTarget.getAttribute('value')};
+      $('input[name="header_bg"]').on('click', (e)=> {   
 
 (async()=>{
-       try {
-            await dashboardConfigSetting({_id,data}).unwrap();
-            dispatch(setDashboardSetting(data))
+  const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, headerBg:e.currentTarget.getAttribute('value')! as string }, ...dashboardConfig}, ...otherSettings };
+  try {
+    console.log(settings)
+    await updateSetting({ id, settings }).unwrap();
+    dispatch(setDashboardSetting(settings));
           } catch (error) {
-         console.log(error)   
+         console.error(error)   
           }
     })();       });
   
       //change the sidebar background controller
       $('input[name="sidebar_bg"]').on('click', (e)=> { 
-    const data = {...layoutOptions,sidebarBg:e.currentTarget.getAttribute('value')};
     
 (async()=>{
-       try {
-            await dashboardConfigSetting({_id,data}).unwrap();
-            dispatch(setDashboardSetting(data))
+  const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, sidebarBg:e.currentTarget.getAttribute('value')!  as string}, ...dashboardConfig}, ...otherSettings };
+  try {
+    console.log(settings)
+    await updateSetting({ id, settings }).unwrap();
+    dispatch(setDashboardSetting(settings));
           } catch (error) {
-         console.log(error)   
+         console.error(error)   
           }
     })();       });
     
     //change the primary color controller
       $('input[name="primary_bg"]').on('click', (e)=> {
-    const data = {...layoutOptions,primary:e.currentTarget.getAttribute('value')};
 (async()=>{
-       try {
-            await dashboardConfigSetting({_id,data}).unwrap();
-            dispatch(setDashboardSetting(data))
+  const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, primary:e.currentTarget.getAttribute('value')! as string }, ...dashboardConfig}, ...otherSettings };
+  try {
+    console.log(settings)
+    await updateSetting({ id, settings }).unwrap();
+    dispatch(setDashboardSetting(settings));
           } catch (error) {
-         console.log(error)   
+         console.error(error)   
           }
     })();       });
   return ()=>{

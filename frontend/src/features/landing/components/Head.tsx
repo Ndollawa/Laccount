@@ -1,15 +1,15 @@
 import React from 'react';
 import {Helmet} from 'react-helmet-async';
-import pageProps from "../../../app/utils/props/pageProps";
+import pageProps from "../../../app/props/pageProps";
 import { useSelector } from 'react-redux';
-import {useCompanyInfo,useLandingPageConfig} from '../../dashboard/pages/Settings/settingsConfigSlice';
-
+import {useCompanyInfo,useLandingConfig} from '../../dashboard/pages/Settings/slices/settings.slice';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Head:React.FC<pageProps> = ({pageData}:pageProps) => {
   
 const {pageTitle} = pageData!;
-const {siteName,description} = useSelector(useCompanyInfo); 
-const {landingConfig:{siteImages:{favicon}}} = useSelector(useLandingPageConfig); 
+const {settings:{siteName,description}={}} = useSelector(useCompanyInfo); 
+const {settings:{siteImages:{favicon}={}}={}} = useSelector(useLandingConfig); 
   return (
     <Helmet>
     <meta charSet="UTF-8" />
@@ -17,10 +17,10 @@ const {landingConfig:{siteImages:{favicon}}} = useSelector(useLandingPageConfig)
    
     <title>{pageTitle+" - "+siteName}</title>
    
-    <link rel="apple-touch-icon" sizes="180x180" href={process.env.REACT_APP_BASE_URL+"/uploads/settings/"+favicon}/>
-    <link rel="icon" type="image/png" sizes="32x32" href={process.env.REACT_APP_BASE_URL+"/uploads/settings/"+favicon} />
-    <link rel="icon" type="image/png" sizes="16x16" href={process.env.REACT_APP_BASE_URL+"/uploads/settings/"+favicon} />
-    {/* <link rel="manifest" href={process.env.REACT_APP_BASE_URL+"/uploads/settings/"+favicon} /> */}
+    <link rel="apple-touch-icon" sizes="180x180" href={BASE_URL+"/uploads/settings/"+favicon}/>
+    <link rel="icon" type="image/png" sizes="32x32" href={BASE_URL+"/uploads/settings/"+favicon} />
+    <link rel="icon" type="image/png" sizes="16x16" href={BASE_URL+"/uploads/settings/"+favicon} />
+    {/* <link rel="manifest" href={BASE_URL+"/uploads/settings/"+favicon} /> */}
     <meta name="description" content={description} />
 
 

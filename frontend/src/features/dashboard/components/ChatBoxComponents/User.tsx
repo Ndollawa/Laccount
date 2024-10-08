@@ -1,10 +1,10 @@
 import React,{useEffect, useState} from 'react'
-import useUserImage from '../../../../app/utils/hooks/useUserImage'
+import useUserImage from '../../../../app/hooks/useUserImage'
 import { selectCurrentUser } from '../../../auth/slices/auth.slice'
 import { useSelector } from 'react-redux'
-import useUserContacts from '../../../../app/utils/hooks/useUserContacts'
+import useUserContacts from '../../../../app/hooks/useUserContacts'
 import Swal from 'sweetalert2'
-import { useAddNewContactMutation, useUpdateContactMutation } from '../../pages/Contact/contactsApiSlice'
+import { useAddNewContactMutation, useUpdateContactMutation } from '../../pages/Contact/slices/contactsApi.slice'
 import { Link } from 'react-router-dom'
 import { HiChatBubbleLeftRight } from 'react-icons/hi2'
 

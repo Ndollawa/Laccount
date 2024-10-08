@@ -1,11 +1,11 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '../../../../../auth/slices/auth.slice'
-import { useGetUsersQuery } from '../../../../../dashboard/pages/Users/usersApiSlice'
-import {postCommentReplyProps} from '../../../../../../app/utils/props/postCommentProps'
-import useUserImage from '../../../../../../app/utils/hooks/useUserImage'
-import defaultUser from '../../../../../../images/user/defaultUser.jpeg'
-import defaultUser2 from '../../../../../../images/user/defaultUser2.jpeg'
+import { useGetUsersQuery } from '../../../../../dashboard/pages/Users/slices/usersApi.slice'
+import {postCommentReplyProps} from '../../../../../../app/props/postCommentProps'
+import useUserImage from '../../../../../../app/hooks/useUserImage'
+import defaultUser from '../../../../../../assets/images/user/defaultUser.jpeg'
+import defaultUser2 from '../../../../../../assets/images/user/defaultUser2.jpeg'
 
 const PostComment = ({pcr, replyComment}:{pcr:postCommentReplyProps; replyComment:any}) => {
   

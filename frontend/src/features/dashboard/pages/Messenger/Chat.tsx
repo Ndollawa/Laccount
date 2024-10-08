@@ -3,22 +3,22 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import MainBody from '../../components/MainBody';
-import pageProps from '../../../../app/utils/props/pageProps';
-import useWindowSize from '../../../../app/utils/hooks/useWindowSize';
+import pageProps from '../../../../app/props/pageProps';
+import useWindowSize from '../../../../app/hooks/useWindowSize';
 import { selectCurrentUser } from '../../../auth/slices/auth.slice';
-import useUserImage from '../../../../app/utils/hooks/useUserImage';
+import useUserImage from '../../../../app/hooks/useUserImage';
 import { useSelector } from 'react-redux';
 import $ from 'jquery'
 import { Link, useParams } from 'react-router-dom';
 import Conversation from './components/Conversation';
-import { useGetConversationsQuery } from '../../pages/Messenger/conversationsApiSlice';
-import { useGetUsersQuery } from '../Users/usersApiSlice';
-import { useGetMessagesQuery } from './messagesApiSlice';
-import conversationProps from '../../../../app/utils/props/conversationProps';
-import messageProps from '../../../../app/utils/props/messageProps';
+import { useGetConversationsQuery } from './slices/conversationsApi.slice';
+import { useGetUsersQuery } from '../Users/slices/usersApi.slice';
+import { useGetMessagesQuery } from './slices/messagesApi.slice';
+import conversationProps from '../../../../app/props/conversationProps';
+import messageProps from '../../../../app/props/messageProps';
 import ChatBox from './components/ChatBox';
-import useDebounce from '../../../../app/utils/hooks/useDebounce';
-import userInterface from '../../../../app/utils/props/userProps';
+import useDebounce from '../../../../app/hooks/useDebounce';
+import userInterface from '../../../../app/props/userProps';
 
 
 const Chat:React.FC<pageProps> = ({pageData}:pageProps) => {

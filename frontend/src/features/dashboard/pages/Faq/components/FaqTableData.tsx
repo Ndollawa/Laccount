@@ -1,14 +1,14 @@
 import React,{useState,useEffect,useMemo} from 'react'
 import Swal from 'sweetalert2'
-import { useGetFaqsQuery, useDeleteFaqMutation } from '../faqApiSlice'
-import showToast from '../../../../../app/utils/hooks/showToast'
+import { useGetFaqsQuery, useDeleteFaqMutation } from '../slices/faqApi.slice'
+import showToast from '../../../../../app/utils/showToast'
 import EditFaqModal from './EditFaqModal'
 import ViewModal from './ViewModal'
 import { setPreloader } from '../../../../components/preloader/slices/preloader.slice'
 import { useDispatch } from 'react-redux'
 import $ from 'jquery'
 import initDataTables, { destroyDataTables } from '../../../../../app/utils/initDataTables'
-import { faqProps } from '../../../../../app/utils/props/faqProps'
+import { faqProps } from '../../../../../app/props/faqProps'
 
 interface modalDataProps {
     data:faqProps | null,
@@ -87,7 +87,7 @@ if (isError) {
             reverseButtons: true
           }).then(async(result) => {
             if (result.isConfirmed) {
-                  await deleteFaq({ _id: id })
+                  await deleteFaq({ id: id })
         if(isDelError) return showToast('error',JSON.stringify(delerror?.data))
               swalWithBootstrapButtons.fire(
                 'Deleted!',
@@ -129,7 +129,7 @@ if (isSuccess && !isLoading) {
         break;
 }
     return (
-            <tr key={faqId._id}>
+            <tr key={faqId.id}>
                     <td>{++index}</td>
                     <td>{faqId.question}</td>
                     <td dangerouslySetInnerHTML={{__html: faqId.response}} ></td>
@@ -139,7 +139,7 @@ if (isSuccess && !isLoading) {
                         <div className="d-flex">
                             <button type="button" className="btn btn-success light shadow btn-xs sharp me-1"   onClick={()=>{showDetails({
         data:{
-       _id:faqId._id,
+       id:faqId.id,
         question:faqId.question,
         response:faqId.response,
         status:faqId.status
@@ -149,7 +149,7 @@ if (isSuccess && !isLoading) {
     });}}><i className="fas fa-eye"></i></button>
                             <button type="button" className="btn btn-info light shadow btn-xs sharp me-1"   onClick={()=>{showEditForm({
         data:{
-        _id:faqId._id,
+        id:faqId.id,
         question:faqId.question,
         response:faqId.response,
         status:faqId.status

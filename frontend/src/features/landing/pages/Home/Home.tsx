@@ -1,7 +1,7 @@
 import React from 'react';
-import pageProps from '../../../../app/utils/props/pageProps';
+import pageProps from '../../../../app/props/pageProps';
 import { useSelector } from 'react-redux';
-import {useCompanyInfo,useLandingPageConfig} from '../../../dashboard/pages/Settings/settingsConfigSlice';
+import {useCompanyInfo,useLandingConfig} from '../../../dashboard/pages/Settings/slices/settings.slice';
 import Slider from './Components/Slider';
 import AboutUs from './Components/AboutUs';
 import WhatWeOffer from './Components/WhatWeOffer';
@@ -12,7 +12,7 @@ import CTASection from './Components/CTASection';
 
 const Home:React.FC<pageProps>=({pageData}:pageProps) => {
 
-    const {siteName} = useSelector(useCompanyInfo); 
+    const {settings:{siteName}={}} = useSelector(useCompanyInfo); 
   return (
     <>
         <Slider/>
@@ -28,7 +28,7 @@ const Home:React.FC<pageProps>=({pageData}:pageProps) => {
                             <div className="block-title text-left">
                                 <p className="block-title__tagline">Why Choose {siteName}:</p>
                                 {/* <!-- /.block-title__tagline --> */}
-                                <h2 className="block-title__title"> Your Trusted Escrow Partner</h2>
+                                <h2 className="block-title__title"> Your Trusted Acount Sellling Platform</h2>
                                 {/* <!-- /.block-title__title --> */}
                             </div>
                             {/* <!-- /.block-title --> */}

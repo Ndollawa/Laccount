@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Nav from './Nav';
-import pageProps from '../../../app/utils/props/pageProps';
+import pageProps from '../../../app/props/pageProps';
 
 
 const Header:React.FC<pageProps> = ({pageData}:pageProps) => {

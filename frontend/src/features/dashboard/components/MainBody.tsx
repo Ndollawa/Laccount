@@ -8,13 +8,13 @@ import SideBar from "./SideBar";
 import Chatbox from "./ChatBox";
 import Footer from "./Footer";
 import { useSelector } from 'react-redux';
-import {useCompanyInfo,useDashboardConfig, useSiteImages} from '../pages/Settings/settingsConfigSlice';
+import {useCompanyInfo,useDashboardConfig, useLandingConfig} from '../pages/Settings/slices/settings.slice';
 import { selectCurrentUser } from "../../auth/slices/auth.slice";
-import useWindowSize from "../../../app/utils/hooks/useWindowSize";
+import useWindowSize from "../../../app/hooks/useWindowSize";
 import AppSettings from "./AppSettings";
 import ThemePanel from "./ThemePanel";
-import useUserActivity from "../../../app/utils/hooks/useUserActivity";
-
+import useUserActivity from "../../../app/hooks/useUserActivity";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const MainBody = ({children}:{children:React.ReactNode}) => {
 const currentUser = useSelector(selectCurrentUser)
@@ -26,10 +26,9 @@ useUserActivity()
 const pageData ={
     pageTitle: 'Dashboard'
 }
-const {siteName} = useSelector(useCompanyInfo);
-const {logo,favicon,logoDark} = useSelector(useSiteImages);
-const {layoutOptions} = useSelector(useDashboardConfig);
-const {
+const {settings:{companyDetails:{siteName}={}}={}} = useSelector(useCompanyInfo);
+const {settings:{siteImages: {logo,favicon, logoDark}={}}={}} = useSelector(useLandingConfig)
+const {settings:{dashboardConfig:{layoutOptions:{
     typography,
     version,
     layout,
@@ -42,7 +41,7 @@ const {
     headerPosition,
     containerLayout,
     direction
-} = layoutOptions;
+}={}}={}}={}} = useSelector(useDashboardConfig);
 
 const toggleMenu = ()=>{
 setIsToggled(prev=> !prev);
@@ -124,7 +123,7 @@ handleHeaderHight()
     ***********************************--> */}
            <div className="nav-header">
             <Link to="/dashboard" className="brand-logo">
-              {(isToggled || width! < 728 || sidebarStyle === 'mini') ?<img src={process.env.REACT_APP_BASE_URL+"/uploads/settings/"+favicon} alt={siteName} width='30'/> :<img src={version === 'dark'? process.env.REACT_APP_BASE_URL+"/uploads/settings/"+logoDark : process.env.REACT_APP_BASE_URL+"/uploads/settings/"+logo} alt={siteName} width='150'/>} 
+              {(isToggled || width! < 728 || sidebarStyle === 'mini') ?<img src={BASE_URL+"/uploads/settings/"+favicon} alt={siteName} width='30'/> :<img src={version === 'dark'? BASE_URL+"/uploads/settings/"+logoDark : BASE_URL+"/uploads/settings/"+logo} alt={siteName} width='150'/>} 
             </Link>
 
             <div className="nav-control">
@@ -157,8 +156,8 @@ handleHeaderHight()
    
         </div>
       </div>
-        {/* <AppSettings/>
-        <ThemePanel/> */}
+        <AppSettings/>
+        <ThemePanel/>
     </div>
     <Footer />
    </>

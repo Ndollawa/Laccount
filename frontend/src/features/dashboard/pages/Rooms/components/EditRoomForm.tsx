@@ -1,11 +1,11 @@
 import React, {ChangeEvent,FormEvent,useState,useEffect} from 'react'
 import { Editor } from '@tinymce/tinymce-react'
-import { useUpdateRoomMutation} from '../roomsApiSlice'
+import { useUpdateRoomMutation} from '../slices/roomsApi.slice'
 import {Modal} from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import showToast from '../../../../../app/utils/hooks/showToast'
+import showToast from '../../../../../app/utils/showToast'
 import $ from 'jquery'
-import roomProps from '../../../../../app/utils/props/roomProps'
+import roomProps from '../../../../../app/props/roomProps'
 
 
 

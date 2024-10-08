@@ -10,7 +10,6 @@ const baseQuery = fetchBaseQuery({
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
-    headers.set("api-secret", "ervis-api-key");
     if (token) {
       headers.set("authorization", `Bearer ${token}`);
     }
@@ -45,6 +44,7 @@ const baseQueryWithReauth: BaseQueryFn = async (args:any, api:any, extraOptions:
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["Contract"],
+  tagTypes: ["users","appSettings","posts","comments","accountDetails","vendors","profiles","ratings","payments","transactions","supportTickets","notifiactions",
+    "subscriptions","subscriptionPlans","roomMessages","messages","mailer","paymentGateway"],
   endpoints: (builders) => ({}),
 });

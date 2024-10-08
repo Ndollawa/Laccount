@@ -1,6 +1,6 @@
 import React from 'react'
-import {useGetTeamsQuery,useDeleteTeamMutation } from '../teamsApiSlice'
-import showToast from '../../../../../app/utils/hooks/showToast'
+import {useGetTeamsQuery,useDeleteTeamMutation } from '../slices/teamsApi.slice'
+import showToast from '../../../../../app/utils/showToast'
 import Swal from 'sweetalert2'
 import LightGallery from 'lightgallery/react'
 import 'lightgallery/css/lightgallery.css'
@@ -9,14 +9,9 @@ import 'lightgallery/css/lg-zoom.css'
 import lgThumbnail from 'lightgallery/plugins/thumbnail'
 import lgZoom from 'lightgallery/plugins/zoom'
 // import 'lightgallery/css/lg-thumbnail.css'
-import teamProps from '../../../../../app/utils/props/teamProps'
+import teamProps from '../../../../../app/props/teamProps'
 
-interface modalDataProps {
-    modalData:{
-       data:teamProps | null,
-      showModal:boolean,
-    } 
-    }
+
 const TeamTableData = ({teamId,index,showEditForm}:any) => {
     const { team } = useGetTeamsQuery("teamsList", {
         selectFromResult: ({ data }) => ({
@@ -49,7 +44,7 @@ const TeamTableData = ({teamId,index,showEditForm}:any) => {
             reverseButtons: true
           }).then(async(result) => {
             if (result.isConfirmed) {
-        await deleteTeam({ _id: id })
+        await deleteTeam({ id: id })
         if(isDelError) return showToast('error',JSON.stringify(delerror?.data))
               swalWithBootstrapButtons.fire(
                 'Deleted!',
@@ -74,7 +69,7 @@ const TeamTableData = ({teamId,index,showEditForm}:any) => {
         const created = new Date(team.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year:'numeric' })
       const teamData = {
         data:{
-        _id:teamId,
+        id:teamId,
         firstName: team.firstName,
         lastName: team.lastName,
         email: team.email,
@@ -119,7 +114,7 @@ const TeamTableData = ({teamId,index,showEditForm}:any) => {
                     <td>
                     <div className="d-flex">
                             <button type="button" className="btn btn-info light shadow btn-xs sharp me-1"   onClick={()=>showEditForm(teamData)}><i className="fas fa-pencil-alt"></i></button>
-                            <button className="btn btn-danger light shadow btn-xs sharp" onClick={()=>onDeleteTeam(team._id)}><i className="fa fa-trash"></i></button>
+                            <button className="btn btn-danger light shadow btn-xs sharp" onClick={()=>onDeleteTeam(team.id)}><i className="fa fa-trash"></i></button>
                         </div>													
                     </td>												
                 </tr>

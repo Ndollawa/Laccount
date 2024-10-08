@@ -7,7 +7,7 @@ export class LoginUserDto {
   @Matches(USER_REGEX || EMAIL_REGEX, {
     message: 'Enter a valid username or email address.',
   })
-  username: string;
+  user: string;
 
   @IsNotEmpty()
   @IsString()

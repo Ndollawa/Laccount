@@ -1,331 +1,207 @@
-import React, {ChangeEvent,FormEvent,useState,useEffect,useRef} from 'react'
-import { useUpdateTeamMutation} from '../teamsApiSlice'
-import {Modal} from 'react-bootstrap'
-import Button from 'react-bootstrap/Button'
-import showToast from '../../../../../app/utils/hooks/showToast'
-import useInput from '../../../../../app/utils/hooks/useInput'
-import $ from 'jquery'
-import teamProps from '../../../../../app/utils/props/teamProps'
+import React, { useState, useEffect } from 'react';
+import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
+import { useUpdateTeamMutation } from '../slices/teamsApi.slice';
+import { Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import showToast from '../../../../../app/utils/showToast';
+import teamProps from '../../../../../app/props/teamProps';
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 interface modalDataProps {
-  modalData:{
-     data:teamProps | null,
-    showModal:boolean,
-  } 
-  }
-const EditTeamModal = ({modalData:{data,showModal}}:modalDataProps) => {
-  const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [position, setPosition] = useState("");
-  const [bio, setBio] = useState("");
-  const emailRef = useRef<HTMLInputElement>(null);
-  const [
-    userFacebookHandle,
-    setUserFacebookHandle,
-    userFacebookHandleAttr,
-  ] = useInput("");
-  const [
-    userTwitterHandle,
-    setUserTwitterHandle,
-    userTwitterHandleAttr,
-  ] = useInput("");
-  const [
-    userInstagramHandle,
-    setUserInstagramHandle,
-    userInstagramHandleAttr,
-  ] = useInput("");
-  const [userWhatsapp, setUserWhatsapp, userWhatsappAttr] =
-    useInput("");
-  const [previewImage, setPreviewImage] =
-    useState("");
+  modalData: {
+    data: teamProps | null;
+    showModal: boolean;
+  };
+}
 
-  const [validEmail, setValidEmail] = useState(false);
-  const EMAIL_REGEX =
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+interface TeamFormInputs {
+  firstName: string;
+  lastName: string;
+  email: string;
+  position: string;
+  phone: string;
+  bio: string;
+  status: string;
+  userImage: FileList;
+  socialMedia: {
+    facebookHandle: string;
+    twitterHandle: string;
+    instagram: string;
+    whatsapp: string;
+  };
+}
 
-  useEffect(() => {
-    const result = EMAIL_REGEX.test(email!);
-    setValidEmail(result);
-  }, [email]);
+const EditTeamModal = ({ modalData: { data, showModal } }: modalDataProps) => {
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [userImage, setUserImage] = useState<FileList | null>(null);
+  const [show, setShow] = useState(showModal);
 
-  const [userImage, setUserImage] = useState<any>(null);
-  const [status, setStatus] = useState<any>($('#status').val());
-  const [show, setShow] = useState(false);
-  const [addNewTeam, { isLoading, isSuccess, isError, error }]: any =
-    useUpdateTeamMutation();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { isSubmitting },
+  } = useForm<TeamFormInputs>();
 
-  // const navigate = useNavigate()
+  const [updateTeam, { isLoading, isError, error }] = useUpdateTeamMutation();
 
   useEffect(() => {
-    setEmail(data?.email!)
-    setFirstName(data?.firstName!)
-    setLastName(data?.lastName!)
-    setPhone(data?.phone!)
-    setPosition(data?.position!)
-    setBio(data?.bio!)
-    setStatus(data?.status!)
-    setUserFacebookHandle(data?.socialMedia?.facebookHandle!)
-    setUserTwitterHandle(data?.socialMedia?.twitterHandle!)
-    setUserInstagramHandle(data?.socialMedia?.instagram!)
-    setUserWhatsapp(data?.socialMedia?.whatsapp!)
-    setPreviewImage(process.env.REACT_APP_BASE_URL+"/uploads/team/"+data?.userImage!)
-    setShow(showModal)
-      return () => {
-        setShow(false)
-        
-      };
-    }, [data,showModal])
+    if (data) {
+      setValue('firstName', data.firstName);
+      setValue('lastName', data.lastName);
+      setValue('email', data.email);
+      setValue('position', data.position);
+      setValue('phone', data.phone);
+      setValue('bio', data.bio);
+      setValue('status', data.status);
+      setValue('socialMedia.facebookHandle', data.socialMedia?.facebookHandle);
+      setValue('socialMedia.twitterHandle', data.socialMedia?.twitterHandle);
+      setValue('socialMedia.instagram', data.socialMedia?.instagram);
+      setValue('socialMedia.whatsapp', data.socialMedia?.whatsapp);
+      setPreviewImage(`${BASE_URL}/uploads/settings/team/${data.userImage}`);
+    }
+    setShow(showModal);
 
-  const canSave =
-    [email, firstName, lastName, phone, bio].every(Boolean) && !isLoading;
+    return () => setShow(false);
+  }, [data, showModal, setValue]);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    const formData = new FormData();
-    if (canSave) {
-      formData.append("_id",data?._id!)
-      formData.append("firstName",firstName)
-      formData.append("lastName",lastName)
-      formData.append("bio",bio)
-      formData.append("phone",phone)
-      formData.append("status",status)
-      formData.append("position",position)
-      formData.append("email",email)
-      formData.append("facebookHandle",userFacebookHandle)
-      formData.append("twitterHandle",userTwitterHandle)
-      formData.append("instagram",userInstagramHandle)
-      formData.append("whatsapp",userWhatsapp)
-      formData.append("upload",userImage)
-      await addNewTeam(formData);
-      if (isError)return showToast("error", JSON.stringify(error?.data?.message));
-      showToast("success", "Team member updated successfully");
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files;
+    if (file && file.length > 0) {
+      setUserImage(file);
+      const fileUrl = (window.URL || window.webkitURL).createObjectURL(file[0]);
+      setPreviewImage(fileUrl);
     }
   };
-  const uploadBg = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files;
-    if (file && file.length > 0) {  
-       setUserImage(file[0]);
-    let fileurl = (window.URL || window.webkitURL).createObjectURL(file[0]);
-    
-    setPreviewImage(fileurl)
- 
-        } 
-  }
+
+  const onSubmit:SubmitHandler<FieldValues> = async (formFields, e) => {
+    e?.preventDefault()
+    const formDataToSend = new FormData();
+    formDataToSend.append('id', data?.id!);
+    formDataToSend.append('firstName', formFields.firstName);
+    formDataToSend.append('lastName', formFields.lastName);
+    formDataToSend.append('email', formFields.email);
+    formDataToSend.append('position', formFields.position);
+    formDataToSend.append('phone', formFields.phone);
+    formDataToSend.append('bio', formFields.bio);
+    formDataToSend.append('status', formFields.status);
+    formDataToSend.append('socialMedia', JSON.stringify(formFields.socialMedia));
+
+    if (userImage) {
+      formDataToSend.append('file', userImage[0]);
+    }
+
+    await updateTeam(formDataToSend);
+    if (isError) return showToast('error', JSON.stringify(error?.data?.message));
+    showToast('success', 'Team member updated successfully');
+  };
+
   return (
     <>
-  
-  
-  <Modal show={show} size="lg" centered backdrop='static'
- onHide={handleClose} animation={false}>
+      <Modal show={show} size="lg" centered backdrop="static" onHide={() => setShow(false)} animation={false}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Team Member</Modal.Title>
         </Modal.Header>
-         <form onSubmit={handleSubmit}>
-        <Modal.Body>
-        <div className="card-body">
+        <form onSubmit={(e) => handleSubmit(onSubmit)(e) } encType="multipart/form-data">
+          <Modal.Body>
+            <div className="card-body">
               <div className="basic-form">
                 <div className="row">
-                  <div className="col-sm-6 col-md-6">
+                  <div className="col-md-6">
                     <div className="form-group">
                       <label className="form-label">First Name</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="fname"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        placeholder="First Name"
-                      />
+                      <input className="form-control" {...register('firstName')} placeholder="First Name" />
                     </div>
                   </div>
-                  <div className="col-sm-6 col-md-6">
+                  <div className="col-md-6">
                     <div className="form-group">
                       <label className="form-label">Last Name</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="lname"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        placeholder="Last Name"
-                      />
+                      <input className="form-control" {...register('lastName')} placeholder="Last Name" />
                     </div>
                   </div>
-                  <div className="col-sm-6 col-md-6">
+                  <div className="col-md-6">
                     <div className="form-group">
-                      <label className="form-label">Email address</label>
-                      <div
-                        className={
-                          validEmail
-                            ? "input-group input-success"
-                            : "input-group input-default"
-                        }
-                      >
-                        <input
-                          type="email"
-                          className="form-control invalid-input"
-                          name="email"
-                          placeholder="Email"
-                          value={email}
-                          ref={emailRef}
-                          onChange={(e) => setEmail(e.target.value)}
-                          required
-                        />
-                      </div>
+                      <label className="form-label">Email</label>
+                      <input className="form-control" type="email" {...register('email')} placeholder="Email" />
                     </div>
                   </div>
-                  <div className="col-sm-6 col-md-6">
+                  <div className="col-md-6">
                     <div className="form-group">
-                      <label className="form-label">Position </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="position"
-                        placeholder="Position"
-                        value={position}
-                        onChange={(e) => setPosition(e.target.value)}
-                      />
+                      <label className="form-label">Position</label>
+                      <input className="form-control" {...register('position')} placeholder="Position" />
                     </div>
                   </div>
-                  <div className="col-sm-6 col-md-6">
+                  <div className="col-md-6">
                     <div className="form-group">
-                      <label className="form-label">Phone </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="phone"
-                        placeholder="Phone"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                      />
+                      <label className="form-label">Phone</label>
+                      <input className="form-control" {...register('phone')} placeholder="Phone" />
                     </div>
                   </div>
-
-                  <div className="mb-3 col-md-6">
-                    <label className="form-label">
-                      <strong>Status</strong>
-                    </label>
-                    <select
-                      id="status"
-                      className="default-select form-control wide"
-                      value={status}
-                      onChange={(e) => setStatus(e.target.value)}
-                    >
+                  <div className="col-md-6">
+                    <label className="form-label">Status</label>
+                    <select className="form-control" {...register('status')}>
                       <option value="active">Active</option>
                       <option value="inactive">Inactive</option>
                     </select>
                   </div>
-                
-                <div className="col-md-6">
-                  <label className="form-label">User Image</label>
-                  <div className="input-group mb-3 col-md-5">
-                    <div className="form-file">
-                      <input
-                        type="file"
-                        id="uploadbg"
-                        accept=".jpeg, .jpg, .png, .gif"
-                        name="uploadbg"
-                        onChange={uploadBg}
-                        className="form-file-input form-control"
-                      />
+                  <div className="col-md-6">
+                    <label className="form-label">User Image</label>
+                    <div className="input-group mb-3">
+                      <input type="file" accept=".jpeg, .jpg, .png, .gif" className="form-control" onChange={handleImageChange} />
                     </div>
-                    <span className="input-group-text">Upload</span>
                   </div>
-                </div>
-                <div className="col-md-6">
-                  Preview
-                  <div id="preview">{previewImage &&<img className="img-responsive" src={previewImage} alt="User Avatar" width="240"/>}</div>
+                  <div className="col-md-6">Preview
+                    <div id="preview">
+                      {previewImage && <img className="img-responsive" src={previewImage} alt="User Avatar" width="240" />}
+                    </div>
                   </div>
-      
-
-                 
-                  <div className="mb-3 col-md-6">
-                    <label className="form-label">
-                      <strong>Facebook Handle</strong>
-                    </label>
-                    <input
-                      type="url"
-                      className="form-control"
-                      placeholder="https://facebook.com/@userName"
-                      value={userFacebookHandle}
-                      onChange={setUserFacebookHandle}
-                      {...userFacebookHandleAttr}
-                    />
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label className="form-label">Facebook Handle</label>
+                      <input className="form-control" {...register('socialMedia.facebookHandle')} placeholder="https://facebook.com/@userName" />
+                    </div>
                   </div>
-                  <div className="mb-3 col-md-6">
-                    <label className="form-label">
-                      <strong>Twitter Handle</strong>
-                    </label>
-                    <input
-                      type="url"
-                      className="form-control"
-                      placeholder="https://twitter.com/@userName"
-                      value={userTwitterHandle}
-                      onChange={setUserTwitterHandle}
-                      {...userTwitterHandleAttr}
-                    />
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label className="form-label">Twitter Handle</label>
+                      <input className="form-control" {...register('socialMedia.twitterHandle')} placeholder="https://twitter.com/@userName" />
+                    </div>
                   </div>
-                  <div className="mb-3 col-md-6">
-                    <label className="form-label">
-                      <strong>Instagram Handle</strong>
-                    </label>
-                    <input
-                      type="url"
-                      className="form-control"
-                      placeholder="https://instagram.com/@userName"
-                      value={userInstagramHandle}
-                      onChange={setUserInstagramHandle}
-                      {...userInstagramHandleAttr}
-                    />
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label className="form-label">Instagram Handle</label>
+                      <input className="form-control" {...register('socialMedia.instagram')} placeholder="https://instagram.com/@userName" />
+                    </div>
                   </div>
-                  <div className="mb-3 col-md-6">
-                    <label className="form-label">
-                      <strong>Whatsapp</strong>
-                    </label>
-                    <input
-                      type="url"
-                      className="form-control"
-                      placeholder="https://twhatsapp.com/@userName"
-                      value={userWhatsapp}
-                      onChange={setUserWhatsapp}
-                      {...userWhatsappAttr}
-                    />
-                  </div> 
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label className="form-label">Whatsapp</label>
+                      <input className="form-control" {...register('socialMedia.whatsapp')} placeholder="https://whatsapp.com/@userName" />
+                    </div>
+                  </div>
                   <div className="col-md-12">
                     <div className="form-group mb-0">
                       <label className="form-label">Bio</label>
-                      <textarea
-                        rows={5}
-                        className="form-control"
-                        name="bio"
-                        onChange={(e) => setBio(e.target.value)}
-                        placeholder="Enter your bio or favourite qoute"
-                        value={bio}
-                      ></textarea>
+                      <textarea className="form-control" {...register('bio')} placeholder="Enter your bio or favorite quote" rows={5} />
                     </div>
                   </div>
-      </div>
-    </div>
-  </div>
-                    </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" size='sm' className='rounded-pill' onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="secondary" size='sm' className='rounded-pill' type="submit" disabled={!canSave}  >
-            Update Team
-          </Button>
-        </Modal.Footer>
-            </form>
+                </div>
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" size="sm" className="rounded-pill" onClick={() => setShow(false)}>
+              Close
+            </Button>
+            <Button variant="secondary" size="sm" className="rounded-pill" type="submit" disabled={isSubmitting}>
+              Update Team
+            </Button>
+          </Modal.Footer>
+        </form>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default React.memo(EditTeamModal)
+export default React.memo(EditTeamModal);

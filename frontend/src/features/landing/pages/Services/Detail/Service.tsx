@@ -1,10 +1,10 @@
 import React from 'react'
 import { NavLink, useParams,useNavigate } from 'react-router-dom'
-import { useGetServicesQuery } from '../../../../dashboard/pages/Service/servicesApiSlice'
-import pageProps from '../../../../../app/utils/props/pageProps'
+import { useGetServicesQuery } from '../../../../dashboard/pages/Service/slices/servicesApi.slice'
+import pageProps from '../../../../../app/props/pageProps'
 import Breadcrum from '../../../components/Breadcrum'
-import serviceProps from '../../../../../app/utils/props/serviceProps'
-
+import serviceProps from '../../../../../app/props/serviceProps'
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Service = ({pageData}:pageProps)  => {
 const {id} = useParams()
@@ -35,7 +35,7 @@ const navigate = useNavigate()
 let allServices;
 if(data.entities){
     const {ids,entities} = data
-     allServices = (Object.values(entities)as serviceProps[])?.map(service=> <li key={service?._id}><NavLink className={({isActive})=> isActive ?"active":''} to={`/services/service/${service?._id}`}>{service.title}</NavLink></li>)
+     allServices = (Object.values(entities)as serviceProps[])?.map(service=> <li key={service?.id}><NavLink className={({isActive})=> isActive ?"active":''} to={`/services/service/${service?.id}`}>{service.title}</NavLink></li>)
 }
     return (
       <>
@@ -56,7 +56,7 @@ if(data.entities){
                     </div>
                     {/* <!-- /.service-sidebar__item --> */}
                     <div className="service-sidebar__item service-sidebar__item--contact">
-                        <div className="service-sidebar__bg" style={{backgroundImage:`url('${process.env.REACT_APP_BASE_URL+"/uploads/service/"+service.image}')`}}>
+                        <div className="service-sidebar__bg" style={{backgroundImage:`url('${BASE_URL+"/uploads/service/"+service.image}')`}}>
                         </div>
                         {/* <!-- /.service-sidebar__bg --> */}
                         <div className="service-sidebar__contact">
@@ -80,7 +80,7 @@ if(data.entities){
             {/* <!-- /.col-lg-4 --> */}
             <div className="col-lg-8">
                 <div className="service-details__image">
-                    <img src={process.env.REACT_APP_BASE_URL+"/uploads/service/"+service.image} alt=""/>
+                    <img src={BASE_URL+"/uploads/service/"+service.image} alt=""/>
                     <div className="service-details__icon">
                         <i className={service?.icon}></i>
                     </div>

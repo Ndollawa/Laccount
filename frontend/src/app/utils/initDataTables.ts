@@ -27,7 +27,7 @@ const initDataTables = (selector:any,message="") =>{
               ],
                
                 language: {
-                  "emptyTable": `<div class="d-flex justify-content-center align-items-center flex-column"><img src='dashboard-assets/images/images/no-result.png'><p>Hey!, No Results Found</p></div>`,
+                  "emptyTable": `<div class="d-flex justify-content-center align-items-center flex-column"><img src='dashboard-assets/images/no-result.png'><p>Hey!, No Results Found</p></div>`,
                   search: "<i class='fa fa-search search-icon my-5'></i>",
                   lengthMenu: '_MENU_ ',
                   paginate : {

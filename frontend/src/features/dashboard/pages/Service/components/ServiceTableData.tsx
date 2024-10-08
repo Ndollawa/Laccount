@@ -1,6 +1,6 @@
 import React,{useState,useEffect,useMemo} from 'react'
-import {useGetServicesQuery,useDeleteServiceMutation } from '../servicesApiSlice'
-import showToast from '../../../../../app/utils/hooks/showToast'
+import {useGetServicesQuery,useDeleteServiceMutation } from '../slices/servicesApi.slice'
+import showToast from '../../../../../app/utils/showToast'
 import LightGallery from 'lightgallery/react'
 import 'lightgallery/css/lightgallery.css'
 import 'lightgallery/css/lg-zoom.css'
@@ -10,13 +10,12 @@ import lgZoom from 'lightgallery/plugins/zoom'
 // import 'lightgallery/css/lg-thumbnail.css'
 import $ from 'jquery'
 import Swal  from 'sweetalert2'
-import serviceProps from '../../../../../app/utils/props/serviceProps'
+import serviceProps from '../../../../../app/props/serviceProps'
 import initDataTables,{destroyDataTables} from '../../../../../app/utils/initDataTables'
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;
 
-interface modalDataProps {
-  data:serviceProps | null,
- showModal:boolean,
-}
+
 const ServiceTableData = ({serviceId,index,showEditForm, showDetails}:any) => {
     const { service } = useGetServicesQuery("servicesList", {
         selectFromResult: ({ data }) => ({
@@ -60,7 +59,7 @@ useEffect(() => {
             reverseButtons: true
           }).then(async(result) => {
             if (result.isConfirmed) {  
-        await deleteService({ _id: id })
+        await deleteService({ id: id })
         if(isDelError) return showToast('error',JSON.stringify(delerror?.data))
               swalWithBootstrapButtons.fire(
                 'Deleted!',
@@ -85,7 +84,7 @@ useEffect(() => {
         const created = new Date(service.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year:'numeric' })
        const serviceData = {
         data:{
-        _id:serviceId,
+        id:serviceId,
         title:service.title,
         description:service.description,
         image:service.image,
@@ -112,8 +111,8 @@ useEffect(() => {
         return (
             <tr key={serviceId}>
                     <td>{++index}</td>
-                    <td><LightGallery plugins={[lgZoom]} > <a href={process.env.REACT_APP_BASE_URL+"/uploads/service/"+service.image}  data-lightbox={`image-${++index}`} data-exthumbimage={process.env.REACT_APP_BASE_URL+"/uploads/service/"+service.image} data-src={process.env.REACT_APP_BASE_URL+"/uploads/service/"+service.image} data-title={service.title}>
-                        <img src={process.env.REACT_APP_BASE_URL+"/uploads/service/"+service.image} alt={service.title} width="120" className="lg img-fluid img-responsive" />
+                    <td><LightGallery plugins={[lgZoom]} > <a href={BASE_URL+"/uploads/settings/service/"+service.image}  data-lightbox={`image-${++index}`} data-exthumbimage={BASE_URL+"/uploads/settings/service/"+service.image} data-src={BASE_URL+"/uploads/settings/service/"+service.image} data-title={service.title}>
+                        <img src={BASE_URL+"/uploads/settings/service/"+service.image} alt={service.title} width="120" className="lg img-fluid img-responsive" />
                         </a></LightGallery></td>
                     <td>{service.title}</td>
                     <td>{service.description}</td>
@@ -122,7 +121,7 @@ useEffect(() => {
                     <td>
                     <div className="d-flex"> <button type="button" className="btn btn-success light shadow btn-xs sharp me-1"   onClick={()=>{showDetails({
         data:{
-        _id:serviceId,
+        id:serviceId,
         title:service.title,
         description:service.description,
         image:service.image,
@@ -133,7 +132,7 @@ useEffect(() => {
         },
         showModal:true})}}><i className="fas fa-eye"></i></button>
                             <button type="button" className="btn btn-info light shadow btn-xs sharp me-1"   onClick={()=>showEditForm(serviceData)}><i className="fas fa-pencil-alt"></i></button>
-                            <button className="btn btn-danger light shadow btn-xs sharp" onClick={()=>onDeleteService(service._id)}><i className="fa fa-trash"></i></button>
+                            <button className="btn btn-danger light shadow btn-xs sharp" onClick={()=>onDeleteService(service.id)}><i className="fa fa-trash"></i></button>
                         </div>													
                     </td>												
                 </tr>

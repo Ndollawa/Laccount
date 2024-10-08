@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { Service, ActiveStatus } from '@prisma/client';
 import { handleError } from '@app/common';
 import { CreateServiceDto, UpdateServiceDto } from './dto';
@@ -35,23 +35,23 @@ export class ServiceService {
       handleError(error);
     }
   }
-  async create(createServiceData: CreateServiceDto): Promise<Service> {
-    // const { authorId } = createServiceData;
+  async create(createServiceData: CreateServiceDto, file: Express.Multer.File): Promise<Service> {
+    const { title } = createServiceData;
 
     try {
-      // const existingService = await this.serviceRepository.exists({
-      //   where: { serviceId },
-      // });
+      const existingService = await this.serviceRepository.exists({
+        where: { title },
+      });
 
-      // if (existingService) {
-      //   throw new HttpException(
-      //     'Service with credentials already exists.',
-      //     HttpStatus.CONFLICT,
-      //   );
-      // }
+      if (existingService) {
+        throw new ConflictException(
+          'Service with credentials already exists.',
+        );
+      }
 
       const serviceData = {
         ...createServiceData,
+        image: file.filename,
       };
 
       const newService = await this.serviceRepository.create({
@@ -65,11 +65,11 @@ export class ServiceService {
     }
   }
 
-  async update(id: string, updateServiceData: UpdateServiceDto) {
+  async update(id: string, updateServiceData: UpdateServiceDto, file: Express.Multer.File) {
     try {
       return await this.serviceRepository.update({
         where: { id },
-        data: updateServiceData,
+        data: {...updateServiceData, image: file.filename},
       });
     } catch (error) {
       handleError(error);

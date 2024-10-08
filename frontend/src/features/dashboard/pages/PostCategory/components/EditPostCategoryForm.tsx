@@ -1,7 +1,7 @@
 import React, {ChangeEvent,FormEvent,useState,useEffect} from 'react'
-import { useUpdatePostCategoryMutation} from '../postCategoryApiSlice'
-import showToast from '../../../../../app/utils/hooks/showToast'
-import postCategoryProps from '../../../../../app/utils/props/postCategoryProps';
+import { useUpdatePostCategoryMutation} from '../slices/postCategoryApi.slice'
+import showToast from '../../../../../app/utils/showToast'
+import postCategoryProps from '../../../../../app/props/postCategoryProps';
 
 
 

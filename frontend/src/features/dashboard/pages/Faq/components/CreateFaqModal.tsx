@@ -1,9 +1,9 @@
 import React, {FormEvent,useState} from 'react'
 import { Editor } from '@tinymce/tinymce-react'
-import { useAddNewFaqMutation } from '../faqApiSlice'
+import { useAddNewFaqMutation } from '../slices/faqApi.slice'
 import { Modal } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import showToast from '../../../../../app/utils/hooks/showToast'
+import showToast from '../../../../../app/utils/showToast'
 
 const CreateFaqModal = () => {
   const [show, setShow] = useState(false);
@@ -80,7 +80,7 @@ e.preventDefault();
                 <div className="col-12">
                   <label className="form-label"><strong>Response</strong></label>
                   <Editor
-        tinymceScriptSrc={process.env.PUBLIC_URL + '/tinymce/tinymce.min.js'}
+        tinymceScriptSrc={process.env.VITE_PUBLIC_URL + '/tinymce/tinymce.min.js'}
        onEditorChange={(newValue,editor)=>setResponse(newValue)}
        value={response}
         init={{

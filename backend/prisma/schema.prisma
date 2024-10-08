@@ -231,13 +231,11 @@ model User {
   email              String   @unique
   username           String   @unique
   password           String
-  verificationStatus Boolean
+  verificationStatus Boolean  @default(false)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt()
 
   // Relations
-  listings      Listing[]
-  sellerRatings Rating[]       @relation("sellerRatings")
   userRatings   Rating[]       @relation("userRatings")
   profile       Profile?
   roles         Role[]
@@ -283,7 +281,9 @@ model Vendor {
   updatedAt          DateTime          @updatedAt()
     // Relations
   user   User   @relation(fields: [userId], references: [id])
-  userId String       @unique
+  userId            String       @unique
+  listings      Listing[]
+  sellerRatings     Rating[]       @relation("sellerRatings")
   documents          Document[]        // Linked to vendor's documents
 }
 
@@ -324,6 +324,21 @@ model Profile {
   userId String @unique
 }
 
+model Team {
+  id                 String        @id @default(uuid())
+  firstName          String        @db.VarChar(80)
+  middleName         String?       @db.VarChar(80)
+  lastName           String?       @db.VarChar(80)
+  position           String?
+  bio                String?
+  image              String?
+  socialMedia        Json?
+  status             ActiveStatus @default(ACTIVE)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt()
+
+}
+
 model Listing {
   id            String        @id @default(uuid())
   listingStatus ListingStatus @default(LISTED)
@@ -333,7 +348,7 @@ model Listing {
   updatedAt     DateTime      @updatedAt()
 
   // Relations
-  seller         User            @relation(fields: [sellerId], references: [id])
+  seller         Vendor            @relation(fields: [sellerId], references: [id])
   orders         Order[]
   attachments    Attachment[]
   accountDetails AccountDetails?
@@ -367,7 +382,7 @@ model Rating {
   // Relations
   order  Order @relation(fields: [orderId], references: [id])
   user   User  @relation("userRatings", fields: [userId], references: [id])
-  seller User  @relation("sellerRatings", fields: [sellerId], references: [id])
+  seller Vendor  @relation("sellerRatings", fields: [sellerId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()

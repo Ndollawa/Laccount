@@ -3,13 +3,13 @@ import MainBody from '../../components/MainBody'
 import CreateFaqModal from './components/CreateTeamForm'
 import EditTeamForm from './components/EditTeamForm'
 import { useDispatch } from 'react-redux'
-import { useGetTeamsQuery } from './teamsApiSlice'
+import { useGetTeamsQuery } from './slices/teamsApi.slice'
 import { setPreloader } from '../../../components/preloader/slices/preloader.slice'
-import pageProps from '../../../../app/utils/props/pageProps'
+import pageProps from '../../../../app/props/pageProps'
 import TeamTableData from './components/TeamTableData'    
 import $ from 'jquery'
 import initDataTables,{destroyDataTables} from '../../../../app/utils/initDataTables'   
-import teamProps from '../../../../app/utils/props/teamProps'
+import teamProps from '../../../../app/props/teamProps'
 
 interface modalDataProps {
        data:teamProps | null,

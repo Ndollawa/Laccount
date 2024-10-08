@@ -1,58 +1,40 @@
-import React,{FormEvent, FormEventHandler, useEffect} from "react";
+import React from "react";
+import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { useDispatch ,useSelector} from "react-redux";
-import useInput from "../../../../../app/utils/hooks/useInput";
-import { useGetSettingsByTypeQuery } from "../settingApiSlice";
-import { setCompanyInfoSetting, useSettings } from "../settingsConfigSlice";
-import { useCompanyInfo } from "../settingsConfigSlice";
-import showToast from "../../../../../app/utils/hooks/showToast";
+import useInput from "../../../../../app/hooks/useInput";
+import { useUpdateSettingMutation } from "../slices/settingApi.slice";
+import { setCompanyInfoSetting, useSettings } from "../slices/settings.slice";
+import { useCompanyInfo } from "../slices/settings.slice";
+import showToast from "../../../../../app/utils/showToast";
 import 'react-toastify/dist/ReactToastify.css';
+import { BsInfoCircleFill } from "react-icons/bs";
+import { PulseLoader } from "react-spinners";
 
 const GeneralSettings = () => {
 const dispatch = useDispatch();
-const {id} = useSelector(useSettings)
-const {email,contact,zip,description,siteName,activeHours,city,state,country,address,socialMedia:{facebookHandle,twitterHandle,instagram,whatsapp}={}} = useSelector(useCompanyInfo);
-const [companyInfo,isLoading] = useGetSettingsByTypeQuery(SettingsType.COMPANY_INFO);
-// alert(id)
+const {companyInfo} = useSelector(useSettings)
+const {id, settings:{companyDetails, ...otherSettings}={}} = useSelector(useCompanyInfo);
+const [updateSetting,isLoading] = useUpdateSettingMutation();
+const initialState = companyDetails;
+const {
+  register,
+  handleSubmit,
+  control,
+  watch,
+  setValue,
+  getValues,
+  reset,
+  formState: { errors, isSubmitting },
+} = useForm({
+  defaultValues: initialState,
+});
 
-const [companyName, setCompanyName, companyNameAttr] = useInput(siteName)
-const [companyEmail, setCompanyEmail, companyEmailAttr] = useInput(email)
-const [companyAddress, setCompanyAddress, companyAddressAttr] = useInput(address)
-const [companyContact, setCompanyContact, companyContactAttr] = useInput(contact)
-const [companyActiveHours, setCompanyActiveHours, companyActiveHoursAttr] = useInput(activeHours)
-const [companyZipCode, setCompanyZipCode, companyZipCodeAttr] = useInput(zip)
-const [companyCountry, setCompanyCountry, companyCountryAttr] = useInput(country)
-const [companyState, setCompanyState, companyStateAttr] = useInput(state)
-const [companyCity, setCompanyCity, companyCityAttr] = useInput(city)
-const [companyFacebookHandle, setCompanyFacebookHandle, companyFacebookHandleAttr] = useInput(facebookHandle)
-const [companyTwitterHandle, setCompanyTwitterHandle, companyTwitterHandleAttr] = useInput(twitterHandle)
-const [companyInstagramHandle, setCompanyInstagramHandle, companyInstagramHandleAttr] = useInput(instagram)
-const [companyWhatsapp, setCompanyWhatsapp, companyWhatsappAttr] = useInput(whatsapp)
-const [companyDescription, setCompanyDescription, companyDescriptionAttr] = useInput(description)
-
-const handleSubmit:FormEventHandler = async(e:FormEvent)=>{
+const updateSettings:SubmitHandler<FieldValues> = async(formFields, e)=>{
 e.preventDefault();
-const data ={
-      siteName:companyName,
-      // logo:logo,
-      // logoDark:logoDark,
-      zip:companyZipCode,
-      city:companyCity,
-      state:companyState,
-      country:companyCountry,
-      description:companyDescription,
-      email:companyEmail,
-      contact:companyContact,
-      address:companyAddress,
-      activeHours:companyActiveHours,
-      facebookHandle:companyFacebookHandle,
-      twitterHandle:companyTwitterHandle,
-      instagram:companyInstagramHandle,
-      whatsapp:companyWhatsapp
-  
-  }
+const settings = {companyDetails:{...companyDetails, ...formFields}, ...otherSettings}
 try{
-  const res = await companyInfoSetting({id,data}).unwrap()
-dispatch(setCompanyInfoSetting(data))
+  const res = await updateSetting({id,settings}).unwrap()
+dispatch(setCompanyInfoSetting(settings))
 showToast('success',"Settings Updated successfully!")
 } catch (error:any) {
   showToast('error',error?.message)
@@ -64,11 +46,11 @@ showToast('success',"Settings Updated successfully!")
     <>
       <div className="card">
         <div className="card-header bg-secondary">
-          <h4 className="card-title text-white">ComanyInfo</h4>
+          <h4 className="card-title text-white">Comany Information</h4>
         </div>
         <div className="card-body">
           <div className="basic-form">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={(e) => handleSubmit(updateSettings)(e)}>
               <div className="row">
                 <div className="mb-3 col-md-6">
                   <label className="form-label"><strong>Company Name</strong></label>
@@ -76,10 +58,19 @@ showToast('success',"Settings Updated successfully!")
                     type="text"
                     className="form-control"
                     placeholder=""
-                    value={companyName}
-                    onChange={setCompanyName}
-                    {...companyNameAttr}
+                    {...register('siteName',{
+                      required:"Field: Company or Site name required!"
+                    })} 
                   />
+                  <div>
+              {errors?.siteName && (
+              <span className="text-xs d-flex m-3 text-danger">
+                <BsInfoCircleFill size={"0.8rem"} />
+                &ensp;
+                {errors?.siteName?.message}
+              </span>
+            ) } 
+          </div>
                 </div>
                 <div className="mb-3 col-md-6">
                   <label className="form-label"><strong>Company Email</strong></label>
@@ -87,10 +78,19 @@ showToast('success',"Settings Updated successfully!")
                     type="email"
                     className="form-control"
                     placeholder=""
-                    value={companyEmail}
-                    onChange={setCompanyEmail}
-                    {...companyEmailAttr}
+                    {...register('email',{
+                      required:"Field: Company email required!"
+                    })} 
                   />
+                  <div>
+              {errors?.email && (
+              <span className="text-xs d-flex m-3 text-danger">
+                <BsInfoCircleFill size={"0.8rem"} />
+                &ensp;
+                {errors?.email?.message}
+              </span>
+            ) } 
+          </div>
                 </div>
              
                 
@@ -100,10 +100,19 @@ showToast('success',"Settings Updated successfully!")
                     type="text"
                     className="form-control"
                     placeholder=""
-                    value={companyAddress}
-                    onChange={setCompanyAddress}
-                    {...companyAddressAttr}
+                    {...register('address',{
+                      required:"Field Company address required!"
+                    })} 
                   />
+                  <div>
+              {errors?.address && (
+              <span className="text-xs d-flex m-3 text-danger">
+                <BsInfoCircleFill size={"0.8rem"} />
+                &ensp;
+                {errors?.address?.message}
+              </span>
+            ) } 
+          </div>
                 </div>
                
                 <div className="mb-3 col-md-6">
@@ -113,10 +122,19 @@ showToast('success',"Settings Updated successfully!")
                     className="form-control"
                    
                     placeholder=""
-                    value={companyContact}
-                    onChange={setCompanyContact}
-                    {...companyContactAttr}
+                    {...register('contact',{
+                      required:"Field Company or Site name required!"
+                    })} 
                   />
+                  <div>
+              {errors?.contact && (
+              <span className="text-xs d-flex m-3 text-danger">
+                <BsInfoCircleFill size={"0.8rem"} />
+                &ensp;
+                {errors?.contact?.message}
+              </span>
+            ) } 
+          </div>
                 </div>
                 <div className="mb-3 col-md-6">
                   <label className="form-label"><strong>City</strong></label>
@@ -124,10 +142,19 @@ showToast('success',"Settings Updated successfully!")
                     type="text"
                     className="form-control"
                     placeholder="city"
-                    value={companyCity}
-                    onChange={setCompanyCity}
-                    {...companyCityAttr}
+                    {...register('city',{
+                      required:"Field Company or Site name required!"
+                    })} 
                   />
+                  <div>
+              {errors?.city && (
+              <span className="text-xs d-flex m-3 text-danger">
+                <BsInfoCircleFill size={"0.8rem"} />
+                &ensp;
+                {errors?.city?.message}
+              </span>
+            ) } 
+          </div>
                 </div>
              
                 <div className="mb-3 col-md-4">
@@ -136,21 +163,38 @@ showToast('success',"Settings Updated successfully!")
                     id="inputState"
                     type='text'
                     className="form-control"
-                    value={companyState}
-                    onChange={setCompanyState}
-                    {...companyStateAttr}
+                    {...register('state',{
+                      required:"Field Company or Site name required!"
+                    })} 
                   />
-                  
+                  <div>
+              {errors?.state && (
+              <span className="text-xs d-flex m-3 text-danger">
+                <BsInfoCircleFill size={"0.8rem"} />
+                &ensp;
+                {errors?.state?.message}
+              </span>
+            ) } 
+          </div>
                 </div>
                 <div className="mb-3 col-md-2">
                   <label className="form-label"><strong>Zip</strong></label>
                   <input 
                   type="number" 
                   className="form-control"
-                  value={companyZipCode}
-                  onChange={setCompanyZipCode}
-                  {...companyZipCodeAttr}
-                   />
+                  {...register('zip',{
+                    required:"Field Company or Site name required!"
+                  })} 
+                />
+                <div>
+            {errors?.zip && (
+            <span className="text-xs d-flex m-3 text-danger">
+              <BsInfoCircleFill size={"0.8rem"} />
+              &ensp;
+              {errors?.zip?.message}
+            </span>
+          ) } 
+        </div>
                 </div>
                 <div className="mb-3 col-md-6">
                   <label className="form-label"><strong>Country</strong></label>
@@ -158,10 +202,19 @@ showToast('success',"Settings Updated successfully!")
                     type="text"
                     className="form-control"
                     placeholder=""
-                    value={companyCountry}
-                    onChange={setCompanyCountry}
-                    {...companyCountryAttr}
+                    {...register('country',{
+                      required:"Field Company or Site name required!"
+                    })} 
                   />
+                  <div>
+              {errors?.country && (
+              <span className="text-xs d-flex m-3 text-danger">
+                <BsInfoCircleFill size={"0.8rem"} />
+                &ensp;
+                {errors?.country?.message}
+              </span>
+            ) } 
+          </div>
                 </div>
                 <div className="mb-3 col-md-6">
                   <label className="form-label"><strong>Active Hours</strong></label>
@@ -169,10 +222,19 @@ showToast('success',"Settings Updated successfully!")
                     type="text"
                     className="form-control"
                     placeholder=""
-                    value={companyActiveHours}
-                    onChange={setCompanyActiveHours}
-                    {...companyActiveHoursAttr}
+                    {...register('activeHours',{
+                      required:"Field Company or Site name required!"
+                    })} 
                   />
+                  <div>
+              {errors?.activeHours && (
+              <span className="text-xs d-flex m-3 text-danger">
+                <BsInfoCircleFill size={"0.8rem"} />
+                &ensp;
+                {errors?.activeHours?.message}
+              </span>
+            ) } 
+          </div>
                 </div>
                  <div className="mb-3 col-md-6">
                   <label className="form-label"><strong>Facebook Handle</strong></label>
@@ -180,10 +242,19 @@ showToast('success',"Settings Updated successfully!")
                     type="url"
                     className="form-control"
                     placeholder="https://facebook.com/@companyName"
-                    value={companyFacebookHandle}
-                    onChange={setCompanyFacebookHandle}
-                    {...companyFacebookHandleAttr}
+                    {...register('socialMedia.facebookHandle',{
+                      // required:"Field Company or Site name required!"
+                    })} 
                   />
+                  <div>
+              {errors?.socialMedia?.facebookHandle && (
+              <span className="text-xs d-flex m-3 text-danger">
+                <BsInfoCircleFill size={"0.8rem"} />
+                &ensp;
+                {errors?.socialMedia?.facebookHandle?.message}
+              </span>
+            ) } 
+          </div>
                 </div>
                 <div className="mb-3 col-md-6">
                   <label className="form-label"><strong>Twitter Handle</strong></label>
@@ -191,10 +262,19 @@ showToast('success',"Settings Updated successfully!")
                     type="url"
                     className="form-control"
                     placeholder="https://twitter.com/@companyName"
-                    value={companyTwitterHandle}
-                    onChange={setCompanyTwitterHandle}
-                    {...companyTwitterHandleAttr}
+                    {...register('socialMedia.twitterHandle',{
+                      // required:"Field Company or Site name required!"
+                    })} 
                   />
+                  <div>
+              {errors?.socialMedia?.twitterHandle && (
+              <span className="text-xs d-flex m-3 text-danger">
+                <BsInfoCircleFill size={"0.8rem"} />
+                &ensp;
+                {errors?.socialMedia?.twitterHandle?.message}
+              </span>
+            ) } 
+          </div>
                 </div>
                 <div className="mb-3 col-md-6">
                   <label className="form-label"><strong>Instagram Handle</strong></label>
@@ -202,10 +282,19 @@ showToast('success',"Settings Updated successfully!")
                     type="url"
                     className="form-control"
                     placeholder="https://instagram.com/@companyName"
-                    value={companyInstagramHandle}
-                    onChange={setCompanyInstagramHandle}
-                    {...companyInstagramHandleAttr}
+                    {...register('socialMedia.instagram',{
+                      // required:"Field Company or Site name required!"
+                    })} 
                   />
+                  <div>
+              {errors?.socialMedia?.instagram && (
+              <span className="text-xs d-flex m-3 text-danger">
+                <BsInfoCircleFill size={"0.8rem"} />
+                &ensp;
+                {errors?.socialMedia?.instagram?.message}
+              </span>
+            ) } 
+          </div>
                 </div>
                 <div className="mb-3 col-md-6">
                   <label className="form-label"><strong>Whatsapp</strong></label>
@@ -213,10 +302,19 @@ showToast('success',"Settings Updated successfully!")
                     type="url"
                     className="form-control"
                     placeholder="https://twhatsapp.com/@companyName"
-                    value={companyWhatsapp}
-                    onChange={setCompanyWhatsapp}
-                    {...companyWhatsappAttr}
+                    {...register('socialMedia.whatsapp',{
+                      // required:"Field Company or Site name required!"
+                    })} 
                   />
+                  <div>
+              {errors?.socialMedia?.whatsapp && (
+              <span className="text-xs d-flex m-3 text-danger">
+                <BsInfoCircleFill size={"0.8rem"} />
+                &ensp;
+                {errors?.socialMedia?.whatsapp?.message}
+              </span>
+            ) } 
+          </div>
                 </div>
                 <div className="mb-3 col-md-12">
                   <label className="form-label"><strong>Company's Description</strong></label>
@@ -224,15 +322,33 @@ showToast('success',"Settings Updated successfully!")
                     type="text"
                     className="form-control"
                     placeholder=""
-                    rows="10"
-                    onChange={setCompanyDescription}
-                    {...companyDescriptionAttr} value={companyDescription}></textarea>
-                
+                    rows={10}
+                    {...register('description',{
+                      required:"Field Company or Site name required!"
+                    })} 
+                 
+                ></textarea>
+            <div>
+              {errors?.description && (
+              <span className="text-xs d-flex m-3 text-danger">
+                <BsInfoCircleFill size={"0.8rem"} />
+                &ensp;
+                {errors?.description?.message}
+              </span>
+            ) } 
+          </div>
                 </div>
               </div>
-              <div className="card-footer d-flex justify-content-end">
-              <button type="submit" className="btn btn-primary">
-                Update Site Info
+              <div className="card-footer d-flex justify-content-end mt-10">
+              <button type="submit" className="btn btn-primary"  disabled={isSubmitting && isLoading}>
+              {isSubmitting ? (
+                          <>
+                           {/* <span> Updating</span> */}
+                            <PulseLoader loading={isSubmitting} color="#ffffff" size="0.7rem" />
+                          </>
+                        ) : (
+                          'Update Site Info'
+                        )}  
               </button></div>
             </form>
           </div>

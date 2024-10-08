@@ -17,7 +17,7 @@ docker:
 	@echo "Running containers"
 	# @sudo systemctl stop mysql
 	# @sudo docker build -f ./Dockerfile -t laccount-app .
-	@sudo docker compose up -d --remove-orphans
+	@sudo docker compose up -d --force-recreate --remove-orphans
 
 # Prisma migration
 prisma:

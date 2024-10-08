@@ -13,7 +13,7 @@ import { Editor } from '@tinymce/tinymce-react';
   return (
     <>
       <Editor
-        tinymceScriptSrc={process.env.PUBLIC_URL + '/tinymce/tinymce.min.js'}
+        tinymceScriptSrc={process.env.VITE_PUBLIC_URL + '/tinymce/tinymce.min.js'}
         onInit={(evt, editor) => editorRef.current = editor}
         initialValue=''
         init={{

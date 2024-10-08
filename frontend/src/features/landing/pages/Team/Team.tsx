@@ -1,8 +1,9 @@
 import React from 'react'
-import pageProps from '../../../../app/utils/props/pageProps'
+import pageProps from '../../../../app/props/pageProps'
 import Breadcrum from '../../components/Breadcrum'
-import { useGetTeamsQuery } from '../../../dashboard/pages/Team/teamsApiSlice'
-import teamProps from '../../../../app/utils/props/teamProps'
+import { useGetTeamsQuery } from '../../../dashboard/pages/Team/slices/teamsApi.slice'
+import teamProps from '../../../../app/props/teamProps'
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Team:React.FC<pageProps> = ({pageData}:pageProps) => {
 
@@ -24,7 +25,7 @@ console.log(team)
             <div className="col-lg-4 col-md-6 col-sm-12 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="000ms">
                 <div className="team-card">
                     <div className="team-card__image">
-                        <img src={process.env.REACT_APP_BASE_URL+"/uploads/team/"+t?.userImage} alt={t?.fullName}/>
+                        <img src={BASE_URL+"/uploads/team/"+t?.userImage} alt={t?.fullName}/>
                         <div className="team-card__social">
                           
                             {t?.socialMedia &&<>

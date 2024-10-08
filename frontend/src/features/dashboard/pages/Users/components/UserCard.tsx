@@ -1,7 +1,7 @@
 import React from 'react'
-import userInterface from '../../../../../app/utils/props/userProps'
-import { useGetUsersQuery } from '../usersApiSlice'
-import useUserImage from '../../../../../app/utils/hooks/useUserImage'
+import userInterface from '../../../../../app/props/userProps'
+import { useGetUsersQuery } from '../slices/usersApi.slice'
+import useUserImage from '../../../../../app/hooks/useUserImage'
 import { Link } from 'react-router-dom'
 
 // :userInterface

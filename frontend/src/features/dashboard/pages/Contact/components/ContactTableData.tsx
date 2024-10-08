@@ -1,8 +1,8 @@
 import React,{useEffect,useState} from 'react'
-import { useDeleteContactMutation } from '../contactsApiSlice'
-import { useGetUsersQuery } from '../../Users/usersApiSlice'
-import showToast from '../../../../../app/utils/hooks/showToast'
-import useUserImage from '../../../../../app/utils/hooks/useUserImage'
+import { useDeleteContactMutation } from '../slices/contactsApi.slice'
+import { useGetUsersQuery } from '../../Users/slices/usersApi.slice'
+import showToast from '../../../../../app/utils/showToast'
+import useUserImage from '../../../../../app/hooks/useUserImage'
 import { Link } from 'react-router-dom'
 import { FaEye } from 'react-icons/fa'
 import Swal from 'sweetalert2'
@@ -11,10 +11,10 @@ import initDataTables,{destroyDataTables} from '../../../../../app/utils/initDat
 import { HiChatBubbleLeftRight } from 'react-icons/hi2'
 
 import { useSelector } from 'react-redux'
-import useUserContacts from '../../../../../app/utils/hooks/useUserContacts'
-import { useAddNewContactMutation, useUpdateContactMutation } from '../contactsApiSlice'
+import useUserContacts from '../../../../../app/hooks/useUserContacts'
+import { useAddNewContactMutation, useUpdateContactMutation } from '../slices/contactsApi.slice'
 import { selectCurrentUser } from '../../../../auth/slices/auth.slice'
-import contactProps from '../../../../../app/utils/props/contactProps'
+import contactProps from '../../../../../app/props/contactProps'
 
 interface modalDataProps {
     modalData:{

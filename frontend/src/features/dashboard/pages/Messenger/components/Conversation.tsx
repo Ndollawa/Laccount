@@ -1,12 +1,12 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import {  Link } from 'react-router-dom'
-import { useGetUsersQuery } from '../../Users/usersApiSlice'
-import { useGetMessagesQuery } from '../messagesApiSlice'
+import { useGetUsersQuery } from '../../Users/slices/usersApi.slice'
+import { useGetMessagesQuery } from '../slices/messagesApi.slice'
 import { selectCurrentUser } from '../../../../auth/slices/auth.slice'
-import useUserImage from '../../../../../app/utils/hooks/useUserImage'
+import useUserImage from '../../../../../app/hooks/useUserImage'
 import { format } from 'timeago.js'
-import messageProps from '../../../../../app/utils/props/messageProps'
+import messageProps from '../../../../../app/props/messageProps'
 
 const Conversation = ({conversation,i}:any) => {
   const currentUser = useSelector(selectCurrentUser)

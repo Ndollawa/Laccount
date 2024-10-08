@@ -3,13 +3,13 @@
     import CreateRoomModal from './components/CreateRoomForm'
     import EditRoomForm from './components/EditRoomForm'
     import { useDispatch } from 'react-redux'
-    import { useGetRoomsQuery } from './roomsApiSlice'
+    import { useGetRoomsQuery } from './slices/roomsApi.slice'
     import $ from 'jquery'
     import { setPreloader } from '../../../components/preloader/slices/preloader.slice'
-    import pageProps from '../../../../app/utils/props/pageProps'
+    import pageProps from '../../../../app/props/pageProps'
     import RoomTableData from './components/RoomsTableData'
     import initDataTables,{destroyDataTables} from '../../../../app/utils/initDataTables'
-import roomProps from '../../../../app/utils/props/roomProps'
+import roomProps from '../../../../app/props/roomProps'
     
     
 

@@ -1,17 +1,15 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import {useCompanyInfo,useLandingPageConfig} from '../../dashboard/pages/Settings/settingsConfigSlice';
-import { settingsProps } from '../../../app/utils/props/settingsProps';
-
+import {useCompanyInfo,useLandingConfig} from '../../dashboard/pages/Settings/slices/settings.slice';
+import { settingsProps } from '../../../app/props/settingsProps';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 
 const Footer = () => {
 
-  const {siteName,email,contact,description,activeHours,socialMedia:{facebookHandle,twitterHandle,instagram,whatsapp}={}}= useSelector(useCompanyInfo);
+  const {settings:{companyDetails:{siteName,email,contact,description,activeHours,socialMedia:{facebookHandle,twitterHandle,instagram,whatsapp}={}}={}}={}} = useSelector(useCompanyInfo);
 
-  const {landingConfig:{siteImages:{logoDark}}} = useSelector(useLandingPageConfig); 
-
-// :settingsProps['companyDetails'] 
+  const {settings:{siteImages:{logoDark}={}}={}} = useSelector(useLandingConfig); 
 
   return (
     <>
@@ -21,7 +19,7 @@ const Footer = () => {
                     <div className="col-xs-12 col-lg-4 col-md-6 footer-widget-area">
                         <div className="footer-widget footer-widget--about">
                             <a href="/" className="footer-widget__logo">
-                                <img src={process.env.REACT_APP_BASE_URL+"/uploads/settings/"+logoDark} alt={siteName} width="150" height="51" />
+                                <img src={BASE_URL+"/uploads/settings/"+logoDark} alt={siteName} width="150" height="51" />
                             </a>
                             <p className="footer-widget__text s-card-7">{description}</p>
                             <ul className="list-unstyled footer-widget__info">

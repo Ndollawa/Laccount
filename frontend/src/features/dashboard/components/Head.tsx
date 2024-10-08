@@ -1,13 +1,13 @@
 import React from 'react';
 import {Helmet} from 'react-helmet-async'
-import pageProps from "../../../app/utils/props/pageProps";
+import pageProps from "../../../app/props/pageProps";
 import { useSelector } from 'react-redux';
-import {useCompanyInfo,useLandingPageConfig} from '../pages/Settings/settingsConfigSlice';
-
+import {useCompanyInfo,useLandingConfig} from '../pages/Settings/slices/settings.slice';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Head:React.FC<pageProps> = ({pageData}:pageProps) => {
-const {siteName,description} = useSelector(useCompanyInfo); 
-const {siteImages:{favicon}} = useSelector(useLandingPageConfig); 
+const {settings:{companyDetails:{siteName,description}={}}={}} = useSelector(useCompanyInfo); 
+const {settings:{siteImages:{favicon}={}}={}} = useSelector(useLandingConfig); 
 const {pageTitle} = pageData!;
   return (
     <Helmet>
@@ -25,7 +25,7 @@ const {pageTitle} = pageData!;
     <base href='/'/>
     <title>{pageTitle}</title>
     {/* <!-- Favicon icon --> */}
-    <link rel="icon" type="image/png" sizes="16x16" href={process.env.REACT_APP_BASE_URL+"/uploads/settings/"+favicon} />
+    <link rel="icon" type="image/png" sizes="16x16" href={BASE_URL+"/uploads/settings/"+favicon} />
 	
 </Helmet>
   )

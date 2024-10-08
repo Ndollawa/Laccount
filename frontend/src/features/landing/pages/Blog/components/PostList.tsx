@@ -1,10 +1,10 @@
 import React from 'react'
-import { useGetPostCategoryQuery } from '../../../../dashboard/pages/PostCategory/postCategoryApiSlice'
-import { useGetUsersQuery } from '../../../../dashboard/pages/Users/usersApiSlice'
+import { useGetPostCategoryQuery } from '../../../../dashboard/pages/PostCategory/slices/postCategoryApi.slice'
+import { useGetUsersQuery } from '../../../../dashboard/pages/Users/slices/usersApi.slice'
 import { useGetPostCommentQuery } from '../../../../dashboard/pages/Post/postCommentApiSlice'
-import postProps from '../../../../../app/utils/props/postProps'
-import postCategoryProps from '../../../../../app/utils/props/postCategoryProps'
-import postCommentProps from '../../../../../app/utils/props/postCommentProps'
+import postProps from '../../../../../app/props/postProps'
+import postCategoryProps from '../../../../../app/props/postCategoryProps'
+import postCommentProps from '../../../../../app/props/postCommentProps'
 
 const PostList = ({post}:{post:postProps}) => {
     const { category } = useGetPostCategoryQuery("categoryList", {

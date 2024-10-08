@@ -1,13 +1,3 @@
-// import { StrictMode } from 'react'
-// import { createRoot } from 'react-dom/client'
-// import App from './App.tsx'
-// import './index.css'
-
-// createRoot(document.getElementById('root')!).render(
-//   <StrictMode>
-//     <App />
-//   </StrictMode>,
-// )
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {disableReactDevTools} from '@fvilers/disable-react-devtools'
@@ -20,7 +10,9 @@ import { Provider } from 'react-redux';
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import { HelmetProvider } from 'react-helmet-async';
 import App from './App';
-if(process.env.NODE_ENV === 'production') disableReactDevTools();
+
+const NODE_ENV = import.meta.env.NODE_ENV;
+if(NODE_ENV === 'production') disableReactDevTools();
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
@@ -28,6 +20,8 @@ function Fallback({ error, resetErrorBoundary }:FallbackProps) {
   // Call resetErrorBoundary() to reset the error boundary and retry the render.
 
   return (
+    <>
+         <div className="body vh-100">
    <div className="container row justify-content-center h-100 align-items-center" style={{width:'100%',height:'100vh'}}>
        <div className="row justify-content-center h-100 align-items-center">
            <div className="col-md-7">
@@ -43,6 +37,8 @@ function Fallback({ error, resetErrorBoundary }:FallbackProps) {
            </div>
        </div>
    </div>
+   </div>
+   </>
   );
 }
 const persistor = persistStore(store)

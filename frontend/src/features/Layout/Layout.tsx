@@ -2,10 +2,10 @@ import React from 'react'
 import { Outlet } from 'react-router-dom';
 import { useDispatch} from 'react-redux';
 import Head from '../dashboard/components/Head';
-import pageProps from '../../app/utils/props/pageProps';
+import pageProps from '../../app/props/pageProps';
 import {  setPreloader } from '../components/preloader/slices/preloader.slice';
 import './assets/css/styles.css';
-import * as $ from 'jquery'
+import $ from 'jquery'
 import Js from '../dashboard/components/Js';
 import { Helmet } from 'react-helmet';
 

@@ -1,8 +1,8 @@
 import React from 'react'
-import {useGetRoomsQuery,useDeleteRoomMutation } from '../roomsApiSlice'
-import showToast from '../../../../../app/utils/hooks/showToast'
+import {useGetRoomsQuery,useDeleteRoomMutation } from '../slices/roomsApi.slice'
+import showToast from '../../../../../app/utils/showToast'
 import Swal from 'sweetalert2'
-import roomProps from '../../../../../app/utils/props/roomProps'
+import roomProps from '../../../../../app/props/roomProps'
 
 interface modalDataProps {
     modalData:{

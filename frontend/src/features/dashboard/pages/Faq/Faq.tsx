@@ -2,7 +2,7 @@ import React,{useEffect,useState,useMemo} from 'react'
 import MainBody from '../../components/MainBody'
 import CreateFaqModal from './components/CreateFaqModal'
 import FaqTableData from './components/FaqTableData'
-import pageProps from '../../../../app/utils/props/pageProps'
+import pageProps from '../../../../app/props/pageProps'
 
 
 

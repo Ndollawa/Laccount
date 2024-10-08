@@ -38,6 +38,7 @@ export class UserController {
       });
     }
 
+    const hashedPassword = await hashData(password, 10);
     try {
       const existingUser = await this.userService.exists({
         where: { OR: [{ email }, { username }] },
@@ -50,7 +51,6 @@ export class UserController {
         });
       }
 
-      const hashedPassword = await hashData(password, 10);
       const userData = {
         username,
         email,
@@ -68,7 +68,7 @@ export class UserController {
             lastName,
           },
         },
-        wallet: {
+        wallets: {
           createMany: {
             data: [
               {
@@ -99,7 +99,30 @@ export class UserController {
   async findAll(): Promise<User[]> {
     try {
       const users = await this.userService.findAll({
-        where: {},
+        where: {
+          roles: {
+            some: {
+              AND: [
+                {
+                  code: {
+                    not: UserRolesEnum.DEV,
+                  },
+                },
+                {
+                  role: {
+                    not: UserRolesKeysEnum.DEV,
+                  },
+                },
+              ],
+            },
+          },
+        },
+        select: {
+          id: true,
+          username: true,
+          email: true,
+          verificationStatus: true,
+        },
         include: { profile: true, roles: true },
       });
       return users;

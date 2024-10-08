@@ -4,8 +4,8 @@ import { useSelector,useDispatch } from 'react-redux';
 import {ToastContainer} from 'react-toastify'
 import { selectCurrentToken } from './features/auth/slices/auth.slice';
 import RequireAuth from './features/dashboard/components/RequireAuth';
-import PersistLogin from './features/dashboard/components/PersistLogin';
-import Prefetch from './features/auth/Prefetch';
+import PersistLogin from './features/components/PersistLogin';
+import Prefetch from './features/components/Prefetch';
 import Home from './features/landing/Index'
 import HomePage from './features/landing/pages/Home/Home';
 
@@ -68,8 +68,9 @@ import TermsConditionsSetting from './features/dashboard/pages/Settings/componen
 import PrivacyPolicySetting from './features/dashboard/pages/Settings/components/PrivacyPolicy';
 import SiteImage from './features/dashboard/pages/Settings/components/SiteImage';
 import Layout from './features/Layout/Layout';
-import { useGetSettingsQuery } from './features/dashboard/pages/Settings/settingApiSlice';
-import { setSettings,  useSettings } from './features/dashboard/pages/Settings/settingsConfigSlice';
+import { useGetSettingsQuery } from './features/dashboard/pages/Settings/slices/settingApi.slice';
+import { setSettings,  useSettings } from './features/dashboard/pages/Settings/slices/settings.slice';
+import { Settings } from './app/props/settingsProps';
 
 // import SocketIO from './app/utils/context/SocketIO';
 
@@ -86,22 +87,21 @@ const {
     isSuccess,
     isError,
     error
-  } = useGetSettingsQuery('settingList', {
+  } = useGetSettingsQuery('appSettingList',{
     pollingInterval: 15000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true
   })
-  //  const {_id} = useSelector(useSettings)
-  const { setting } = useGetSettingsQuery("settingsList", {
-    selectFromResult: ({ data }) => ({
-        setting: data?.entities[data.ids[0]]
-    }),
-  })
-  // console.log(_id)
+
   React.useEffect(() => {
-    if(!isLoading && isSuccess) dispatch(setSettings(setting))
+    if(!isLoading && isSuccess){
+                
+          
+          
+    //  dispatch(setSettings(settingState));
+        };
    
-  }, [setting,isSuccess,isLoading])
+  }, [settings,isSuccess,isLoading])
   return (
       
             <>
@@ -144,21 +144,18 @@ const {
                 <Route path="register" element={<Navigate to="/auth/register"/>} />
                 <Route path="lockscreen" element={<Navigate to="/auth/login"/>} />
               </Route>
-            
-
-          
            
              {/* End Public Routes */}
 
               {/* Protected Routes */}
 
-            {/* <Route element={<PersistLogin />} >
-            <Route element={<RequireAuth allowedRoles={[1002,1003]} />} >
+            {/* <Route element={<PersistLogin />} > */}
+            {/* <Route element={<RequireAuth allowedRoles={["0000","0002","0003"]} />} > */}
             <Route path="/dashboard" element={<Layout pageData={{pageTitle:"Dashboard"}}/>} >
                   <Route index element={<DashboardHomepage/>} />
                   <Route path="profile" element={<Profile/>} />
                   <Route path="profile/edit" element={<ProfileEdit />} />
-                  <Route path="wallet" element={<Wallet pageData={{pageTitle:"Wallet",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
+                  {/* <Route path="wallet" element={<Wallet pageData={{pageTitle:"Wallet",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
                   <Route path="market" element={<Market pageData={{pageTitle:"Market",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
                   <Route path="transaction" element={<Transaction pageData={{pageTitle:"Transaction",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
                   <Route path="contacts" element={<Contacts pageData={{pageTitle:"Contacts",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
@@ -166,17 +163,17 @@ const {
                   <Route path="users/user/:userId" element={<User pageData={{pageTitle:"User",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
                   <Route path="messenger" element={<Chat pageData={{pageTitle:"Messenger",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
                   <Route path="messenger/:id" element={<Chat pageData={{pageTitle:"Messenger",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
-                  <Route path="coin-Detail/:id" element={<CoinDetail pageData={{pageTitle:"Coin Data",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
+                  <Route path="coin-Detail/:id" element={<CoinDetail pageData={{pageTitle:"Coin Data",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} /> */}
                  
-            <Route element={<RequireAuth allowedRoles={[1000,1001]} />} >
-                  <Route path="privacy-and-Policy" element={<PrivacyPolicy pageData={{pageTitle:"Privacy and Policy",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
+            {/* <Route element={<RequireAuth allowedRoles={["0001","0000"]} />} > */}
+                 <Route path="privacy-and-Policy" element={<PrivacyPolicy pageData={{pageTitle:"Privacy and Policy",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
                   <Route path="faq" element={<FaqManagement pageData={{pageTitle:"Privacy and Policy",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
                   <Route path="our-team" element={<TeamManagement pageData={{pageTitle:"Our Team",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
                   <Route path="rooms" element={<RoomsManagement pageData={{pageTitle:"All Rooms",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
                   <Route path="services" element={<ServicesManagement pageData={{pageTitle:"Services",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
                   <Route path="posts" element={<PostManagement pageData={{pageTitle:"Service",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
                   <Route path="posts/category" element={<PostCategoryManagement pageData={{pageTitle:"Service",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
-                  <Route path="slides" element={<Slide />} />
+                  <Route path="slides" element={<Slide />} /> 
                   <Route path="settings/" element={<SiteSettings/>} >
                       <Route index element={<GeneralSettings/>} />
                       <Route path="general" element={<GeneralSettings/>} />
@@ -187,12 +184,12 @@ const {
                       <Route path="site-images" element={<SiteImage/>} />
                       <Route path="terms-and-conditions" element={<TermsConditionsSetting/>} />
                   </Route> 
-              </Route>
-            </Route>  */}
+              {/* </Route> */}
+            {/* </Route>  */}
              {/* End Protected Routes */}
             {/* </Route> */}
-            {/* </Route> */}
-           </Route>
+            </Route>
+          </Route> 
             <Route path='*'  element={<Navigate to="error/404"/>}/>
           </Routes>
 </>

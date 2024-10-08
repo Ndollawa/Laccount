@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import {useGetSlidesQuery,useDeleteSlideMutation } from '../slidesApiSlice'
-import showToast from '../../../../../app/utils/hooks/showToast'
+import showToast from '../../../../../app/utils/showToast'
 import Swal from 'sweetalert2'
 import LightGallery from 'lightgallery/react'
 import 'lightgallery/css/lightgallery.css'
@@ -9,28 +8,25 @@ import 'lightgallery/css/lg-zoom.css'
 import lgThumbnail from 'lightgallery/plugins/thumbnail'
 import lgZoom from 'lightgallery/plugins/zoom'
 // import 'lightgallery/css/lg-thumbnail.css'
-import slideProps from '../../../../../app/utils/props/slideProps'
+import { HomeSlide } from '../../../../../app/props/settingsProps'
+import { useSelector } from 'react-redux'
+import { useUpdateSettingMutation } from '../../Settings/slices/settingApi.slice'
+import { setLandingSetting, useLandingConfig } from '../../Settings/slices/settings.slice'
+import { useDispatch } from 'react-redux'
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;
 
 
-interface modalDataProps {
-    modalData:{
-       data:slideProps | null,
-      showModal:boolean,
-    } 
-    }
-const SlideTableData = ({slideId,index,showEditForm}:any) => {
-    const { slide } = useGetSlidesQuery("slidesList", {
-        selectFromResult: ({ data }) => ({
-            slide: data?.entities[slideId]
-        }),
-    })
-
-    const [deleteSlide, {
+const SlideTableData = ({slide,index,showEditForm}:any) => {
+   
+  const { id, settings: {sliders, ...otherSettings } = {} } = useSelector(useLandingConfig);
+  const dispatch = useDispatch();
+    const [updateSetting, {
         isSuccess: isDelSuccess,
         isError: isDelError,
         error: delerror
-    }]:any = useDeleteSlideMutation()
-    const onDeleteSlide = async (id:string) => {
+    }] = useUpdateSettingMutation()
+    const onDeleteSlide = async (slideId:number) => {
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
               confirmButton: 'btn btn-sm m-2 btn-success',
@@ -49,7 +45,11 @@ const SlideTableData = ({slideId,index,showEditForm}:any) => {
             reverseButtons: true
           }).then(async(result) => {
             if (result.isConfirmed) {
-        await deleteSlide({ _id: id })
+              const filteredSlides = sliders?.filter(slide =>slide.id !== slideId)
+              const settings = { sliders:filteredSlides, ...otherSettings };
+         
+                await updateSetting({ id, settings }).unwrap();
+                dispatch(setLandingSetting(settings));
         if(isDelError) return showToast('error',JSON.stringify(delerror?.data))
               swalWithBootstrapButtons.fire(
                 'Deleted!',
@@ -71,17 +71,15 @@ const SlideTableData = ({slideId,index,showEditForm}:any) => {
 // 
   
     if (slide) {
-        const created = new Date(slide.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year:'numeric' })
-      const slideData = {
+         const slideData = {
         data:{
-        _id:slide._id,
-        title:slide.title,
-        description:slide.description,
-        image:slide.image,
-        cto_text:slide.cto_text,
-        link:slide.link,
-        body:slide.body,
-        status:slide.status
+        id:slide?.id,
+        title:slide?.title,
+        description:slide?.description,
+        image:slide?.image,
+        cto:slide?.cto,
+        body:slide?.body,
+        status:slide?.status
 
         },
         showModal:true
@@ -103,20 +101,19 @@ const SlideTableData = ({slideId,index,showEditForm}:any) => {
 }
 
         return (
-            <><tr key={slideId}>
+            <><tr key={slide.id}>
                     <td>{++index}</td>
                     <td>
-                    <LightGallery plugins={[lgZoom]} > <a href={process.env.REACT_APP_BASE_URL+"/uploads/slide/"+slide.image}  data-lightbox={`image-${++index}`} data-exthumbimage={process.env.REACT_APP_BASE_URL+"/uploads/slide/"+slide.image} data-src={process.env.REACT_APP_BASE_URL+"/uploads/slide/"+slide.image} data-title={slide.title}>
-                        <img src={process.env.REACT_APP_BASE_URL+"/uploads/slide/"+slide.image} alt={slide.title} width="150" /></a></LightGallery></td>
+                    <LightGallery plugins={[lgZoom]} > <a href={`${BASE_URL}/uploads/settings/slides/${slide.image}`}  data-lightbox={`image-${++index}`} data-exthumbimage={BASE_URL+"/uploads/slide/"+slide.image} data-src={BASE_URL+"/uploads/slide/"+slide.image} data-title={slide.title}>
+                        <img src={`${BASE_URL}/uploads/settings/slides/${slide.image}`} alt={slide.title} width="150" /></a></LightGallery></td>
                     <td>{slide.title}</td>
                     <td>{slide.description}</td>
                     <td  dangerouslySetInnerHTML={{__html:slide.body}} ></td>
                     <td align="center">{slideStatus}</td>
-                    <td>{created}</td>
                     <td>
                     <div className="d-flex">
                             <button type="button" className="btn btn-info light shadow btn-xs sharp me-1"   onClick={()=>showEditForm(slideData)}><i className="fas fa-pencil-alt"></i></button>
-                            <button className="btn btn-danger light shadow btn-xs sharp" onClick={()=>onDeleteSlide(slide._id)}><i className="fa fa-trash"></i></button>
+                            <button type="button" className="btn btn-danger light shadow btn-xs sharp" onClick={()=>onDeleteSlide(slide.id)}><i className="fa fa-trash"></i></button>
                         </div>													
                     </td>												
                 </tr></>

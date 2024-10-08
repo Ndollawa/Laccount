@@ -1,9 +1,9 @@
 import React from 'react'
-import { useGetPostCategoryQuery } from '../../../../dashboard/pages/PostCategory/postCategoryApiSlice'
-import { useGetUsersQuery } from '../../../../dashboard/pages/Users/usersApiSlice'
-import postProps from '../../../../../app/utils/props/postProps'
+import { useGetPostCategoryQuery } from '../../../../dashboard/pages/PostCategory/slices/postCategoryApi.slice'
+import { useGetUsersQuery } from '../../../../dashboard/pages/Users/slices/usersApi.slice'
+import postProps from '../../../../../app/props/postProps'
 import { format } from 'timeago.js'
-import postCategoryProps from '../../../../../app/utils/props/postCategoryProps'
+import postCategoryProps from '../../../../../app/props/postCategoryProps'
 
 const RecentPostList = ({post}:{post:postProps}) => {
     const { category } = useGetPostCategoryQuery("categoryList", {

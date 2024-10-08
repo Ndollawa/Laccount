@@ -4,7 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { RedisService } from '@app/common';
 import { RequestService } from '@app/common/services';
-import { UserModule } from 'src/user/';
+import { UserModule } from 'src/user/user.module';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -34,8 +34,9 @@ import { AuthEventsService } from './auth.events';
     JwtStrategy,
     JwtRefreshStrategy,
     AuthEventsService,
-    RedisService,
     RequestService,
+    // UserService,
+    // RefreshTokenService,
     AuthService,
   ],
   exports: [JwtStrategy, AuthService, AuthEventsService],

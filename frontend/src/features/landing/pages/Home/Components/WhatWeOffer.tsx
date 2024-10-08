@@ -1,15 +1,15 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import {  useCompanyInfo,useLandingPageConfig } from '../../../../dashboard/pages/Settings/settingsConfigSlice';
+import {  useCompanyInfo,useLandingConfig } from '../../../../dashboard/pages/Settings/slices/settings.slice';
 
-import { useGetServicesQuery } from '../../../../dashboard/pages/Service/servicesApiSlice'
-import serviceProps from '../../../../../app/utils/props/serviceProps'
+import { useGetServicesQuery } from '../../../../dashboard/pages/Service/slices/servicesApi.slice'
+import serviceProps from '../../../../../app/props/serviceProps'
 
 
 const WhatWeOffer = () => {
 const {
-    whatWeOfferStyle} = useSelector(useLandingPageConfig)
-const {siteName} = useSelector(useCompanyInfo);
+    settings:{landingPageConfig:{whatWeOfferStyle,showWhatWeOffer}={}}={}} = useSelector(useLandingConfig)
+const {settings:{companyDetails:{siteName}={}}={}} = useSelector(useCompanyInfo);
 let WhatWeOfferSection,sec1;
 const { services } = useGetServicesQuery("servicesList", {
             selectFromResult: ({ data }) => ({
@@ -141,7 +141,7 @@ switch (whatWeOfferStyle) {
                 <div className="col-lg-6">
                     <div className="block-title text-left">
                         <p className="block-title__tagline">What We’re Offering</p>
-                        <h2 className="block-title__title">We provide best services for your Escrow needs</h2>
+                        <h2 className="block-title__title">We provide best services for your Social Media Account Escrow needs</h2>
                     </div>
                 </div>
                 <div className="col-lg-6">
@@ -158,10 +158,10 @@ switch (whatWeOfferStyle) {
                         <i className={service?.icon}></i>
                     </div>
                     <h3 className="service-card-five__title">
-                        <a href={`/services/${service._id}`}>{service?.title}</a>
+                        <a href={`/services/${service.id}`}>{service?.title}</a>
                     </h3>
                     <p className="service-card-five__text s-card" >{service?.description}</p>
-                    <a className="readmore-link" href={`/services/${service._id}`}>Read More</a>
+                    <a className="readmore-link" href={`/services/${service.id}`}>Read More</a>
                     
                 </div>
             </div>
@@ -181,7 +181,7 @@ switch (whatWeOfferStyle) {
       <div className="container">
           <div className="block-title text-center">
               <p className="block-title__tagline">What We’re Offering</p>
-              <h2 className="block-title__title">We provide best services <br/> For your Escrow Payments </h2>
+              <h2 className="block-title__title">We provide best services <br/> For your Social Media Account Escrow Payments </h2>
           </div>
           <div className="row row-gutter-y-50 mt-3">
           {
@@ -189,8 +189,8 @@ switch (whatWeOfferStyle) {
               <div className="col-lg-4 col-md-12 col-sm-12">
                   <div className="service-card">
                       <div className="service-card__image">
-                      <a href={`/services/${service._id}`}>
-                      <img src={process.env.REACT_APP_BASE_URL+"/uploads/service/"+service?.image} alt={service?.title}/>
+                      <a href={`/services/${service.id}`}>
+                      <img src={BASE_URL+"/uploads/service/"+service?.image} alt={service?.title}/>
                           </a>
                       </div>
                       <div className="service-card__content">
@@ -199,10 +199,10 @@ switch (whatWeOfferStyle) {
                                   <i className={service?.icon}></i>
                               </div>
                               <h3 className="service-card__title">
-                              <a href={`/services/${service._id}`}>{service?.title}</a>
+                              <a href={`/services/${service.id}`}>{service?.title}</a>
                               </h3>
                               <p className="service-card__text s-card">{service?.description}</p>
-                              <a href={`/services/${service._id}`} className="service-card__link"><i className="fa fa-angle-right"></i></a>
+                              <a href={`/services/${service.id}`} className="service-card__link"><i className="fa fa-angle-right"></i></a>
                            
                           </div>
                       </div>
@@ -222,7 +222,7 @@ switch (whatWeOfferStyle) {
 }
 
   return (
-  <>{WhatWeOfferSection}</>  
+  <>{showWhatWeOffer && WhatWeOfferSection}</>  
   )
 }
 

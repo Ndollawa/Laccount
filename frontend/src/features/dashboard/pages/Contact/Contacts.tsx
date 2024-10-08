@@ -1,17 +1,17 @@
 import React,{useState,useEffect} from 'react'
 import MainBody from '../../components/MainBody'
 import { useDispatch } from 'react-redux'
-import { useGetContactsQuery } from './contactsApiSlice'
+import { useGetContactsQuery } from './slices/contactsApi.slice'
 import { setPreloader } from '../../../components/preloader/slices/preloader.slice'
-import pageProps from '../../../../app/utils/props/pageProps'
+import pageProps from '../../../../app/props/pageProps'
 import ContactsTable from './components/ContactsTable'
-import useToggle from '../../../../app/utils/hooks/useToggle'
+import useToggle from '../../../../app/hooks/useToggle'
 import ContactCard from './components/ContactCard'
 import { FaListAlt } from 'react-icons/fa'
 import { IoGridOutline } from 'react-icons/io5'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '../../../auth/slices/auth.slice'
-import contactProps from '../../../../app/utils/props/contactProps'
+import contactProps from '../../../../app/props/contactProps'
 
     
 interface modalDataProps {

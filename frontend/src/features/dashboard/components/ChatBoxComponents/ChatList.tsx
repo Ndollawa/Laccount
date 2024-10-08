@@ -2,15 +2,15 @@ import React,{useState,useEffect} from 'react'
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../auth/slices/auth.slice';
-import { useGetConversationsQuery } from '../../pages/Messenger/conversationsApiSlice';
+import { useGetConversationsQuery } from '../../pages/Messenger/slices/conversationsApi.slice';
 import Conversation from './Conversation';
-import { useGetUsersQuery } from '../../pages/Users/usersApiSlice';
-import { useGetMessagesQuery } from '../../pages/Messenger/messagesApiSlice';
-import conversationProps from '../../../../app/utils/props/conversationProps';
-import messageProps from '../../../../app/utils/props/messageProps';
+import { useGetUsersQuery } from '../../pages/Users/slices/usersApi.slice';
+import { useGetMessagesQuery } from '../../pages/Messenger/slices/messagesApi.slice';
+import conversationProps from '../../../../app/props/conversationProps';
+import messageProps from '../../../../app/props/messageProps';
 
-import useDebounce from '../../../../app/utils/hooks/useDebounce';
-import userInterface from '../../../../app/utils/props/userProps';
+import useDebounce from '../../../../app/hooks/useDebounce';
+import userInterface from '../../../../app/props/userProps';
 
 
 

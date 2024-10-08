@@ -1,12 +1,12 @@
 import React from 'react'
-import pageProps from '../../../../app/utils/props/pageProps'
+import pageProps from '../../../../app/props/pageProps'
 import Breadcrum from '../../components/Breadcrum'
 import { useSelector } from 'react-redux';
-import {useCompanyInfo} from '../../../dashboard/pages/Settings/settingsConfigSlice';
+import {useCompanyInfo} from '../../../dashboard/pages/Settings/slices/settings.slice';
 
 
 const Contact :React.FC<pageProps> = ({pageData}:pageProps) => {
-    const {siteName,address,email,contact,description,activeHours,socialMedia:{facebookHandle,twitterHandle,instagram,whatsapp}} = useSelector(useCompanyInfo);
+    const {settings:{siteName,address,email,contact,description,activeHours,socialMedia:{facebookHandle,twitterHandle,instagram,whatsapp}={}}={}} = useSelector(useCompanyInfo);
  
 
 

@@ -1,81 +1,58 @@
 import {createSlice} from '@reduxjs/toolkit';
 import { RootState } from '../../../app/stores/store';
-import userInterface from '../../../app/utils/props/userProps';
+import { authProps } from '../../../app/props/authProps';
 
 
-interface authProps extends userInterface{
-    token: string | null;
-}
+const defaultUserState =  {
+    id:undefined,
+    email:undefined,
+    username:undefined,
+    verificationStatus:undefined,
+    profile:{
+        id:undefined,
+        firstName:undefined,
+        lastName:undefined,
+        middleName:undefined,
+        phone:undefined,
+        dob:undefined,
+        gender: undefined,
+        address: undefined,
+        city: undefined,
+        state: undefined,
+        country: undefined,
+        occupation: undefined,
+        bio: undefined,
+        image:undefined,
+        status:undefined,
+        authentication_2FA:undefined,
+    },
+    online:{
+        status:undefined,
+        lastSeen:undefined,
+     },
+    roles:[],
+    wallets:[],
+    
+};
+
 const authSlice = createSlice({
     name:'auth',
     initialState:{ 
         token: null, 
-        user: { 
-            _id:undefined,
-            email:undefined,
-            firstName:undefined,
-            lastName:undefined,
-            // fullName:undefined,
-            username:undefined,
-            phone:undefined,
-            dob:undefined,
-            gender: undefined,
-            address: undefined,
-            city: undefined,
-            online:{
-                status:undefined,
-                lastSeen:undefined,
-             },
-            state: undefined,
-            country: undefined,
-            occupation: undefined,
-            bio: undefined,
-            userImage:undefined,
-            accountStatus:undefined,
-            verificationStatus:undefined,
-            accountSecurity_2FA:undefined,
-            roles:undefined,
-            
-
-        }
+        user: defaultUserState,
     } as authProps, 
     reducers:{
         setCredentials: (state, action) =>{
             const {accessToken , user_info} = action.payload;
             state.token = accessToken;
             if(user_info){
-                // console.log(user_info)
+                console.log(user_info)
             state.user = user_info;
             }
         },
         logOut: (state):void =>{
             state.token = null;
-            state.user = { 
-                _id:undefined,
-                email:undefined,
-                firstName:undefined,
-                lastName:undefined,
-                // fullName:undefined,
-                username:undefined,
-                phone:undefined,
-                dob:undefined,
-                gender: undefined,
-                address: undefined,
-                city: undefined,
-                state: undefined,
-                country: undefined,
-                occupation: undefined,
-                online:{
-                    status:undefined,
-                    lastSeen:undefined,
-                 },
-                bio: undefined,
-                userImage:undefined,
-                accountStatus:undefined,
-                verificationStatus:undefined,
-                accountSecurity_2FA:undefined,
-                roles:undefined,
-                }
+            state.user = defaultUserState;
         }
     },
    

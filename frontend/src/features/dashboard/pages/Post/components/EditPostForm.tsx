@@ -1,13 +1,13 @@
 import React, {ChangeEvent,FormEvent,useState,useEffect} from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import {IoMdPricetags,IoIosList,IoMdColorWand,IoIosCreate,IoIosClose} from 'react-icons/io'
-import { useUpdatePostMutation} from '../postApiSlice'
-import { useGetPostCategoryQuery } from '../../PostCategory/postCategoryApiSlice'
+import { useUpdatePostMutation} from '../slices/postApi.slice'
+import { useGetPostCategoryQuery } from '../../PostCategory/slices/postCategoryApi.slice'
 import {Modal} from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import showToast from '../../../../../app/utils/hooks/showToast'
+import showToast from '../../../../../app/utils/showToast'
 import $ from 'jquery'
-import postProps from '../../../../../app/utils/props/postProps'
+import postProps from '../../../../../app/props/postProps'
 
 
 
@@ -226,7 +226,7 @@ setPreviewImage(fileurl)
                 <div className="col-12">
                   <label className="form-label"><strong>Response</strong></label>
                   <Editor
-        tinymceScriptSrc={process.env.PUBLIC_URL + '/tinymce/tinymce.min.js'}
+        tinymceScriptSrc={process.env.VITE_PUBLIC_URL + '/tinymce/tinymce.min.js'}
        onEditorChange={(newValue,editor)=>setBody(newValue)}
        value={body}
         init={{

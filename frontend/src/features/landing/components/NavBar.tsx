@@ -1,10 +1,6 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import {useCompanyInfo,useLandingPageConfig} from '../../dashboard/pages/Settings/settingsConfigSlice';
-import useWindowSize from '../../../app/utils/hooks/useWindowSize';
-import useUserImage from '../../../app/utils/hooks/useUserImage';
-import { selectCurrentUser } from '../../auth/slices/auth.slice';
 import {NavDropdown} from 'react-bootstrap';
 import { FaCogs, FaUserCog, FaUserFriends } from 'react-icons/fa';
 import { IoLogOutOutline, IoWalletOutline} from 'react-icons/io5'
@@ -13,16 +9,21 @@ import {BiTransfer} from 'react-icons/bi'
 import {GiTakeMyMoney} from 'react-icons/gi'
 import {RxDashboard} from 'react-icons/rx'
 import { HiOutlineChatBubbleLeftRight } from 'react-icons/hi2'
+import {useCompanyInfo,useLandingConfig} from '../../dashboard/pages/Settings/slices/settings.slice';
+import {Styles} from '../../../app/props/settingsProps';
+import useWindowSize from '../../../app/hooks/useWindowSize';
+import useUserImage from '../../../app/hooks/useUserImage';
+import { selectCurrentUser } from '../../auth/slices/auth.slice';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 
-enum Styles{STYLE_1,STYLE_2, STYLE_3};
 
 
 const NavBar = () => {
 const {width} = useWindowSize()
 const currentUser = useSelector(selectCurrentUser)
-const {siteName,contact,activeHours}  = useSelector(useCompanyInfo);
-const {landingConfig:{landingPageConfig:{navStyle},siteImages:{logo,favicon}}} = useSelector(useLandingPageConfig);
+const {settings:{siteName,contact,activeHours}={}}  = useSelector(useCompanyInfo);
+const {settings:{landingPageConfig:{navStyle}={},siteImages:{logo,favicon}={}}={}} = useSelector(useLandingConfig);
 const userImage = useUserImage(currentUser)
     return (
         <>
@@ -38,7 +39,7 @@ const userImage = useUserImage(currentUser)
                         }
 
                     <Link to="/">
-                        <img src={width! < 320? process.env.REACT_APP_BASE_URL+"/uploads/settings/"+favicon : process.env.REACT_APP_BASE_URL+"/uploads/settings/"+logo} width={width! <320?"50" :"150"} alt={siteName} />
+                        <img src={width! < 320? BASE_URL+"/uploads/settings/"+favicon : BASE_URL+"/uploads/settings/"+logo} width={width! <320?"50" :"150"} alt={siteName} />
                     </Link>
                 </div>
                 {/* <!-- /.main-menu__logo --> */}
@@ -53,8 +54,8 @@ const userImage = useUserImage(currentUser)
 
                         <li><NavLink to="/services" className={({isActive})=> isActive ?"current":""} >Services</NavLink> </li>
                         {/* <li><a to="#">Pages</a></li> */}
-                        <li><NavLink to="/our-team" className={({isActive})=> isActive ?"current":""} >Our Team</NavLink></li>
-                        <li><NavLink to="/our-blog/posts" className={({isActive})=> isActive ?"current":""} >News</NavLink></li>
+                        {/* <li><NavLink to="/our-team" className={({isActive})=> isActive ?"current":""} >Our Team</NavLink></li> */}
+                        <li><NavLink to="/our-blog/posts" className={({isActive})=> isActive ?"current":""} >Blog</NavLink></li>
                         <li><NavLink to="/contact" className={({isActive})=> isActive ?"current":""} >Contact</NavLink></li>
                     </ul>
                 </div>
@@ -98,7 +99,7 @@ const userImage = useUserImage(currentUser)
                         </span>
                         {/* <!-- /.main-menu__contact__icon --> */}
                         <span className="main-menu__contact__text"><strong>{c}</strong>
-                            {activeHours.slice(0,28)}
+                            {activeHours?.slice(0,28)}
                         </span>
                     </a> ))}
                     {/* <!-- /.main-menu__contact --> */}

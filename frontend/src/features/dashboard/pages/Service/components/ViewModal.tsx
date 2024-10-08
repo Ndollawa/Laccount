@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import { Editor } from '@tinymce/tinymce-react'
-import { useUpdateServiceMutation} from '../servicesApiSlice'
+import { useUpdateServiceMutation} from '../slices/servicesApi.slice'
 import {Modal} from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import showToast from '../../../../../app/utils/hooks/showToast'
+import showToast from '../../../../../app/utils/showToast'
 import Swal from 'sweetalert2'
-import serviceProps from '../../../../../app/utils/props/serviceProps'
+import serviceProps from '../../../../../app/props/serviceProps'
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;
 
 interface modalDataProps {
 viewData:{
@@ -18,10 +20,10 @@ const ViewModal = ({viewData:{data,showModal}}:modalDataProps) => {
   const [icon, setIcon] = useState(data?.icon)
   const [description, setDescription] = useState(data?.description)
   const [body, setBody] = useState(data?.body)
-  const [serviceBg, setServiceBg] = useState<any>(null)
+  const [image, setServiceBg] = useState<any>(null)
   const [status, setStatus] = useState(data?.status)
   const [show, setShow] = useState(false)
-  const [previewImage, setPreviewImage] =useState(process.env.REACT_APP_BASE_URL+"/uploads/service/"+data?.image);
+  const [previewImage, setPreviewImage] =useState(BASE_URL+"/uploads/settings/service/"+data?.image);
   
 
 // const navigate = useNavigate()
@@ -31,7 +33,7 @@ useEffect(() => {
   setDescription(data?.description!)
   setBody(data?.body!)
   setStatus(data?.status!)
-  setPreviewImage(process.env.REACT_APP_BASE_URL+"/uploads/service/"+data?.image!)
+  setPreviewImage(BASE_URL+"/uploads/settings/service/"+data?.image!)
     setShow(showModal)
       return () => {
         setShow(false)
@@ -60,7 +62,7 @@ const handleClose = () => setShow(false);
           <p className='blockquote my-3 p-2 fs-14'>{description}</p>
           <h4 className="heading">Body Content:</h4>
         <Editor
-        tinymceScriptSrc={process.env.PUBLIC_URL + '/tinymce/tinymce.min.js'}
+        tinymceScriptSrc={'/tinymce/tinymce.min.js'}
       //  onEditorChange={(newValue,editor)=>setBody(newValue)}
        value={body}
        disabled

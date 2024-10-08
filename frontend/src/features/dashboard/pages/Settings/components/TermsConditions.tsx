@@ -1,40 +1,64 @@
-import React, { FormEvent, FormEventHandler,useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
+import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { useDispatch,useSelector } from 'react-redux';
-import { usePagesSettingsMutation } from '../settingApiSlice';
-import { setPagesSetting, useSettings, usePages } from '../settingsConfigSlice';
-import showToast from '../../../../../app/utils/hooks/showToast';
+import { useUpdateSettingMutation } from '../slices/settingApi.slice';
+import { setLandingSetting, useLandingConfig } from '../slices/settings.slice';
+import showToast from '../../../../../app/utils/showToast';
+import { BsInfoCircleFill } from 'react-icons/bs';
+import { PulseLoader } from 'react-spinners';
 
+const PUBLIC_URL= import.meta.env.VITE_PUBLIC_URL;
 const TermsCondition = () => {
-const pages = useSelector(usePages);
-  const [terms,setTerms] = useState(pages.termsCondition);
-const dispatch= useDispatch();
-const [pagesSettings,isLoading]=usePagesSettingsMutation();
-const {_id} = useSelector(useSettings);
-const updateSetting:FormEventHandler = async(e:FormEvent)=>{
-e.preventDefault()
-try {
-  const data={...pages,termsCondition:terms}
-  await pagesSettings({_id,data}).unwrap()
-   dispatch(setPagesSetting({data}))
-   showToast('success',"Settings Updated successfully!")
-}  catch (error:any) {
-  showToast('error',error)
-}
 
-}
+  const dispatch = useDispatch();
+  const [updateSetting, isLoading] = useUpdateSettingMutation();
+  const {id,settings:{pages, ...otherSettings}={}} = useSelector(useLandingConfig)
+  const initialState = {
+    termsCondition:pages? pages?.termsCondition : "",
+  };
+  
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    getValues,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: initialState,
+  });
+  
+  // Watch form fields
+  const termsConditionValue = watch('termsCondition');
 
-
-
-
+  useEffect(() => {
+    // Initialize the value in TinyMCE editor
+    setValue('termsCondition', initialState.termsCondition);
+  }, [setValue, initialState.termsCondition]);
+  const updateSettings:SubmitHandler<FieldValues> = async(formFields, e)=>{
+  e.preventDefault()
+  try {
+    const settings = {pages:{...pages, ...formFields}, ...otherSettings}
+    await updateSetting({id, settings}).unwrap()
+     dispatch(setLandingSetting(settings))
+     showToast('success',"Settings Updated successfully!")
+    } catch (error:any) {
+      showToast('error',error)
+  }
+  
+  }
+  
   return (
     <div className="card">
     <div className="card-header bg-secondary">
       <h4 className="card-title text-white">Terms and Conditions</h4>
     </div>
-    <div className="card-body">
+    <div className="card-body p-5">
       <div className="basic-form">
-        <form onSubmit={updateSetting}>
+        <form  onSubmit={(e) => handleSubmit(updateSettings)(e)}>
           <div className='row'>
             
               <div className="col-md-12">
@@ -42,10 +66,11 @@ try {
                   {/* <label><strong>Terms and Conditions</strong></label> */}
                
         <Editor
-        tinymceScriptSrc={process.env.PUBLIC_URL + '/tinymce/tinymce.min.js'}
-        value={terms}
-        onEditorChange={(nv,editor)=>setTerms(nv)}
-        initialValue={pages.termsCondition}
+        tinymceScriptSrc={'/tinymce/tinymce.min.js'}
+        value={termsConditionValue}
+        onEditorChange={(newValue) => {
+          setValue('termsCondition', newValue); // Update the form value when editor content changes
+        }}
         init={{
           height: 500,
           menubar: true,
@@ -60,11 +85,25 @@ try {
             'removeformat | help',
           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
         }}
-      />
+      />   <div>
+      {errors?.termsCondition && (
+      <span className="text-xs d-flex m-3 text-danger">
+        <BsInfoCircleFill size={"0.8rem"} />
+        &ensp;
+        {errors?.termsCondition?.message}
+      </span>
+    ) } 
+  </div>
               </div>
-          <div className="card-footer d-flex justify-content-end">
-              <button type="submit" className="btn btn-primary">
-                Update Page Info
+          <div className="card-footer d-flex justify-content-end mt-10">
+              <button type="submit" className="btn btn-primary"  disabled={isSubmitting && isLoading}>
+              {isSubmitting ? (<> 
+                           {/* <span> Updating</span> */}
+                            <PulseLoader loading={isSubmitting} color="#ffffff" size="0.7rem" />
+                          </>
+                        ) : (
+                          'Update Terms and Condition Info'
+                        )}  
               </button></div>
           </div>
           </form>

@@ -1,10 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
-import {useCompanyInfo,useLandingPageConfig} from '../../../../dashboard/pages/Settings/settingsConfigSlice';
+import {useCompanyInfo,useLandingConfig} from '../../../../dashboard/pages/Settings/slices/settings.slice';
 
 
 const CTASection = () => {
-    const {siteName} = useSelector(useCompanyInfo); 
+    const {settings:{siteName}={}} = useSelector(useCompanyInfo); 
   return (
     <>
             <section className="call-to-action-two">

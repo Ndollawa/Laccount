@@ -1,326 +1,212 @@
-import React, {
-  ChangeEvent,
-  FormEvent,
-  useState,
-  useEffect,
-  useRef,
-} from "react";
-import { useAddNewTeamMutation } from "../teamsApiSlice";
+import React from "react";
+import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import showToast from "../../../../../app/utils/hooks/showToast";
-import useInput from "../../../../../app/utils/hooks/useInput";
-import $ from 'jquery'
+import { useAddNewTeamMutation } from "../slices/teamsApi.slice";
+import showToast from "../../../../../app/utils/showToast";
+
+interface TeamFormInputs {
+  firstName: string;
+  lastName: string;
+  email: string;
+  position: string;
+  phone: string;
+  bio: string;
+  status: string;
+  userImage: FileList;
+  socialMedia: {
+    facebookHandle: string;
+    twitterHandle: string;
+    instagram: string;
+    whatsapp: string;
+  };
+}
 
 const CreateTeamForm = () => {
-  const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [position, setPosition] = useState("");
-  const [bio, setBio] = useState("");
-  const emailRef = useRef<HTMLInputElement>(null);
-  const [userFacebookHandle, setUserFacebookHandle, userFacebookHandleAttr] =
-    useInput("");
-  const [userTwitterHandle, setUserTwitterHandle, userTwitterHandleAttr] =
-    useInput("");
-  const [userInstagramHandle, setUserInstagramHandle, userInstagramHandleAttr] =
-    useInput("");
-  const [userWhatsapp, setUserWhatsapp, userWhatsappAttr] = useInput("");
-  const [previewImage, setPreviewImage] =
-    useState("");
+  const { register, handleSubmit, formState: { errors, isSubmitting }, reset, setValue, watch } = useForm<TeamFormInputs>();
+  const [addNewTeam, { isLoading, isSuccess, isError, error }] = useAddNewTeamMutation();
+  const userImage = watch("userImage");
 
-  const [validEmail, setValidEmail] = useState(false);
-  const EMAIL_REGEX =
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-
-  useEffect(() => {
-    const result = EMAIL_REGEX.test(email!);
-    setValidEmail(result);
-  }, [email]);
-
-  const [userImage, setUserImage] = useState<any>(null);
-  const [status, setStatus] = useState<any>($('#status').val());
-  const [show, setShow] = useState(false);
-  const [addNewTeam, { isLoading, isSuccess, isError, error }]: any =
-    useAddNewTeamMutation();
-
-  // const navigate = useNavigate()
-
-  React.useEffect(() => {
-    if (isSuccess) {
-setEmail("")
-setFirstName("")
-setLastName('')
-setPhone("")
-setPosition("")
-setBio("")
-setUserFacebookHandle("")
-setUserTwitterHandle("")
-setUserInstagramHandle("")
-setUserWhatsapp("")
-setValidEmail(false)
-setUserImage("")
-      setPreviewImage('')
-    }
-  }, [isSuccess]);
-
-  const canSave =
-    [email, firstName, lastName, phone, bio].every(Boolean) && !isLoading;
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const onSubmit:SubmitHandler<FieldValues> = async (formFields, e) => {
+    e?.preventDefault()
     const formData = new FormData();
-    if (canSave) {
-      formData.append("firstName",firstName)
-      formData.append("lastName",lastName)
-      formData.append("bio",bio)
-      formData.append("status",status)
-      formData.append("phone",phone)
-      formData.append("position",position)
-      formData.append("email",email)
-      formData.append("facebookHandle",userFacebookHandle)
-      formData.append("twitterHandle",userTwitterHandle)
-      formData.append("instagram",userInstagramHandle)
-      formData.append("whatsapp",userWhatsapp)
-      formData.append("upload",userImage)
-      await addNewTeam(formData); 
-      if (isError) return showToast("error", JSON.stringify(error?.data?.message));
+    
+    formDataToSend.append('firstName', formFields.firstName);
+    formDataToSend.append('lastName', formFields.lastName);
+    formDataToSend.append('email', formFields.email);
+    formDataToSend.append('position', formFields.position);
+    formDataToSend.append('phone', formFields.phone);
+    formDataToSend.append('bio', formFields.bio);
+    formDataToSend.append('status', formFields.status);
+    formDataToSend.append('socialMedia', JSON.stringify(formFields.socialMedia));
+    
+    if (data.userImage && data.userImage.length > 0) {
+      formData.append("file", data.userImage[0]);
+    }
+
+    await addNewTeam(formData);
+
+    if (isError) {
+      showToast("error", JSON.stringify(error?.data?.message));
+    } else if (isSuccess) {
       showToast("success", "Team member created successfully");
+      reset();
     }
   };
-  const uploadBg = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files;
-    if (file && file.length > 0){
-      setUserImage(file[0]);
-let fileurl = (window.URL || window.webkitURL).createObjectURL(file[0]);
 
-setPreviewImage(fileurl)
-// $(".img-popup").lightGallery();
-//     $(".img-gallery").lightGallery({
-//         selector: ".gallery-selector",
-//         hash: false
-//     });
-    } 
-  }
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files;
+    if (file && file.length > 0) {
+      setValue("userImage", file);
+    }
+  };
 
   return (
     <>
-      <button
-        type="button"
-        className="btn btn-primary mb-2"
-        onClick={handleShow}
-      >
-        Add New
-      </button>
+      <Button onClick={() => setValue("show", true)}>Add New</Button>
 
-      <Modal
-        show={show}
-        size="lg"
-        centered
-        backdrop="static"
-        onHide={handleClose}
-        animation={false}
-      >
+      <Modal show={watch("show")} size="lg" centered backdrop="static" onHide={() => setValue("show", false)}>
         <Modal.Header closeButton>
           <Modal.Title>Add New Team Member</Modal.Title>
         </Modal.Header>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => handleSubmit(onSubmit)(e) } encType="multipart/form-data">
           <Modal.Body>
-            <div className="card-body">
-              <div className="basic-form">
-                <div className="row">
-                  <div className="col-sm-6 col-md-6">
-                    <div className="form-group">
-                      <label className="form-label">First Name</label>{" "}
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="fname"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        placeholder="First Name"
-                      />
-                    </div>
-                  </div>
-                  <div className="col-sm-6 col-md-6">
-                    <div className="form-group">
-                      <label className="form-label">Last Name</label>{" "}
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="lname"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        placeholder="Last Name"
-                      />
-                    </div>
-                  </div>
-                  <div className="col-sm-6 col-md-6">
-                    <div className="form-group">
-                      <label className="form-label">Email address</label>{" "}
-                      <div
-                        className={
-                          validEmail
-                            ? "input-group input-success"
-                            : "input-group input-default"
-                        }
-                      >
-                        <input
-                          type="email"
-                          className="form-control invalid-input"
-                          name="email"
-                          placeholder="Email"
-                          value={email}
-                          ref={emailRef}
-                          onChange={(e) => setEmail(e.target.value)}
-                          required
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-sm-6 col-md-6">
-                    <div className="form-group">
-                      <label className="form-label">Position </label>{" "}
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="position"
-                        placeholder="Position"
-                        value={position}
-                        onChange={(e) => setPosition(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-sm-6 col-md-6">
-                    <div className="form-group">
-                      <label className="form-label">Phone </label>{" "}
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="phone"
-                        placeholder="Phone"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                      />
-                    </div>
-                  </div>
+            <div className="row">
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label>First Name</label>
+                  <input
+                    type="text"
+                    className={`form-control ${errors.firstName ? "is-invalid" : ""}`}
+                    {...register("firstName", { required: "First name is required" })}
+                  />
+                  {errors.firstName && <div className="invalid-feedback">{errors.firstName.message}</div>}
+                </div>
+              </div>
 
-                  <div className="mb-3 col-md-6">
-                    <label className="form-label">
-                      <strong>Status</strong>
-                    </label>
-                    <select
-                      id="status"
-                      className="default-select form-control wide"
-                      value={status}
-                      onChange={(e) => setStatus(e.target.value)}
-                    >
-                      <option value="active" selected>Active</option>
-                      <option value="inactive">Inactive</option>
-                    </select>
-                  </div>
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label>Last Name</label>
+                  <input
+                    type="text"
+                    className={`form-control ${errors.lastName ? "is-invalid" : ""}`}
+                    {...register("lastName", { required: "Last name is required" })}
+                  />
+                  {errors.lastName && <div className="invalid-feedback">{errors.lastName.message}</div>}
+                </div>
+              </div>
 
-                  <div className="col-md-6">
-                    <label className="form-label">User Image</label>
-                    <div className="input-group mb-3 col-md-5">
-                      <div className="form-file">
-                        <input
-                          type="file"
-                          id="uploadbg"
-                          accept=".jpeg, .jpg, .png, .gif"
-                          name="uploadbg"
-                          onChange={uploadBg}
-                          className="form-file-input form-control"
-                        />
-                      </div>
-                      <span className="input-group-text">Upload</span>
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    Preview
-                    <div id="preview">{previewImage &&<img className="img-responsive" src={previewImage} alt="User Avatar" width="240"/>}</div>
-                  </div>
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label>Email</label>
+                  <input
+                    type="email"
+                    className={`form-control ${errors.email ? "is-invalid" : ""}`}
+                    {...register("email", { required: "Email is required", pattern: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/ })}
+                  />
+                  {errors.email && <div className="invalid-feedback">{errors.email.message}</div>}
+                </div>
+              </div>
 
-                  <div className="mb-3 col-md-6">
-                    <label className="form-label">
-                      <strong>Facebook Handle</strong>
-                    </label>
-                    <input
-                      type="url"
-                      className="form-control"
-                      placeholder="https://facebook.com/@userName"
-                      value={userFacebookHandle}
-                      onChange={setUserFacebookHandle}
-                      {...userFacebookHandleAttr}
-                    />
-                  </div>
-                  <div className="mb-3 col-md-6">
-                    <label className="form-label">
-                      <strong>Twitter Handle</strong>
-                    </label>
-                    <input
-                      type="url"
-                      className="form-control"
-                      placeholder="https://twitter.com/@userName"
-                      value={userTwitterHandle}
-                      onChange={setUserTwitterHandle}
-                      {...userTwitterHandleAttr}
-                    />
-                  </div>
-                  <div className="mb-3 col-md-6">
-                    <label className="form-label">
-                      <strong>Instagram Handle</strong>
-                    </label>
-                    <input
-                      type="url"
-                      className="form-control"
-                      placeholder="https://instagram.com/@userName"
-                      value={userInstagramHandle}
-                      onChange={setUserInstagramHandle}
-                      {...userInstagramHandleAttr}
-                    />
-                  </div>
-                  <div className="mb-3 col-md-6">
-                    <label className="form-label">
-                      <strong>Whatsapp</strong>
-                    </label>
-                    <input
-                      type="url"
-                      className="form-control"
-                      placeholder="https://twhatsapp.com/@userName"
-                      value={userWhatsapp}
-                      onChange={setUserWhatsapp}
-                      {...userWhatsappAttr}
-                    />
-                  </div>
-                  <div className="col-md-12">
-                    <div className="form-group mb-0">
-                      <label className="form-label">Bio</label>{" "}
-                      <textarea
-                        rows={5}
-                        className="form-control"
-                        name="bio"
-                        onChange={(e) => setBio(e.target.value)}
-                        placeholder="Enter your bio or favourite qoute"
-                        value={bio}
-                      ></textarea>
-                    </div>
-                  </div>
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label>Phone</label>
+                  <input
+                    type="text"
+                    className={`form-control ${errors.phone ? "is-invalid" : ""}`}
+                    {...register("phone", { required: "Phone is required" })}
+                  />
+                  {errors.phone && <div className="invalid-feedback">{errors.phone.message}</div>}
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label>Position</label>
+                  <input
+                    type="text"
+                    className={`form-control ${errors.position ? "is-invalid" : ""}`}
+                    {...register("position", { required: "Position is required" })}
+                  />
+                  {errors.position && <div className="invalid-feedback">{errors.position.message}</div>}
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label>Status</label>
+                  <select className="form-control" {...register("status", { required: "Status is required" })}>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                  {errors.status && <div className="invalid-feedback">{errors.status.message}</div>}
+                </div>
+              </div>
+
+              <div className="col-md-12">
+                <div className="form-group">
+                  <label>Bio</label>
+                  <textarea className="form-control" rows={4} {...register("bio", { required: "Bio is required" })}></textarea>
+                  {errors.bio && <div className="invalid-feedback">{errors.bio.message}</div>}
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label>Facebook Handle</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    {...register("socialMedia.facebookHandle")}
+                  />
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label>Twitter Handle</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    {...register("socialMedia.twitterHandle")}
+                  />
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label>Instagram Handle</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    {...register("socialMedia.instagram")}
+                  />
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label>Whatsapp</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    {...register("socialMedia.whatsapp")}
+                  />
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label>User Image</label>
+                  <input type="file" className="form-control" onChange={handleImageUpload} />
+                  {userImage && userImage[0] && <img src={URL.createObjectURL(userImage[0])} alt="Preview" width="100" />}
                 </div>
               </div>
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" size='sm' className='rounded-pill' onClick={handleClose}>
-              Close
-            </Button>
-            <Button variant="secondary" size='sm' className='rounded-pill' type="submit" disabled={!canSave}>
-              Save Team
-            </Button>
+            <Button variant="secondary" onClick={() => setValue("show", false)}>Close</Button>
+            <Button type="submit" variant="primary" disabled={isSubmitting || isLoading}>Save</Button>
           </Modal.Footer>
         </form>
       </Modal>
@@ -328,4 +214,4 @@ setPreviewImage(fileurl)
   );
 };
 
-export default React.memo(CreateTeamForm);
+export default CreateTeamForm;

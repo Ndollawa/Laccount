@@ -1,286 +1,195 @@
-import React,{FormEvent,FormEventHandler,useState}  from 'react';
-import {BsToggle2Off ,BsToggle2On} from 'react-icons/bs';
-import { useSelector,useDispatch } from 'react-redux';
-import { useLandingPageConfig } from '../settingsConfigSlice';
-import { useHomepageSettingsMutation } from '../settingApiSlice';
-import { setAppHomepageSetting,useSettings } from '../settingsConfigSlice';
-import useInput from '../../../../../app/utils/hooks/useInput';
-import showToast from '../../../../../app/utils/hooks/showToast';
+import React from 'react';
+import { BsInfoCircleFill, BsToggle2Off, BsToggle2On } from 'react-icons/bs';
+import { useSelector, useDispatch } from 'react-redux';
+import { useLandingConfig } from '../slices/settings.slice';
+import { PulseLoader } from "react-spinners";
+import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
+import { useUpdateSettingMutation } from '../slices/settingApi.slice';
+import { setLandingSetting } from '../slices/settings.slice';
+import showToast from '../../../../../app/utils/showToast';
 
 const HomePageSettings = () => {
+  const dispatch = useDispatch();
+  const [updateSetting, { isLoading }] = useUpdateSettingMutation();
 
-const dispatch= useDispatch();
-const [homepageSettings,isLoading]=useHomepageSettingsMutation();
+  const { id, settings: { landingPageConfig, colors, ...otherSettings } = {} } = useSelector(useLandingConfig);
+  const initialState = { landingPageConfig, colors };
 
-const {id} = useSelector(useSettings)
-const homeSettings = useSelector(useLandingPageConfig);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: initialState,
+  });
+  const toCamelCase = (str) =>
+    str
+      .split(' ')
+      .map((word, index) =>
+        index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1)
+      )
+      .join('');
+  // Watching the toggle states independently
+  const affiliateToggle = watch("landingPageConfig.showAffiliate", false);
+  const blogToggle = watch("landingPageConfig.showBlog", false);
+  const testimonialToggle = watch("landingPageConfig.showTestimonial", false);
+  const metricsToggle = watch("landingPageConfig.showMetrics", false);
+  const whatWeOfferToggle = watch("landingPageConfig.showWhatWeOffer", false);
+  const teamToggle = watch("landingPageConfig.showTeam", false);
+  const ourBenefitToggle = watch("landingPageConfig.showOurBenefit", false);
+  const partnersToggle = watch("landingPageConfig.showPartners", false);
 
+  const updateSettings: SubmitHandler<FieldValues> = async (formFields, e) => {
+    e.preventDefault();
+    const settings = { landingPageConfig: { ...landingPageConfig, ...formFields }, ...otherSettings };
+    try {
+      await updateSetting({ id, settings }).unwrap();
+      dispatch(setLandingSetting(settings));
+      showToast('success', "Settings Updated successfully!");
+    } catch (error: any) {
+      showToast('error', error);
+    }
+  };
 
-const [affiliateToggle, setAffiliateToggle] = useState(homeSettings.showAffiliate)
-const [testimonialToggle, setTestimonialToggle] = useState(homeSettings.showTestimonial)
-const [blogToggle, setBlogToggle] = useState(homeSettings.showBlog)
-
-const [aboutUsStyle, setAboutUsStyle, AboutUsStyleAttr] = useInput(homeSettings.aboutStyle)
-const [whatweOfferStyle, setWhatWeOfferStyle, WhatWeOfferStyleAttr] = useInput(homeSettings.whatWeOfferStyle)
-const [navstyle, setNavStyle, NavStyleAttr] = useInput(homeSettings.navStyle)
-const [testimonialStyle, setTestimonialStyle, TestimonialStyleAttr] = useInput(homeSettings.testimonialStyle)
-const [serviceStyle, setServiceStyle, serviceStyleAttr] = useInput(homeSettings.serviceStyle)
-const [sliderstyle, setSliderStyle, SliderStyleAttr] = useInput(homeSettings.sliderStyle)
-const [ourBenefitstyle, setOurBenefitStyle, OurBenefitStyleAttr] = useInput(homeSettings.ourBenefitStyle)
-const [ourBlogStyle, setOurBlogStyle, OurBlogStyleAttr] = useInput(homeSettings.ourBlogStyle)
-
-const styleOptions = [1,2,3].map((option, i)=><option key={i} value={option}>Style {option}</option>)
-
-const updateSetting:FormEventHandler = async(e:FormEvent)=>{
-e.preventDefault()
-const data={
-  navStyle:navstyle,
-  sliderStyle:sliderstyle,
-  aboutStyle:aboutUsStyle,
-  testimonialStyle,
-  serviceStyle,
-  ourBenefitStyle:ourBenefitstyle,
-  whatWeOfferStyle:whatweOfferStyle,
-  ourBlogStyle
-}
-try {
-  await homepageSettings({id,data}).unwrap()
-   dispatch(setAppHomepageSetting(data))
-   showToast('success',"Settings Updated successfully!")
-
-  }  catch (error:any) {
-    showToast('error',error)
-}
-
-}
-const handleAffiliateToggle = async ()=>{
-  let data={showAffiliate:affiliateToggle}
-  try {
-    await homepageSettings({id,data}).unwrap()
-     dispatch(setAppHomepageSetting(data))
-     showToast('success',"Settings Updated successfully!")
-  }  catch (error:any) {
-    showToast('error',error)
-  }
-}
-const handleBlogToggle =  async()=>{
-  let data={showBlog:blogToggle}
-  try {
-    await homepageSettings({id,data}).unwrap()
-     dispatch(setAppHomepageSetting(data))
-     showToast('success',"Settings Updated successfully!")
-
-    }  catch (error:any) {
-      showToast('error',error)
-  }
-}
-const handleTestimonialToggle =  async()=>{
-  let data={showTestimonial:testimonialToggle}
-  try {
-    await homepageSettings({id,data}).unwrap()
-     dispatch(setAppHomepageSetting(data))
-     showToast('success',"Settings Updated successfully!")
-
-    }  catch (error:any) {
-      showToast('error',error)
-  }
-}
   return (
     <>
-    <div className="card">
-      <div className="card-header bg-secondary">
-        <h4 className="card-title text-white">Home Page</h4>
-      </div>
-      <div className="card-body">
-        <div className="basic-form">
-          <form onSubmit={updateSetting}> 
-            <div className="row">
-            <div className="my-20 col-md-12 d-flex justify-content-between">
-              <div><strong>Show Affiliate Section</strong></div>
-              <div className=''>
-                <label htmlFor='affiliateToggle'  className='p-10'>{affiliateToggle?<BsToggle2On className='text-primary' fontSize={'2rem'}/>:<BsToggle2Off className='text-default' fontSize={'2rem'}/>}</label>
-                <input
-                id="affiliateToggle"
-                type="checkbox"
-                  className="setting-checkbox d-none"
-                  checked={affiliateToggle}
-                  onClick={()=>{setAffiliateToggle((prev:boolean)=>!prev);
-                  handleAffiliateToggle()}}
-                />
-                 </div>
-              </div><br/>
-            <div className="mb-15 col-md-12 d-flex justify-content-between align-center">
-              <div><strong>Show Blog Section</strong></div>
-              <div>
-                <label htmlFor="blogToggle" className="p-10">{blogToggle?<BsToggle2On className='text-primary' fontSize={'2rem'}/>:<BsToggle2Off className='text-default' fontSize={'2rem'}/>}</label>
-                <input
-                id='blogToggle'
-                type="checkbox"
-                  className="setting-checkbox d-none"
-                  checked={blogToggle}
-                  readOnly
-                  onClick={()=>{setBlogToggle((prev:boolean) => !prev);
-                    handleBlogToggle()
-                  }}
-                />
-                 </div>
-              </div><br/>
-            <div className="my-20 col-md-12 d-flex justify-content-between">
-              <div><strong>Show Testimonial Section</strong></div>
-              <div>
-                <label htmlFor='testimonialToggle' className="p-10">{testimonialToggle?<BsToggle2On className='text-primary' fontSize={'2rem'}/>:<BsToggle2Off className='text-default' fontSize={'2rem'}/>}</label>
-                <input
-                id='testimonialToggle'
-                type="checkbox"
-                  className="setting-checkbox d-none"
-                  checked={testimonialToggle}
-                  readOnly
-                  onChange={()=>{setTestimonialToggle((prev:boolean)=> !prev);
-                  handleTestimonialToggle()}}
-                />
-                 </div>
-              </div>
-             <br/>
-             <br/>
-             <br/>
-            <div className="mb-3 col-md-3">
-                <label className="form-label"><strong>Navbar Style</strong></label>
-                <select
-                  className="default-select form-control wide"
-                  value={navstyle}
-                  onChange={setNavStyle}
-                  {...NavStyleAttr}
-                >
-                  <option value="">Choose...</option>
-                 {styleOptions}
-                </select>
-              </div>
-              
-              <div className="mb-3 col-md-3">
-                <label className="form-label"><strong>Slider Style</strong></label>
-                <select
-                  className="default-select form-control wide"
-                  value={sliderstyle}
-                  onChange={setSliderStyle}
-                  {...SliderStyleAttr}
-                >
-                  <option value="">Choose...</option>
-                 {styleOptions}
-                </select>
-              </div>
-              <div className="mb-3 col-md-3">
-                <label className="form-label"><strong>About Us Style</strong></label>
-                <select
-                  className="default-select form-control wide"
-                  value={aboutUsStyle}
-                  onChange={setAboutUsStyle}
-                  {...AboutUsStyleAttr}
-                >
-                  <option value="">Choose...</option>
-                  {styleOptions}
-                </select>
+      <div className="card">
+        <div className="card-header bg-secondary">
+          <h4 className="card-title text-white">Home Page</h4>
+        </div>
+        <div className="card-body p-5">
+          <div className="basic-form">
+            <form onSubmit={(e) => handleSubmit(updateSettings)(e)}>
+              <div className="row">
 
-            </div>
-              
-            <div className="mb-3 col-md-3">
-                <label className="form-label"><strong>Service  Style</strong></label>
-                <select
-                  className="default-select form-control wide"
-                  value={serviceStyle}
-                  onChange={setServiceStyle}
-                  {...serviceStyleAttr}
-                >
-                  <option value="">Choose...</option>
-                  {styleOptions}
-                </select>
-              </div>
-              
-            <div className="mb-3 col-md-3">
-                <label className="form-label"><strong>What We Offer  Style</strong></label>
-                <select
-                  className="default-select form-control wide"
-                  value={whatweOfferStyle}
-                  onChange={setWhatWeOfferStyle}
-                  {...WhatWeOfferStyleAttr}
-                >
-                  <option value="">Choose...</option>
-                  {styleOptions}
-                </select>
-              </div>
-
-              <div className="mb-3 col-md-3">
-                <label className="form-label"><strong>Testimonial Style</strong></label>
-                <select
-                  className="default-select form-control wide"
-                  value={testimonialStyle}
-                  onChange={setTestimonialStyle}
-                  {...TestimonialStyleAttr}
-                >
-                  <option value="">Choose...</option>
-                  {styleOptions}
-                </select>
-              </div>
-              <div className="mb-3 col-md-3">
-                <label className="form-label"><strong>Our Benefit Style</strong></label>
-                <select
-                  className="default-select form-control wide"
-                  value={ourBenefitstyle}
-                  onChange={setOurBenefitStyle}
-                  {...OurBenefitStyleAttr}
-                >
-                  <option value="">Choose...</option>
-                  {styleOptions}
-                </select>
-
-            </div>
-              <div className="mb-3 col-md-3">
-                <label className="form-label"><strong>Our Blog Style</strong></label>
-                <select
-                  className="default-select form-control wide"
-                  value={ourBlogStyle}
-                  onChange={setOurBlogStyle}
-                  {...OurBlogStyleAttr}
-                >
-                  <option value="">Choose...</option>
-                  {styleOptions}
-                </select>
-
-            </div>
-                {/*  <div className="mb-3 col-md-3">
-                <label className="form-label"><strong>Primary Colour</strong></label>
+                {/* Toggle Component */}
+                {[
+                  { label: "Show Affiliate Section", field: "landingPageConfig.showAffiliate", toggle: affiliateToggle },
+                  { label: "Show Testimonial Section", field: "landingPageConfig.showTestimonial", toggle: testimonialToggle },
+                  { label: "Show Blog Section", field: "landingPageConfig.showBlog", toggle: blogToggle },
+                  { label: "Show Metric Section", field: "landingPageConfig.showMetrics", toggle: metricsToggle },
+                  { label: "Show Partners Section", field: "landingPageConfig.showPartners", toggle: partnersToggle },
+                  { label: "Show What we Offer Section", field: "landingPageConfig.showWhatWeOffer", toggle: whatWeOfferToggle },
+                  { label: "Show Team Section", field: "landingPageConfig.showTeam", toggle: teamToggle },
+                  { label: "Show Our Benefit Section", field: "landingPageConfig.showOurBenefit", toggle: ourBenefitToggle },
+                  
+                ].map(({ label, field, toggle }, index) => (
+                  <div key={index} className="my-1 col-md-12 d-flex justify-content-between">
+                    <div><strong>{label}</strong></div>
+                    <div>
+                      <label htmlFor={field} className="p-10">
+                        {toggle ? <BsToggle2On className='text-primary' fontSize={'2rem'} /> : <BsToggle2Off className='text-default' fontSize={'2rem'} />}
+                      </label>
+                      <input
+                        id={field}
+                        type="checkbox"
+                        className="setting-checkbox d-none"
+                        {...register(field)}
+                      />
+                      {errors[field] && (
+                        <span className="text-xs d-flex m-3 text-danger">
+                          <BsInfoCircleFill size={"0.8rem"} />
+                          &ensp; {errors[field]?.message}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                {/* Colors */}
+                <div className="col-12 row my-3">
+              <div className="mb-5 col-md-4">
+                <label className="form-label"><strong>Primary Color</strong></label>
                 <input
                   type="color"
                   className="form-control"
-                  placeholder=""
-                  value={primaryColour}
-                  onChange={setPrimaryColour}
-                  {...PrimaryColourAttr}
+                  {...register('colors.primary', {
+                    required: "Field: Primary color is required!"
+                  })}
                 />
+                {errors.colors?.primary && (
+                  <span className="text-xs d-flex m-3 text-danger">
+                    <BsInfoCircleFill size="0.8rem" />
+                    &ensp;{errors.colors?.primary?.message}
+                  </span>
+                )}
               </div>
-           
-           <div className="mb-3 col-md-3">
-                <label className="form-label"><strong>Secondary Colour </strong></label>
+
+              <div className="mb-5 col-md-4">
+                <label className="form-label"><strong>Secondary Color</strong></label>
                 <input
                   type="color"
                   className="form-control"
-                  placeholder=""
-                  value={WhatWeOfferStyle}
-                  onChange={setSecondaryColour}
-                  {...SecondaryColourAttr}
+                  {...register('colors.secondary', {
+                    required: "Field: Secondary color is required!"
+                  })}
                 />
-              </div> */}
-               
-            </div>
-            <div className="card-footer d-flex justify-content-end">
-            <button type="submit" className="btn btn-primary">
-             Save Changes
-            </button></div>
-          </form>
+                {errors.colors?.secondary && (
+                  <span className="text-xs d-flex m-3 text-danger">
+                    <BsInfoCircleFill size="0.8rem" />
+                    &ensp;{errors.colors?.secondary?.message}
+                  </span>
+                )}
+              </div>
+
+              <div className="mb-5 col-md-4">
+                <label className="form-label"><strong>Tertiary Color</strong></label>
+                <input
+                  type="color"
+                  className="form-control"
+                  {...register('colors.tertiary', {
+                    required: "Field: Tertiary color is required!"
+                  })}
+                />
+                {errors.colors?.tertiary && (
+                  <span className="text-xs d-flex m-3 text-danger">
+                    <BsInfoCircleFill size="0.8rem" />
+                    &ensp;{errors.colors?.tertiary?.message}
+                  </span>
+                )}
+              </div>
+              </div>
+{/* Additional Style Fields */}
+{['Slider Style', 'About Us Style', 'Service Style', 'What We Offer Style', 'Testimonial Style', 'Our Benefit Style', 'Our Blog Style'].map((style, index) => (
+                <div key={index} className="mb-5 col-md-4 col-sm-2">
+                  <label className="form-label"><strong>{style}</strong></label>
+                  <select
+                    className="default-select form-control wide"
+                    {...register(`landingPageConfig.${toCamelCase(style)}`, {
+                      required: `Field: ${style} is required!`
+                    })}
+                  >
+                    <option value="">Choose...</option>
+                    {[1, 2, 3].map(option => (
+                      <option key={option} value={option}>Style {option}</option>
+                    ))}
+                  </select>
+                  {errors.landingPageConfig?.[`${toCamelCase(style)}`] && (
+                    <span className="text-xs d-flex m-3 text-danger">
+                      <BsInfoCircleFill size="0.8rem" />
+                      &ensp;{errors.landingPageConfig?.[`${toCamelCase(style)}`]?.message}
+                    </span>
+                  )}
+                </div>
+              ))}
+                <div className="card-footer d-flex justify-content-end">
+                  <button type="submit" className="btn btn-primary" disabled={isSubmitting && isLoading}>
+                    {isSubmitting ? (
+                      <>
+                        <PulseLoader loading={isSubmitting} color="#ffffff" size="0.7rem" />
+                      </>
+                    ) : (
+                      'Save Changes'
+                    )}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-  </>
-  )
-}
+    </>
+  );
+};
 
-export default React.memo(HomePageSettings)
+export default React.memo(HomePageSettings);

@@ -1,14 +1,15 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { useLandingPageConfig } from '../../../dashboard/pages/Settings/settingsConfigSlice'
-import pageProps from '../../../../app/utils/props/pageProps'
+import { useLandingConfig } from '../../../dashboard/pages/Settings/slices/settings.slice'
+import pageProps from '../../../../app/props/pageProps'
 import Breadcrum from '../../components/Breadcrum'
 import CTASection from '../Home/Components/CTASection'
-
+import { LandingConfig } from '../../../../app/props/settingsProps'
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const About:React.FC<pageProps> = ({pageData}:pageProps) => {
     
-const {landingConfig:{siteImages:{aboutUsBg, backgroundImage}}, sitePages:{aboutUs}} = useSelector(useLandingPageConfig); 
+const {settings:{siteImages:{aboutUsBg, backgroundImage}={}, sitePages:{aboutUs}={}}={}} = useSelector<LandingConfig>(useLandingConfig); 
   return (
     <>
 <Breadcrum pageData={pageData}/>
@@ -17,7 +18,7 @@ const {landingConfig:{siteImages:{aboutUsBg, backgroundImage}}, sitePages:{about
         <div className="row row-gutter-y-50">
             <div className="col-lg-6">
                 <div className="about-two__image">
-                    <img src={process.env.REACT_APP_BASE_URL+"/uploads/settings/"+aboutUsBg} alt=""/>
+                    <img src={BASE_URL+"/uploads/settings/"+aboutUsBg} alt=""/>
                 </div>
                 {/* <!-- /.about-two__image --> */}
             </div>

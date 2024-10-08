@@ -1,9 +1,9 @@
 import React,{useEffect,useState} from 'react'
-import {useGetContactsQuery } from '../contactsApiSlice'
+import {useGetContactsQuery } from '../slices/contactsApi.slice'
 import { Link } from 'react-router-dom'
 import { FaEye } from 'react-icons/fa'
 import ContactTableData from './ContactTableData'
-import contactProps from '../../../../../app/utils/props/contactProps'
+import contactProps from '../../../../../app/props/contactProps'
 
 interface modalDataProps {
     modalData:{

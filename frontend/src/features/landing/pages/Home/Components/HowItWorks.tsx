@@ -1,12 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { useCompanyInfo, useLandingPageConfig, usePages, useSiteImages } from '../../../../dashboard/pages/Settings/settingsConfigSlice';
+import { useCompanyInfo, useLandingConfig, usePages, useSiteImages } from '../../../../dashboard/pages/Settings/slices/settings.slice';
 import { GrShieldSecurity } from 'react-icons/gr';
 
 
 const HowItWorks = () => {
-  const {siteName} = useSelector(useCompanyInfo);
+  const {settings:{siteName}={} }= useSelector(useCompanyInfo);
   return (
     <section className="work-process pt-50 pb-120">
     <div className="work-process__shape-1"></div>

@@ -1,9 +1,9 @@
 import React from 'react'
 import { useParams,useNavigate } from 'react-router-dom'
-import { useGetTeamsQuery } from '../../../../dashboard/pages/Team/teamsApiSlice'
-import pageProps from '../../../../../app/utils/props/pageProps'
+import { useGetTeamsQuery } from '../../../../dashboard/pages/Team/slices/teamsApi.slice'
+import pageProps from '../../../../../app/props/pageProps'
 import Breadcrum from '../../../components/Breadcrum'
-
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Member:React.FC<pageProps> = ({pageData}:pageProps) => {
     const {id} = useParams()
@@ -25,7 +25,7 @@ if(!team) navigate('/error/404')
                 <div className="row">
                     <div className="col-lg-6">
                         <div className="team-details__image wow fadeInUp" data-wow-duration="1500ms">
-                            <img src={process.env.REACT_APP_BASE_URL+"/uploads/team/"+team?.userImage} alt={team?.fullName}/>
+                            <img src={BASE_URL+"/uploads/team/"+team?.userImage} alt={team?.fullName}/>
                         </div>
                         {/* <!-- /.team-details__image --> */}
                     </div>

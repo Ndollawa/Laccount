@@ -1,17 +1,18 @@
 import React,{useEffect} from 'react';
 import { Link,Outlet } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import * as $ from 'jquery';
-import {useCompanyInfo, useLandingPageConfig} from '../dashboard/pages/Settings/settingsConfigSlice';
+import $ from 'jquery';
+import {useCompanyInfo, useLandingConfig} from '../dashboard/pages/Settings/slices/settings.slice';
 import Nav from './components/Nav';
 import Head from './components/Head';
 import Footer from './components/Footer';
 import Js from './components/Js';
 import MobileNav from './components/MobileNav';
 import Search from './components/Search';
-import pageProps from "../../app/utils/props/pageProps";
+import pageProps from "../../app/props/pageProps";
 import './styles.css';
-    
+const BASE_URL = import.meta.env.VITE_BASE_URL;    
+
 const Home:React.FC<pageProps> = ({pageData}:pageProps) => {
 
     useEffect(()=>{
@@ -199,7 +200,7 @@ const Home:React.FC<pageProps> = ({pageData}:pageProps) => {
 
     }, [])
   
-const {landingConfig:{siteImages:{favicon}}} = useSelector(useLandingPageConfig); 
+const {settings:{siteImages:{favicon}={}}={}} = useSelector(useLandingConfig); 
   return (
     <>
     <Head pageData={pageData}/>
@@ -210,7 +211,7 @@ const {landingConfig:{siteImages:{favicon}}} = useSelector(useLandingPageConfig)
     <div className="custom-cursor__cursor-two"></div>
 
     <div className="preloader">
-        <div className="preloader__image" style={{backgroundImage:process.env.REACT_APP_BASE_URL+"/settings/"+favicon}}></div>
+        <div className="preloader__image" style={{backgroundImage:BASE_URL+"/settings/"+favicon}}></div>
     </div>
     {/* // <!-- /.preloader --> */}
     <div className="page-wrapper">

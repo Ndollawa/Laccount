@@ -1,20 +1,20 @@
 import React,{useEffect} from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useDashboardConfigSettingsMutation } from "../pages/Settings/settingApiSlice";
-import { setDashboardSetting } from '../pages/Settings/settingsConfigSlice';
+import { useUpdateSettingMutation } from "../pages/Settings/slices/settingApi.slice";
+import { setDashboardSetting } from '../pages/Settings/slices/settings.slice';
 import $ from 'jquery';
 import ThemeOptions from "./Themes/ThemeOptions";
 import { themeProps } from "./Themes/ThemeOptions";
-import { useSettings} from "../pages/Settings/settingsConfigSlice";
+import { useDashboardConfig} from "../pages/Settings/slices/settings.slice";
 import { useSelector } from "react-redux";
 
 
 const ThemePanel = () => {
 const dispatch = useDispatch();
-const [dashboardConfigSetting,isLoading] = useDashboardConfigSettingsMutation();
- const settings = useSelector(useSettings)
- const {_id} =settings
+const [updateStting, isLoading] = useUpdateSettingMutation();
+ const {id, settings} = useSelector(useDashboardConfig)
+// console.log(id,settings)
 const [toggleThemePanel, setToggleThemePanel] = React.useState(false);
 useEffect(() => {
   $(document).on('click', '.dz_theme_demo', function(){
@@ -22,9 +22,10 @@ useEffect(() => {
   // console.log(Theme);
 
   (async()=>{
+    const settings = { dashboardConfig: { layoutOptions: data, ...dashboardConfig}, ...otherSettings };
     try {
-         await dashboardConfigSetting({_id,data}).unwrap();
-         dispatch(setDashboardSetting(data))
+      await updateSetting({ id, settings }).unwrap();
+      dispatch(setDashboardSetting(settings));
        } catch (error) {
         console.log(error) 
        }
@@ -37,9 +38,10 @@ $(document).on('click', '.dz_theme_demo_rtl', function(){
   // console.log(Theme);
 
   (async()=>{
+    const settings = { dashboardConfig: { layoutOptions: data, ...dashboardConfig}, ...otherSettings };
     try {
-         await dashboardConfigSetting({_id,data}).unwrap();
-         dispatch(setDashboardSetting(data))
+      await updateSetting({ id, settings }).unwrap();
+      dispatch(setDashboardSetting(settings));
        } catch (error) {
         console.log(error) 
        }

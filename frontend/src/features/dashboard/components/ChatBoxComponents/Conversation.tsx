@@ -1,8 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { useGetUsersQuery } from '../../pages/Users/usersApiSlice'
+import { useGetUsersQuery } from '../../pages/Users/slices/usersApi.slice'
 import { selectCurrentUser } from '../../../auth/slices/auth.slice'
-import useUserImage from '../../../../app/utils/hooks/useUserImage'
+import useUserImage from '../../../../app/hooks/useUserImage'
 import { format } from 'timeago.js'
 
 const Conversation = ({openChat,conversation ,i}:any) => {

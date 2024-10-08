@@ -1,9 +1,9 @@
 import React,{useState,useEffect} from 'react'
-import pageProps from '../../../../app/utils/props/pageProps'
+import pageProps from '../../../../app/props/pageProps'
 import Breadcrum from '../../components/Breadcrum'
-import { useGetServicesQuery } from '../../../dashboard/pages/Service/servicesApiSlice'
-import serviceProps from '../../../../app/utils/props/serviceProps'
-
+import { useGetServicesQuery } from '../../../dashboard/pages/Service/slices/servicesApi.slice'
+import serviceProps from '../../../../app/props/serviceProps'
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Services:React.FC<pageProps> = ({pageData}:pageProps) => {
     // const { services } = useGetServicesQuery("servicesList", {
@@ -37,13 +37,13 @@ const Services:React.FC<pageProps> = ({pageData}:pageProps) => {
     <div className="container">
         <div className="row row-gutter-y-50 g-5">
             {
-                (Object.values(services) as serviceProps[])?.map((service:serviceProps)=>{
+                (Object?.values(services ?? []) as serviceProps[])?.map((service:serviceProps)=>{
                     return (
 
                     <div className="col-lg-4 col-md-6 col-sm-12">
                         <div className="service-card">
-                            <div className="service-card__image"><a href={`/services/${service._id}`}>
-                                <img src={process.env.REACT_APP_BASE_URL+"/uploads/service/"+service?.image} alt={service?.title}/>
+                            <div className="service-card__image"><a href={`/services/${service.id}`}>
+                                <img src={BASE_URL+"/uploads/service/"+service?.image} alt={service?.title}/>
                                 </a>
                             </div>
                             {/* <!-- /.service-card__image --> */}
@@ -54,12 +54,12 @@ const Services:React.FC<pageProps> = ({pageData}:pageProps) => {
                                     </div>
                                     {/* <!-- /.service-card__icon --> */}
                                     <h3 className="service-card__title">
-                                        <a href={`/services/${service._id}`}>{service?.title}</a>
+                                        <a href={`/services/${service.id}`}>{service?.title}</a>
                                     </h3>
                                     {/* <!-- /.service-card__title --> */}
                                     <p className="service-card__text s-card">{service?.description}</p>
                                         {/* <!-- /.service-card__text --> */}
-                                    <a href={`/services/${service._id}`} className="service-card__link">
+                                    <a href={`/services/${service.id}`} className="service-card__link">
                                         <i className="fa fa-angle-right"></i>
                                     </a>
                                     {/* <!-- /.service-card__link --> */}

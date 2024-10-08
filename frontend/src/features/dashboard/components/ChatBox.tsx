@@ -5,7 +5,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import ChatList from './ChatBoxComponents/ChatList'
 import ChatModal from './ChatBoxComponents/ChatModal'
 import NotesList from './ChatBoxComponents/NotesList'
-import { useGetUsersQuery } from '../pages/Users/usersApiSlice'
+import { useGetUsersQuery } from '../pages/Users/slices/usersApi.slice'
 import AllUsers from './ChatBoxComponents/AllUsers'
 import $ from 'jquery'
 

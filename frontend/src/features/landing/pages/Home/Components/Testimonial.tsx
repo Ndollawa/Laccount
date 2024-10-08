@@ -1,10 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { useLandingPageConfig } from '../../../../dashboard/pages/Settings/settingsConfigSlice';
+import { useLandingConfig } from '../../../../dashboard/pages/Settings/slices/settings.slice';
 
 
 const Testimonial = ()  => {
-const {testimonialStyle} = useSelector(useLandingPageConfig)
+const {settings:{landingPageConfig:{testimonialStyle}={}}={}} = useSelector(useLandingConfig)
 let testimonialSection;
 switch (testimonialStyle) {
   case 1:

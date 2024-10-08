@@ -1,8 +1,8 @@
 import React from 'react'
-import pageProps from '../../../../app/utils/props/pageProps'
+import pageProps from '../../../../app/props/pageProps'
 import Breadcrum from '../../components/Breadcrum'
-import { useGetFaqsQuery } from '../../../dashboard/pages/Faq/faqApiSlice'
-import { faqProps } from '../../../../app/utils/props/faqProps'
+import { useGetFaqsQuery } from '../../../dashboard/pages/Faq/slices/faqApi.slice'
+import { faqProps } from '../../../../app/props/faqProps'
 import NoResult from '../../components/NoResult'
 
 const Faq:React.FC<pageProps> = ({pageData}:pageProps) => {
@@ -26,7 +26,7 @@ const Faq:React.FC<pageProps> = ({pageData}:pageProps) => {
             
             faqs?.map((f:faqProps)=>(
             <div className="col-lg-6">
-                <div className={`accrodion-grp faq-${f?._id}-accrodion`} data-grp-name={`faq-one-accrodion-${f?._id}`}>
+                <div className={`accrodion-grp faq-${f?.id}-accrodion`} data-grp-name={`faq-one-accrodion-${f?.id}`}>
                     
                     <div className="accrodion  wow fadeInUp" data-wow-delay="0ms">
                         <div className="accrodion-title">

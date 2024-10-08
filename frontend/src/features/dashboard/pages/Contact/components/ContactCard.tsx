@@ -1,7 +1,7 @@
 import React from 'react'
-import userInterface from '../../../../../app/utils/props/userProps'
-import { useGetContactsQuery } from '../contactsApiSlice'
-import { useGetUsersQuery } from '../../Users/usersApiSlice'
+import userInterface from '../../../../../app/props/userProps'
+import { useGetContactsQuery } from '../slices/contactsApi.slice'
+import { useGetUsersQuery } from '../../Users/slices/usersApi.slice'
 import getUserImage from '../../../../../app/utils/getUserImage'
 import { Link } from 'react-router-dom'
 

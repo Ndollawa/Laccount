@@ -1,4 +1,12 @@
-import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  forwardRef,
+  Inject,
+  Injectable,
+  Logger,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import shortid from 'shortid';
@@ -9,10 +17,14 @@ import {
   RefreshTokenQueryDto,
   hashData,
   RequestService,
+  handleError,
 } from '@app/common';
+
+import * as grpc from '@grpc/grpc-js';
+const { ALREADY_EXISTS, UNAUTHENTICATED } = grpc.status;
 import { RedisService } from '@app/common/redis';
 import { UserService, RefreshTokenService } from '../user';
-import { RefreshToken, User } from '@prisma/client';
+import { RefreshToken, User, WalletType } from '@prisma/client';
 import { LoginUserDto, RegisterUserDto } from './dto';
 import { CreateRefreshTokenDto } from 'src/user/dto';
 import {
@@ -21,30 +33,41 @@ import {
 } from './dto/reset-password.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { VerifyUserEmailDto } from './dto/auth.dto';
+import { UserRolesEnum, UserRolesKeysEnum } from 'src/user/enums/user-roles';
 
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
 
   constructor(
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     private readonly configService: ConfigService,
     protected readonly refreshTokenService: RefreshTokenService,
     protected readonly requestService: RequestService,
     protected readonly eventEmitter: EventEmitter2,
-    @Inject(RedisService) protected readonly redisService: RedisService,
+    @Inject(forwardRef(() => RedisService))
+    protected readonly redisService: RedisService,
     private readonly jwtService: JwtService,
   ) {}
 
-  validateUser = async ({ username, password }: LoginUserDto) => {
-    const userType = EMAIL_REGEX.test(username);
-    const userQuery = userType ? { email: username } : { username };
-    const foundUser = await this.userService.find({ where: userQuery });
+  validateUser = async ({ user, password }: LoginUserDto) => {
+    const userType = EMAIL_REGEX.test(user);
+    const userQuery = userType ? { email: user } : { username: user };
+    const foundUser = await this.userService.find({
+      where: userQuery,
+      include: {
+        profile: true,
+        roles: true,
+        // refreshTokens: true,
+        wallets: true,
+      },
+    });
     console.log('first');
     this.logger.debug(foundUser);
     if (foundUser && (await compareHashData(password, foundUser?.password))) {
-      const { password, ...user } = foundUser;
-      return user;
+      const { password, ...userInfo } = foundUser;
+      return userInfo;
     }
     return null;
   };
@@ -60,7 +83,71 @@ export class AuthService {
   };
 
   register = async (registerUserDto: RegisterUserDto) => {
-    return await this.userService.create(registerUserDto);
+    const { firstName, lastName, username, email, password, confirmPassword } =
+      registerUserDto;
+
+    if (password !== confirmPassword) {
+      throw new UnauthorizedException({
+        code: UNAUTHENTICATED,
+        message: 'Password mismatch',
+      });
+    }
+
+    const hashedPassword = await hashData(password, 10);
+    try {
+      const existingUser = await this.userService.exists({
+        where: { OR: [{ email }, { username }] },
+      });
+
+      if (existingUser) {
+        throw new ConflictException({
+          code: ALREADY_EXISTS,
+          message: 'User with credentials already exists.',
+        });
+      }
+
+      const userData = {
+        username,
+        email,
+        password: hashedPassword,
+        verificationStatus: false,
+        roles: {
+          create: {
+            role: UserRolesKeysEnum.USER,
+            code: UserRolesEnum.USER,
+          },
+        },
+        profile: {
+          create: {
+            firstName,
+            lastName,
+          },
+        },
+        wallets: {
+          createMany: {
+            data: [
+              {
+                balance: 0,
+                type: WalletType.CREDIT,
+                currency: {
+                  name: 'LA',
+                },
+              },
+              {
+                balance: 0,
+                type: WalletType.FIAT,
+                currency: {
+                  name: 'FA',
+                },
+              },
+            ],
+          },
+        },
+      };
+      return await this.userService.create(userData);
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   saveUserRefreshToken = async (

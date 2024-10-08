@@ -7,6 +7,7 @@ import {
   // UnprocessableEntityException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { join } from 'path';
 import express from 'express';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
@@ -45,6 +46,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
   app.use(ErrorHandler);
   app.enableVersioning();
+  app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
   await app.listen(port);
 }
 bootstrap();

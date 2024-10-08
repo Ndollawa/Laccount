@@ -2,19 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { FaListAlt } from 'react-icons/fa'
 import { IoGridOutline } from 'react-icons/io5'
 import { useSearchParams } from 'react-router-dom'
-import useToggle from '../../../../app/utils/hooks/useToggle'
-import { useGetPostCategoryQuery } from '../../../dashboard/pages/PostCategory/postCategoryApiSlice'
-import { useGetPostsQuery } from '../../../dashboard/pages/Post/postApiSlice'		
-import pageProps from '../../../../app/utils/props/pageProps'
-import postProps from '../../../../app/utils/props/postProps'
+import useToggle from '../../../../app/hooks/useToggle'
+import { useGetPostCategoryQuery } from '../../../dashboard/pages/PostCategory/slices/postCategoryApi.slice'
+import { useGetPostsQuery } from '../../../dashboard/pages/Post/slices/postApi.slice'		
+import pageProps from '../../../../app/props/pageProps'
+import postProps from '../../../../app/props/postProps'
 import Breadcrum from '../../components/Breadcrum'
 import PostList from './components/PostList'
 import PostGrid from './components/PostGrid'
 import PostSidebar from './Post/components/PostSidebar'
-import postCategoryProps from '../../../../app/utils/props/postCategoryProps'
+import postCategoryProps from '../../../../app/props/postCategoryProps'
 
  export function filterPosts(posts: any, search?:string | null, category?: string, tag?: string | null): postProps[] {
-              return posts.filter((post:any) => {
+              return posts?.filter((post:any) => {
                 if (category && tag) {
                   return post.category === category && post.tags.includes(tag);
                 }
@@ -81,7 +81,7 @@ const Blog:React.FC<pageProps> = ({pageData}:pageProps) => {
                 <div className="col-lg-8">
                   <div className="row row-gutter-y-30 all-posts-wrapper">
                     {
-                    postList.length?  postList?.map((post:postProps)=><PostList post={post}/>)
+                    postList?.length?  postList?.map((post:postProps)=><PostList post={post}/>)
                     : <h3>No post yet.</h3>
                     }
                   </div>
@@ -118,7 +118,7 @@ const Blog:React.FC<pageProps> = ({pageData}:pageProps) => {
                       >
                         <div className="elementor-widget-container">
                           <div className="row row-gutter-y-30 m-auto">
-                         { postList.length?
+                         { postList?.length?
                           postList?.map((post:postProps)=><PostGrid post={post}/>)
                         :<h3>No Post yet.</h3>
                         }

@@ -1,8 +1,8 @@
 import React, {ChangeEvent,FormEvent,useState } from 'react'
-import { useAddNewRoomMutation } from '../roomsApiSlice'
+import { useAddNewRoomMutation } from '../slices/roomsApi.slice'
 import { Modal } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import showToast from '../../../../../app/utils/hooks/showToast'
+import showToast from '../../../../../app/utils/showToast'
 
 
 const CreateRoomForm = () => {

@@ -2,15 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import NavBar from './NavBar'
 import { useSelector } from 'react-redux';
-import {useCompanyInfo,useLandingPageConfig} from '../../dashboard/pages/Settings/settingsConfigSlice';
+import {useCompanyInfo,useLandingConfig} from '../../dashboard/pages/Settings/slices/settings.slice';
 import { selectCurrentUser } from '../../auth/slices/auth.slice';
+import { Styles } from '../../../app/props/settingsProps';
 
- enum Styles{STYLE_1,STYLE_2, STYLE_3};
 
 const Nav = () => {
-   const {email,address,socialMedia:{facebookHandle,twitterHandle,instagram,whatsapp}={}}   = useSelector(useCompanyInfo); 
+   const {settings:{email,address,socialMedia:{facebookHandle,twitterHandle,instagram,whatsapp}={}} ={}}  = useSelector(useCompanyInfo); 
 const currentUser = useSelector(selectCurrentUser)
-    const {landingConfig:{landinPageConfig:{navStyle}}} = useSelector(useLandingPageConfig);
+    const {settings:{landingPageConfig:{navStyle}={}}={}} = useSelector(useLandingConfig);
   return (
     <>
    

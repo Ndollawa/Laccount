@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Conversation, ActiveStatus } from '@prisma/client';
 import { handleError } from '@app/common';
 import { CreateConversationDto, UpdateConversationDto } from './dto';
-import { ConversationRepository } from './';
+import { ConversationRepository } from './conversation.repository';
 
 @Injectable()
 export class ConversationService {
