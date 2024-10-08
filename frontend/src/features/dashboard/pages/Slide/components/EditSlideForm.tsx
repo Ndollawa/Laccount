@@ -86,11 +86,10 @@ console.log(showModal)
   }, [setValue]);
 
   return (
-    <Modal show={show} size="lg" centered backdrop="static" onHide={handleClose} animation={false}>
-      <Modal.Header closeButton>
-        <Modal.Title>Edit Slide</Modal.Title>
-      </Modal.Header>
-
+    <Modal show={show} size="lg" centered backdrop="static" onHide={() => setShow(false)} animation={false}>
+    <Modal.Header closeButton>
+      <Modal.Title>Edit Slide</Modal.Title>
+    </Modal.Header>
       <form onSubmit={handleSubmit(updateSettings)} encType="multipart/form-data">
         <Modal.Body>
           {/* Form Fields */}
