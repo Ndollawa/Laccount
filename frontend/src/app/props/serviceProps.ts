@@ -1,5 +1,5 @@
- interface serviceProps{
-    _id:string;
+export default interface ServiceProps{
+    id:string;
     title:string;
     description:string;
     body:string;
@@ -9,4 +9,3 @@
     createdAt?:Date;
     updatedAt?:Date;
 }
-export default serviceProps

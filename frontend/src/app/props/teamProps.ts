@@ -1,4 +1,4 @@
- interface teamProps{
+export default interface TeamProps{
     id: string;
     firstName: string;
     lastName: string;
@@ -16,4 +16,4 @@
     createdAt?:Date;
     updatedAt?:Date;
 }
-export default teamProps
+ teamProps

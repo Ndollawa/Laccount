@@ -6,5 +6,6 @@ import { ConversationController } from './conversation.controller';
 @Module({
   controllers: [ConversationController],
   providers: [ConversationService, ConversationRepository],
+  exports: [ConversationService],
 })
 export class ConversationModule {}

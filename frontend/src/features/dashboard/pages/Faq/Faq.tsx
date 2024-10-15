@@ -2,11 +2,11 @@ import React,{useEffect,useState,useMemo} from 'react'
 import MainBody from '../../components/MainBody'
 import CreateFaqModal from './components/CreateFaqModal'
 import FaqTableData from './components/FaqTableData'
-import pageProps from '../../../../app/props/pageProps'
+import PageProps from '../../../../app/props/PageProps'
 
 
 
-const Faq = ({pageData}:pageProps)  => {
+const Faq = ({pageData}:PageProps)  => {
  return (
     <MainBody>
     <div className="container-fluid">

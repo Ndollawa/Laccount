@@ -6,8 +6,8 @@ import { useGetConversationsQuery } from '../../pages/Messenger/slices/conversat
 import Conversation from './Conversation';
 import { useGetUsersQuery } from '../../pages/Users/slices/usersApi.slice';
 import { useGetMessagesQuery } from '../../pages/Messenger/slices/messagesApi.slice';
-import conversationProps from '../../../../app/props/conversationProps';
-import messageProps from '../../../../app/props/messageProps';
+import ConversationProps from '../../../../app/props/ConversationProps';
+import MessageProps from '../../../../app/props/MessageProps';
 
 import useDebounce from '../../../../app/hooks/useDebounce';
 import userInterface from '../../../../app/props/userProps';
@@ -19,10 +19,10 @@ const currentUser = useSelector(selectCurrentUser)
 const [showSearch, setShowSearch] = useState(false)
 	const [query, setQuery] = useState('')
 	const debouncedQuery = useDebounce(query)
-const [userConversations, setUserConversations] = useState<conversationProps[] | []>([])
+const [userConversations, setUserConversations] = useState<ConversationProps[] | []>([])
   	const { conversations } = useGetConversationsQuery("conversationsList", {
 	selectFromResult: ({ data }) => ({
-		conversations: data && (Object.values(data?.entities)as conversationProps[])?.filter((c)=>c?.members?.includes(currentUser?._id!))
+		conversations: data && (Object.values(data?.entities)as ConversationProps[])?.filter((c)=>c?.members?.includes(currentUser?._id!))
   })
 })
 
@@ -45,7 +45,7 @@ const searchData = (data:any)=>{
 	const contactId = item?.members.find((m:string) => m !== currentUser?._id )
 	const contact = users.find((user:userInterface['user']) =>user._id === contactId)
 	return keys?.some((key:string)=>contact[key]?.toLowerCase()?.includes(debouncedQuery)) 
-	//|| (messages as messageProps[])?.filter((m:messageProps)=> m?.conversationId === item?._id && m?.message.includes(debouncedQuery)).length
+	//|| (messages as MessageProps[])?.filter((m:MessageProps)=> m?.conversationId === item?._id && m?.message.includes(debouncedQuery)).length
 		 
 	}
 		)
@@ -78,7 +78,7 @@ const searchData = (data:any)=>{
   <div className="card-body contacts_body p-0 dz-scroll  " id="DZ_W_Contacts_Body">
   <ul className="contacts">
     {
-        userConversations?.map((c:conversationProps,i:number)=> <Conversation openChat={openChat} key={c?._id} conversation={c} i={i}/>)
+        userConversations?.map((c:ConversationProps,i:number)=> <Conversation openChat={openChat} key={c?._id} conversation={c} i={i}/>)
     }     
   </ul>
 </div>

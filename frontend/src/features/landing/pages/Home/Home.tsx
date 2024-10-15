@@ -1,5 +1,5 @@
 import React from 'react';
-import pageProps from '../../../../app/props/pageProps';
+import PageProps from '../../../../app/props/PageProps';
 import { useSelector } from 'react-redux';
 import {useCompanyInfo,useLandingConfig} from '../../../dashboard/pages/Settings/slices/settings.slice';
 import Slider from './Components/Slider';
@@ -9,15 +9,18 @@ import OurBenefit from './Components/OurBenefit';
 import Testimonial from './Components/Testimonial';
 import HowItWorks from './Components/HowItWorks';
 import CTASection from './Components/CTASection';
+import PerformanceMetric from '../../components/PerformanceMetric';
+import BrandPartners from '../../components/BrandPartners';
 
-const Home:React.FC<pageProps>=({pageData}:pageProps) => {
+const Home:React.FC<PageProps>=({pageData}:PageProps) => {
 
-    const {settings:{siteName}={}} = useSelector(useCompanyInfo); 
+    const {settings:{companyDetails: { siteName }={}}={}} = useSelector(useCompanyInfo); 
+    const {settings:{landingPageConfig: { showTestimonial, showWhatWeOffer, showOurBenefit,showPartners, showMetrics}={}}={}} = useSelector(useLandingConfig); 
   return (
     <>
         <Slider/>
         <AboutUs/>
-        <WhatWeOffer/>
+       {showWhatWeOffer && <WhatWeOffer/> }
        
         <HowItWorks/>
         <section className="loan-calculator loan-calculator--has-bg pt-120">
@@ -28,14 +31,14 @@ const Home:React.FC<pageProps>=({pageData}:pageProps) => {
                             <div className="block-title text-left">
                                 <p className="block-title__tagline">Why Choose {siteName}:</p>
                                 {/* <!-- /.block-title__tagline --> */}
-                                <h2 className="block-title__title"> Your Trusted Acount Sellling Platform</h2>
+                                <h2 className="block-title__title"> Your Trusted Acount Selling Platform</h2>
                                 {/* <!-- /.block-title__title --> */}
                             </div>
                             {/* <!-- /.block-title --> */}
                         </div>
                         {/* <!-- /.col-md-6 --> */}
                         <div className="col-md-6">
-                            <p className="loan-calculator__top__text">Choosing {siteName} as your trusted escrow partner comes with a range of benefits. We prioritize transparency, reliability, and customer satisfaction to deliver an exceptional experience to our users. Here's why you should choose {siteName}:</p>
+                            <p className="loan-calculator__top__text">Choosing {siteName} as your trusted Account escrow partner comes with a range of benefits. We prioritize transparency, reliability, and customer satisfaction to deliver an exceptional experience to our users. Here's why you should choose {siteName}:</p>
                                 {/* <!-- /.loan-calculator__top__text --> */}
                         </div>
                         {/* <!-- /.col-md-6 --> */}
@@ -143,109 +146,17 @@ const Home:React.FC<pageProps>=({pageData}:pageProps) => {
             {/* <!-- /.container --> */}
         </section>
         {/* <!-- /.loan-calculator --> */}
-       <Testimonial/>
+       {showTestimonial && <Testimonial/> }
         {/* <!-- /.testimonials-one --> */}
-        <section className="fact-one pt-140 pb-100">
-            <div className="container">
-                <div className="row row-gutter-y-30">
-                    <div className="col-lg-3 col-md-6">
-                        <div className="fact-one__item">
-                            <div className="fact-one__count">
-                                <span className="count-box">
-                                    <span className="count-text" data-stop="90" data-speed="1500"></span>
-                                </span>%
-                            </div>
-                            {/* <!-- /.fact-one__count --> */}
-                            <h3 className="fact-one__title">Loans Approve</h3>
-                            {/* <!-- /.fact-one__title --> */}
-                        </div>
-                        {/* <!-- /.fact-one__item --> */}
-                    </div>
-                    {/* <!-- /.col-lg-3 col-md-6 --> */}
-                    <div className="col-lg-3 col-md-6">
-                        <div className="fact-one__item">
-                            <div className="fact-one__count">$<span className="count-box">
-                                    <span className="count-text" data-stop="90" data-speed="1500"></span>
-                                </span>k</div>
-                                {/* <!-- /.fact-one__count --> */}
-                            <h3 className="fact-one__title">Daily Payments</h3>
-                            {/* <!-- /.fact-one__title --> */}
-                        </div>
-                        {/* <!-- /.fact-one__item --> */}
-                    </div>
-                    {/* <!-- /.col-lg-3 col-md-6 --> */}
-                    <div className="col-lg-3 col-md-6">
-                        <div className="fact-one__item">
-                            <div className="fact-one__count"><span className="count-box">
-                                    <span className="count-text" data-stop="90" data-speed="1500"></span>
-                                </span>k</div>
-                                {/* <!-- /.fact-one__count --> */}
-                            <h3 className="fact-one__title">Happy Customers</h3>
-                            {/* <!-- /.fact-one__title --> */}
-                        </div>
-                        {/* <!-- /.fact-one__item --> */}
-                    </div>
-                    {/* <!-- /.col-lg-3 col-md-6 --> */}
-                    <div className="col-lg-3 col-md-6">
-                        <div className="fact-one__item">
-                            <div className="fact-one__count"><span className="count-box">
-                                    <span className="count-text" data-stop="290" data-speed="1500"></span>
-                                </span>
-                                {/* <!-- /.count-box --> */}
-                            </div>
-                            {/* <!-- /.fact-one__count --> */}
-                            <h3 className="fact-one__title">Expert People</h3>
-                            {/* <!-- /.fact-one__title --> */}
-                        </div>
-                        {/* <!-- /.fact-one__item --> */}
-                    </div>
-                    {/* <!-- /.col-lg-3 col-md-6 --> */}
-                </div>
-                {/* <!-- /.row --> */}
-            </div>
-            {/* <!-- /.container --> */}
-        </section>
+       
+       {showMetrics && <PerformanceMetric/> }
         {/* <!-- /.fact-one --> */}
-       <OurBenefit/>
+       {showOurBenefit && <OurBenefit/> }
         {/* <!-- /.benefit-one --> */}
 
+       {showPartners && <BrandPartners/> }
 
-        <div className="client-carousel @@extraClassName">
-            <div className="container">
-                <div className="thm-swiper__slider swiper-container" data-swiper-options='{"spaceBetween": 30, "slidesPerView": 5, "autoplay": { "delay": 5000 }, "breakpoints": {
-                "0": {
-                    "spaceBetween": 30,
-                    "slidesPerView": 2
-                },
-                "375": {
-                    "spaceBetween": 30,
-                    "slidesPerView": 2
-                },
-                "575": {
-                    "spaceBetween": 30,
-                    "slidesPerView": 3
-                },
-                "767": {
-                    "spaceBetween": 50,
-                    "slidesPerView": 4
-                },
-                "991": {
-                    "spaceBetween": 30,
-                    "slidesPerView": 5
-                },
-                "1199": {
-                    "spaceBetween": 30,
-                    "slidesPerView": 5
-                }
-            }}'>
-                    <div className="swiper-wrapper">
-                        <div className="swiper-slide">
-                            <img src="assets/images/resources/brand-1-1.png" alt="" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+       
         {/* <!-- /.blog-one --> */}
 <CTASection/>
     </>

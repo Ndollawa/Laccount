@@ -3,22 +3,22 @@ import MainBody from '../../components/MainBody'
 import { useDispatch } from 'react-redux'
 import { useGetPostCategoryQuery, useAddNewPostCategoryMutation } from './slices/postCategoryApi.slice'
 import { setPreloader } from '../../../components/preloader/slices/preloader.slice'
-import pageProps from '../../../../app/props/pageProps'
+import PageProps from '../../../../app/props/PageProps'
 import PostCategoryTableData from './components/PostCategoryTableData'   
 import showToast from '../../../../app/utils/showToast'
 import initDataTables,{destroyDataTables} from '../../../../app/utils/initDataTables'
 import $ from 'jquery'
 import EditPostCategoryForm from './components/EditPostCategoryForm'
-import postCategoryProps from '../../../../app/props/postCategoryProps'
+import PostCategoryProps from '../../../../app/props/PostCategoryProps'
 
     
 
     
 interface modalDataProps {
-       data:postCategoryProps | null,
+       data:PostCategoryProps | null,
       showModal:boolean,
     }
-    const PostCategory = ({pageData}:pageProps)  => {
+    const PostCategory = ({pageData}:PageProps)  => {
         const dispatch =useDispatch()
         const [modalData,setModalData] = useState<modalDataProps>({
             data:null, 

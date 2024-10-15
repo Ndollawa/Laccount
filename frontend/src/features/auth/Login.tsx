@@ -10,14 +10,11 @@ import {jwtDecode} from 'jwt-decode';
 import OtherBody from '../dashboard/components/OtherBody';
 import ClipLoader from 'react-spinners/ClipLoader';
 import useToggle from '../../app/hooks/useToggle';
+import { AuthProps } from '../../app/props/AuthProps';
 
 interface LoginFormInputs {
   user: string;
   password: string;
-}
-
-interface AuthProps {
-  token: string;
 }
 
 interface ErrMessages {
@@ -83,11 +80,11 @@ const Login: React.FC = () => {
                   <div className="auth-form">
                     <div className="text-center mb-3">
                       <Link to="/" className="brand-logo">
-                        <img src={`${BASE_URL}/uploads/settings/${logo}`} alt={siteName} width="150" />
+                        <img src={`${BASE_URL}/uploads/settings/brand/${logo}`} alt={siteName} width="150" />
                       </Link>
                     </div>
                     <h4 className="text-center mb-4">Sign in to your account</h4>
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={handleSubmit(onSubmit)} className="p-4">
                       {errMsg && (
                         <div className={`alert alert-${errMsg.type} alert-dismissible fade show`} role="alert">
                           <strong>{errMsg.type === 'warning' ? 'Warning!' : 'Error!'}</strong> {errMsg.msg}
@@ -145,7 +142,7 @@ const Login: React.FC = () => {
                         <Link to="/forgot-password">Forgot Password?</Link>
                       </div>
 
-                      <button type="submit" className="btn btn-secondary w-100 flex gap-1 align-items-center">
+                      <button type="submit" className="btn btn-primary w-100 flex gap-1 align-items-center">
                         {isLoadingLogin ? (
                           <>
                             Logging In...
@@ -158,7 +155,7 @@ const Login: React.FC = () => {
                     </form>
 
                     <div className="new-account mt-3 text-center">
-                      <p>Don't have an account? <Link className="text-secondary" to="/auth/register">Register</Link></p>
+                      <p>Don't have an account? <Link className="text-primary" to="/auth/register">Register</Link></p>
                     </div>
                   </div>
                 </div>

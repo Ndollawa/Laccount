@@ -1,5 +1,5 @@
- interface messageProps{
-    _id:string;
+ interface MessageProps{
+    id:string;
     sender:string;
     conversationId:string;
     message:string;

@@ -1,7 +1,7 @@
-import React,{useEffect} from 'react'
+import React,{useEffect, useTransition} from 'react'
 import { Link } from 'react-router-dom'
 import SideNav from './SideBarComponent/SideNav'
-import pageProps from '../../../app/props/pageProps'
+import PageProps from '../../../app/props/PageProps'
 import { useSelector } from 'react-redux';
 import { useCompanyInfo } from '../pages/Settings/slices/settings.slice';
 import { selectCurrentUser } from '../../auth/slices/auth.slice';
@@ -11,14 +11,17 @@ import $ from 'jquery'
 
 enum Styles{STYLE_1,STYLE_2, STYLE_3};
 
-const SideBar:React.FC<pageProps> = ({pageData,}:pageProps) => {
+const SideBar:React.FC<PageProps> = ({pageData,}:PageProps) => {
 
      const {settings:{companyDetails:{siteName}={}}={}} = useSelector(useCompanyInfo);
     const currentUser= useSelector(selectCurrentUser)
     const userImage = useUserImage(currentUser)
-
+    const [isPending, startTransition] = useTransition();
+  
     useEffect(()=>{
-        const handleMetisMenu = () =>{
+          startTransition(() => {
+
+          const handleMetisMenu = () =>{
            $('.metismenu > .mm-active ').each(function(){
               if($(this).children('ul').length > 0)
               {
@@ -26,7 +29,8 @@ const SideBar:React.FC<pageProps> = ({pageData,}:pageProps) => {
               }
            });
         }
-     handleMetisMenu();
+     handleMetisMenu();  
+      });
      
      },[])
     return (

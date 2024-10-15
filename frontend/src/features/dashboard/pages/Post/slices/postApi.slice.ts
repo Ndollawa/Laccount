@@ -4,8 +4,8 @@ import {
 } from "@reduxjs/toolkit"
 import { apiSlice } from "../../../../../app/api/apiSlice";
 import { ResponseProps } from "../../../../../app/props/responseProps";
-// import postProps from "../../../../app/utils/props/postProps";
-// interface postsProp extends  postProps{}
+// import PostProps from "../../../../app/utils/props/PostProps";
+// interface postsProp extends  PostProps{}
 
 
 const postsAdapter = createEntityAdapter({

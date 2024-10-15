@@ -16,12 +16,6 @@ import { useAddNewContactMutation, useUpdateContactMutation } from '../slices/co
 import { selectCurrentUser } from '../../../../auth/slices/auth.slice'
 import contactProps from '../../../../../app/props/contactProps'
 
-interface modalDataProps {
-    modalData:{
-       data:contactProps | null,
-      showModal:boolean,
-    } 
-    }
 const ContactsTableData = ({contactId,index,showEditForm}:any) => {
     const { user } = useGetUsersQuery("usersList", {
         selectFromResult: ({ data }) => ({

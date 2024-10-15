@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import { RootState } from '../../../app/stores/store';
-import { authProps } from '../../../app/props/authProps';
+import { AuthProps } from '../../../app/props/AuthProps';
 
 
 const defaultUserState =  {
@@ -40,7 +40,7 @@ const authSlice = createSlice({
     initialState:{ 
         token: null, 
         user: defaultUserState,
-    } as authProps, 
+    } as AuthProps, 
     reducers:{
         setCredentials: (state, action) =>{
             const {accessToken , user_info} = action.payload;

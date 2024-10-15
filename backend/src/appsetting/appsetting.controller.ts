@@ -83,11 +83,18 @@ export class AppSettingController {
   ) {
     console.log(slide);
     // console.log(Jso);
-    return this.appSettingsService.updateSlider({ id, type, slide:JSON.parse(slide as string), file });
+    return this.appSettingsService.updateSlider({
+      id,
+      type,
+      slide: JSON.parse(slide as string),
+      file,
+    });
   }
 
   @Post('uploads')
-  @UseInterceptors(FileInterceptor('file', FileOptions2('./uploads/settings/brand')))
+  @UseInterceptors(
+    FileInterceptor('file', FileOptions2('./uploads/settings/brand')),
+  )
   uploadFile(
     @Body() { type, id }: SettingFileUploadDto,
     @UploadedFile(

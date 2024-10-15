@@ -1,14 +1,14 @@
 import React from 'react';
 import {Helmet} from 'react-helmet-async'
-import pageProps from "../../../app/props/pageProps";
+import PageProps from "../../../app/props/PageProps";
 import { useSelector } from 'react-redux';
 import {useCompanyInfo,useLandingConfig} from '../pages/Settings/slices/settings.slice';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const Head:React.FC<pageProps> = ({pageData}:pageProps) => {
+const Head:React.FC<PageProps> = ({pageData: {pageTitle}={}}:PageProps) => {
 const {settings:{companyDetails:{siteName,description}={}}={}} = useSelector(useCompanyInfo); 
 const {settings:{siteImages:{favicon}={}}={}} = useSelector(useLandingConfig); 
-const {pageTitle} = pageData!;
+
   return (
     <Helmet>
    <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>

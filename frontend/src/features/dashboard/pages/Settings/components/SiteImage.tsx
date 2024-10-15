@@ -82,7 +82,7 @@ const SiteImage = () => {
         >
           <img
             className="img-responsive offset-1"
-            src={`${BASE_URL}/uploads/settings/${image}`}
+            src={`${BASE_URL}/uploads/settings/brand/${image}`}
             alt={type}
             width={width}
           />
@@ -99,7 +99,7 @@ const SiteImage = () => {
 
   return (
     <div className="card">
-      <div className="card-header bg-secondary">
+      <div className="card-header bg-primary">
         <h4 className="card-title text-white">Site Images</h4>
       </div>
       <div className="card-body">
@@ -227,7 +227,7 @@ const SiteImage = () => {
               >
                 <video
                   className="img-responsive offset-1"
-                  src={`${BASE_URL}/uploads/settings/${aboutVideo}`}
+                  src={`${BASE_URL}/uploads/settings/brand/${aboutVideo}`}
                   controls
                   width="320"
                 ></video>

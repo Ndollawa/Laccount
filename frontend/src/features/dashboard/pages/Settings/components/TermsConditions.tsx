@@ -13,7 +13,8 @@ const TermsCondition = () => {
 
   const dispatch = useDispatch();
   const [updateSetting, isLoading] = useUpdateSettingMutation();
-  const {id,settings:{pages, ...otherSettings}={}} = useSelector(useLandingConfig)
+  const landingConfig = useSelector(useLandingConfig);
+  const { id, settings: { pages, ...otherSettings }} = landingConfig;
   const initialState = {
     termsCondition:pages? pages?.termsCondition : "",
   };
@@ -43,7 +44,7 @@ const TermsCondition = () => {
   try {
     const settings = {pages:{...pages, ...formFields}, ...otherSettings}
     await updateSetting({id, settings}).unwrap()
-     dispatch(setLandingSetting(settings))
+     dispatch(setLandingSetting({ ...landingConfig, settings }))
      showToast('success',"Settings Updated successfully!")
     } catch (error:any) {
       showToast('error',error)
@@ -53,7 +54,7 @@ const TermsCondition = () => {
   
   return (
     <div className="card">
-    <div className="card-header bg-secondary">
+    <div className="card-header bg-primary">
       <h4 className="card-title text-white">Terms and Conditions</h4>
     </div>
     <div className="card-body p-5">

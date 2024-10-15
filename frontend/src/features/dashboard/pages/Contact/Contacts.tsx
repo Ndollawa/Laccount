@@ -3,7 +3,7 @@ import MainBody from '../../components/MainBody'
 import { useDispatch } from 'react-redux'
 import { useGetContactsQuery } from './slices/contactsApi.slice'
 import { setPreloader } from '../../../components/preloader/slices/preloader.slice'
-import pageProps from '../../../../app/props/pageProps'
+import PageProps from '../../../../app/props/PageProps'
 import ContactsTable from './components/ContactsTable'
 import useToggle from '../../../../app/hooks/useToggle'
 import ContactCard from './components/ContactCard'
@@ -12,14 +12,10 @@ import { IoGridOutline } from 'react-icons/io5'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '../../../auth/slices/auth.slice'
 import contactProps from '../../../../app/props/contactProps'
+import { ModalDataProps } from '../../../../app/props/modalProps'
 
     
-interface modalDataProps {
-    data:contactProps | null,
-   showModal:boolean,
- }
-
-    const Contacts = ({pageData}:pageProps)  => {
+    const Contacts = ({pageData}:PageProps)  => {
 
 // const [contacts, setcontacts] = useState<any>([])
     const [viewType,toggleViewType] = useToggle('viewType','List');
@@ -42,11 +38,11 @@ interface modalDataProps {
              
             }, [isLoading])
 
-            const [modalData,setModalData] = useState<modalDataProps>({
+            const [modalData,setModalData] = useState<ModalDataProps<contactProps>["modalData"]>({
                 data:null, 
                 showModal:false,
                 })
-          const showEditForm = (modalData:modalDataProps)=>{
+          const showEditForm = (modalData:ModalDataProps<contactProps>["modalData"])=>{
                  setModalData(modalData);
                  }
          

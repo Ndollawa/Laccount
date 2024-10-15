@@ -75,7 +75,7 @@ services:
     restart: always
     user: "0:0"
     ports:
-      - "6380:6379"
+      - "6379:6379"
     environment:
       REDIS_USER: ${REDIS_USER}
       REDIS_PASSWORD: ${REDIS_PASSWORD}

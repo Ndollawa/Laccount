@@ -9,7 +9,7 @@ const user = useSelector(selectCurrentUser)
 useEffect(()=>{
    const socketIO:Socket = io(import.meta.env.VITE_BASE_URL)
    socket.current = socketIO
-   socket.current.emit('addUser', user._id)
+   socket.current.emit('addUser', user.id)
    return ()=>{
     socket.current.disconnect()
 }

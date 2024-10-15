@@ -11,7 +11,7 @@ import { MailerService } from './mailer.service';
 import { CreateMailerDto, UpdateMailerDto } from './dto';
 import {} from './dto/update-mailer.dto';
 
-@Controller('mailer')
+@Controller('mailers')
 export class MailerController {
   constructor(private readonly mailerService: MailerService) {}
 

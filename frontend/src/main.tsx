@@ -21,7 +21,7 @@ function Fallback({ error, resetErrorBoundary }:FallbackProps) {
 
   return (
     <>
-         <div className="body vh-100">
+  <div className="vh-100" id="body">
    <div className="container row justify-content-center h-100 align-items-center" style={{width:'100%',height:'100vh'}}>
        <div className="row justify-content-center h-100 align-items-center">
            <div className="col-md-7">
@@ -31,7 +31,7 @@ function Fallback({ error, resetErrorBoundary }:FallbackProps) {
                    <h5>Something went wrong. Your Request resulted in an error</h5>
                    <p>Reload the page to continue. If this still continues, please contact out support team</p>
        <div>
-                       <button className="btn btn-secondary" onClick={()=>resetErrorBoundary()} >Click to go Back</button>
+                       <button className="btn btn-info" onClick={()=>resetErrorBoundary()} >Click to go Back</button>
                    </div>
                </div>
            </div>
@@ -45,6 +45,7 @@ const persistor = persistStore(store)
 root.render(
   <React.StrictMode>
       <ErrorBoundary FallbackComponent={Fallback} onError={(error)=>console.log(error)}>
+        <React.Suspense fallback={<Preloader/>}>
     <Provider  store={store} >
       <PersistGate loading={<Preloader/>} persistor={persistor}>
             <HelmetProvider>  
@@ -56,6 +57,7 @@ root.render(
            </HelmetProvider>
     </PersistGate>
 </Provider>
+</React.Suspense>
 </ErrorBoundary>
   </React.StrictMode>
 );

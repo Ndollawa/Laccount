@@ -7,13 +7,13 @@ import { useGetConversationsQuery } from '../slices/conversationsApi.slice';
 import { useGetMessagesQuery } from '../slices/messagesApi.slice';
 import useUserImage from '../../../../../app/hooks/useUserImage';
 import useSocketIO from '../../../../../app/hooks/useSocketIO';
-import conversationProps, { conversationIdProps } from '../../../../../app/props/conversationProps';
-import messageProps from '../../../../../app/props/messageProps';
+import ConversationProps, { conversationIdProps } from '../../../../../app/props/ConversationProps';
+import MessageProps from '../../../../../app/props/MessageProps';
 
 const ChatBox = ({ receiver, sender }: { receiver: string; sender: string }) => {
     const [chatMessage, setChatMessage] = useState('');
-    const [conversations, setConversations] = useState<messageProps[]>([]);
-    const [newMessage, setNewMessage] = useState<messageProps | null>(null);
+    const [conversations, setConversations] = useState<MessageProps[]>([]);
+    const [newMessage, setNewMessage] = useState<MessageProps | null>(null);
     const msgRef = useRef<HTMLDivElement | null>(null);
     const socket = useSocketIO();
 
@@ -28,21 +28,21 @@ const ChatBox = ({ receiver, sender }: { receiver: string; sender: string }) => 
 
     const { conversation } = useGetConversationsQuery("conversationsList", {
         selectFromResult: ({ data }) => ({
-            conversation: data && Object.values(data.entities as conversationProps[])
+            conversation: data && Object.values(data.entities as ConversationProps[])
                 .find((c) => c.members.length === 2 && c.members.every(m => conversationId.includes(m) || conversationId2.includes(m))),
         }),
     });
 
     const { messages } = useGetMessagesQuery("messagesList", {
         selectFromResult: ({ data }) => ({
-            messages: data && Object.values(data.entities as messageProps[])
+            messages: data && Object.values(data.entities as MessageProps[])
                 .filter(m => m.conversationId === conversation?._id),
         }),
     });
 
     // Handle new message from socket
     useEffect(() => {
-        const handleReceivedMessage = (data: messageProps) => {
+        const handleReceivedMessage = (data: MessageProps) => {
             setNewMessage(data);
         };
         socket.current?.on('receivedMessage', handleReceivedMessage);
@@ -76,7 +76,7 @@ const ChatBox = ({ receiver, sender }: { receiver: string; sender: string }) => 
         e.preventDefault(); // Prevent form submission
         if (chatMessage) {
             const msgData = { message: chatMessage, sender, receiver };
-            socket.current.emit("sendMessage", msgData, (err: any, sentMessage: messageProps) => {
+            socket.current.emit("sendMessage", msgData, (err: any, sentMessage: MessageProps) => {
                 if (!err) {
                     setConversations(prev => [...prev, sentMessage]);
                     setChatMessage(''); // Reset chat input after sending
@@ -116,7 +116,7 @@ const ChatBox = ({ receiver, sender }: { receiver: string; sender: string }) => 
             </div>
             <PerfectScrollbar className="chat-box-area dz-scroll" id="chartBox" style={{ backgroundImage: `url('dashboard-assets/images/chat-bg.png')` }}>
                 <div className="chat active-chat">
-                    {conversations?.map((m: messageProps, i: number) => m && (
+                    {conversations?.map((m: MessageProps, i: number) => m && (
                         <div key={i} className={`media mb-4 ${m.sender !== sender ? 'justify-content-end align-items-end' : 'justify-content-start align-items-start'}`} ref={msgRef}>
                             {m.sender !== sender ? (
                                 <>

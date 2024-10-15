@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Nav from './Nav';
-import pageProps from '../../../app/props/pageProps';
+import PageProps from '../../../app/props/PageProps';
 
 
-const Header:React.FC<pageProps> = ({pageData}:pageProps) => {
+const Header:React.FC<PageProps> = ({pageData}:PageProps) => {
     // const {companyData, homeSettings} = useContext(DataContext); 
 	// const {siteName,logo,logoDark,email,contact,address,activeHours,facebookHandle,twitterHandle,instagram,whatsapp} = companyData!
   return (

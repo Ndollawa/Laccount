@@ -1,5 +1,5 @@
- interface conversationProps{
-    _id:string;
+ interface cConversationProps{
+    id:string;
     members:string[];
     createdAt?:Date;
     updatedAt?:Date;

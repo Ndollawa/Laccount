@@ -3,7 +3,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import MainBody from '../../components/MainBody';
-import pageProps from '../../../../app/props/pageProps';
+import PageProps from '../../../../app/props/PageProps';
 import useWindowSize from '../../../../app/hooks/useWindowSize';
 import { selectCurrentUser } from '../../../auth/slices/auth.slice';
 import useUserImage from '../../../../app/hooks/useUserImage';
@@ -14,16 +14,16 @@ import Conversation from './components/Conversation';
 import { useGetConversationsQuery } from './slices/conversationsApi.slice';
 import { useGetUsersQuery } from '../Users/slices/usersApi.slice';
 import { useGetMessagesQuery } from './slices/messagesApi.slice';
-import conversationProps from '../../../../app/props/conversationProps';
-import messageProps from '../../../../app/props/messageProps';
+import ConversationProps from '../../../../app/props/ConversationProps';
+import MessageProps from '../../../../app/props/MessageProps';
 import ChatBox from './components/ChatBox';
 import useDebounce from '../../../../app/hooks/useDebounce';
 import userInterface from '../../../../app/props/userProps';
 
 
-const Chat:React.FC<pageProps> = ({pageData}:pageProps) => {
+const Chat:React.FC<PageProps> = ({pageData}:PageProps) => {
 	const [query, setQuery] = useState('')
-	const [userConversations, setUserConversations] = useState<conversationProps[] | []>([])
+	const [userConversations, setUserConversations] = useState<ConversationProps[] | []>([])
 	const { height } = useWindowSize()
 	const currentUser = useSelector(selectCurrentUser)
 	const userImage = useUserImage(currentUser)
@@ -32,7 +32,7 @@ const Chat:React.FC<pageProps> = ({pageData}:pageProps) => {
   // console.log(chatUserId)
   	const { conversations } = useGetConversationsQuery("conversationsList", {
 	selectFromResult: ({ data }) => ({
-		conversations: data && (Object.values(data?.entities)as conversationProps[])?.filter((c)=>c?.members?.includes(currentUser?._id!))
+		conversations: data && (Object.values(data?.entities)as ConversationProps[])?.filter((c)=>c?.members?.includes(currentUser?._id!))
   })
 })
 	const [room, setRoom] = useState('')
@@ -95,7 +95,7 @@ const searchData = (data:any)=>{
 	const contactId = item?.members.find((m:string) => m !== currentUser?._id )
 	const contact = users.find((user:userInterface['user']) =>user._id === contactId)
 	return keys?.some((key:string)=>contact[key]?.toLowerCase()?.includes(debouncedQuery)) ||
-	(messages as messageProps[])?.filter((m:messageProps)=> m?.conversationId === item?._id && m?.message.includes(debouncedQuery)).length
+	(messages as MessageProps[])?.filter((m:MessageProps)=> m?.conversationId === item?._id && m?.message.includes(debouncedQuery)).length
 		 
 	}
 		)
@@ -134,7 +134,7 @@ const searchData = (data:any)=>{
 									<div className="card-body message-bx px-0 pt-3" >
 										<PerfectScrollbar className="tab-content dz-scroll" id="message-bx">
 												
-												{userConversations && userConversations.map((c:conversationProps,i:number)=> <Conversation key={c?._id} conversation={c} i={i}/>)}
+												{userConversations && userConversations.map((c:ConversationProps,i:number)=> <Conversation key={c?._id} conversation={c} i={i}/>)}
 											</PerfectScrollbar>
 									</div></Tab>
 											<Tab eventKey="unread" title="Unread">

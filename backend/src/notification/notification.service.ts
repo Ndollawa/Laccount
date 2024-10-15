@@ -10,11 +10,9 @@ export class NotificationService {
     protected readonly notificationReNotificationtory: NotificationRepository,
   ) {}
 
-  async find(id: any): Promise<Notification> {
+  async find(query: any): Promise<Notification> {
     try {
-      return await this.notificationReNotificationtory.find({
-        where: { id },
-      });
+      return await this.notificationReNotificationtory.find(query);
     } catch (error) {
       handleError(error);
     }
@@ -57,8 +55,8 @@ export class NotificationService {
       const NotificationData = {
         ...createNotificationData,
         status: ViewState.UNREAD,
-        readCount: 12,
-        readingTime: '12 minutes',
+        // readCount: 12,
+        // readingTime: '12 minutes',
       };
 
       const newNotification = await this.notificationReNotificationtory.create({

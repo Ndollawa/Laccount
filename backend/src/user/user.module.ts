@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { RequestService } from '@app/common';
 import { UserRepository } from './repositories/user.repository';
 import { UserService } from './services/user.service';
 import { UserController } from './user.controller';
@@ -14,7 +13,6 @@ import { UserSeed } from './seeds/user.seed';
   providers: [
     UserRepository,
     UserService,
-    RequestService,
     RefreshTokenRepository,
     RefreshTokenService,
     ProfileService,

@@ -1,5 +1,5 @@
- interface postProps{
-    _id:string;
+ interface PostProps{
+    id:string;
     title:string;
     author:string;
     description:string;

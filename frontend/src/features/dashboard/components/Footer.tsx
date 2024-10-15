@@ -1,11 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import {useCompanyInfo} from '../pages/Settings/slices/settings.slice';
-import pageProps from '../../../app/props/pageProps'
+import PageProps from '../../../app/props/PageProps'
 
 
 
-const Footer:React.FC<pageProps> = ({pageData}:pageProps) => {
+const Footer:React.FC<PageProps> = ({pageData}:PageProps) => {
   const {settings:{companyDetails:{siteName}={}}={}} = useSelector(useCompanyInfo); 
    const year = new Date().getFullYear()
    

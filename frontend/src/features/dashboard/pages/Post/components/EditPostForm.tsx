@@ -7,14 +7,14 @@ import {Modal} from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import showToast from '../../../../../app/utils/showToast'
 import $ from 'jquery'
-import postProps from '../../../../../app/props/postProps'
+import PostProps from '../../../../../app/props/PostProps'
 
 
 
 
 interface modalDataProps {
   modalData:{
-     data:postProps | null,
+     data:PostProps | null,
     showModal:boolean,
   } 
   }

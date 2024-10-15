@@ -4,7 +4,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { Editor } from '@tinymce/tinymce-react';
 import { useUpdateServiceMutation } from '../slices/servicesApi.slice';
 import showToast from '../../../../../app/utils/showToast';
-import serviceProps from '../../../../../app/props/serviceProps';
+import ServiceProps from '../../../../../app/props/ServiceProps';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -19,7 +19,7 @@ interface FormInputs {
 
 interface ModalDataProps {
   modalData: {
-    data: serviceProps | null;
+    data: ServiceProps | null;
     showModal: boolean;
   };
 }
@@ -139,7 +139,7 @@ const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps) =>
             </div>
 
             <div className="col-md-6">
-              <label className="form-label">Preview</label>
+              <label className="form-label block w-100">Preview</label>
               {previewImage && <img className="img-responsive" src={previewImage} alt="Preview" width="240" />}
             </div>
 

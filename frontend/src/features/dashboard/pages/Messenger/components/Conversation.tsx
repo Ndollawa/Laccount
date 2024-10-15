@@ -6,7 +6,7 @@ import { useGetMessagesQuery } from '../slices/messagesApi.slice'
 import { selectCurrentUser } from '../../../../auth/slices/auth.slice'
 import useUserImage from '../../../../../app/hooks/useUserImage'
 import { format } from 'timeago.js'
-import messageProps from '../../../../../app/props/messageProps'
+import MessageProps from '../../../../../app/props/MessageProps'
 
 const Conversation = ({conversation,i}:any) => {
   const currentUser = useSelector(selectCurrentUser)
@@ -19,7 +19,7 @@ const Conversation = ({conversation,i}:any) => {
   
       const { messages } = useGetMessagesQuery("messagesList", {
       selectFromResult: ({ data }) => ({
-        messages: data && (Object.values(data?.entities) as messageProps[])?.filter((m:messageProps)=> m?.conversationId === conversation?._id)		 
+        messages: data && (Object.values(data?.entities) as MessageProps[])?.filter((m:MessageProps)=> m?.conversationId === conversation?._id)		 
       }),
       }) 
       // console.log(messages)

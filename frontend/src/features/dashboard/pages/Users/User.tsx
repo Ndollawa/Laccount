@@ -1,7 +1,7 @@
 import React from 'react'
-import pageProps from '../../../../app/props/pageProps'
+import PageProps from '../../../../app/props/PageProps'
 
-const User = ({pageData}:pageProps) => {
+const User = ({pageData}:PageProps) => {
   return (
     <div>User</div>
   )

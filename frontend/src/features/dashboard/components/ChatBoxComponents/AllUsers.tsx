@@ -5,7 +5,7 @@ import { useGetUsersQuery } from '../../pages/Users/slices/usersApi.slice'
 import { useGetConversationsQuery } from '../../pages/Messenger/slices/conversationsApi.slice'
 import Conversation from './Conversation'
 import { useGetMessagesQuery } from '../../pages/Messenger/slices/messagesApi.slice'
-import conversationProps from '../../../../app/props/conversationProps'
+import ConversationProps from '../../../../app/props/ConversationProps'
 import useDebounce from '../../../../app/hooks/useDebounce'
 import { selectCurrentUser } from '../../../auth/slices/auth.slice'
 import User from './User'
@@ -18,7 +18,7 @@ const AllUsers = ({openChat}:any) => {
 const [showSearch, setShowSearch] = useState(false)
 	const [query, setQuery] = useState('')
 	const debouncedQuery = useDebounce(query)
-const [users, setUsers] = useState<conversationProps[] | []>([])
+const [users, setUsers] = useState<ConversationProps[] | []>([])
 const { contact } = useGetContactsQuery("contactsList", {
 	selectFromResult: ({ data }) => ({
 		contact: data && (Object.values(data?.entities)as contactProps[]).find((i:contactProps) => i.user === currentUser._id)		 
@@ -33,7 +33,7 @@ const { contact } = useGetContactsQuery("contactsList", {
 	
   	const { conversations } = useGetConversationsQuery("conversationsList", {
 	selectFromResult: ({ data }) => ({
-		conversations: data && (Object.values(data?.entities)as conversationProps[])?.filter((c)=>c?.members?.includes(currentUser?._id!))
+		conversations: data && (Object.values(data?.entities)as ConversationProps[])?.filter((c)=>c?.members?.includes(currentUser?._id!))
   })
 })
 //   console.log(contact)

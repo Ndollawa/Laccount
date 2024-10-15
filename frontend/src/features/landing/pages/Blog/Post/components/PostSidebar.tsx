@@ -1,21 +1,21 @@
 import React,{FormEvent, useState} from 'react'
 import { useSearchParams,useNavigate } from 'react-router-dom'
 import RecentPostList from '../../components/RecentPostList'
-import postProps from '../../../../../../app/props/postProps'
+import PostProps from '../../../../../../app/props/PostProps'
 import { useGetPostsQuery } from '../../../../../dashboard/pages/Post/slices/postApi.slice'
 import { useGetPostCategoryQuery } from '../../../../../dashboard/pages/PostCategory/slices/postCategoryApi.slice'	
-import postCategoryProps from '../../../../../../app/props/postCategoryProps'
+import PostCategoryProps from '../../../../../../app/props/PostCategoryProps'
 import useDebounce from '../../../../../../app/hooks/useDebounce'
 
 
-const PostSidebar = ({posts,filterPosts,setPostList, sFormA =false}:{posts:postProps[],filterPosts:any,setPostList?:any,sFormA?:boolean}) => { 
+const PostSidebar = ({posts,filterPosts,setPostList, sFormA =false}:{posts:PostProps[],filterPosts:any,setPostList?:any,sFormA?:boolean}) => { 
 const [search, setSearch] = useState('')
     const { tags  } = useGetPostsQuery("postsList", {
         selectFromResult: ({ data }) => ({
           tags: Array.from(new Set(
             (data?.ids?.map((id:string)=>data?.entities[id]))
-            ?.filter((post:postProps) => post.status === 'published')
-            .flatMap((p:postProps)=>p?.tags)
+            ?.filter((post:PostProps) => post.status === 'published')
+            .flatMap((p:PostProps)=>p?.tags)
             ))	as string[]as string[]	 
         }),
         }) 
@@ -25,12 +25,12 @@ const [search, setSearch] = useState('')
         // console.log(tags) 
      const { category } = useGetPostCategoryQuery("categoryList", {
 selectFromResult: ({ data }) => ({
-  category: data?.ids?.map((id:string)=>data?.entities[id])?.filter((c:postCategoryProps) => c?.status === 'active')		 
+  category: data?.ids?.map((id:string)=>data?.entities[id])?.filter((c:PostCategoryProps) => c?.status === 'active')		 
 }),
 }) 
 const { allPosts } = useGetPostsQuery("postsList", {
     selectFromResult: ({ data }) => ({
-      allPosts: (data?.ids?.map((id:string)=>data?.entities[id]))?.filter((post:postProps) => post.status === 'published')		 
+      allPosts: (data?.ids?.map((id:string)=>data?.entities[id]))?.filter((post:PostProps) => post.status === 'published')		 
     }),
     }) 
 const debouncedQuery = useDebounce(search)
@@ -76,7 +76,7 @@ const searchPost = (e:FormEvent)=>{
     >
       <h3 className="blog-sidebar__title">Recent Posts</h3>
       <ul className="list-unstyled blog-sidebar__post">
-        {  posts?.slice(0,6)?.map((post:postProps)=><RecentPostList post={post} key={post?._id}/>)}
+        {  posts?.slice(0,6)?.map((post:PostProps)=><RecentPostList post={post} key={post?._id}/>)}
        
       
       </ul>
@@ -88,7 +88,7 @@ const searchPost = (e:FormEvent)=>{
       <h3 className="blog-sidebar__title">Categories</h3>
       <ul>
         {
-           category?.map((c:postCategoryProps,i:number)=> ( 
+           category?.map((c:PostCategoryProps,i:number)=> ( 
            <li className={`cat-item cat-item-${i}`} key={c?._id}>
           <a href={`/our-blog/posts?category=${c?.title}`}>
             {c?.title}

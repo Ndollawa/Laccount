@@ -1,12 +1,12 @@
 import React from 'react'
 import { NavLink, useParams,useNavigate } from 'react-router-dom'
 import { useGetServicesQuery } from '../../../../dashboard/pages/Service/slices/servicesApi.slice'
-import pageProps from '../../../../../app/props/pageProps'
+import PageProps from '../../../../../app/props/PageProps'
 import Breadcrum from '../../../components/Breadcrum'
-import serviceProps from '../../../../../app/props/serviceProps'
+import ServiceProps from '../../../../../app/props/ServiceProps'
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const Service = ({pageData}:pageProps)  => {
+const Service = ({pageData}:PageProps)  => {
 const {id} = useParams()
 const navigate = useNavigate()
    const { service } = useGetServicesQuery("servicesList", {
@@ -35,7 +35,7 @@ const navigate = useNavigate()
 let allServices;
 if(data.entities){
     const {ids,entities} = data
-     allServices = (Object.values(entities)as serviceProps[])?.map(service=> <li key={service?.id}><NavLink className={({isActive})=> isActive ?"active":''} to={`/services/service/${service?.id}`}>{service.title}</NavLink></li>)
+     allServices = (Object.values(entities)as ServiceProps[])?.map(service=> <li key={service?.id}><NavLink className={({isActive})=> isActive ?"active":''} to={`/services/service/${service?.id}`}>{service.title}</NavLink></li>)
 }
     return (
       <>

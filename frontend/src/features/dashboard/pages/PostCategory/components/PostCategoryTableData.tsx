@@ -2,11 +2,11 @@ import React from 'react'
 import {useGetPostCategoryQuery,useDeletePostCategoryMutation } from '../slices/postCategoryApi.slice'
 import showToast from '../../../../../app/utils/showToast'
 import Swal from 'sweetalert2'
-import postCategoryProps from '../../../../../app/props/postCategoryProps'
+import PostCategoryProps from '../../../../../app/props/PostCategoryProps'
 
 interface modalDataProps {
     modalData:{
-       data:postCategoryProps | null,
+       data:PostCategoryProps | null,
       showModal:boolean,
     } 
     }

@@ -17,22 +17,8 @@
       }
 
 const ThemeOptions:themeProps[] =[
-    
- { /* Default Theme */
-    typography: "poppins",
-    version: "light",
-    layout: "vertical",
-    headerBg: "color_1",
-    primary: "color_1",
-    navheaderBg: "color_1",
-    sidebarBg: "color_1",
-    sidebarStyle: "full",
-    sidebarPosition: "fixed",
-    headerPosition: "fixed",
-    containerLayout: "full",
-    direction:""
-},
- {
+  
+ {/* Default Theme */
     typography: "poppins",
     version: "light",
     layout: "vertical",
@@ -45,8 +31,7 @@ const ThemeOptions:themeProps[] =[
     headerPosition: "fixed",
     containerLayout: "full",
     direction:""
-},
- {
+},{
     typography: "poppins",
     version: "light",
     layout: "vertical",
@@ -60,8 +45,8 @@ const ThemeOptions:themeProps[] =[
     containerLayout: "full",
     direction:""
 },
-
- {
+  
+{
     typography: "poppins",
     version: "light",
     layout: "horizontal",
@@ -75,6 +60,8 @@ const ThemeOptions:themeProps[] =[
     containerLayout: "full",
     direction:""
 },
+ 
+ 
  {
     typography: "poppins",
     version: "light",
@@ -116,8 +103,22 @@ const ThemeOptions:themeProps[] =[
     headerPosition: "fixed",
     containerLayout: "full",
     direction:""
-},
- {
+ },
+ // { 
+//     typography: "poppins",
+//     version: "light",
+//     layout: "vertical",
+//     headerBg: "color_1",
+//     primary: "color_1",
+//     navheaderBg: "color_1",
+//     sidebarBg: "color_1",
+//     sidebarStyle: "full",
+//     sidebarPosition: "fixed",
+//     headerPosition: "fixed",
+//     containerLayout: "full",
+//     direction:""
+// }, 
+{
     typography: "poppins",
     version: "light",
     layout: "vertical",
@@ -130,8 +131,7 @@ const ThemeOptions:themeProps[] =[
     headerPosition: "fixed",
     containerLayout: "full",
     direction:""
-},
- {
+}, {
     typography: "poppins",
     version: "light",
     layout: "vertical",
@@ -145,6 +145,8 @@ const ThemeOptions:themeProps[] =[
     containerLayout: "full",
     direction:""
 },
+
+
     
 ]
 

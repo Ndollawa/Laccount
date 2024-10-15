@@ -5,7 +5,7 @@ import { useCompanyInfo, useLandingConfig } from '../../../../dashboard/pages/Se
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const AboutUs = () => {
-  const {settings:{siteName}} = useSelector(useCompanyInfo);
+  const {settings:{companyDetails:{siteName}={}}={}} = useSelector(useCompanyInfo);
   const {settings:{landingPageConfig:{aboutStyle}={},siteImages:{aboutUsBg}={},pages:{aboutUs}={}}={}} = useSelector(useLandingConfig)
   const startDate = new Date('2022-01-01').getFullYear()
   const endDate =   new Date(Date.now()).getFullYear()
@@ -13,7 +13,8 @@ const AboutUs = () => {
 let aboutUsSection;
 switch (aboutStyle) {
 case 1:
-aboutUsSection = (      <section className="blog-one pt-120 pb-120">
+aboutUsSection = (      
+<section className="blog-one pt-120 pb-120">
 <div className="container">
     <div className="block-title text-center">
         <p className="block-title__tagline">Our Blog</p>
@@ -70,7 +71,7 @@ aboutUsSection = (      <section className="blog-one pt-120 pb-120">
         <div className="row row-gutter-y-60">
             <div className="col-lg-6">
                 <div className="about-six__image">
-                    <img src={BASE_URL+"uploads/settings/"+aboutUsBg} alt={siteName}/>
+                    <img src={BASE_URL+"uploads/blog/"+aboutUsBg} alt={siteName}/>
                     <div className="about-six__image__caption wow fadeInRight" data-wow-duration="1500ms">
                         <h4 className="about-six__image__caption__year count-box">
                             <span className="count-text" data-stop="20" data-speed="1500"></span>
@@ -104,7 +105,7 @@ aboutUsSection = (      <section className="blog-one pt-120 pb-120">
                     <p className="about-six__text" dangerouslySetInnerHTML={{__html:aboutUs}}></p>
                     <div className="about-six__author">
                         <div className="about-six__author__image">
-                            <img src={BASE_URL+"uploads/settings/"+aboutUsBg} alt={siteName}/>
+                            <img src={BASE_URL+"uploads/blog/"+aboutUsBg} alt={siteName}/>
                         </div>
                         <div className="about-six__author__name">
                             Kevin Martin

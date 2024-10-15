@@ -5,8 +5,8 @@ import {
 import { RootState } from "../../../../../app/stores/store";
 import { apiSlice } from "../../../../../app/api/apiSlice";
 import { ResponseProps } from "../../../../../app/props/responseProps";
-// import teamProps from "../../../../app/utils/props/teamProps";
-// interface teamsProp extends  teamProps{}
+// import TeamProps from "../../../../app/utils/props/TeamProps";
+// interface teamsProp extends  TeamProps{}
 
 
 const teamsAdapter = createEntityAdapter({

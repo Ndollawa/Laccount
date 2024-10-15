@@ -4,7 +4,7 @@ import {useCompanyInfo,useLandingConfig} from '../../../../dashboard/pages/Setti
 
 
 const CTASection = () => {
-    const {settings:{siteName}={}} = useSelector(useCompanyInfo); 
+    const {settings:{companyDetails:{siteName}={}}={}} = useSelector(useCompanyInfo); 
   return (
     <>
             <section className="call-to-action-two">

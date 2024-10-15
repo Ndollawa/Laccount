@@ -5,13 +5,13 @@ import {Modal} from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import showToast from '../../../../../app/utils/showToast'
 import Swal from 'sweetalert2'
-import serviceProps from '../../../../../app/props/serviceProps'
+import ServiceProps from '../../../../../app/props/ServiceProps'
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;
 
 interface modalDataProps {
 viewData:{
-   data:serviceProps | null,
+   data:ServiceProps | null,
   showModal:boolean,
 } 
 }

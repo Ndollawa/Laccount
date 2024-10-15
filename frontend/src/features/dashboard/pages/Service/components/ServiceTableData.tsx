@@ -10,7 +10,7 @@ import lgZoom from 'lightgallery/plugins/zoom'
 // import 'lightgallery/css/lg-thumbnail.css'
 import $ from 'jquery'
 import Swal  from 'sweetalert2'
-import serviceProps from '../../../../../app/props/serviceProps'
+import ServiceProps from '../../../../../app/props/ServiceProps'
 import initDataTables,{destroyDataTables} from '../../../../../app/utils/initDataTables'
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;

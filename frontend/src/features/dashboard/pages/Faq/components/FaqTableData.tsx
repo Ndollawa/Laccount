@@ -8,10 +8,10 @@ import { setPreloader } from '../../../../components/preloader/slices/preloader.
 import { useDispatch } from 'react-redux'
 import $ from 'jquery'
 import initDataTables, { destroyDataTables } from '../../../../../app/utils/initDataTables'
-import { faqProps } from '../../../../../app/props/faqProps'
+import { FaqProps } from '../../../../../app/props/FaqProps'
 
 interface modalDataProps {
-    data:faqProps | null,
+    data:FaqProps | null,
     showModal:boolean,
 }
 

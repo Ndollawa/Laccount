@@ -12,7 +12,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { handleError, hashData } from '@app/common';
+import { EMAIL_REGEX, handleError, hashData } from '@app/common';
 import * as grpc from '@grpc/grpc-js';
 import { User, WalletType } from '@prisma/client';
 import { CreateUserDto, UpdateUserDto } from './dto';
@@ -99,31 +99,31 @@ export class UserController {
   async findAll(): Promise<User[]> {
     try {
       const users = await this.userService.findAll({
-        where: {
-          roles: {
-            some: {
-              AND: [
-                {
-                  code: {
-                    not: UserRolesEnum.DEV,
-                  },
-                },
-                {
-                  role: {
-                    not: UserRolesKeysEnum.DEV,
-                  },
-                },
-              ],
-            },
-          },
-        },
-        select: {
-          id: true,
-          username: true,
-          email: true,
-          verificationStatus: true,
-        },
-        include: { profile: true, roles: true },
+        // where: {
+        //   roles: {
+        //     some: {
+        //       AND: [
+        //         {
+        //           code: {
+        //             not: UserRolesEnum.DEV,
+        //           },
+        //         },
+        //         {
+        //           role: {
+        //             not: UserRolesKeysEnum.DEV,
+        //           },
+        //         },
+        //       ],
+        //     },
+        //   },
+        // },
+        // select: {
+        //   id: true,
+        //   username: true,
+        //   email: true,
+        //   verificationStatus: true,
+        // },
+        // include: { profile: true, roles: true },
       });
       return users;
     } catch (error) {
@@ -158,6 +158,14 @@ export class UserController {
     return await this.userService.remove(id);
   }
 
+  @Post('check-duplicates')
+  async checkDuplicate(@Body() { user }: { user: string; }):Promise<boolean>{
+    const userType = EMAIL_REGEX.test(user);
+    const userQuery = userType ? { email: user } : { username: user };
+    return await this.userService.exists({
+      where: userQuery,
+    });
+  }
   // queryUsers(paginationDtoStream: PaginationDto):Promise<any> | Observable<any> {
   //   // return this.userService.queryUser(paginationDtoStream);
   //   return null

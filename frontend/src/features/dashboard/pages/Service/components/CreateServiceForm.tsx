@@ -15,7 +15,7 @@ type FormValues = {
 };
 
 const CreateServiceForm = () => {
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormValues>();
+  const { register, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm<FormValues>();
   const [addNewService, { isLoading, isSuccess, isError, error }] = useAddNewServiceMutation();
   const [previewImage, setPreviewImage] = React.useState<string>("");
 
@@ -35,6 +35,8 @@ const CreateServiceForm = () => {
       showToast('error', JSON.stringify(error?.data?.message));
     } else {
       showToast('success', 'Service created successfully');
+      reset();
+      setPreviewImage("")
     }
   };
 
@@ -116,7 +118,7 @@ const CreateServiceForm = () => {
                   </div>
 
                   <div className="col-md-6">
-                    <label className="form-label">Preview </label>
+                    <label className="form-label block w-100">Preview </label>
                     {previewImage && <img src={previewImage} alt="Preview" width="240" />}
                   </div>
 

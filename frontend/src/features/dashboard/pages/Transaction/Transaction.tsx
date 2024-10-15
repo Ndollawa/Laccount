@@ -1,8 +1,8 @@
 import React from 'react';
-import pageProps from '../../../../app/props/pageProps';
+import PageProps from '../../../../app/props/PageProps';
 import MainBody from '../../components/MainBody';
 
-const Transaction:React.FC<pageProps> = ({pageData}:pageProps) => {
+const Transaction:React.FC<PageProps> = ({pageData}:PageProps) => {
   return (
     <MainBody>
 		<div className="container-fluid">

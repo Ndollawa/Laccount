@@ -1,15 +1,15 @@
 import React from 'react'
-import pageProps from '../../../../app/props/pageProps'
+import PageProps from '../../../../app/props/PageProps'
 import Breadcrum from '../../components/Breadcrum'
 import { useGetFaqsQuery } from '../../../dashboard/pages/Faq/slices/faqApi.slice'
-import { faqProps } from '../../../../app/props/faqProps'
+import { FaqProps } from '../../../../app/props/FaqProps'
 import NoResult from '../../components/NoResult'
 
-const Faq:React.FC<pageProps> = ({pageData}:pageProps) => {
+const Faq:React.FC<PageProps> = ({pageData}:PageProps) => {
 
     const { faqs } = useGetFaqsQuery("faqsList", {
         selectFromResult: ({ data }) => ({
-          faqs: (data?.ids?.map((id:string)=>data?.entities[id]))?.filter((c:faqProps) => c?.status === 'active')		 
+          faqs: (data?.ids?.map((id:string)=>data?.entities[id]))?.filter((c:FaqProps) => c?.status === 'active')		 
         }),
         }) 
         console.log(faqs)
@@ -24,7 +24,7 @@ const Faq:React.FC<pageProps> = ({pageData}:pageProps) => {
         <div className="row row-gutter-y-20">
               { faqs.length ? 
             
-            faqs?.map((f:faqProps)=>(
+            faqs?.map((f:FaqProps)=>(
             <div className="col-lg-6">
                 <div className={`accrodion-grp faq-${f?.id}-accrodion`} data-grp-name={`faq-one-accrodion-${f?.id}`}>
                     

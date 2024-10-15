@@ -1,5 +1,5 @@
- interface roomProps{
-    _id:string;
+ export default interface RoomProps{
+    id:string;
     title:string;
     description:string;
     members:string;
@@ -8,4 +8,3 @@
     createdAt?:Date;
     updatedAt?:Date;
 }
-export default roomProps

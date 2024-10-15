@@ -1,10 +1,5 @@
 import { forwardRef, Module, Scope } from '@nestjs/common';
-import {
-  CacheModule,
-  Cache,
-  CACHE_MANAGER,
-  CacheInterceptor,
-} from '@nestjs/cache-manager';
+
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { MulterModule } from '@nestjs/platform-express/multer';
 import { EventEmitterModule } from '@nestjs/event-emitter';
@@ -16,11 +11,9 @@ import {
   ResponseInterceptor,
   HttpExceptionFilter,
   RequestService,
-  RedisModule,
+  CommonModule,
 } from '@app/common';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { redisStore } from 'cache-manager-redis-store';
-// import type { RedisClientOptions } from 'redis';
 import { PostModule } from './post/post.module';
 import { CommentModule } from './comment/comment.module';
 import { PrismaModule } from '@app/prisma';
@@ -47,6 +40,7 @@ import { SubscriptionPlanModule } from './subscriptionPlan';
 import { SeederModule } from '@app/common/seeder/seeder.module';
 import { FaqModule } from './faq';
 import { TeamModule } from './team';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -65,22 +59,7 @@ import { TeamModule } from './team';
     }),
     EventEmitterModule.forRoot(),
     ScheduleModule.forRoot(),
-    // CacheModule.registerAsync({
-    //   imports: [ConfigModule],
-    //   inject: [ConfigService],
-    //   useFactory: async (configService: ConfigService) => ({
-    //     isGlobal: true,
-    //     max: 10_000,
-    //     store: (): any => redisStore({
-    //       commandsQueueMaxLength: 10_000,
-    //       socket: {
-    //         host: configService.getOrThrow<string>('REDIS_HOST', 'localhost'),
-    //         port: configService.getOrThrow<number>('REDIS_PORT', 6379),
-    //         ttl: configService.getOrThrow<number>('CACHE_TTL', 600),
-    //       }
-    //     })
-    //   }),
-    // }),
+
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -91,8 +70,8 @@ import { TeamModule } from './team';
         },
       }),
     }),
-    PrismaModule,
-    RedisModule,
+    forwardRef(() => CommonModule),
+    forwardRef(() => PrismaModule),
     AuthModule,
     UserModule,
     MailerModule,
@@ -117,7 +96,7 @@ import { TeamModule } from './team';
     TestimonialModule,
     FaqModule,
     TeamModule,
-    forwardRef(() => SeederModule),
+    SeederModule,
   ],
   controllers: [],
   providers: [
@@ -132,11 +111,11 @@ import { TeamModule } from './team';
       scope: Scope.REQUEST,
       useClass: ResponseInterceptor,
     },
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   // scope: Scope.REQUEST,
-    //   useClass: CacheInterceptor,
-    // },
+    {
+      provide: APP_INTERCEPTOR,
+      // scope: Scope.REQUEST,
+      useClass: CacheInterceptor,
+    },
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,

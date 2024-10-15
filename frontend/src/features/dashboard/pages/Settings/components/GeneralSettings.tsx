@@ -34,7 +34,7 @@ e.preventDefault();
 const settings = {companyDetails:{...companyDetails, ...formFields}, ...otherSettings}
 try{
   const res = await updateSetting({id,settings}).unwrap()
-dispatch(setCompanyInfoSetting(settings))
+dispatch(setCompanyInfoSetting({ ...companyInfo, settings }))
 showToast('success',"Settings Updated successfully!")
 } catch (error:any) {
   showToast('error',error?.message)
@@ -45,7 +45,7 @@ showToast('success',"Settings Updated successfully!")
   return (
     <>
       <div className="card">
-        <div className="card-header bg-secondary">
+        <div className="card-header bg-primary">
           <h4 className="card-title text-white">Comany Information</h4>
         </div>
         <div className="card-body">

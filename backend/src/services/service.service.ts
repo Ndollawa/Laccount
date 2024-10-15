@@ -35,7 +35,10 @@ export class ServiceService {
       handleError(error);
     }
   }
-  async create(createServiceData: CreateServiceDto, file: Express.Multer.File): Promise<Service> {
+  async create(
+    createServiceData: CreateServiceDto,
+    file: Express.Multer.File,
+  ): Promise<Service> {
     const { title } = createServiceData;
 
     try {
@@ -44,9 +47,7 @@ export class ServiceService {
       });
 
       if (existingService) {
-        throw new ConflictException(
-          'Service with credentials already exists.',
-        );
+        throw new ConflictException('Service with credentials already exists.');
       }
 
       const serviceData = {
@@ -65,11 +66,15 @@ export class ServiceService {
     }
   }
 
-  async update(id: string, updateServiceData: UpdateServiceDto, file: Express.Multer.File) {
+  async update(
+    id: string,
+    updateServiceData: UpdateServiceDto,
+    file: Express.Multer.File,
+  ) {
     try {
       return await this.serviceRepository.update({
         where: { id },
-        data: {...updateServiceData, image: file.filename},
+        data: { ...updateServiceData, image: file.filename },
       });
     } catch (error) {
       handleError(error);

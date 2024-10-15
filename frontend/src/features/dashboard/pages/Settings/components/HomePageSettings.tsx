@@ -11,8 +11,8 @@ import showToast from '../../../../../app/utils/showToast';
 const HomePageSettings = () => {
   const dispatch = useDispatch();
   const [updateSetting, { isLoading }] = useUpdateSettingMutation();
-
-  const { id, settings: { landingPageConfig, colors, ...otherSettings } = {} } = useSelector(useLandingConfig);
+  const landingConfig = useSelector(useLandingConfig);
+  const { id, settings: { landingPageConfig, colors, ...otherSettings  }} = landingConfig;
   const initialState = { landingPageConfig, colors };
 
   const {
@@ -42,10 +42,11 @@ const HomePageSettings = () => {
 
   const updateSettings: SubmitHandler<FieldValues> = async (formFields, e) => {
     e.preventDefault();
-    const settings = { landingPageConfig: { ...landingPageConfig, ...formFields }, ...otherSettings };
+    const { colors, ...otherFormFields} = formFields;
+    const settings = { landingPageConfig: { ...landingPageConfig, ...otherFormFields }, colors, ...otherSettings };
     try {
       await updateSetting({ id, settings }).unwrap();
-      dispatch(setLandingSetting(settings));
+      dispatch(setLandingSetting({...landingConfig, settings}));
       showToast('success', "Settings Updated successfully!");
     } catch (error: any) {
       showToast('error', error);
@@ -55,7 +56,7 @@ const HomePageSettings = () => {
   return (
     <>
       <div className="card">
-        <div className="card-header bg-secondary">
+        <div className="card-header bg-primary">
           <h4 className="card-title text-white">Home Page</h4>
         </div>
         <div className="card-body p-5">
@@ -103,6 +104,7 @@ const HomePageSettings = () => {
                 <input
                   type="color"
                   className="form-control"
+                  value={colors.primary}
                   {...register('colors.primary', {
                     required: "Field: Primary color is required!"
                   })}
@@ -120,6 +122,7 @@ const HomePageSettings = () => {
                 <input
                   type="color"
                   className="form-control"
+                  value={colors.secondary}
                   {...register('colors.secondary', {
                     required: "Field: Secondary color is required!"
                   })}
@@ -137,6 +140,7 @@ const HomePageSettings = () => {
                 <input
                   type="color"
                   className="form-control"
+                  value={colors.tertiary}
                   {...register('colors.tertiary', {
                     required: "Field: Tertiary color is required!"
                   })}

@@ -9,12 +9,12 @@ import 'lightgallery/css/lg-zoom.css'
 // import 'lightgallery/css/lg-thumbnail.css'
 import lgThumbnail from 'lightgallery/plugins/thumbnail'
 import lgZoom from 'lightgallery/plugins/zoom'
-import postProps from '../../../../../app/props/postProps'
+import PostProps from '../../../../../app/props/PostProps'
 // import 'lightgallery/css/lg-thumbnail.css'
 
 interface modalDataProps {
     modalData:{
-       data:postProps | null,
+       data:PostProps | null,
       showModal:boolean,
     } 
     }

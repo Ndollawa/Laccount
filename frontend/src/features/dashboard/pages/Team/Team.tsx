@@ -5,17 +5,17 @@ import EditTeamForm from './components/EditTeamForm'
 import { useDispatch } from 'react-redux'
 import { useGetTeamsQuery } from './slices/teamsApi.slice'
 import { setPreloader } from '../../../components/preloader/slices/preloader.slice'
-import pageProps from '../../../../app/props/pageProps'
+import PageProps from '../../../../app/props/PageProps'
 import TeamTableData from './components/TeamTableData'    
 import $ from 'jquery'
 import initDataTables,{destroyDataTables} from '../../../../app/utils/initDataTables'   
-import teamProps from '../../../../app/props/teamProps'
+import TeamProps from '../../../../app/props/TeamProps'
 
 interface modalDataProps {
-       data:teamProps | null,
+       data:TeamProps | null,
       showModal:boolean,
     }
-    const Team = ({pageData}:pageProps)  => {
+    const Team = ({pageData}:PageProps)  => {
         const dispatch =useDispatch()
         const [modalData,setModalData] = useState<modalDataProps>({
             data:null, 

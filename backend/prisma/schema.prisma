@@ -187,6 +187,7 @@ enum RolesEnum {
 
 enum MailerTemplateEnum {
   SIGNUP_CONFIRMATION
+  LOGIN_CONFIRMATION
   PASSWORD_RESET
   ACCOUNT_VERIFICATION
   PAYMENT_RECEIPT
@@ -200,7 +201,6 @@ enum MailerTemplateEnum {
 enum MailerTemplateStatus {
   ACTIVE
   INACTIVE
-  ARCHIVED
 }
 
 enum TicketCategory {

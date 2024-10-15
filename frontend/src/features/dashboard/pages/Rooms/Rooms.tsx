@@ -6,19 +6,19 @@
     import { useGetRoomsQuery } from './slices/roomsApi.slice'
     import $ from 'jquery'
     import { setPreloader } from '../../../components/preloader/slices/preloader.slice'
-    import pageProps from '../../../../app/props/pageProps'
+    import PageProps from '../../../../app/props/PageProps'
     import RoomTableData from './components/RoomsTableData'
     import initDataTables,{destroyDataTables} from '../../../../app/utils/initDataTables'
-import roomProps from '../../../../app/props/roomProps'
+import RoomProps from '../../../../app/props/RoomProps'
     
     
 
     
 interface modalDataProps {
-       data:roomProps | null,
+       data:RoomProps | null,
       showModal:boolean,
     }
-    const Rooms = ({pageData}:pageProps)  => {
+    const Rooms = ({pageData}:PageProps)  => {
         const dispatch =useDispatch()
         const [modalData,setModalData] = useState<modalDataProps>({
             data:null, 

@@ -2,11 +2,11 @@ import React from 'react'
 import {useGetRoomsQuery,useDeleteRoomMutation } from '../slices/roomsApi.slice'
 import showToast from '../../../../../app/utils/showToast'
 import Swal from 'sweetalert2'
-import roomProps from '../../../../../app/props/roomProps'
+import RoomProps from '../../../../../app/props/RoomProps'
 
 interface modalDataProps {
     modalData:{
-       data:roomProps | null,
+       data:RoomProps | null,
       showModal:boolean,
     } 
     }

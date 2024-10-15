@@ -4,11 +4,11 @@ import {
 } from "@reduxjs/toolkit";
 import { RootState } from "../../../../../app/stores/store";
 import { apiSlice } from "../../../../../app/api/apiSlice";
-import { faqProps } from "../../../../../app/props/faqProps";
+import { FaqProps } from "../../../../../app/props/FaqProps";
 
 
 
-interface faqsProps extends faqProps{}
+interface faqsProps extends FaqProps{}
 
 
 const faqsAdapter = createEntityAdapter({

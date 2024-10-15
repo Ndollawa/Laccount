@@ -4,8 +4,8 @@ import {
 } from "@reduxjs/toolkit";
 import { RootState } from "../../../../app/stores/store";
 import { apiSlice } from "../../../../app/api/apiSlice";
-// import postProps from "../../../../app/utils/props/postProps";
-// interface postCommentProp extends  postProps{}
+// import PostProps from "../../../../app/utils/props/PostProps";
+// interface postCommentProp extends  PostProps{}
 
 
 const postCommentAdapter = createEntityAdapter({

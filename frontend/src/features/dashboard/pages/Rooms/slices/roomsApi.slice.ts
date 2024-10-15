@@ -5,8 +5,8 @@ import {
 import { RootState } from "../../../../../app/stores/store";
 import { apiSlice } from "../../../../../app/api/apiSlice";
 import { ResponseProps } from "../../../../../app/props/responseProps";
-// import roomProps from "../../../../app/utils/props/roomProps";
-// interface roomsProp extends  roomProps{}
+// import RoomProps from "../../../../app/utils/props/RoomProps";
+// interface roomsProp extends  RoomProps{}
 
 
 const roomsAdapter = createEntityAdapter({

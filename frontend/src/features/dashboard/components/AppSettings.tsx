@@ -1,310 +1,113 @@
-import React,{ FormEvent, FormEventHandler, useEffect } from "react";
+import React, { ChangeEventHandler, FormEvent, FormEventHandler, useEffect, useState, useTransition } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useUpdateSettingMutation } from "../pages/Settings/slices/settingApi.slice";
-import { useDashboardConfig, useSettings } from "../pages/Settings/slices/settings.slice";
-import { setDashboardSetting } from '../pages/Settings/slices/settings.slice';
-import $ from 'jquery';
+import { useDashboardConfig } from "../pages/Settings/slices/settings.slice";
+import { setDashboardSetting } from "../pages/Settings/slices/settings.slice";
+import $ from "jquery";
 
 const AppSettings = () => {
-  const {id, settings:{dashboardConfig, ...otherSettings}={}} = useSelector(useDashboardConfig);
+  const dashboardConfig = useSelector(useDashboardConfig);
+  const { id, settings } = dashboardConfig;
+  const dispatch = useDispatch();
+  const [updateSetting, isLoading] = useUpdateSettingMutation();
   const body = $('body');
   const html = $('html');
+// State to track the active tab
+const [activeTab, setActiveTab] = useState('one');
+const [isPending, startTransition] = useTransition();
 
-
-const dispatch = useDispatch();
-const [updateSetting,isLoading] = useUpdateSettingMutation();
- 
-//change the theme typography controller
-   const typographySelect:FormEventHandler =(e:FormEvent<HTMLInputElement>)=> {
-      e.persist();
-        (async()=>{
-          const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, typography:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
-          try {
-            console.log(settings)
-            await updateSetting({ id, settings }).unwrap();
-            dispatch(setDashboardSetting(settings));
-             } catch (error) {
-            console.error(error)   
-             }
-       })(); 
-    }
-
-    //change the theme version controller
-  const  versionSelect:FormEventHandler = (e:FormEvent<HTMLInputElement>) =>{
-      e.persist();
-     
-    
-      (async()=>{
-          const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, version:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
-          try {
-            console.log(settings)
-            await updateSetting({ id, settings }).unwrap();
-            dispatch(setDashboardSetting(settings));
-           } catch (error) {
-             
-           }
-     })(); 
-		
-    }
-	
-	
-  const handleRightSidebar = ()=>$('.sidebar-right').toggleClass('show');
-  const handleRightSidebarclose = ()=>$('.sidebar-right').removeClass('show');
-
-
-    //change the sidebar position controller
-  const  sidebarPositionSelect:FormEventHandler = (e:FormEvent<HTMLInputElement>)=> {
-      e.persist();
-       if(e.currentTarget.value === "fixed" && body.attr('data-sidebar-style') === "modern" && body.attr('data-layout') === "vertical" ){
-        alert("Sorry, Modern sidebar layout dosen't support fixed position!") 
-       }else{
-         
-        (async()=>{
-            const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, layout:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
-            try {
-              console.log(settings)
-              await updateSetting({ id, settings }).unwrap();
-              dispatch(setDashboardSetting(settings));
-             } catch (error) {
-            console.error(error)   
-             }
-       })(); 
-      }
-    }
-
-    //change the header position controller
-  const  headerPositionSelect:FormEventHandler = (e:FormEvent<HTMLInputElement>) =>{
-      e.persist();
-      
-      (async()=>{
-        const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, headerPosition:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
-        try {
-          console.log(settings)
-          await updateSetting({ id, settings }).unwrap();
-          dispatch(setDashboardSetting(settings));
-           } catch (error) {
-             consol.error(error)
-           }
-     })(); 
-    }
-
-    //change the theme direction (rtl, ltr) controller
-    const themeDirectionSelect:FormEventHandler =(e:FormEvent<HTMLInputElement>)=> {
-      e.persist(); 
-      html.attr('dir', e.currentTarget.value);
-        html.attr('class', '');
-        html.addClass(`${e.currentTarget.value}`);
-    console.log(e.currentTarget.value);
-    (async()=>{
-      const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, direction:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
-      try {
-        console.log(settings)
-        await updateSetting({ id, settings }).unwrap();
-        dispatch(setDashboardSetting(settings));
-          } catch (error) {
-         console.error(error)   
-          }
-    })();   
-    }
-
-    //change the theme layout controller
-    const layoutSelect:FormEventHandler=(e:FormEvent<HTMLInputElement>)=> {
-      e.persist();
-        if(body.attr('data-sidebar-style') === 'overlay') {
-    
-    (async()=>{
-      const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, sidebarStyle:"full" as string,layout:e.currentTarget.value! as string}, ...dashboardConfig}, ...otherSettings };
-      try {
-        console.log(settings)
-        await updateSetting({ id, settings }).unwrap();
-        dispatch(setDashboardSetting(settings));
-         } catch (error) {
-           console.error(error)
-         }
-   })(); 
-            return;
-        }
-
-               (async()=>{
-          const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, layout:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
-          try {
-            console.log(settings)
-            await updateSetting({ id, settings }).unwrap();
-            dispatch(setDashboardSetting(settings));
-             } catch (error) {
-            console.error(error)   
-             }
-       })(); 
-    }
-    
-    //change the container layout controller
-  const  containerLayoutSelect:FormEventHandler = (e:FormEvent<HTMLInputElement>)=> {
-      e.persist();
-        if(e.currentTarget.value === "boxed") {
-
-            if(body.attr('data-layout') === "vertical" && body.attr('data-sidebar-style') === "full") {
-    
-                (async()=>{
-                  const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, sidebarStyle:"overlay" as string,containerLayout:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
-                  try {
-                    console.log(settings)
-                    await updateSetting({ id, settings }).unwrap();
-                    dispatch(setDashboardSetting(settings));
-                     } catch (error) {
-                       console.error(error)
-                     }
-               })();  
-                setTimeout(function(){
-                    $(window).trigger('resize');
-                },200);
-                
-                return;
-            }
-            
-            
-        }
-
-    
-        (async()=>{
-          const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, containerLayout:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
-          try {
-            console.log(settings)
-            await updateSetting({ id, settings }).unwrap();
-            dispatch(setDashboardSetting(settings));
-             } catch (error) {
-            console.error(error)   
-             }
-       })(); 
-    }
-	/* Move LTR to RTL and RTL to LTR */
-	
-	// var currentURL      = window.location.href; 
-	
-	// $('#theme_direction').on('change',function(){
-	// 	if(currentURL.indexOf('xhtml-rtl') > -1){
-	// 		currentURL = currentURL.replace('xhtml-rtl', 'xhtml')
-	// 	}else{
-	// 		currentURL = currentURL.replace('xhtml', 'xhtml-rtl')
-	// 	}
-		
-	// 	window.location.href = currentURL;
-		
-	// });
-
-    //change the sidebar style controller
-   const sidebarStyleSelect:FormEventHandler = (e:FormEvent<HTMLInputElement>)=> {
-      e.persist();
-        if(body.attr('data-layout') === "horizontal") {
-            if(e.currentTarget.value === "overlay") {
-                alert("Sorry! Overlay is not possible in Horizontal layout.");
-                return;
-            }
-        }
-
-        if(body.attr('data-layout') === "vertical") {
-            if(body.attr('data-container') === "boxed" && e.currentTarget.value === "full") {
-                alert("Sorry! Full menu is not available in Vertical Boxed layout.");
-                return;
-            }
-
-            if(e.currentTarget.value === "modern" && body.attr('data-sidebar-position') === "fixed") {
-                alert("Sorry! Modern sidebar layout is not available in the fixed position. Please change the sidebar position into Static.");
-                return;
-            }
-        }
-    
-        (async()=>{
-          const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, sidebarStyle:e.currentTarget.value! as string }, ...dashboardConfig}, ...otherSettings };
-          try {
-            console.log(settings)
-            await updateSetting({ id, settings }).unwrap();
-            dispatch(setDashboardSetting(settings));
-             } catch (error) {
-            console.error(error)   
-             }
-       })(); 
-
-         if(body.attr('data-sidebar-style') === 'icon-hover') {
-            $('.deznav').on('hover',function() {
-			$('#main-wrapper').addClass('iconhover-toggle'); 
-            }, function() {
-			$('#main-wrapper').removeClass('iconhover-toggle'); 
-            });
-        } 
-		
-	}
-
- useEffect(()=>{
-//    
-  	//change the nav-header background controller
-    $('input[name="navigation_header"]').on('click',(e)=> {
-  //  alert(e.currentTarget.value)  
-    
-  (async()=>{
-    const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, navheaderBg:e.currentTarget.getAttribute('value')! as string }, ...dashboardConfig}, ...otherSettings };
+// Handler to switch tabs
+const handleTabClick = (tab: string) => {
+  setActiveTab(tab);
+};
+  // Common function to handle settings update
+  const handleSettingsUpdate = async (newSettings: object) => {
+    const updatedSettings = { dashboardConfig: { ...settings?.dashboardConfig, ...newSettings }};
     try {
-      console.log(settings)
-      await updateSetting({ id, settings }).unwrap();
-      dispatch(setDashboardSetting(settings));
-      } catch (error) {
-        
-      }
-  })(); 
+      await updateSetting({ id,settings }).unwrap();
+      dispatch(setDashboardSetting({ ...dashboardConfig, settings: updatedSettings}));
+      closeRightSidebar()
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+  // Event handlers for select changes
+  const handleSelectChange = (layoutOption: string): FormEventHandler =>
+    (e: any) => {
+      const value = e.currentTarget.value as string;
+      handleSettingsUpdate({ layoutOptions: { ...dashboardConfig?.settings?.dashboardConfig?.layoutOptions, [layoutOption]: value } });
+    };
+
+  const handleThemeDirectionChange: FormEventHandler = (e: any) => {
+    const direction = e.currentTarget.value;
+    html.attr("dir", direction).attr("class", direction);
+    handleSettingsUpdate({ layoutOptions: { ...dashboardConfig?.settings?.dashboardConfig?.layoutOptions, direction } });
+  };
+
+  // Sidebar toggle handlers
+  const toggleRightSidebar = () => $(".sidebar-right").toggleClass("show");
+  const closeRightSidebar = () => $(".sidebar-right").removeClass("show");
+
+  // UseEffect to handle background color changes
+  useEffect(() => {
+   startTransition(() => {
+  const handleBackgroundChange = (attribute: string, selector: string) => {
+      $(selector).on("click", (e: any) => {
+        const value = e.currentTarget.getAttribute("value") as string;
+        handleSettingsUpdate({ layoutOptions: { ...dashboardConfig?.settings?.dashboardConfig?.layoutOptions, [attribute]: value } });
       });
-    
-      //change the header background controller
-      $('input[name="header_bg"]').on('click', (e)=> {   
+    };
 
-(async()=>{
-  const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, headerBg:e.currentTarget.getAttribute('value')! as string }, ...dashboardConfig}, ...otherSettings };
-  try {
-    console.log(settings)
-    await updateSetting({ id, settings }).unwrap();
-    dispatch(setDashboardSetting(settings));
-          } catch (error) {
-         console.error(error)   
-          }
-    })();       });
-  
-      //change the sidebar background controller
-      $('input[name="sidebar_bg"]').on('click', (e)=> { 
-    
-(async()=>{
-  const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, sidebarBg:e.currentTarget.getAttribute('value')!  as string}, ...dashboardConfig}, ...otherSettings };
-  try {
-    console.log(settings)
-    await updateSetting({ id, settings }).unwrap();
-    dispatch(setDashboardSetting(settings));
-          } catch (error) {
-         console.error(error)   
-          }
-    })();       });
-    
-    //change the primary color controller
-      $('input[name="primary_bg"]').on('click', (e)=> {
-(async()=>{
-  const settings = { dashboardConfig: { layoutOptions: { ...dashboardConfig?.layoutOptions, primary:e.currentTarget.getAttribute('value')! as string }, ...dashboardConfig}, ...otherSettings };
-  try {
-    console.log(settings)
-    await updateSetting({ id, settings }).unwrap();
-    dispatch(setDashboardSetting(settings));
-          } catch (error) {
-         console.error(error)   
-          }
-    })();       });
-  return ()=>{
+    handleBackgroundChange("navheaderBg", 'input[name="navigation_header"]');
+    handleBackgroundChange("headerBg", 'input[name="header_bg"]');
+    handleBackgroundChange("sidebarBg", 'input[name="sidebar_bg"]');
+    handleBackgroundChange("primary", 'input[name="primary_bg"]');
 
-  }
- 
-  },[])
+  }); 
+    return () => {
+      // Clean up event listeners
+      $('input[name="navigation_header"], input[name="header_bg"], input[name="sidebar_bg"], input[name="primary_bg"]').off();
+    };
+  }, [dashboardConfig]);
 
-  // const deleteAllCookie=()=>{
-    
-  // }
+  // Layout change handlers
+  const layoutSelect = (e: any) => {
+    const value = e.currentTarget.value;
+    handleSettingsUpdate({ layoutOptions: { ...dashboardConfig?.settings?.dashboardConfig?.layoutOptions, layout: value } });
+  };
+
+  const headerPositionSelect = (e: any) => {
+    const value = e.currentTarget.value;
+    handleSettingsUpdate({ layoutOptions: { ...dashboardConfig?.settings?.dashboardConfig?.layoutOptions, headerPosition: value } });
+  };
+
+  const sidebarStyleSelect = (e: any) => {
+    const value = e.currentTarget.value;
+    handleSettingsUpdate({ layoutOptions: { ...dashboardConfig?.settings?.dashboardConfig?.layoutOptions, sidebarStyle: value } });
+  };
+
+  const sidebarPositionSelect = (e: any) => {
+    const value = e.currentTarget.value;
+    handleSettingsUpdate({ layoutOptions: { ...dashboardConfig?.settings?.dashboardConfig?.layoutOptions, sidebarPosition: value } });
+  };
+
+  const containerLayoutSelect = (e: any) => {
+    const value = e.currentTarget.value;
+    handleSettingsUpdate({ layoutOptions: { ...dashboardConfig?.settings?.dashboardConfig?.layoutOptions, containerLayout: value } });
+  };
+
+  const themeDirectionSelect = handleThemeDirectionChange;
+
+  const typographySelect = (e: any) => {
+    const value = e.currentTarget.value;
+    handleSettingsUpdate({ layoutOptions: { ...dashboardConfig?.settings?.dashboardConfig?.layoutOptions, typography: value } });
+  };
+
   return (
     <>
+      {/* Sidebar Right */}
       <div className="sidebar-right">
         <div className="bg-overlay"></div>
         <Link
@@ -314,720 +117,153 @@ const [updateSetting,isLoading] = useUpdateSettingMutation();
           data-original-title="Change Layout"
           to=""
           role="button"
-          onClick={handleRightSidebar}
+          onClick={toggleRightSidebar}
         >
           <span>
             <i className="fa fa-cog fa-spin"></i>
           </span>
         </Link>
-        <Link className="sidebar-close-trigger" to=""  role="button"
-          onClick={handleRightSidebarclose}>
+        <Link 
+          className="sidebar-close-trigger" 
+          to="" 
+          role="button" 
+          onClick={closeRightSidebar}
+        >
           <span>
             <i className="la-times las"></i>
           </span>
         </Link>
+        
         <div className="sidebar-right-inner">
-          <h4>
-            Pick your style
-            {/* <Link
-              to=""
-              onClick={deleteAllCookie}
-              className="btn btn-primary btn-sm pull-right"
-              role="button"
-              // onClick={handleRightSidebar}
-            >
-              Delete All Cookie
-            </Link> */}
-          </h4>
+          <h4>Pick your style</h4>
           <div className="card-tabs">
             <ul className="nav nav-tabs" role="tablist">
-              <li className="nav-item">
-                <Link role="button"
-                 data-tab="tab1" 
-                  className="nav-link active"
-                  to="#tab1"
-                  data-bs-toggle="tab"
+              <li className="nav-item flex justify-content-center align-items-center">
+                <a 
+                  role="button" 
+                  className={`nav-link ${activeTab === 'one' ? 'active' : ''}`}
+                  onClick={() => handleTabClick('one')}
                 >
                   Theme
-                </Link>
+                </a>
               </li>
-              <li className="nav-item">
-                <Link role="button"
-                 className="nav-link" data-tab="tab2" to="#tab2" data-bs-toggle="tab">
+              <li className="nav-item flex justify-content-center align-items-center">
+                <a 
+                  role="button" 
+                  className={`nav-link ${activeTab === 'two' ? 'active' : ''}`}
+                  onClick={() => handleTabClick('two')}
+                >
                   Header
-                </Link>
+                </a>
               </li>
-              <li className="nav-item">
-                <Link role="button"  data-tab="tab3" className="nav-link" to="#tab3" data-bs-toggle="tab">
+              <li className="nav-item flex justify-content-center align-items-center">
+                <a 
+                  role="button" 
+                  className={`nav-link ${activeTab === 'three' ? 'active' : ''}`}
+                  onClick={() => handleTabClick('three')}
+                >
                   Content
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
+
           <div className="tab-content tab-content-default tabcontent-border">
-            <div className="fade tab-pane active show" id="tab1">
+            {/* Tab 1 - Theme */}
+            {activeTab === 'one' && (  <div className={` tab-pane ${activeTab === 'one' ? "active show}" : "fade"}`} >
               <div className="admin-settings">
                 <div className="row">
                   <div className="col-sm-12">
                     <p>Background</p>
-                    <select
-                      className="default-select form-control"
-                      id="theme_version"
-                      name="theme_version"
-                      onChange={versionSelect}
+                    <select 
+                      className="default-select form-control" 
+                      id="theme_version" 
+                      name="theme_version" 
+                      onChange={handleSelectChange("themeVersion")}
                     >
                       <option value="light">Light</option>
                       <option value="dark">Dark</option>
                     </select>
                   </div>
+
+                  {/* Primary Color Selection */}
                   <div className="col-sm-6">
                     <p>Primary Color</p>
                     <div>
-                      
-                      <span
-                        data-placement="top"
-                        data-bs-toggle="tooltip"
-                        title="Color 1"
-                      >
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="primary_color_1"
-                          name="primary_bg"
-                          type="radio"
-                          value="color_1"
-                        />
-                        <label
-                          htmlFor="primary_color_1"
-                          className="bg-label-pattern"
-                        ></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="primary_color_2"
-                          name="primary_bg"
-                          type="radio"
-                          value="color_2"
-                        />
-                        <label htmlFor="primary_color_2"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="primary_color_3"
-                          name="primary_bg"
-                          type="radio"
-                          value="color_3"
-                        />
-                        <label htmlFor="primary_color_3"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="primary_color_4"
-                          name="primary_bg"
-                          type="radio"
-                          value="color_4"
-                        />
-                        <label htmlFor="primary_color_4"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="primary_color_5"
-                          name="primary_bg"
-                          type="radio"
-                          value="color_5"
-                        />
-                        <label htmlFor="primary_color_5"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="primary_color_6"
-                          name="primary_bg"
-                          type="radio"
-                          value="color_6"
-                        />
-                        <label htmlFor="primary_color_6"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="primary_color_7"
-                          name="primary_bg"
-                          type="radio"
-                          value="color_7"
-                        />
-                        <label htmlFor="primary_color_7"></label>
-                      </span>
-                      <span>
-                        
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="primary_color_9"
-                          name="primary_bg"
-                          type="radio"
-                          value="color_9"
-                        />
-                        <label htmlFor="primary_color_9"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="primary_color_10"
-                          name="primary_bg"
-                          type="radio"
-                          value="color_10"
-                        />
-                        <label htmlFor="primary_color_10"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="primary_color_11"
-                          name="primary_bg"
-                          type="radio"
-                          value="color_11"
-                        />
-                        <label htmlFor="primary_color_11"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="primary_color_12"
-                          name="primary_bg"
-                          type="radio"
-                          value="color_12"
-                        />
-                        <label htmlFor="primary_color_12"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="primary_color_13"
-                          name="primary_bg"
-                          type="radio"
-                          value="color_13"
-                        />
-                        <label htmlFor="primary_color_13"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="primary_color_14"
-                          name="primary_bg"
-                          type="radio"
-                          value="color_14"
-                        />
-                        <label htmlFor="primary_color_14"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="primary_color_15"
-                          name="primary_bg"
-                          type="radio"
-                          value="color_15"
-                        />
-                        <label htmlFor="primary_color_15"></label>
-                      </span>
+                      {[...Array(15)].map((_, i) => (
+                        <span key={i}>
+                          <input 
+                            className="chk-col-primary filled-in" 
+                            id={`primary_color_${i + 1}`} 
+                            name="primary_bg" 
+                            type="radio" 
+                            value={`color_${i + 1}`} 
+                          />
+                          <label htmlFor={`primary_color_${i + 1}`}></label>
+                        </span>
+                      ))}
                     </div>
                   </div>
+                  {/* Navigation Header Color Selection */}
                   <div className="col-sm-6">
-                    <p>Navigation Header</p>
+                    <p>Navigation Header Color</p>
                     <div>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="nav_header_color_1"
-                          name="navigation_header"
-                          type="radio"
-                          value="color_1"
-                        />
-                        <label
-                          htmlFor="nav_header_color_1"
-                          className="bg-label-pattern"
-                        ></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="nav_header_color_2"
-                          name="navigation_header"
-                          type="radio"
-                          value="color_2"
-                        />
-                        <label htmlFor="nav_header_color_2"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="nav_header_color_3"
-                          name="navigation_header"
-                          type="radio"
-                          value="color_3"
-                        />
-
-                        <label htmlFor="nav_header_color_3"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="nav_header_color_4"
-                          name="navigation_header"
-                          type="radio"
-                          value="color_4"
-                        />
-
-                        <label htmlFor="nav_header_color_4"></label>
-                      </span>
-                      <span>
-                        
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="nav_header_color_5"
-                          name="navigation_header"
-                          type="radio"
-                          value="color_5"
-                        />
-                        <label htmlFor="nav_header_color_5"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="nav_header_color_6"
-                          name="navigation_header"
-                          type="radio"
-                          value="color_6"
-                        />
-
-                        <label htmlFor="nav_header_color_6"></label>
-                      </span>
-                      <span>
-                        
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="nav_header_color_7"
-                          name="navigation_header"
-                          type="radio"
-                          value="color_7"
-                        />
-                        <label htmlFor="nav_header_color_7"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="nav_header_color_8"
-                          name="navigation_header"
-                          type="radio"
-                          value="color_8"
-                        />
-                        <label
-                          htmlFor="nav_header_color_8"
-                          className="border"
-                        ></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="nav_header_color_9"
-                          name="navigation_header"
-                          type="radio"
-                          value="color_9"
-                        />
-                        <label htmlFor="nav_header_color_9"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="nav_header_color_10"
-                          name="navigation_header"
-                          type="radio"
-                          value="color_10"
-                        />
-                        <label htmlFor="nav_header_color_10"></label>
-                      </span>
-                      <span>
-                        
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="nav_header_color_11"
-                          name="navigation_header"
-                          type="radio"
-                          value="color_11"
-                        />
-                        <label htmlFor="nav_header_color_11"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="nav_header_color_12"
-                          name="navigation_header"
-                          type="radio"
-                          value="color_12"
-                        />
-                        <label htmlFor="nav_header_color_12"></label>
-                      </span>
-                      <span>
-                        
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="nav_header_color_13"
-                          name="navigation_header"
-                          type="radio"
-                          value="color_13"
-                        />
-                        <label htmlFor="nav_header_color_13"></label>
-                      </span>
-                      <span>
-                        
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="nav_header_color_14"
-                          name="navigation_header"
-                          type="radio"
-                          value="color_14"
-                        />
-                        <label htmlFor="nav_header_color_14"></label>
-                      </span>
-                      <span>
-                        
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="nav_header_color_15"
-                          name="navigation_header"
-                          type="radio"
-                          value="color_15"
-                        />
-                        <label htmlFor="nav_header_color_15"></label>
-                      </span>
+                      {[...Array(15)].map((_, i) => (
+                        <span key={i}>
+                          <input 
+                            className="chk-col-primary filled-in" 
+                            id={`nav_header_color_${i + 1}`} 
+                            name="navigation_header" 
+                            type="radio" 
+                            value={`color_${i + 1}`} 
+                          />
+                          <label htmlFor={`nav_header_color_${i + 1}`}></label>
+                        </span>
+                      ))}
                     </div>
                   </div>
+                  {/* Header Color Selection */}
                   <div className="col-sm-6">
-                    <p>Header</p>
+                    <p>Header Color</p>
                     <div>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="header_color_1"
-                          name="header_bg"
-                          type="radio"
-                          value="color_1"
-                        />
-                        <label
-                          htmlFor="header_color_1"
-                          className="bg-label-pattern"
-                        ></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="header_color_2"
-                          name="header_bg"
-                          type="radio"
-                          value="color_2"
-                        />
-                        <label htmlFor="header_color_2"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="header_color_3"
-                          name="header_bg"
-                          type="radio"
-                          value="color_3"
-                        />
-                        <label htmlFor="header_color_3"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="header_color_4"
-                          name="header_bg"
-                          type="radio"
-                          value="color_4"
-                        />
-                        <label htmlFor="header_color_4"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="header_color_5"
-                          name="header_bg"
-                          type="radio"
-                          value="color_5"
-                        />
-                        <label htmlFor="header_color_5"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="header_color_6"
-                          name="header_bg"
-                          type="radio"
-                          value="color_6"
-                        />
-                        <label htmlFor="header_color_6"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="header_color_7"
-                          name="header_bg"
-                          type="radio"
-                          value="color_7"
-                        />
-                        <label htmlFor="header_color_7"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="header_color_8"
-                          name="header_bg"
-                          type="radio"
-                          value="color_8"
-                        />
-                        <label htmlFor="header_color_8" className="border"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="header_color_9"
-                          name="header_bg"
-                          type="radio"
-                          value="color_9"
-                        />
-                        <label htmlFor="header_color_9"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="header_color_10"
-                          name="header_bg"
-                          type="radio"
-                          value="color_10"
-                        />
-                        <label htmlFor="header_color_10"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="header_color_11"
-                          name="header_bg"
-                          type="radio"
-                          value="color_11"
-                        />
-                        <label htmlFor="header_color_11"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="header_color_12"
-                          name="header_bg"
-                          type="radio"
-                          value="color_12"
-                        />
-                        <label htmlFor="header_color_12"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="header_color_13"
-                          name="header_bg"
-                          type="radio"
-                          value="color_13"
-                        />
-                        <label htmlFor="header_color_13"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="header_color_14"
-                          name="header_bg"
-                          type="radio"
-                          value="color_14"
-                        />
-                        <label htmlFor="header_color_14"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="header_color_15"
-                          name="header_bg"
-                          type="radio"
-                          value="color_15"
-                        />
-                        <label htmlFor="header_color_15"></label>
-                      </span>
+                      {[...Array(15)].map((_, i) => (
+                        <span key={i}>
+                          <input 
+                            className="chk-col-primary filled-in" 
+                            id={`header_color_${i + 1}`} 
+                            name="header_bg" 
+                            type="radio" 
+                            value={`color_${i + 1}`} 
+                          />
+                          <label htmlFor={`header_color_${i + 1}`}></label>
+                        </span>
+                      ))}
                     </div>
                   </div>
+                  {/* Sidebar Color Selection */}
                   <div className="col-sm-6">
-                    <p>Sidebar</p>
+                    <p>Sidebar Color</p>
                     <div>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="sidebar_color_1"
-                          name="sidebar_bg"
-                          type="radio"
-                          value="color_1"
-                        />
-                        <label
-                          htmlFor="sidebar_color_1"
-                          className="bg-label-pattern"
-                        ></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="sidebar_color_2"
-                          name="sidebar_bg"
-                          type="radio"
-                          value="color_2"
-                        />
-                        <label htmlFor="sidebar_color_2"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="sidebar_color_3"
-                          name="sidebar_bg"
-                          type="radio"
-                          value="color_3"
-                        />
-
-                        <label htmlFor="sidebar_color_3"></label>
-                      </span>
-                      <span>
-                        
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="sidebar_color_4"
-                          name="sidebar_bg"
-                          type="radio"
-                          value="color_4"
-                        />
-                        <label htmlFor="sidebar_color_4"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="sidebar_color_5"
-                          name="sidebar_bg"
-                          type="radio"
-                          value="color_5"
-                        />
-                        <label htmlFor="sidebar_color_5"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="sidebar_color_6"
-                          name="sidebar_bg"
-                          type="radio"
-                          value="color_6"
-                        />
-                        <label htmlFor="sidebar_color_6"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="sidebar_color_7"
-                          name="sidebar_bg"
-                          type="radio"
-                          value="color_7"
-                        />
-                        <label htmlFor="sidebar_color_7"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="sidebar_color_8"
-                          name="sidebar_bg"
-                          type="radio"
-                          value="color_8"
-                        />
-                        <label htmlFor="sidebar_color_8" className="border"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="sidebar_color_9"
-                          name="sidebar_bg"
-                          type="radio"
-                          value="color_9"
-                        />
-                        <label htmlFor="sidebar_color_9"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="sidebar_color_10"
-                          name="sidebar_bg"
-                          type="radio"
-                          value="color_10"
-                        />
-                        <label htmlFor="sidebar_color_10"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="sidebar_color_11"
-                          name="sidebar_bg"
-                          type="radio"
-                          value="color_11"
-                        />
-                        <label htmlFor="sidebar_color_11"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="sidebar_color_12"
-                          name="sidebar_bg"
-                          type="radio"
-                          value="color_12"
-                        />
-                        <label htmlFor="sidebar_color_12"></label>
-                      </span>
-                      <span>
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="sidebar_color_13"
-                          name="sidebar_bg"
-                          type="radio"
-                          value="color_13"
-                        />
-                        <label htmlFor="sidebar_color_13"></label>
-                      </span>
-                      <span>
-                        
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="sidebar_color_14"
-                          name="sidebar_bg"
-                          type="radio"
-                          value="color_14"
-                        />
-                        <label htmlFor="sidebar_color_14"></label>
-                      </span>
-                      <span>
-                        
-                        <input
-                          className="chk-col-primary filled-in"
-                          id="sidebar_color_15"
-                          name="sidebar_bg"
-                          type="radio"
-                          value="color_15"
-                        />
-                        <label htmlFor="sidebar_color_15"></label>
-                      </span>
+                      {[...Array(15)].map((_, i) => (
+                        <span key={i}>
+                          <input 
+                            className="chk-col-primary filled-in" 
+                            id={`sidebar_color_${i + 1}`} 
+                            name="sidebar_bg" 
+                            type="radio" 
+                            value={`color_${i + 1}`} 
+                          />
+                          <label htmlFor={`sidebar_color_${i + 1}`}></label>
+                        </span>
+                      ))}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="fade tab-pane" id="tab2">
+            )}
+            {/* Tab 2 - Header */}
+            {activeTab === 'two' && ( <div className={`tab-pane ${activeTab === 'two' ? "active show}" : "fade "}`}>
               <div className="admin-settings">
                 <div className="row">
                   <div className="col-sm-6">
@@ -1085,7 +321,9 @@ const [updateSetting,isLoading] = useUpdateSettingMutation();
                 </div>
               </div>
             </div>
-            <div className="fade tab-pane" id="tab3">
+            )}
+            {/* Tab 3 - Content */}
+            {activeTab === 'three' && ( <div className={` tab-pane ${activeTab === 'three' ? "active show}" : "fade"}`}>
               <div className="admin-settings">
                 <div className="row">
                   <div className="col-sm-6">
@@ -1130,6 +368,9 @@ const [updateSetting,isLoading] = useUpdateSettingMutation();
                 </div>
               </div>
             </div>
+
+            )}
+
           </div>
         </div>
       </div>
@@ -1137,4 +378,4 @@ const [updateSetting,isLoading] = useUpdateSettingMutation();
   );
 };
 
-export default React.memo(AppSettings)
+export default AppSettings;

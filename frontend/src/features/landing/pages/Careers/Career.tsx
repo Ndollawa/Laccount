@@ -1,9 +1,9 @@
 import React from 'react'
-import pageProps from '../../../../app/props/pageProps'
+import PageProps from '../../../../app/props/PageProps'
 import Breadcrum from '../../components/Breadcrum'
 
 
-const Career:React.FC<pageProps> = ({pageData}:pageProps) => {
+const Career:React.FC<PageProps> = ({pageData}:PageProps) => {
 
 
     return (

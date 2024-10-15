@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 
 interface UserContact{
-    _id:string;
+    id:string;
     user:string;
     contacts:string[];
 }
@@ -25,7 +25,7 @@ const useUserContacts = ()=>{
     })
        if(isSuccess && !isLoading){
             const {entities} = allContacts
-userContact.current =(Object.values(entities).filter((contact:any)=> contact.user === currentUser?._id))
+userContact.current =(Object.values(entities).filter((contact:any)=> contact.user === currentUser?.id))
        }
    
 

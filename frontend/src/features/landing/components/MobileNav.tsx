@@ -6,7 +6,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const MobileNav = () => {
     const {width} = useWindowSize()
-    const {settings:{siteName,email,contact,description,activeHours,socialMedia:{facebookHandle,twitterHandle,instagram,whatsapp}={}}={}} = useSelector(useCompanyInfo);
+    const {settings:{companyDetails:{siteName,email,contact,description,activeHours,socialMedia:{facebookHandle,twitterHandle,instagram,whatsapp}={}}={}}={}} = useSelector(useCompanyInfo);
     const {settings:{siteImages:{logoIcon,logo}={}}={}} = useSelector(useLandingConfig); 
   return (
     <div className="mobile-nav__wrapper">
@@ -17,7 +17,7 @@ const MobileNav = () => {
         <span className="mobile-nav__close mobile-nav__toggler"><i className="fa fa-times"></i></span>
 
         <div className="logo-box">
-            <a href="/" aria-label="logo image"><img src={width! < 660? BASE_URL+"/uploads/settings/"+logoIcon : BASE_URL+"/uploads/settings/"+logo} width="150" alt={siteName} /></a>
+            <a href="/" aria-label="logo image"><img src={width! < 660? BASE_URL+"/uploads/settings/brand/"+logoIcon : BASE_URL+"/uploads/settings/brand/"+logo} width="150" alt={siteName} /></a>
         </div>
         
         {/* <!-- /.logo-box --> */}

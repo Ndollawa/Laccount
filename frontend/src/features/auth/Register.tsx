@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { GoKey } from 'react-icons/go';
 import { GrMail } from 'react-icons/gr';
 import { FaUser, FaRegUserCircle, FaKeycdn, FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
@@ -11,6 +11,10 @@ import OtherBody from '../dashboard/components/OtherBody';
 import { ClipLoader } from 'react-spinners';
 import showToast from '../../app/utils/showToast';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { setCredentials } from './slices/auth.slice';
+import { jwtDecode } from 'jwt-decode';
+import { AuthProps } from '../../app/props/AuthProps';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -29,6 +33,11 @@ const Register: React.FC = () => {
   const { settings: {companyDetails:{ siteName } = {}}={} } = useSelector(useCompanyInfo);
   const { settings: { siteImages: { logo } = {} } = {} } = useSelector(useLandingConfig);
 
+  const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
+
+  const from = location?.state?.from?.pathname || '/dashboard';
   const [showPassword, setShowPassword] = useState(false);
   const [showCPassword, setShowCPassword] = useState(false);
 
@@ -36,6 +45,7 @@ const Register: React.FC = () => {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
     setError,
     clearErrors,
@@ -48,7 +58,13 @@ const Register: React.FC = () => {
   const cpwd = watch('confirmPassword');
 
   const onSubmit = async (data: FormValues) => {
-    await registerUser(data);
+    const { accessToken } = await registerUser(data).unwrap();
+    const decodedToken: AuthProps['token'] | undefined = accessToken ? jwtDecode(accessToken) : undefined;
+    const user_info = decodedToken?.sub;
+
+    dispatch(setCredentials({ accessToken, user_info }));
+    reset();
+    navigate(from);
     if (error) {
       showToast('error', 'Registration failed');
     } else if (isSuccess) {
@@ -72,12 +88,12 @@ const Register: React.FC = () => {
                   <div className="auth-form">
                     <div className="text-center mb-3">
                       <Link to="/" className="brand-logo d-flex justify-content-center align-items-center">
-                        <img src={`${BASE_URL}/uploads/settings/${logo}`} alt={siteName} width="150" />
+                        <img src={`${BASE_URL}/uploads/settings/brand/${logo}`} alt={siteName} width="150" />
                       </Link>
                     </div>
                     <h4 className="text-center mb-4">Sign up your account</h4>
 
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={handleSubmit(onSubmit)} className='p-4'>
                       {/* Username */}
                       <div className="mb-3">
                         <label className="form-label">
@@ -192,7 +208,7 @@ const Register: React.FC = () => {
                       <div className="text-center mt-4">
                         <button
                           type="submit"
-                          className="btn btn-secondary btn-block"
+                          className="btn btn-primary btn-block"
                           disabled={isLoading}
                         >
                           {isLoading ? "Registering..." : "Register Me"}{" "}
@@ -203,7 +219,7 @@ const Register: React.FC = () => {
 
                     <div className="new-account mt-3">
                       <p>
-                        Already have an account? <Link to="/auth/login" className="text-secondary">Login</Link>
+                        Already have an account? <Link to="/auth/login" className="text-primary">Login</Link>
                       </p>
                     </div>
                   </div>

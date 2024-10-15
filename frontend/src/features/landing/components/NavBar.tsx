@@ -22,8 +22,8 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 const NavBar = () => {
 const {width} = useWindowSize()
 const currentUser = useSelector(selectCurrentUser)
-const {settings:{siteName,contact,activeHours}={}}  = useSelector(useCompanyInfo);
-const {settings:{landingPageConfig:{navStyle}={},siteImages:{logo,favicon}={}}={}} = useSelector(useLandingConfig);
+const {settings:{companyDetails:{siteName,contact,activeHours}={}}={}}  = useSelector(useCompanyInfo);
+const {settings:{landingPageConfig:{navStyle,showTeam, showBlog}={},siteImages:{logo,favicon, logoIcon}={}}={}} = useSelector(useLandingConfig);
 const userImage = useUserImage(currentUser)
     return (
         <>
@@ -39,7 +39,7 @@ const userImage = useUserImage(currentUser)
                         }
 
                     <Link to="/">
-                        <img src={width! < 320? BASE_URL+"/uploads/settings/"+favicon : BASE_URL+"/uploads/settings/"+logo} width={width! <320?"50" :"150"} alt={siteName} />
+                        <img src={width! < 320? BASE_URL+"/uploads/settings/brand/"+(logoIcon || favicon) : BASE_URL+"/uploads/settings/brand/"+logo} width={width! <320?"50" :"150"} alt={siteName} />
                     </Link>
                 </div>
                 {/* <!-- /.main-menu__logo --> */}
@@ -54,8 +54,8 @@ const userImage = useUserImage(currentUser)
 
                         <li><NavLink to="/services" className={({isActive})=> isActive ?"current":""} >Services</NavLink> </li>
                         {/* <li><a to="#">Pages</a></li> */}
-                        {/* <li><NavLink to="/our-team" className={({isActive})=> isActive ?"current":""} >Our Team</NavLink></li> */}
-                        <li><NavLink to="/our-blog/posts" className={({isActive})=> isActive ?"current":""} >Blog</NavLink></li>
+                       {showTeam && <li><NavLink to="/our-team" className={({isActive})=> isActive ?"current":""} >Our Team</NavLink></li>}
+                        {showBlog && <li><NavLink to="/our-blog/" className={({isActive})=> isActive ?"current":""} >Blog</NavLink></li>}
                         <li><NavLink to="/contact" className={({isActive})=> isActive ?"current":""} >Contact</NavLink></li>
                     </ul>
                 </div>
@@ -67,7 +67,7 @@ const userImage = useUserImage(currentUser)
                     <Link to="#" className="main-menu__search search-toggler">
                         <i className="icon-magnifying-glass"></i>
                     </Link>
-                    {currentUser._id?
+                    {currentUser.id?
                      <NavDropdown title={<img src={userImage} width='30' height={'30'} className='border-color-primary object-fit-cover border-1 rounded-circle' alt='avatar'/>} id="basic-nav-dropdown">
               <NavDropdown.Item href="/dashboard"><RxDashboard fontSize={'1.2rem'}/> Dashboard</NavDropdown.Item>
               <NavDropdown.Item href="/dashboard/profile">
@@ -83,17 +83,17 @@ const userImage = useUserImage(currentUser)
               <NavDropdown.Item href="/logout"><IoLogOutOutline fontSize={'1.2rem'}/>
                 Logout
               </NavDropdown.Item>
-            </NavDropdown> :  <><Button href="auth/register" className="thm-btn main-menu__btn mx-2" size="sm">Sign Up</Button>
-                    <Button href="auth/login" className="thm-btn main-menu__btn mx-2" size="sm">Login</Button></>
+            </NavDropdown> :  <><Button href="auth/register" className="thm-primary main-menu__btn mx-2" size="sm">Sign Up</Button>
+                    <Button href="auth/login" className="thm-primary main-menu__btn mx-2" size="sm">Login</Button></>
                    
            
                 } 
                     {/* <!-- /.thm-btn --> */}
                     {
-                (((navStyle as Styles) === Styles.STYLE_1) || ((navStyle as Styles) === Styles.STYLE_3)) &&  contact?.map((c:string)=>(
+                (((navStyle as Styles) === Styles.STYLE_1) || ((navStyle as Styles) === Styles.STYLE_3)) &&  contact?.map((c:string,i:number)=>(
                  
                  
-                <a href={`tel:${c}`} className="main-menu__contact">
+                <a href={`tel:${c}`} className="main-menu__contact" key={i}>
                         <span className="main-menu__contact__icon">
                             <i className="icon-phone"></i>
                         </span>

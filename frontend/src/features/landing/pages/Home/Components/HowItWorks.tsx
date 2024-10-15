@@ -6,7 +6,7 @@ import { GrShieldSecurity } from 'react-icons/gr';
 
 
 const HowItWorks = () => {
-  const {settings:{siteName}={} }= useSelector(useCompanyInfo);
+  const {settings:{companyDetails:{siteName}={}}={} }= useSelector(useCompanyInfo);
   return (
     <section className="work-process pt-50 pb-120">
     <div className="work-process__shape-1"></div>
@@ -45,7 +45,7 @@ const HowItWorks = () => {
                         <i className="icon-bill"></i>
                     </div>
                     <h3 className="work-process__title"><a href="#">Start a Transaction</a></h3>
-                    <p className="work-process__text">Once your account is verified, you can initiate a transaction by selecting the "Create Escrow" option. Provide the necessary details, including the amount, terms, and participants involved.
+                    <p className="work-process__text">Once your account is verified, you can initiate a transaction by selecting the "Sell"  option. Provide the necessary details, including the amount, terms, and participants involved.
                     </p>
                 </div>
             </div>
@@ -54,8 +54,8 @@ const HowItWorks = () => {
                     <div className="work-process__icon">
                         <i className="icon icon-loan"></i>
                     </div>
-                    <h3 className="work-process__title"><a href="#">Fund the Escrow</a></h3>
-                    <p className="work-process__text"> Transfer the agreed-upon amount to the secure escrow account provided by Paybuddie. Your funds will be held safely until the transaction is successfully completed.
+                    <h3 className="work-process__title"><a href="#">Fund the Wallet</a></h3>
+                    <p className="work-process__text"> contents.
                     </p>
                 </div>
             </div>

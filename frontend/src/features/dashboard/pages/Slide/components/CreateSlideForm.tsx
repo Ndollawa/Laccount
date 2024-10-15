@@ -116,7 +116,7 @@ const formData = new FormData();
                     <label className="form-label"><strong>Status</strong></label>
                     <select
                       id="status"
-                      className={`form-control default-select form-control wide ${errors.description ? 'is-invalid' : ''}`}
+                      className={`form-control default-select form-control wide ${errors.status ? 'is-invalid' : ''}`}
                       {...register('status',{required:"Status is required"})}
                     >
                       <option value='active'>Active</option>

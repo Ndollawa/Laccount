@@ -11,7 +11,8 @@ import { PulseLoader } from 'react-spinners';
 const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;
 
 const AboutUs = () => {
-  const { id, settings: { pages, ...otherSettings } = {} } = useSelector(useLandingConfig);
+  const landingConfig = useSelector(useLandingConfig);
+  const { id, settings: { pages, ...otherSettings }} = landingConfig;
   const initialState = {
     aboutUs: pages?.aboutUs || "",
   };
@@ -35,9 +36,9 @@ const AboutUs = () => {
   const updateSettings: SubmitHandler<FieldValues> = async (formFields, e) => {
     e?.preventDefault();
     try {
-      const settings = { pages: { ...pages, ...formFields }, ...otherSettings };
+      const settings = { ...otherSettings, pages: { ...pages, ...formFields }, };
       await updateSetting({ id, settings }).unwrap();
-      dispatch(setLandingSetting(settings));
+      dispatch(setLandingSetting({ ...landingConfig, settings }));
       showToast('success', "Settings Updated successfully!");
     } catch (error: any) {
       showToast('error', error.message || 'Error updating settings');
@@ -51,7 +52,7 @@ const AboutUs = () => {
 
   return (
     <div className="card">
-      <div className="card-header bg-secondary">
+      <div className="card-header bg-primary">
         <h4 className="card-title text-white">About Us</h4>
       </div>
       <div className="card-body p-5">

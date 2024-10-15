@@ -1,5 +1,5 @@
- interface contactProps{
-    _id:string;
+ interface ContactProps{
+    id:string;
     user:string;
     contacts:string[];
     createdAt?:Date;

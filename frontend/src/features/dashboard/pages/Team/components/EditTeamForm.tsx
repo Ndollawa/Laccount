@@ -4,13 +4,13 @@ import { useUpdateTeamMutation } from '../slices/teamsApi.slice';
 import { Modal } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import showToast from '../../../../../app/utils/showToast';
-import teamProps from '../../../../../app/props/teamProps';
+import TeamProps from '../../../../../app/props/TeamProps';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 interface modalDataProps {
   modalData: {
-    data: teamProps | null;
+    data: TeamProps | null;
     showModal: boolean;
   };
 }

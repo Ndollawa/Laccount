@@ -1,10 +1,10 @@
 import userInterface  from './userProps';
 
-export interface authProps extends userInterface{
+export interface AuthProps extends userInterface{
        token: string | null;
    }
 
-export interface allowedRolesProps{
+export interface AllowedRolesProps{
        allowedRoles:number[] | string[];
        
 }

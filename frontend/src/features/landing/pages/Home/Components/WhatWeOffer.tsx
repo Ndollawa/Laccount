@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import {  useCompanyInfo,useLandingConfig } from '../../../../dashboard/pages/Settings/slices/settings.slice';
 
 import { useGetServicesQuery } from '../../../../dashboard/pages/Service/slices/servicesApi.slice'
-import serviceProps from '../../../../../app/props/serviceProps'
+import ServiceProps from '../../../../../app/props/ServiceProps'
 
 
 const WhatWeOffer = () => {
@@ -151,7 +151,7 @@ switch (whatWeOfferStyle) {
         </div>
         <div className="row row-gutter-y-30  gap-3">
             {
-                services?.map((service:serviceProps)=>(
+                services?.map((service:ServiceProps)=>(
             <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="100ms">
                 <div className="service-card-five">
                     <div className="service-card-five__icon">
@@ -185,7 +185,7 @@ switch (whatWeOfferStyle) {
           </div>
           <div className="row row-gutter-y-50 mt-3">
           {
-                services?.map((service:serviceProps)=>(
+                services?.map((service:ServiceProps)=>(
               <div className="col-lg-4 col-md-12 col-sm-12">
                   <div className="service-card">
                       <div className="service-card__image">

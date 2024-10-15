@@ -6,16 +6,16 @@ import { useGetMessagesQuery } from '../../pages/Messenger/slices/messagesApi.sl
 import { useGetConversationsQuery } from '../../pages/Messenger/slices/conversationsApi.slice';
 import { useGetUsersQuery } from '../../pages/Users/slices/usersApi.slice';
 import useUserImage from '../../../../app/hooks/useUserImage';
-import messageProps from '../../../../app/props/messageProps';
+import MessageProps from '../../../../app/props/MessageProps';
 import useSocketIO from '../../../../app/hooks/useSocketIO';
-import conversationProps,{conversationIdProps} from '../../../../app/props/conversationProps';
+import ConversationProps,{conversationIdProps} from '../../../../app/props/ConversationProps';
 import { format } from 'timeago.js';
  
 const ChatModal = ({currentChat, closeChat}:any) => {
 
 const [chatMessage, setChatMessage] = useState('')
-const [conversations, setConversations] = useState<messageProps[]  | []>([])
-const [newMessage, setNewMessage] = useState<messageProps>()
+const [conversations, setConversations] = useState<MessageProps[]  | []>([])
+const [newMessage, setNewMessage] = useState<MessageProps>()
 const msgRef = useRef <HTMLInputElement>(null);
 const currentUser = useSelector(selectCurrentUser)
 const [attchment, setAttchment] = useState([])
@@ -27,14 +27,14 @@ const socket = useSocketIO()
 
 	  const { conversation } = useGetConversationsQuery("conversationsList", {
 		selectFromResult: ({ data }) => ({
-		  conversation: data && (Object.values(data?.entities)as conversationProps[])?.find(
-			(c:conversationProps) => c?.members?.length === 2 && c?.members.every((m) => conversationId.includes(m) ||  conversationId2.includes(m))
+		  conversation: data && (Object.values(data?.entities)as ConversationProps[])?.find(
+			(c:ConversationProps) => c?.members?.length === 2 && c?.members.every((m) => conversationId.includes(m) ||  conversationId2.includes(m))
 		  ),
 		}),
 	  });
 		const { messages } = useGetMessagesQuery("messagesList", {
 		selectFromResult: ({ data }) => ({
-			messages: data && (Object.values(data?.entities) as messageProps[])?.filter((m:messageProps)=> m?.conversationId === conversation?._id)		 
+			messages: data && (Object.values(data?.entities) as MessageProps[])?.filter((m:MessageProps)=> m?.conversationId === conversation?._id)		 
 		}),
 	  }) 
 	const { contact } = useGetUsersQuery("usersList", {
@@ -58,7 +58,7 @@ const socket = useSocketIO()
   },[currentChat])
 
   useEffect(()=>{
-socket.current?.on('receivedMessage',(data:messageProps)=>{
+socket.current?.on('receivedMessage',(data:MessageProps)=>{
  setNewMessage(data)
 })
   },[])
@@ -77,7 +77,7 @@ msgRef.current?.scrollIntoView({behavior:'smooth'})
   const sendChat = () =>{
 		if(chatMessage !== '' || isUpload){
 		const msgData = {message:chatMessage,sender:currentUser._id,receiver:contact._id}
-		socket.current.emit("sendMessage",(msgData), (err:any,sentMessage:messageProps)=>{
+		socket.current.emit("sendMessage",(msgData), (err:any,sentMessage:MessageProps)=>{
 		setConversations(prev=>[...prev,sentMessage])
 		}) 
 		setChatMessage('')
@@ -108,7 +108,7 @@ msgRef.current?.scrollIntoView({behavior:'smooth'})
 								</div>
 							</div>
 							<div className="card-body msg_card_body dz-scroll" id="DZ_W_Contacts_Body3">
-								{conversations?.map((m:messageProps,i:number)=> m &&(
+								{conversations?.map((m:MessageProps,i:number)=> m &&(
 									(m?.sender !== currentUser?._id)?
 									<div className="d-flex justify-content-start mb-4" key={m?._id+i} ref={msgRef}>
 										<div className="img_cont_msg">

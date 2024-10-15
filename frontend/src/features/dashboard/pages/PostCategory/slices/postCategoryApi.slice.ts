@@ -5,8 +5,8 @@ import {
 import { RootState } from "../../../../../app/stores/store";
 import { apiSlice } from "../../../../../app/api/apiSlice";
 import { ResponseProps } from "../../../../../app/props/responseProps";
-// import postCategoryProps from "../../../../app/utils/props/postCategoryProps";
-// interface postCategoryProp extends  postCategoryProps{}
+// import PostCategoryProps from "../../../../app/utils/props/PostCategoryProps";
+// interface postCategoryProp extends  PostCategoryProps{}
 
 
 const postCategoryAdapter = createEntityAdapter({

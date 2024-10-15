@@ -1,6 +1,6 @@
- export interface postCommentReplyProps
+ export interface PostCommentReplyProps
     { 
-        _id:string;
+        id:string;
         author: string;
         authorType: string;
         firstName: string;
@@ -14,7 +14,7 @@
         updatedAt?:Date;}
 
  interface postCommentProps{
-    _id:string;
+    id:string;
     postId:string;
     author: string;
     authorType: string;
@@ -25,7 +25,7 @@
     fullName: string;
     comment: string;
     reply:[{ 
-        _id:string;
+        id:string;
         author: string;
         authorType: string;
         firstName: string;

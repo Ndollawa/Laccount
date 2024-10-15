@@ -5,8 +5,8 @@ import {
 import { RootState } from "../../../../../app/stores/store";
 import { apiSlice } from "../../../../../app/api/apiSlice";
 import { ResponseProps } from "../../../../../app/props/responseProps";
-// import serviceProps from "../../../../app/utils/props/serviceProps";
-// interface servicesProp extends  serviceProps{}
+// import ServiceProps from "../../../../app/utils/props/ServiceProps";
+// interface servicesProp extends  ServiceProps{}
 
 
 const servicesAdapter = createEntityAdapter({

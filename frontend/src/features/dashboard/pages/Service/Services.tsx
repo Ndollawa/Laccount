@@ -5,19 +5,19 @@
     import { useDispatch } from 'react-redux'
     import { useGetServicesQuery } from './slices/servicesApi.slice'
     import { setPreloader } from '../../../components/preloader/slices/preloader.slice'
-    import pageProps from '../../../../app/props/pageProps'
+    import PageProps from '../../../../app/props/PageProps'
     import ServiceTableData from './components/ServiceTableData'
-    import serviceProps from '../../../../app/props/serviceProps'
+    import ServiceProps from '../../../../app/props/ServiceProps'
     import $ from 'jquery'
 import ViewModal from './components/ViewModal'
 
 
     
 interface modalDataProps {
-        data:serviceProps | null,
+        data:ServiceProps | null,
       showModal:boolean,
     }
-    const Service = ({pageData}:pageProps)  => {
+    const Service = ({pageData}:PageProps)  => {
           const {
         data:services,
         isLoading,

@@ -8,12 +8,9 @@ import { MessageRepository } from './message.repository';
 export class MessageService {
   constructor(protected readonly messageRepository: MessageRepository) {}
 
-  async find(id: string): Promise<Message> {
+  async find(query: any): Promise<Message> {
     try {
-      return await this.messageRepository.find({
-        where: { id },
-        // include: { author: true },
-      });
+      return await this.messageRepository.find(query);
     } catch (error) {
       handleError(error);
     }
@@ -35,32 +32,13 @@ export class MessageService {
       handleError(error);
     }
   }
-  async create(createMessageData: CreateMessageDto): Promise<Message> {
-    // const { authorId } = createMessageData;
-
-    try {
-      // const existingMessage = await this.messageRepository.exists({
-      //   where: { messageId },
-      // });
-
-      // if (existingMessage) {
-      //   throw new HttpException(
-      //     'Message with credentials already exists.',
-      //     HttpStatus.CONFLICT,
-      //   );
-      // }
-
-      const messageData = {
-        ...createMessageData,
-      };
-
-      const newMessage = await this.messageRepository.create({
-        data: messageData,
-      });
+  async create(query: any): Promise<Message> {
+     try {
+  
+      const newMessage = await this.messageRepository.create(query);
       Logger.debug(newMessage);
       return newMessage;
     } catch (error) {
-      Logger.log(error);
       handleError(error);
     }
   }

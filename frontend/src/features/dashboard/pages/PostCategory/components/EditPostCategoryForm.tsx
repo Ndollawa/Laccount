@@ -1,7 +1,7 @@
 import React, {ChangeEvent,FormEvent,useState,useEffect} from 'react'
 import { useUpdatePostCategoryMutation} from '../slices/postCategoryApi.slice'
 import showToast from '../../../../../app/utils/showToast'
-import postCategoryProps from '../../../../../app/props/postCategoryProps';
+import PostCategoryProps from '../../../../../app/props/PostCategoryProps';
 
 
 
@@ -9,7 +9,7 @@ import postCategoryProps from '../../../../../app/props/postCategoryProps';
 
 interface modalDataProps {
   modalData:{
-     data:postCategoryProps | null,
+     data:PostCategoryProps | null,
     showModal:boolean;
   } 
   showEditForm:any

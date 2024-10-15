@@ -25,7 +25,15 @@ export class RefreshTokenService {
     try {
       return await this.refreshTokenRepository.find({
         where: { id },
-        include: { user: true },
+        include: {
+          user: {
+            include: {
+              profile: true,
+              roles: true,
+              wallets: true,
+            },
+          },
+        },
       });
     } catch (error) {
       handleError(error);

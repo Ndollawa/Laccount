@@ -17,7 +17,7 @@ const persistConfig = {
   key: "rootApp",
   version: 1,
   storage,
-  // blacklist: ["auth","appSettings"],
+  blacklist: ["auth"],
 };
 
 const rootReducer = combineReducers({

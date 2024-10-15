@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '../../../../../auth/slices/auth.slice'
 import { useGetUsersQuery } from '../../../../../dashboard/pages/Users/slices/usersApi.slice'
 import { useAddNewPostCommentReplyMutation } from '../../../../../dashboard/pages/Post/postCommentApiSlice'
-import postCommentProps,{postCommentReplyProps} from '../../../../../../app/props/postCommentProps'
+import PostCommentProps,{postCommentReplyProps} from '../../../../../../app/props/PostCommentProps'
 import useLocalStorage from '../../../../../../app/hooks/useLocalStorage'
 import useUserImage from '../../../../../../app/hooks/useUserImage'
 import defaultUser from '../../../../../../assets/images/user/defaultUser.jpeg'
@@ -11,7 +11,7 @@ import defaultUser2 from '../../../../../../assets/images/user/defaultUser2.jpeg
 import showToast from '../../../../../../app/utils/showToast'
 import PostCommentReply from './PostCommentReply'
 
-const PostComment = ({pc}:{pc:postCommentProps}) => {
+const PostComment = ({pc}:{pc:PostCommentProps}) => {
     const [userInfo] = useLocalStorage('commentUserInfo',{})
     const { user } = useGetUsersQuery("usersList", {
         selectFromResult: ({ data }) => ({

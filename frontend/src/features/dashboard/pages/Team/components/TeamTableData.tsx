@@ -9,7 +9,7 @@ import 'lightgallery/css/lg-zoom.css'
 import lgThumbnail from 'lightgallery/plugins/thumbnail'
 import lgZoom from 'lightgallery/plugins/zoom'
 // import 'lightgallery/css/lg-thumbnail.css'
-import teamProps from '../../../../../app/props/teamProps'
+import TeamProps from '../../../../../app/props/TeamProps'
 
 
 const TeamTableData = ({teamId,index,showEditForm}:any) => {

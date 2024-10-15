@@ -20,17 +20,22 @@ export class ServiceController {
   constructor(private readonly serviceService: ServiceService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('file', FileOptions2('./uploads/settings/services')))
-  create(@Body() createServiceDto: CreateServiceDto, @UploadedFile(
-    new ParseFilePipe({
-      validators: [
-        // new MaxFileSizeValidator({ maxSize: 1000 }),
-        // new FileTypeValidator({ fileType: 'image/jpeg' }),
-      ],
-    }),
+  @UseInterceptors(
+    FileInterceptor('file', FileOptions2('./uploads/settings/services')),
   )
-  file: Express.Multer.File,) {
-    return this.serviceService.create(createServiceDto,file);
+  create(
+    @Body() createServiceDto: CreateServiceDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          // new MaxFileSizeValidator({ maxSize: 1000 }),
+          // new FileTypeValidator({ fileType: 'image/jpeg' }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    return this.serviceService.create(createServiceDto, file);
   }
 
   @Get()
@@ -44,17 +49,23 @@ export class ServiceController {
   }
 
   @Patch(':id')
-  @UseInterceptors(FileInterceptor('file', FileOptions2('./uploads/settings/services')))
-  update(@Param('id') id: string, @Body() updateServiceDto: UpdateServiceDto, @UploadedFile(
-    new ParseFilePipe({
-      validators: [
-        // new MaxFileSizeValidator({ maxSize: 1000 }),
-        // new FileTypeValidator({ fileType: 'image/jpeg' }),
-      ],
-    }),
+  @UseInterceptors(
+    FileInterceptor('file', FileOptions2('./uploads/settings/services')),
   )
-  file: Express.Multer.File,) {
-    return this.serviceService.update(id, updateServiceDto,file);
+  update(
+    @Param('id') id: string,
+    @Body() updateServiceDto: UpdateServiceDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          // new MaxFileSizeValidator({ maxSize: 1000 }),
+          // new FileTypeValidator({ fileType: 'image/jpeg' }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    return this.serviceService.update(id, updateServiceDto, file);
   }
 
   @Delete(':id')

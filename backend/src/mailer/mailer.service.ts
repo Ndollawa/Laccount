@@ -98,9 +98,7 @@ export class MailerService {
 
   async find(query: any): Promise<Mailer> {
     try {
-      return await this.mailerRepository.find({
-        where: query,
-      });
+      return await this.mailerRepository.find(query);
     } catch (error) {
       handleError(error);
     }
@@ -116,8 +114,7 @@ export class MailerService {
 
   async create(createMailerData: CreateMailerDto): Promise<Mailer> {
     const { name, type } = createMailerData;
-
-    try {
+        try {
       const existingMailer = await this.mailerRepository.exists({
         where: { AND: [{ name }, { type }] },
       });
@@ -125,7 +122,7 @@ export class MailerService {
       if (existingMailer) {
         throw new ConflictException({
           code: ALREADY_EXISTS,
-          message: 'Mailer with credentials already exists.',
+          message: 'Mailer template already exists.',
         });
       }
 

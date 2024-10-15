@@ -2,11 +2,11 @@ import React from 'react'
 import { useGetPostCategoryQuery } from '../../../../dashboard/pages/PostCategory/slices/postCategoryApi.slice'
 import { useGetUsersQuery } from '../../../../dashboard/pages/Users/slices/usersApi.slice'
 import { useGetPostCommentQuery } from '../../../../dashboard/pages/Post/postCommentApiSlice'
-import postProps from '../../../../../app/props/postProps'
-import postCommentProps from '../../../../../app/props/postCommentProps'
-import postCategoryProps from '../../../../../app/props/postCategoryProps'
+import PostProps from '../../../../../app/props/PostProps'
+import PostCommentProps from '../../../../../app/props/PostCommentProps'
+import PostCategoryProps from '../../../../../app/props/PostCategoryProps'
 
-const PostList = ({post}:{post:postProps}) => {
+const PostList = ({post}:{post:PostProps}) => {
     const { category } = useGetPostCategoryQuery("categoryList", {
         selectFromResult: ({ data }) => ({
           category: data?.entities[post?.category]	 
@@ -15,7 +15,7 @@ const PostList = ({post}:{post:postProps}) => {
    
         const { postComment } = useGetPostCommentQuery("postCommentsList", {
             selectFromResult: ({ data }) => ({
-              postComment: data && data.ids.map((id:string) => data?.entities[id]).filter((comment:postCommentProps) =>comment.status === 'active')	 
+              postComment: data && data.ids.map((id:string) => data?.entities[id]).filter((comment:PostCommentProps) =>comment.status === 'active')	 
             }),
             })
     const { user } = useGetUsersQuery("usersList", {

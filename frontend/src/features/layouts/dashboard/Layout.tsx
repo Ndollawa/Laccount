@@ -1,16 +1,16 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom';
 import { useDispatch} from 'react-redux';
-import Head from '../dashboard/components/Head';
-import pageProps from '../../app/props/pageProps';
-import {  setPreloader } from '../components/preloader/slices/preloader.slice';
+import Head from '../../dashboard/components/Head';
+import PageProps from '../../../app/props/PageProps';
+import {  setPreloader } from '../../components/preloader/slices/preloader.slice';
 import './assets/css/styles.css';
 import $ from 'jquery'
-import Js from '../dashboard/components/Js';
+import Js from '../../dashboard/components/Js';
 import { Helmet } from 'react-helmet';
 
 
-const Layout:React.FC<pageProps> = ({pageData}:pageProps) => { 
+const Layout:React.FC<PageProps> = ({pageData}:PageProps) => { 
  
    const dispatch = useDispatch()
 

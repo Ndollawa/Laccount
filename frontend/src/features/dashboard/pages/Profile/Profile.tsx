@@ -1,8 +1,8 @@
 import React from 'react';
 import MainBody from '../../components/MainBody';
-import pageProps from '../../../../app/props/pageProps'
+import PageProps from '../../../../app/props/PageProps'
 
-const Profile:React.FC<pageProps> = ({pageData}:pageProps) => {
+const Profile:React.FC<PageProps> = ({pageData}:PageProps) => {
 
 
 

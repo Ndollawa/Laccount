@@ -8,9 +8,9 @@ import { Styles } from '../../../app/props/settingsProps';
 
 
 const Nav = () => {
-   const {settings:{email,address,socialMedia:{facebookHandle,twitterHandle,instagram,whatsapp}={}} ={}}  = useSelector(useCompanyInfo); 
+   const {settings:{companyDetails:{email,address,socialMedia:{facebookHandle,twitterHandle,instagram,whatsapp}={}}={}} ={}}  = useSelector(useCompanyInfo); 
 const currentUser = useSelector(selectCurrentUser)
-    const {settings:{landingPageConfig:{navStyle}={}}={}} = useSelector(useLandingConfig);
+    const {settings:{landingPageConfig:{navStyle, showBlog, showTeam}={}}={}} = useSelector(useLandingConfig);
   return (
     <>
    
@@ -27,7 +27,7 @@ const currentUser = useSelector(selectCurrentUser)
         // <!-- /.topbar__info --> */}
        {!navStyle && <div className="topbar__links">
           {!currentUser && <><Link to="/auth/login">Login</Link> <Link to="/auth/register">Sign Up</Link></>}
-            <Link to="/blog">Company News</Link>
+            <Link to="/blog">Our Blog</Link>
             <Link to="/faqs">FAQs</Link>
         </div>}
         {/* 

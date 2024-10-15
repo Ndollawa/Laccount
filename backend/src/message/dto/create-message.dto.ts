@@ -28,5 +28,6 @@ export class CreateMessageDto {
 
   @IsUUID()
   @IsString()
-  conversationId: string;
+  @IsOptional()
+  conversationId?: string;
 }

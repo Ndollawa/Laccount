@@ -1,11 +1,11 @@
 import React from 'react'
 import { useGetPostCategoryQuery } from '../../../../dashboard/pages/PostCategory/slices/postCategoryApi.slice'
 import { useGetUsersQuery } from '../../../../dashboard/pages/Users/slices/usersApi.slice'
-import postProps from '../../../../../app/props/postProps'
+import PostProps from '../../../../../app/props/PostProps'
 import { format } from 'timeago.js'
-import postCategoryProps from '../../../../../app/props/postCategoryProps'
+import PostCategoryProps from '../../../../../app/props/PostCategoryProps'
 
-const RecentPostList = ({post}:{post:postProps}) => {
+const RecentPostList = ({post}:{post:PostProps}) => {
     const { category } = useGetPostCategoryQuery("categoryList", {
         selectFromResult: ({ data }) => ({
           category: data?.entities[post?.category]	 

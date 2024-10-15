@@ -5,15 +5,16 @@ import { useSearchParams } from 'react-router-dom'
 import useToggle from '../../../../app/hooks/useToggle'
 import { useGetPostCategoryQuery } from '../../../dashboard/pages/PostCategory/slices/postCategoryApi.slice'
 import { useGetPostsQuery } from '../../../dashboard/pages/Post/slices/postApi.slice'		
-import pageProps from '../../../../app/props/pageProps'
-import postProps from '../../../../app/props/postProps'
+import PageProps from '../../../../app/props/PageProps'
+import PostProps from '../../../../app/props/PostProps'
 import Breadcrum from '../../components/Breadcrum'
 import PostList from './components/PostList'
 import PostGrid from './components/PostGrid'
 import PostSidebar from './Post/components/PostSidebar'
-import postCategoryProps from '../../../../app/props/postCategoryProps'
+import PostCategoryProps from '../../../../app/props/PostCategoryProps'
+import NoResult from '../../components/NoResult'
 
- export function filterPosts(posts: any, search?:string | null, category?: string, tag?: string | null): postProps[] {
+ export function filterPosts(posts: any, search?:string | null, category?: string, tag?: string | null): PostProps[] {
               return posts?.filter((post:any) => {
                 if (category && tag) {
                   return post.category === category && post.tags.includes(tag);
@@ -32,9 +33,9 @@ import postCategoryProps from '../../../../app/props/postCategoryProps'
               });
             }
             
-const Blog:React.FC<pageProps> = ({pageData}:pageProps) => {
+const Blog:React.FC<PageProps> = ({pageData}:PageProps) => {
     const [viewType,toggleViewType] = useToggle('viewType','List');
-    const [postList, setPostList] = useState<postProps[] | []>([])
+    const [postList, setPostList] = useState<PostProps[] | []>([])
     const [searchParams, setSearchParams] = useSearchParams()
     const tag = searchParams.get('tag')
     const category = searchParams.get('category')
@@ -48,12 +49,12 @@ const Blog:React.FC<pageProps> = ({pageData}:pageProps) => {
   }		
   const { posts } = useGetPostsQuery("postsList", {
             selectFromResult: ({ data }) => ({
-              posts: (data?.ids?.map((id:string)=>data?.entities[id]))?.filter((post:postProps) => post.status === 'published')		 
+              posts: (data?.ids?.map((id:string)=>data?.entities[id]))?.filter((post:PostProps) => post.status === 'published')		 
             }),
             }) 
   const { cat } = useGetPostCategoryQuery("categoriesList", {
             selectFromResult: ({ data }) => ({
-              cat: (data?.ids?.map((id:string)=>data?.entities[id]))?.find((c:postCategoryProps) => c.title === category && c?.status === 'active')		 
+              cat: (data?.ids?.map((id:string)=>data?.entities[id]))?.find((c:PostCategoryProps) => c.title === category && c?.status === 'active')		 
             }),
             }) 
             useEffect(() => {
@@ -81,8 +82,8 @@ const Blog:React.FC<pageProps> = ({pageData}:pageProps) => {
                 <div className="col-lg-8">
                   <div className="row row-gutter-y-30 all-posts-wrapper">
                     {
-                    postList?.length?  postList?.map((post:postProps)=><PostList post={post}/>)
-                    : <h3>No post yet.</h3>
+                    postList?.length?  postList?.map((post:PostProps)=><PostList post={post}/>)
+                    : <NoResult/>
                     }
                   </div>
                 </div>
@@ -119,8 +120,8 @@ const Blog:React.FC<pageProps> = ({pageData}:pageProps) => {
                         <div className="elementor-widget-container">
                           <div className="row row-gutter-y-30 m-auto">
                          { postList?.length?
-                          postList?.map((post:postProps)=><PostGrid post={post}/>)
-                        :<h3>No Post yet.</h3>
+                          postList?.map((post:PostProps)=><PostGrid post={post}/>)
+                        :<NoResult/>
                         }
 
 

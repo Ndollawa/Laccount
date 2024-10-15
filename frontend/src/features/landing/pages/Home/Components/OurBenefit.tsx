@@ -6,7 +6,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 
 const OurBenefit = () => {
-  const {settings:{siteName}={}} = useSelector(useCompanyInfo);  
+  const {settings:{companyDetails:{siteName}={}}={}} = useSelector(useCompanyInfo);  
 const {settings:{landingPageConfig:{ourBenefitStyle}={}, siteImages:{aboutUsBg, backgroundImage}={}}={}} = useSelector(useLandingConfig); 
 
 let ourBenefitSection;
@@ -23,7 +23,7 @@ switch (ourBenefitStyle) {
           <div className="row row-gutter-y-60">
               <div className="col-lg-6">
                   <div className="benefit-one__image wow fadeInUp image-overlay" data-wow-duration="1500ms" data-wow-delay="500ms">
-                      <img src={BASE_URL+"/uploads/settings/"+aboutUsBg} alt={siteName}  />
+                      <img src={BASE_URL+"/uploads/settings/brand/"+aboutUsBg} alt={siteName}  />
                       <div className="benefit-one__image__caption image-caption catptio-left">
                           <h3 className="benefit-one__image__title">99.9%</h3>
                           <p className="benefit-one__image__text">Success Rates Guarantee</p>

@@ -17,7 +17,7 @@ const Error400 = () => {
                         <h4><i className="fa fa-times-circle text-danger"></i> Bad Request!</h4>
                         <p>Your Request resulted in an error.</p>
 						<div>
-                            <button className="btn btn-secondary" onClick={()=>navigate(-1)}>Click to go Back</button>
+                            <button className="btn btn-primary" onClick={()=>navigate(-1)}>Click to go Back</button>
                         </div>
                     </div>
                 </div>

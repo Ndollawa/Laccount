@@ -1,11 +1,11 @@
 import React,{useState,useEffect} from 'react'
-import pageProps from '../../../../app/props/pageProps'
+import PageProps from '../../../../app/props/PageProps'
 import Breadcrum from '../../components/Breadcrum'
 import { useGetServicesQuery } from '../../../dashboard/pages/Service/slices/servicesApi.slice'
-import serviceProps from '../../../../app/props/serviceProps'
+import ServiceProps from '../../../../app/props/ServiceProps'
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const Services:React.FC<pageProps> = ({pageData}:pageProps) => {
+const Services:React.FC<PageProps> = ({pageData}:PageProps) => {
     // const { services } = useGetServicesQuery("servicesList", {
     //         selectFromResult: ({ data }) => ({
     //           services: data?.ids?.map((id:string)=>data?.entities[id])		 
@@ -37,13 +37,13 @@ const Services:React.FC<pageProps> = ({pageData}:pageProps) => {
     <div className="container">
         <div className="row row-gutter-y-50 g-5">
             {
-                (Object?.values(services ?? []) as serviceProps[])?.map((service:serviceProps)=>{
+                (Object?.values(services ?? []) as ServiceProps[])?.map((service:ServiceProps)=>{
                     return (
 
                     <div className="col-lg-4 col-md-6 col-sm-12">
                         <div className="service-card">
                             <div className="service-card__image"><a href={`/services/${service.id}`}>
-                                <img src={BASE_URL+"/uploads/service/"+service?.image} alt={service?.title}/>
+                                <img src={BASE_URL+"/uploads/settings/service/"+service?.image} alt={service?.title}/>
                                 </a>
                             </div>
                             {/* <!-- /.service-card__image --> */}

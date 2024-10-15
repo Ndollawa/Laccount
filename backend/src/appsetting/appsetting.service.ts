@@ -166,28 +166,31 @@ export class AppSettingService {
   }) {
     const destination = join('../../', 'uploads/settings/slides');
     if (!file) return;
-  
+
     try {
       const result = await this.getSettingsByIdOrType(id, SettingsType.LANDING);
-  
+
       // Parse settings from JSON (assuming settings is a JSON string)
       let settings;
       try {
-        settings = typeof result.settings === 'string'
-          ? JSON.parse(result.settings)
-          : result.settings;
+        settings =
+          typeof result.settings === 'string'
+            ? JSON.parse(result.settings)
+            : result.settings;
       } catch (e) {
         throw new Error('Invalid settings format');
       }
-  
+
       // Ensure sliders is an array
       if (!Array.isArray(settings.sliders)) {
         settings.sliders = [];
       }
-  
-      const sImage = settings.sliders.find((s: any) => s.id === slide.id)?.image;
+
+      const sImage = settings.sliders.find(
+        (s: any) => s.id === slide.id,
+      )?.image;
       const count = settings.sliders.length || 0;
-  
+
       let slidersUpdate;
       switch (type) {
         case 'create':
@@ -196,28 +199,30 @@ export class AppSettingService {
             { id: count + 1, ...slide, image: file.filename },
           ];
           break;
-  
+
         case 'update':
           if (sImage) deleteItem(destination, sImage);
           slidersUpdate = settings.sliders.map((s: any) =>
-            s.id === slide.id ? { ...s, ...slide, image: file.filename } : s
+            s.id === slide.id ? { ...s, ...slide, image: file.filename } : s,
           );
           break;
-  
+
         case 'delete':
           if (sImage) deleteItem(destination, sImage);
-          slidersUpdate = settings.sliders.filter((s: any) => s.id !== slide.id);
+          slidersUpdate = settings.sliders.filter(
+            (s: any) => s.id !== slide.id,
+          );
           break;
-  
+
         default:
           throw new Error('Invalid slide operation');
       }
-  
+
       // Ensure slidersUpdate is a valid object and stringify it before saving
       return await this.appSettingsRepository.update({
         where: { id: result.id },
         data: {
-          settings:{
+          settings: {
             ...settings,
             sliders: slidersUpdate || [], // Ensure slidersUpdate is not undefined
           },
@@ -227,7 +232,6 @@ export class AppSettingService {
       handleError(error);
     }
   }
-  
 
   async upload({ id, type, file }: { id: string; type: string; file: any }) {
     if (!file) return;

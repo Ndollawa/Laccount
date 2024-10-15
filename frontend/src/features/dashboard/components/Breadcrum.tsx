@@ -1,9 +1,9 @@
 import React from 'react'
-import pageProps from '../../../app/props/pageProps'
+import PageProps from '../../../app/props/PageProps'
 import useTitle from '../../../app/hooks/useTitle';
 
 
-const Breadcrum:React.FC<pageProps> = ({pageData}:pageProps) => {
+const Breadcrum:React.FC<PageProps> = ({pageData}:PageProps) => {
     const {pageTitle,coverImage}= pageData!;
     useTitle(`${pageTitle}`)
   return (

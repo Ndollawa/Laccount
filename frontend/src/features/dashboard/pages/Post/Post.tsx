@@ -5,19 +5,19 @@
     import { useDispatch } from 'react-redux'
     import { useGetPostsQuery } from './slices/postApi.slice'
     import { setPreloader } from '../../../components/preloader/slices/preloader.slice'
-    import pageProps from '../../../../app/props/pageProps'
+    import PageProps from '../../../../app/props/PageProps'
     import PostTableData from './components/PostTableData'
-   import postProps from '../../../../app/props/postProps' 
+   import PostProps from '../../../../app/props/PostProps' 
 import $ from 'jquery'
 import initDataTables,{destroyDataTables} from '../../../../app/utils/initDataTables'   
  
 
     
 interface modalDataProps {
-       data:postProps | null,
+       data:PostProps | null,
       showModal:boolean,
     }
-    const Post = ({pageData}:pageProps)  => {
+    const Post = ({pageData}:PageProps)  => {
         const dispatch =useDispatch()
         const [modalData,setModalData] = useState<modalDataProps>({
             data:null, 

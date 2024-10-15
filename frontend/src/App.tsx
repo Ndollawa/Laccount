@@ -1,199 +1,183 @@
-import React,{useContext} from 'react'
-import {Navigate, Routes,Route,useLocation} from 'react-router-dom';
-import { useSelector,useDispatch } from 'react-redux';
-import {ToastContainer} from 'react-toastify'
+import React, { useState, useMemo, useEffect, useTransition } from 'react';
+import { Navigate, Routes, Route, useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
 import { selectCurrentToken } from './features/auth/slices/auth.slice';
-import RequireAuth from './features/dashboard/components/RequireAuth';
-import PersistLogin from './features/components/PersistLogin';
-import Prefetch from './features/components/Prefetch';
-import Home from './features/landing/Index'
-import HomePage from './features/landing/pages/Home/Home';
+import DashboardLayout from './features/layouts/dashboard/Layout';
+import LandingLayout from './features/layouts/landing/Layout';
+import { useLandingConfig } from './features/dashboard/pages/Settings/slices/settings.slice';
+
+// Lazy Load components
+const PersistLogin = React.lazy(() => import('./features/components/PersistLogin'));
+const RequireAuth = React.lazy(() => import('./features/components/RequireAuth'));
+const Wallet = React.lazy(() => import('./features/dashboard/pages/Wallet/Wallet'));
+const Market = React.lazy(() => import('./features/dashboard/pages/Market/Market'));
+const Transaction = React.lazy(() => import('./features/dashboard/pages/Transaction/Transaction'));
+const Chat = React.lazy(() => import('./features/dashboard/pages/Messenger/Chat'));
+const Users = React.lazy(() => import('./features/dashboard/pages/Users/Users'));
+const User = React.lazy(() => import('./features/dashboard/pages/Users/User'));
+const Contacts = React.lazy(() => import('./features/dashboard/pages/Contact/Contacts'));
+// const CoinDetail = React.lazy(() => import('./features/dashboard/pages/CoinDetail'));
+const DashboardHome = React.lazy(() => import('./features/dashboard/pages/Home/HomePage'));
+const Profile = React.lazy(() => import('./features/dashboard/pages/Profile/Profile'));
+const ProfileEdit = React.lazy(() => import('./features/dashboard/pages/Profile/ProfileEdit'));
+const DashboardFaq = React.lazy(() => import('./features/dashboard/pages/Faq/Faq'));
+const DashboardTeam = React.lazy(() => import('./features/dashboard/pages/Team/Team'));
+const DashboardService = React.lazy(() => import('./features/dashboard/pages/Service/Services'));
+const DashboardSlider = React.lazy(() => import('./features/dashboard/pages/Slide/Slide'));
 
 
-// landing/pages
-import About from './features/landing/pages/About/About';
-import Blog from './features/landing/pages/Blog/Blog';
-import Post from './features/landing/pages/Blog/Post/Post';
-import Career from './features/landing/pages/Careers/Career';
-import Form from './features/landing/pages/Careers/Form';
-import Contact from './features/landing/pages/Contact/Contact';
-import Faq from './features/landing/pages/FAQ/Faq';
-import Services from './features/landing/pages/Services/Services';
-import Service from './features/landing/pages/Services/Detail/Service';
-import Team from './features/landing/pages/Team/Team';
-import TermsConditions from './features/landing/pages/Terms-Conditions/TermsConditions';
-import Member from './features/landing/pages/Team/Detail/Member';
-import PrivacyPolicy from './features/landing/pages/Privacy-Policy/PrivacyPolicy';
-
+const LandingHome = React.lazy(() => import('./features/landing/pages/Home/Home'));
+const About = React.lazy(() => import('./features/landing/pages/About/About'));
+const Blog = React.lazy(() => import('./features/landing/pages/Blog/Blog'));
+const Post = React.lazy(() => import('./features/landing/pages/Blog/Post/Post'));
+const Career = React.lazy(() => import('./features/landing/pages/Careers/Career'));
+const Form = React.lazy(() => import('./features/landing/pages/Careers/Form'));
+const Contact = React.lazy(() => import('./features/landing/pages/Contact/Contact'));
+const Faq = React.lazy(() => import('./features/landing/pages/FAQ/Faq'));
+const Services = React.lazy(() => import('./features/landing/pages/Services/Services'));
+const Service = React.lazy(() => import('./features/landing/pages/Services/Detail/Service'));
+const Team = React.lazy(() => import('./features/landing/pages/Team/Team'));
+const Member = React.lazy(() => import('./features/landing/pages/Team/Detail/Member'));
+const TermsConditions = React.lazy(() => import('./features/landing/pages/Terms-Conditions/TermsConditions'));
+const PrivacyPolicy = React.lazy(() => import('./features/landing/pages/Privacy-Policy/PrivacyPolicy'));
+const Login = React.lazy(() => import('./features/auth/Login'));
+const Register = React.lazy(() => import('./features/auth/Register'));
 
 // Error pages
-import Error400 from './features/errorPages/Error400';
-import Error401 from './features/errorPages/Error401';
-import Error403 from './features/errorPages/Error403';
-import Error404 from './features/errorPages/Error404';
-import Error500 from './features/errorPages/Error500';
-import Error503 from './features/errorPages/Error503';
+const Error400 = React.lazy(() => import( './features/errorPages/Error400'));
+const Error401 = React.lazy(() => import( './features/errorPages/Error401'));
+const Error403 = React.lazy(() => import( './features/errorPages/Error403'));
+const Error404 = React.lazy(() => import( './features/errorPages/Error404'));
+const Error500 = React.lazy(() => import( './features/errorPages/Error500'));
+const Error503 = React.lazy(() => import( './features/errorPages/Error503'));
+ const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-// dashboar pages
-import DashboardHomepage from './features/dashboard/pages/Home/HomePage'
-import Profile from './features/dashboard/pages/Profile/Profile';
-import ProfileEdit from './features/dashboard/pages/Profile/ProfileEdit';
-import Market from './features/dashboard/pages/Market/Market';
-import Wallet from './features/dashboard/pages/Wallet/Wallet';
-import Transaction from './features/dashboard/pages/Transaction/Transaction';
-import Chat from './features/dashboard/pages/Messenger/Chat';
-import CoinDetail from './features/dashboard/pages/CoinDetail/CoinDetail';
-import Users from './features/dashboard/pages/Users/Users';
-import Contacts from './features/dashboard/pages/Contact/Contacts';
-import User from './features/dashboard/pages/Users/User';
-import FaqManagement from './features/dashboard/pages/Faq/Faq';
-import TeamManagement from './features/dashboard/pages/Team/Team';
-import PostManagement from './features/dashboard/pages/Post/Post';
-import PostCategoryManagement from './features/dashboard/pages/PostCategory/PostCategory';
-import Slide from './features/dashboard/pages/Slide/Slide';
-import RoomsManagement from './features/dashboard/pages/Rooms/Rooms';
-import ServicesManagement from './features/dashboard/pages/Service/Services';
-
-// auth routes
-import Login from './features/auth/Login';
-import LockScreen from './features/auth/LockScreen';
-import Register from './features/auth/Register';
-
-// settings
-import SiteSettings from './features/dashboard/pages/Settings/SiteSettings';
-import GeneralSettings from './features/dashboard/pages/Settings/components/GeneralSettings';
-import HomePageSettings from './features/dashboard/pages/Settings/components/HomePageSettings';
-import AboutUs from './features/dashboard/pages/Settings/components/AboutUs';
-import TermsConditionsSetting from './features/dashboard/pages/Settings/components/TermsConditions';
-import PrivacyPolicySetting from './features/dashboard/pages/Settings/components/PrivacyPolicy';
-import SiteImage from './features/dashboard/pages/Settings/components/SiteImage';
-import Layout from './features/Layout/Layout';
-import { useGetSettingsQuery } from './features/dashboard/pages/Settings/slices/settingApi.slice';
-import { setSettings,  useSettings } from './features/dashboard/pages/Settings/slices/settings.slice';
-import { Settings } from './app/props/settingsProps';
-
-// import SocketIO from './app/utils/context/SocketIO';
-
-
-
-const App= ()=>{
-const [pageTitle, setPageTitle] = React.useState("Home");
-const location  = useLocation()
-const dispatch = useDispatch()
-const currentToken = useSelector(selectCurrentToken)
-const {
-    data: settings,
-    isLoading,
-    isSuccess,
-    isError,
-    error
-  } = useGetSettingsQuery('appSettingList',{
-    pollingInterval: 15000,
-    refetchOnFocus: true,
-    refetchOnMountOrArgChange: true
-  })
-
-  React.useEffect(() => {
-    if(!isLoading && isSuccess){
-                
-          
-          
-    //  dispatch(setSettings(settingState));
-        };
-   
-  }, [settings,isSuccess,isLoading])
+const Preloader = ()=>{
   return (
-      
-            <>
-                    
-            <ToastContainer/>
-          <Routes>
-            {/* Public Routes */}{/* ^/$|/index(.html)? */}
-             <Route path="error"  element={<Layout pageData={{pageTitle:"Dashboard"}}/> }>
-                      <Route index element={<Error404/>} />
-                      <Route path="400" element={<Error400 />} />
-                      <Route path="401" element={<Error401 />} />
-                      <Route path="403" element={<Error403 />} />
-                      <Route path="404" element={<Error404 />} />
-                      <Route path="500" element={<Error500 />} />
-                      <Route path="503" element={<Error503/>} />
-              </Route>
-              <Route path="auth" element={<Layout pageData={{pageTitle:"Dashboard"}}/>}  >
-                      <Route index element={currentToken?<Navigate state={{from:location}} to={'/dashboard'}/> :<Login/>} />
-                      <Route path="login" element={currentToken?<Navigate state={{from:location}} to={'/dashboard'}/> :<Login />} />
-                      <Route path="register" element={currentToken?<Navigate state={{from:location}} to={'/dashboard'}/> :<Register/>} />
-                  
-              </Route>
-            <Route element={<Prefetch/>}>
-            <Route path="/" element={<Home pageData={{pageTitle:pageTitle,coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} >
-                <Route index element={<HomePage/>} />
-                <Route path="about" element={<About pageData={{pageTitle:"About"}}/>} />
-                <Route path="contact" element={<Contact pageData={{pageTitle:"Contact"}}/>} />
-                <Route path="careers" element={<Career pageData={{pageTitle:"Careers"}}/>} />
-                <Route path="career/apply-now" element={<Form pageData={{pageTitle:"Apply Now"}}/>} />
-                <Route path="faqs" element={<Faq pageData={{pageTitle:"FAQs"}}/>} />
-                <Route path="terms-and-condition" element={<TermsConditions pageData={{pageTitle:"Terms and Conditions"}}/>} />
-                <Route path="our-blog/posts" element={<Blog pageData={{pageTitle:"Blog"}}/>} />
-                <Route path="our-blog/posts/:id" element={<Post pageData={{pageTitle:"Post"}}/>} />
-                <Route path="privacy-and-Policy" element={<PrivacyPolicy pageData={{pageTitle:"Privacy and Policy"}}/>} />
-                <Route path="our-team" element={<Team pageData={{pageTitle:"Our Team"}}/>} />
-                <Route path="our-team/:id" element={<Member pageData={{pageTitle:"Team Member"}}/>} />
-                <Route path="services" element={<Services pageData={{pageTitle:"Services"}}/>} />
-                <Route path="services/:id" element={<Service pageData={{pageTitle:"Service"}}/>} />
-                <Route path="login" element={<Navigate to="/auth/login" replace/>} />
-                <Route path="register" element={<Navigate to="/auth/register"/>} />
-                <Route path="lockscreen" element={<Navigate to="/auth/login"/>} />
-              </Route>
-           
-             {/* End Public Routes */}
-
-              {/* Protected Routes */}
-
-            {/* <Route element={<PersistLogin />} > */}
-            {/* <Route element={<RequireAuth allowedRoles={["0000","0002","0003"]} />} > */}
-            <Route path="/dashboard" element={<Layout pageData={{pageTitle:"Dashboard"}}/>} >
-                  <Route index element={<DashboardHomepage/>} />
-                  <Route path="profile" element={<Profile/>} />
-                  <Route path="profile/edit" element={<ProfileEdit />} />
-                  {/* <Route path="wallet" element={<Wallet pageData={{pageTitle:"Wallet",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
-                  <Route path="market" element={<Market pageData={{pageTitle:"Market",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
-                  <Route path="transaction" element={<Transaction pageData={{pageTitle:"Transaction",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
-                  <Route path="contacts" element={<Contacts pageData={{pageTitle:"Contacts",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
-                  <Route path="users" element={<Users pageData={{pageTitle:"Users",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
-                  <Route path="users/user/:userId" element={<User pageData={{pageTitle:"User",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
-                  <Route path="messenger" element={<Chat pageData={{pageTitle:"Messenger",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
-                  <Route path="messenger/:id" element={<Chat pageData={{pageTitle:"Messenger",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
-                  <Route path="coin-Detail/:id" element={<CoinDetail pageData={{pageTitle:"Coin Data",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} /> */}
-                 
-            {/* <Route element={<RequireAuth allowedRoles={["0001","0000"]} />} > */}
-                 <Route path="privacy-and-Policy" element={<PrivacyPolicy pageData={{pageTitle:"Privacy and Policy",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
-                  <Route path="faq" element={<FaqManagement pageData={{pageTitle:"Privacy and Policy",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
-                  <Route path="our-team" element={<TeamManagement pageData={{pageTitle:"Our Team",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
-                  <Route path="rooms" element={<RoomsManagement pageData={{pageTitle:"All Rooms",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
-                  <Route path="services" element={<ServicesManagement pageData={{pageTitle:"Services",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
-                  <Route path="posts" element={<PostManagement pageData={{pageTitle:"Service",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
-                  <Route path="posts/category" element={<PostCategoryManagement pageData={{pageTitle:"Service",coverImage:'assets/images/backgrounds/page-header-bg-1-1.jpg'}}/>} />
-                  <Route path="slides" element={<Slide />} /> 
-                  <Route path="settings/" element={<SiteSettings/>} >
-                      <Route index element={<GeneralSettings/>} />
-                      <Route path="general" element={<GeneralSettings/>} />
-                      <Route path="home-page" element={<HomePageSettings/>} />
-                      <Route path="about-us" element={<AboutUs/>} />
-                      <Route path="privacy-and-policy" element={<PrivacyPolicySetting/>} />
-                      <Route path="contact-us" element={<SiteSettings/>} />
-                      <Route path="site-images" element={<SiteImage/>} />
-                      <Route path="terms-and-conditions" element={<TermsConditionsSetting/>} />
-                  </Route> 
-              {/* </Route> */}
-            {/* </Route>  */}
-             {/* End Protected Routes */}
-            {/* </Route> */}
-            </Route>
-          </Route> 
-            <Route path='*'  element={<Navigate to="error/404"/>}/>
-          </Routes>
-</>
-  );
+    <div id="preloader" >
+            <div className="sk-three-bounce">
+                <div className="sk-child sk-bounce1"></div>
+                <div className="sk-child sk-bounce2"></div>
+                <div className="sk-child sk-bounce3"></div>
+            </div>
+        </div>
+  )
 }
+
+const App = () => {
+  // const [pageTitle, setPageTitle] = useState("Home");
+  const location = useLocation();
+  const currentToken = useSelector(selectCurrentToken);
+  const { settings: { landingPageConfig: { showBlog, showTeam } = {}, siteImages: {pagesBg}={} } = {} } = useSelector(useLandingConfig);
+const bgImage = `${BASE_URL}uploads/settings/brand/${pagesBg}`
+
+  const [isPending, startTransition] = useTransition();
+
+  // useEffect(() => {
+  //   startTransition(() => {
+  //     setPageTitle("Home");
+  //   });
+  // }, [location]);
+
+  const errorRoutes = useMemo(() => (
+    <>
+      <Route path="error" element={<DashboardLayout pageData={{ pageTitle: "Dashboard" }} />}>
+        <Route index element={<Error404 />} />
+        <Route path="400" element={<Error400 />} />
+        <Route path="401" element={<Error401 />} />
+        <Route path="403" element={<Error403 />} />
+        <Route path="404" element={<Error404 />} />
+        <Route path="500" element={<Error500 />} />
+        <Route path="503" element={<Error503 />} />
+      </Route>
+    </>
+  ), []);
+
+  const protectedRoutes = useMemo(() => (
+    <>
+      <Route element={<PersistLogin />}>
+        <Route element={<RequireAuth allowedRoles={["0000", "0002", "0003"]} />}>
+          <Route path="/dashboard" element={<DashboardLayout pageData={{ pageTitle: "Dashboard" }} />}>
+            <Route index element={<DashboardHome />} />
+            <Route path="profile">
+              <Route index element={<Profile />} />
+              <Route path="edit" element={<ProfileEdit />} />
+            </Route>
+            <Route path="faq" element={<DashboardFaq />} />
+            <Route path="our-team" element={<DashboardTeam />} />
+            <Route path="services" element={<DashboardService />} />
+            <Route path="sliders" element={<DashboardSlider />} />
+            <Route path="wallet" element={<Wallet pageData={{ pageTitle: "Wallet", coverImage:bgImage }} />} />
+            <Route path="market" element={<Market pageData={{ pageTitle: "Market", coverImage:bgImage }} />} />
+            <Route path="transaction" element={<Transaction pageData={{ pageTitle: "Transaction", coverImage:bgImage }} />} />
+            <Route path="contacts" element={<Contacts pageData={{ pageTitle: "Contacts", coverImage:bgImage }} />} />
+            <Route path="users">
+              <Route index element={<Users pageData={{ pageTitle: "Users", coverImage:bgImage }} />} />
+              <Route path="user/:userId" element={<User pageData={{ pageTitle: "User", coverImage:bgImage }} />} />
+            </Route>
+            <Route path="messenger">
+              <Route index element={<Chat pageData={{ pageTitle: "Messenger", coverImage:bgImage }} />} />
+              <Route path=":id" element={<Chat pageData={{ pageTitle: "Messenger", coverImage:bgImage }} />} />
+            </Route>
+            {/* <Route path="coin-Detail/:id" element={<CoinDetail pageData={{ pageTitle: "Coin Data", coverImage:bgImage }} />} /> */}
+          </Route>
+          {/* Admin Routes */}
+          <Route element={<RequireAuth allowedRoles={["0001", "0000"]} />} />
+        </Route>
+      </Route>
+    </>
+  ), []);
+
+  return (
+    <>
+      <ToastContainer />
+      {isPending ? <Preloader /> :
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<LandingLayout/> }>
+          <Route index element={<LandingHome  pageData={{ pageTitle:"Home", coverImage:bgImage }}/>} />
+          <Route path="about" element={<About />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="careers" element={<Career />} />
+          <Route path="career/apply-now" element={<Form />} />
+          <Route path="faqs" element={<Faq />} />
+          <Route path="terms-and-condition" element={<TermsConditions />} />
+          <Route path="our-blog">
+            <Route index element={showBlog ? <Blog /> : <Navigate to="/error/404" />} />
+            <Route path="posts/:id" element={showBlog ? <Post /> : <Navigate to="/error/404" />} />
+          </Route>
+          <Route path="privacy-and-policy" element={<PrivacyPolicy />} />
+          <Route path="our-team">
+            <Route index element={showTeam ? <Team /> : <Navigate to="/error/404" />} />
+            <Route path=":id" element={showTeam ? <Member /> : <Navigate to="/error/404" />} />
+          </Route>
+          <Route path="services">
+            <Route index element={<Services />} />
+            <Route path=":id" element={<Service />} />
+          </Route>
+          <Route path="login" element={<Navigate to="/auth/login" replace />} />
+          <Route path="register" element={<Navigate to="/auth/register" />} />
+         
+        </Route>
+         <Route path="auth" element={<DashboardLayout pageData={{ pageTitle: "Dashboard" }} />}>
+          <Route index element={currentToken ? <Navigate state={{ from: location }} to="/dashboard" /> : <Login />} />
+          <Route path="login" element={currentToken ? <Navigate state={{ from: location }} to="/dashboard" /> : <Login />} />
+          <Route path="register" element={currentToken ? <Navigate state={{ from: location }} to="/dashboard" /> : <Register />} />
+          </Route>
+        {/* </React.Suspense> */}
+
+      {/* <React.Suspense fallback={<Preloader/>} > */}
+        {/* Protected Routes */}
+        {protectedRoutes}
+        {errorRoutes}
+
+        {/* Error Route */}
+        <Route path="*" element={<Navigate to="error/404" />} />
+      </Routes>
+       }
+    </>
+  );
+};
 
 export default React.memo(App);

@@ -3,21 +3,21 @@ import {useParams, useNavigate} from 'react-router-dom'
 import { useGetPostsQuery } from "../../../../dashboard/pages/Post/slices/postApi.slice";
 import { useAddNewPostCommentMutation, useGetPostCommentQuery } from "../../../../dashboard/pages/Post/postCommentApiSlice";
 import { useGetUsersQuery } from "../../../../dashboard/pages/Users/slices/usersApi.slice";
-import postCommentProps from "../../../../../app/props/postCommentProps";
-import pageProps from "../../../../../app/props/pageProps";
+import PostCommentProps from "../../../../../app/props/PostCommentProps";
+import PageProps from "../../../../../app/props/PageProps";
 import Breadcrum from "../../../components/Breadcrum";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../../auth/slices/auth.slice";
 import useLocalStorage from "../../../../../app/hooks/useLocalStorage";
 import showToast from "../../../../../app/utils/showToast";
-import postProps from "../../../../../app/props/postProps";
+import PostProps from "../../../../../app/props/PostProps";
 import PostComment from "./components/PostComment";
 import PostSidebar from "./components/PostSidebar";
 import { filterPosts } from "../Blog";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const Post = ({ pageData }: pageProps) => {
+const Post = ({ pageData }: PageProps) => {
   const {id} = useParams()
   const [userInfo] = useLocalStorage('commentUserInfo',{})
 const navigate = useNavigate()
@@ -28,7 +28,7 @@ const navigate = useNavigate()
             }) 
             const { posts } = useGetPostsQuery("postsList", {
               selectFromResult: ({ data }) => ({
-                posts: (data?.ids?.map((id:string)=>data?.entities[id]))?.filter((post:postProps) => post.status === 'published')		 
+                posts: (data?.ids?.map((id:string)=>data?.entities[id]))?.filter((post:PostProps) => post.status === 'published')		 
               }),
               })    
    const { postIndex } = useGetPostsQuery("postsList", {
@@ -44,7 +44,7 @@ const navigate = useNavigate()
       
       const { postComment } = useGetPostCommentQuery("postCommentsList", {
         selectFromResult: ({ data }) => ({
-          postComment: data && data.ids.map((id:string) => data?.entities[id]).filter((comment:postCommentProps) =>comment.postId === post?._id) 
+          postComment: data && data.ids.map((id:string) => data?.entities[id]).filter((comment:PostCommentProps) =>comment.postId === post?._id) 
         }),
         })
         const { data } = useGetPostsQuery("postsList");
@@ -219,7 +219,7 @@ setShowCommentForm(false)
                       <h3 className="post-comment__title">{postComment?.length} Comment(s)</h3>
 <ul className="blog-comment" style={{maxHeight:'50rem',overflowY:'scroll',overflowX:'clip',msOverflowY:'scroll',msOverflowX:'clip', scrollBehavior:'smooth'}}>
   {
-    postComment?.map((pc:postCommentProps)=><PostComment pc={pc}/>)
+    postComment?.map((pc:PostCommentProps)=><PostComment pc={pc}/>)
   }
   
         </ul>                    

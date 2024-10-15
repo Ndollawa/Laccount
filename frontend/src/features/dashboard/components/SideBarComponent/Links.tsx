@@ -72,7 +72,7 @@ export type sideBarLink ={
 
     export const AdminLinks:sideBarLink =[{
         id:6,
-        title:'User Management',
+        title:'Users',
         icon:<HiOutlineUsers fontSize={"2rem"}/>,
         // path:
         isOpen:false,
@@ -85,7 +85,7 @@ export type sideBarLink ={
         },
         {
             id:6.1,
-            title:'Team members',
+            title:'Our Team',
             // icon:
                 path: '/dashboard/our-team'
         }],
@@ -93,19 +93,19 @@ export type sideBarLink ={
     },
     {
         id:7,
-        title:'Blog Post Management',
+        title:'Blog',
         icon:<FaPodcast fontSize={"2rem"}/>,
         isOpen:false,
         children:[
          { 
             id:6.0,
-            title:'Blog Posts',
+            title:'Posts',
         // icon:
             path: '/dashboard/posts'
         },
         {
             id:6.1,
-            title:'Post Category',
+            title:'Category',
             // icon:
             path: '/dashboard/posts/category'
         }],
@@ -113,42 +113,92 @@ export type sideBarLink ={
     }
     ,{
         id:8,
-        title:'Rooms Management',
+        title:'Home',
         icon:<IoChatbubblesOutline fontSize={"2rem"}/>,
-        path:'/dashboard/rooms',
         isActive:false,
-        isOpen:false
-    }
-    ,{
-        id:9,
-        title:'Slider Management',
-        icon:<TfiLayoutMediaCenter fontSize={"2rem"}/>,
-        path:'/dashboard/slides',
-        isActive:false,
-        isOpen:false
-    }
-    ,{
-        id:10,
-        title:'Team Management',
+        isOpen:false,
+        children:[
+            { 
+               id:8.0,
+               title:'Rooms',
+            icon:<IoChatbubblesOutline fontSize={"2rem"}/>,
+               path: '/dashboard/rooms'
+           },
+           {
+               id:8.1,
+               title:'Home Slider',
+               icon:<TfiLayoutMediaCenter fontSize={"2rem"}/>,
+               path: '/dashboard/sliders'
+           } 
+        ,{
+        id:8.2,
+        title:'Team',
         icon:<FaPeopleArrows fontSize={"2rem"}/>,
         path:'/dashboard/our-team',
         isActive:false,
         isOpen:false
     }
     ,{
-        id:11,
-        title:'Services Management',
+        id:8.3,
+        title:'Services',
         icon:<FaServicestack fontSize={"2rem"}/>,
         path:'/dashboard/services',
         isActive:false,
         isOpen:false
     }
     ,{
-        id:12,
-        title:'FAQ Management',
+        id:8.4,
+        title:'FAQ',
         icon:<FaRegQuestionCircle fontSize={"2rem"}/>,
         path:'/dashboard/faq',
         isActive:false,
         isOpen:false
+    }],
     }
+    ,{
+        id:9,
+        title:'Finance',
+        icon:<IoChatbubblesOutline fontSize={"2rem"}/>,
+        isActive:false,
+        isOpen:false,
+        children:[
+            { 
+               id:9.0,
+               title:'Summary',
+            icon:<IoChatbubblesOutline fontSize={"2rem"}/>,
+               path: '/dashboard/rooms'
+           },
+           {
+               id:9.1,
+               title:'Slider',
+               icon:<TfiLayoutMediaCenter fontSize={"2rem"}/>,
+               path: '/dashboard/sliders'
+           } 
+        ,{
+        id:9.2,
+        title:'Team',
+        icon:<FaPeopleArrows fontSize={"2rem"}/>,
+        path:'/dashboard/our-team',
+        isActive:false,
+        isOpen:false
+    }
+    ,{
+        id:9.3,
+        title:'Services',
+        icon:<FaServicestack fontSize={"2rem"}/>,
+        path:'/dashboard/services',
+        isActive:false,
+        isOpen:false
+    }
+    ,{
+        id:9.4,
+        title:'FAQ',
+        icon:<FaRegQuestionCircle fontSize={"2rem"}/>,
+        path:'/dashboard/faq',
+        isActive:false,
+        isOpen:false
+    }],
+    }
+    
+   
 ]

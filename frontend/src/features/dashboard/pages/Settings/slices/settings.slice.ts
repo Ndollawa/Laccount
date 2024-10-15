@@ -28,6 +28,7 @@ import { CompanyInfo, DashboardConfig, LandingConfig, LandingPageConfig, Setting
             secondary:'',
             tertiary: '',
           },
+          sliders: [],
         siteImages:{
             logo:'',
             logoIcon:'',
@@ -46,6 +47,7 @@ import { CompanyInfo, DashboardConfig, LandingConfig, LandingPageConfig, Setting
   
  };
 const dashboardConfig:DashboardConfig = {
+          dashboardConfig:{
             layoutOptions: {
                 typography: 'poppins',
                 version: 'light',
@@ -60,8 +62,10 @@ const dashboardConfig:DashboardConfig = {
                 containerLayout: 'full',
                 direction: 'ltr',
               },
+            }
     };
 const companyInfo: CompanyInfo ={
+    companyDetails:{
             siteName:'',
             city:'',
             state:'',
@@ -78,7 +82,8 @@ const companyInfo: CompanyInfo ={
             instagram:'',
             whatsapp:''
         }
-        };
+    }
+   };
 
 const initialState:SettingsState = {
     landingConfig:{
@@ -117,16 +122,16 @@ export const settingsSlice = createSlice({
             // console.log(action.payload)
                     return action.payload
         },
-        setCompanyInfoSetting: (state, action: PayloadAction<Partial<CompanyInfo>>) => {
+        setCompanyInfoSetting: (state, action: PayloadAction<Settings<CompanyInfo>>) => {
             // console.log(action.payload)
             state.companyInfo = { ...state.companyInfo, ...action.payload };
           }
           ,
-        setDashboardSetting:(state,action: PayloadAction<Partial<DashboardConfig>>)=>{
-            // console.log(action.payload)
+        setDashboardSetting:(state,action: PayloadAction<Settings<DashboardConfig>>)=>{
+            console.log(action.payload)
             state.dashboardConfig ={ ...state.dashboardConfig, ...action.payload};
         },
-        setLandingSetting:(state,action: PayloadAction<Partial<LandingConfig>>)=>{
+        setLandingSetting:(state,action: PayloadAction<Settings<LandingConfig>>)=>{
             // console.log(action.payload)
             state.landingConfig={...state.landingConfig,...action.payload}
         },

@@ -4,11 +4,11 @@ import { useUpdateFaqMutation } from '../slices/faqApi.slice'
 import { Modal } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import showToast from '../../../../../app/utils/showToast'
-import { faqProps } from '../../../../../app/props/faqProps'
+import { FaqProps } from '../../../../../app/props/FaqProps'
 
 interface modalDataProps {
 modalData:{
-   data:faqProps | null,
+   data:FaqProps | null,
   showModal:boolean,
 } 
 }

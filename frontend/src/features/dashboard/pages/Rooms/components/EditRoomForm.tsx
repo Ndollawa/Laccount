@@ -5,14 +5,14 @@ import {Modal} from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import showToast from '../../../../../app/utils/showToast'
 import $ from 'jquery'
-import roomProps from '../../../../../app/props/roomProps'
+import RoomProps from '../../../../../app/props/RoomProps'
 
 
 
 
 interface modalDataProps {
   modalData:{
-     data:roomProps | null,
+     data:RoomProps | null,
     showModal:boolean,
   } 
   }

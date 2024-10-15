@@ -5,12 +5,7 @@ import { FaEye } from 'react-icons/fa'
 import ContactTableData from './ContactTableData'
 import contactProps from '../../../../../app/props/contactProps'
 
-interface modalDataProps {
-    modalData:{
-       data:contactProps | null,
-      showModal:boolean,
-    } 
-    }
+
 const ContactsTable = ({contactId,index,showEditForm}:any) => {
     const { contact } = useGetContactsQuery("contactsList", {
         selectFromResult: ({ data }) => ({

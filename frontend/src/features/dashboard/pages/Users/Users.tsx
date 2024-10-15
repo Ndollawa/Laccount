@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react'
 import MainBody from '../../components/MainBody'
 import { useDispatch } from 'react-redux'
 import { setPreloader } from '../../../components/preloader/slices/preloader.slice'
-import pageProps from '../../../../app/props/pageProps'
+import PageProps from '../../../../app/props/PageProps'
 import UsersTableData from './components/UsersTableData'
 import useToggle from '../../../../app/hooks/useToggle'
 import { useGetUsersQuery } from './slices/usersApi.slice'
@@ -20,7 +20,7 @@ interface modalDataProps {
    showModal:boolean,
  }
 
-    const Users = ({pageData}:pageProps)  => {
+    const Users = ({pageData}:PageProps)  => {
 
 // const [users, setusers] = useState<any>([])
     const [viewType,toggleViewType] = useToggle('viewType','List');
