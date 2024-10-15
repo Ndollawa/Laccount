@@ -18,11 +18,15 @@ const Slider = () => {
     autoplayTimeout: 7000,
     smartSpeed: 500,
     items: 1,
+    lazyLoad:true,
+    lazyContent:true,
     animateOut: 'fadeOut',
     animateIn: 'fadeIn',
     nav: true,
     dots: false,
-    navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>']
+    navContainer: true
+    navElement: 'div',
+    navText: ['<button className="slider-one__carousel__btn__left"> <i className="fa fa-angle-left"></i> </button>', '<button className="slider-one__carousel__btn__right"> <i className="fa fa-angle-right"></i> </button>']
   };
 
   let slider: any = null;
@@ -59,7 +63,8 @@ const Slider = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                  <div className="slider-one__carousel__btn nav-container">  </div>
+                  </div>
               ))}
             </OwlCarousel>
 
@@ -98,6 +103,7 @@ const Slider = () => {
                       </div>
                     </div>
                   </div>
+                  <div className="slider-one__carousel__btn nav-container">  </div> 
                 </div>
               ))}
             </OwlCarousel>
@@ -124,9 +130,10 @@ const Slider = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
+                      </div>
                   </div>
-                </div>
+                  <div className="slider-one__carousel__btn nav-container">  </div>
+                     </div>
               ))}
             </OwlCarousel>
           </section>
