@@ -33,8 +33,7 @@ export class MessageService {
     }
   }
   async create(query: any): Promise<Message> {
-     try {
-  
+    try {
       const newMessage = await this.messageRepository.create(query);
       Logger.debug(newMessage);
       return newMessage;

@@ -5,6 +5,7 @@ import { useUpdateSettingMutation } from "../pages/Settings/slices/settingApi.sl
 import { useDashboardConfig } from "../pages/Settings/slices/settings.slice";
 import { setDashboardSetting } from "../pages/Settings/slices/settings.slice";
 import $ from "jquery";
+import useLocalStorage from "../../../app/hooks/useLocalStorage";
 
 const AppSettings = () => {
   const dashboardConfig = useSelector(useDashboardConfig);
@@ -16,7 +17,7 @@ const AppSettings = () => {
 // State to track the active tab
 const [activeTab, setActiveTab] = useState('one');
 const [isPending, startTransition] = useTransition();
-
+const [theme, setTheme] =  useLocalStorage('appThemeMode','light');
 // Handler to switch tabs
 const handleTabClick = (tab: string) => {
   setActiveTab(tab);
@@ -37,6 +38,10 @@ const handleTabClick = (tab: string) => {
   const handleSelectChange = (layoutOption: string): FormEventHandler =>
     (e: any) => {
       const value = e.currentTarget.value as string;
+      if(layoutOption ==='version'){
+        setTheme(value)
+        document.body.setAttribute('data-theme-version', value);
+      };
       handleSettingsUpdate({ layoutOptions: { ...dashboardConfig?.settings?.dashboardConfig?.layoutOptions, [layoutOption]: value } });
     };
 
@@ -134,7 +139,7 @@ const handleTabClick = (tab: string) => {
           </span>
         </Link>
         
-        <div className="sidebar-right-inner">
+        <div className="sidebar-right-inner stacked card">
           <h4>Pick your style</h4>
           <div className="card-tabs">
             <ul className="nav nav-tabs" role="tablist">
@@ -179,7 +184,7 @@ const handleTabClick = (tab: string) => {
                       className="default-select form-control" 
                       id="theme_version" 
                       name="theme_version" 
-                      onChange={handleSelectChange("themeVersion")}
+                      onChange={handleSelectChange("version")}
                     >
                       <option value="light">Light</option>
                       <option value="dark">Dark</option>

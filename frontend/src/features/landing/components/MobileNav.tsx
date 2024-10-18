@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { useSelector } from 'react-redux';
 import {useCompanyInfo, useLandingConfig} from '../../dashboard/pages/Settings/slices/settings.slice';
 import useWindowSize from '../../../app/hooks/useWindowSize';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const MobileNav = () => {
-    const {width} = useWindowSize()
+const MobileNav = forwardRef<HTMLDivElement>((_, ref) => {
+    const {width} = useWindowSize() 
     const {settings:{companyDetails:{siteName,email,contact,description,activeHours,socialMedia:{facebookHandle,twitterHandle,instagram,whatsapp}={}}={}}={}} = useSelector(useCompanyInfo);
     const {settings:{siteImages:{logoIcon,logo}={}}={}} = useSelector(useLandingConfig); 
   return (
@@ -14,7 +14,7 @@ const MobileNav = () => {
     
     {/* <!-- /.mobile-nav__overlay --> */}
     <div className="mobile-nav__content">
-        <span className="mobile-nav__close mobile-nav__toggler"><i className="fa fa-times"></i></span>
+        <span className="mobile-nav__close mobile-nav__toggler" ref={ref}><i className="fa fa-times"></i></span>
 
         <div className="logo-box">
             <a href="/" aria-label="logo image"><img src={width! < 660? BASE_URL+"/uploads/settings/brand/"+logoIcon : BASE_URL+"/uploads/settings/brand/"+logo} width="150" alt={siteName} /></a>
@@ -57,6 +57,6 @@ const MobileNav = () => {
     {/* <!-- /.mobile-nav__content --> */}
 </div>
   )
-}
+});
 
 export default React.memo(MobileNav)

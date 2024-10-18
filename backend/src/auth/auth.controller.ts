@@ -39,28 +39,28 @@ export class AuthController {
     return await this.authService.register(registerUserDto);
   }
 
-  // @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalAuthGuard)
   @Post('/login')
   async loginUser(
     @Req() req: Request,
     @Res() res: Response,
-    @Body(ValidationPipe) loginUserDto: LoginUserDto,
+    // @Body(ValidationPipe) loginUserDto: LoginUserDto,
   ): Promise<any> {
-    // const foundUser = (req as any).user;
-    // if (!foundUser) throw new UnauthorizedException();
-    // const { cookies } = req;
-    // if (cookies?.jwt) {
-    //   const { refreshTokenId, refreshToken } = splitRt(cookies.jwt);
-    //   await this.authService.findRefreshToken(refreshTokenId);
-    //   await this.authService.removeRefreshToken(refreshTokenId);
+    const foundUser = (req as any).user;
+    if (!foundUser) throw new UnauthorizedException();
+    const { cookies } = req;
+    if (cookies?.jwt) {
+      const { refreshTokenId, refreshToken } = splitRt(cookies.jwt);
+      await this.authService.findRefreshToken(refreshTokenId);
+      await this.authService.removeRefreshToken(refreshTokenId);
 
-    //   res.clearCookie('jwt', {
-    //     httpOnly: true,
-    //     secure: true,
-    //     sameSite: 'none',
-    //   });
-    // }
-    const foundUser = await this.authService.validateUser(loginUserDto);
+      res.clearCookie('jwt', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+      });
+    }
+    // const foundUser = await this.authService.validateUser(loginUserDto);
     const { accessToken, refreshToken }: Tokens =
       await this.authService.login(foundUser);
     // console.log(foundUser);

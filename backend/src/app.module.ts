@@ -111,11 +111,11 @@ import { CacheInterceptor } from '@nestjs/cache-manager';
       scope: Scope.REQUEST,
       useClass: ResponseInterceptor,
     },
-    {
-      provide: APP_INTERCEPTOR,
-      // scope: Scope.REQUEST,
-      useClass: CacheInterceptor,
-    },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   // scope: Scope.REQUEST,
+    //   useClass: CacheInterceptor,
+    // },
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,

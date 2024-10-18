@@ -60,7 +60,7 @@ export class PaymentGatewayService {
 
       if (existingPaymentGateway) {
         throw new HttpException(
-          'PaymentGateway with credentials already exists.',
+          'Payment  Gateway with credentials already exists.',
           HttpStatus.CONFLICT,
         );
       }

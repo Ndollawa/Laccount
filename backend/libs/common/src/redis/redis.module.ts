@@ -14,7 +14,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         const redisInstance = new Redis({
           port: configService.get<number>('REDIS_PORT', 6379),
           host: configService.get<string>('REDIS_HOST', 'localhost'),
-          password: configService.get<string>('REDIS_PASS', ''),
+          password: configService.get<string>('REDIS_PASSWORD', ''),
+          connectTimeout: 10000,
           retryStrategy: (times: number) => {
             const delay = Math.min(times * 100, 3000); // Exponential backoff, max wait 3 seconds
             console.log(

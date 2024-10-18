@@ -1,4 +1,3 @@
-import { ReactComponentElement, ReactElement } from 'react';
 import { IoChatbubblesOutline, IoWalletOutline} from 'react-icons/io5'
 import {FaOpencart, FaPeopleArrows, FaPodcast, FaRegQuestionCircle, FaServicestack, FaUserFriends} from "react-icons/fa"
 import {BiTransfer} from 'react-icons/bi'
@@ -113,7 +112,7 @@ export type sideBarLink ={
     }
     ,{
         id:8,
-        title:'Home',
+        title:'Home Pages',
         icon:<IoChatbubblesOutline fontSize={"2rem"}/>,
         isActive:false,
         isOpen:false,
@@ -166,35 +165,19 @@ export type sideBarLink ={
                id:9.0,
                title:'Summary',
             icon:<IoChatbubblesOutline fontSize={"2rem"}/>,
-               path: '/dashboard/rooms'
+               path: '/dashboard/summary'
            },
            {
                id:9.1,
-               title:'Slider',
+               title:'Subscription Plans',
                icon:<TfiLayoutMediaCenter fontSize={"2rem"}/>,
-               path: '/dashboard/sliders'
+               path: '/dashboard/subscription-plans'
            } 
         ,{
         id:9.2,
-        title:'Team',
+        title:'Coupons',
         icon:<FaPeopleArrows fontSize={"2rem"}/>,
-        path:'/dashboard/our-team',
-        isActive:false,
-        isOpen:false
-    }
-    ,{
-        id:9.3,
-        title:'Services',
-        icon:<FaServicestack fontSize={"2rem"}/>,
-        path:'/dashboard/services',
-        isActive:false,
-        isOpen:false
-    }
-    ,{
-        id:9.4,
-        title:'FAQ',
-        icon:<FaRegQuestionCircle fontSize={"2rem"}/>,
-        path:'/dashboard/faq',
+        path:'/dashboard/coupons',
         isActive:false,
         isOpen:false
     }],

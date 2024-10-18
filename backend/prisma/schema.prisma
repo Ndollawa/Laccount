@@ -255,7 +255,9 @@ model User {
   assignedSupportTickets         SupportTicket[] @relation("assignedTickets")
   notifications Notification[]
   wallets       Wallet[]
+  savedItems       SavedItem[]
   vendor        Vendor?
+  cart        Cart?
 }
 
 model RefreshToken {
@@ -369,6 +371,43 @@ model AccountDetails {
   // Relations
   listingId String?  @unique
   listing   Listing? @relation(fields: [listingId], references: [id])
+}
+
+model Cart{
+  id       String  @id @default(uuid())
+  items   CartItem[]
+  userId   String @unique
+
+  // Relations
+  user   User  @relation( fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt() 
+}
+
+
+model CartItem{
+  id       String  @id @default(uuid())
+  quantity   Int
+  listingId   String
+  cartId   String
+
+  // Relations
+  cart   Cart  @relation(fields: [cartId], references: [id], onDelete:Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt() 
+}
+
+model SavedItem{
+  id       String  @id @default(uuid())
+  listingId   String
+  userId   String
+
+  // Relations
+  user   User  @relation(fields: [userId], references: [id], onDelete:Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt() 
 }
 
 model Rating {

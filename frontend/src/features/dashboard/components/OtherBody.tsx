@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import $ from 'jquery';
 import useWindowSize from "../../../app/hooks/useWindowSize";
 import {useCompanyInfo,useDashboardConfig} from '../pages/Settings/slices/settings.slice';
+import useLocalStorage from '../../../app/hooks/useLocalStorage';
 
 
 const OtherBody = ({children}:{children:React.ReactNode}) => {
@@ -21,6 +22,7 @@ const OtherBody = ({children}:{children:React.ReactNode}) => {
     direction
 }={}}={}}={}} = useSelector(useDashboardConfig);
 const [isPending, startTransition] = useTransition();
+const [themeMode] =  useLocalStorage('appThemeMode','light');
 
 const { width, height } = useWindowSize();
 useEffect(() => {
@@ -30,7 +32,7 @@ useEffect(() => {
   // Apply layout settings from the Redux state
   body.attr({
       "data-typography": typography,
-      "data-theme-version": version,
+      "data-theme-version": themeMode,
       "data-layout": layout,
       "data-nav-headerbg": navheaderBg,
       "data-headerbg": headerBg,

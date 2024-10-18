@@ -1,31 +1,29 @@
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../features/auth/slices/auth.slice";
 import {jwtDecode} from "jwt-decode";
-import { authProps } from "../props/authProps";
+import { AuthProps } from "../props/authProps";
 import { Role } from "../props/userProps";
 
 const useAuth = ()=>{
 
     const token =useSelector(selectCurrentToken)
     let isAdmin, isUser, isDev, isStaff = false
-    let role = 'User'
+    let userRoles;
     if(token){
-        const decodedToken:authProps['token'] | undefined = token
+        const decodedToken:AuthProps['token'] | undefined = token
         ? jwtDecode(token)
            : undefined;
 const  roles = decodedToken?.sub?.roles || []
-        
-        isUser = roles?.find((role:Role) => role.code === "0004")
-        isStaff = roles?.find((role:Role) => role.code === "0003")
-        isAdmin = roles?.find((role:Role) => role.code === "0002")
-        isDev = roles?.find((role:Role) => role.code === "000")
+        const userRoles =  roles?.map((role:Role) => role.code)
+        isUser = userRoles?.includes("0003")
+        isStaff = userRoles?.includes("0002")
+        isAdmin = userRoles?.includes("0001")
+        isDev = userRoles?.includes("0000")
 
-        if(isAdmin) role = "Admin" 
-        if(isDev) role = "Developer" 
-        if(isUser) role = "User" 
-        if(isStaff) role = "Staff" 
+       
+        
     }
-    return {username:'',user: '', roles:[], isAdmin,isDev,isStaff,role}
+    return {username:'',user: '', isUser, isAdmin,isDev,isStaff,roles:userRoles}
 }
 
 export default useAuth

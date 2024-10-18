@@ -56,8 +56,8 @@ const HomePageSettings = () => {
   return (
     <>
       <div className="card">
-        <div className="card-header bg-primary">
-          <h4 className="card-title text-white">Home Page</h4>
+        <div className="card-header">
+          <h4 className="card-title">Home Page</h4>
         </div>
         <div className="card-body p-5">
           <div className="basic-form">

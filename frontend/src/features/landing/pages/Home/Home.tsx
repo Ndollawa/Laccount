@@ -1,5 +1,5 @@
 import React from 'react';
-import PageProps from '../../../../app/props/PageProps';
+import PageProps from '../../../../app/props/pageProps';
 import { useSelector } from 'react-redux';
 import {useCompanyInfo,useLandingConfig} from '../../../dashboard/pages/Settings/slices/settings.slice';
 import Slider from './Components/Slider';

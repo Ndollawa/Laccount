@@ -56,8 +56,9 @@
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "bull": "^4.16.3",
-    "cache-manager": "^6.1.0",
+    "cache-manager": "^5",
     "cache-manager-redis-store": "^3.0.1",
+    "cache-manager-redis-yet": "^5.1.5",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "cookie-parser": "^1.4.6",
@@ -77,10 +78,12 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "passport-oauth": "^1.0.0",
+    "paystack": "^2.0.1",
     "prisma": "^5.19.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "shortid": "^2.2.16",
+    "stripe": "^17.2.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

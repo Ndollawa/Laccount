@@ -2,71 +2,79 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useLandingConfig } from '../../../../dashboard/pages/Settings/slices/settings.slice';
-import OwlCarousel from 'react-owl-carousel'; // Importing OwlCarousel from react-owl-carousel
-import 'owl.carousel/dist/assets/owl.carousel.css'; // OwlCarousel CSS
-import 'owl.carousel/dist/assets/owl.theme.default.css'; // OwlCarousel default theme CSS
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay, EffectFade, Virtual } from 'swiper/modules';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/effect-fade';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Slider = () => {
   const { settings: { landingPageConfig: { sliderStyle } = {} , sliders =[]} = {} } = useSelector(useLandingConfig);
 
-  // OwlCarousel options
-  const carouselOptions = {
+  const handleSlideHeading = (phrase: string) => {
+    let res = '';
+    if (phrase) {
+      const words = phrase.trim().split(' ');
+      const lastWord = words.pop();
+      res = words.length > 0 ? `${words.join(' ')} <span>${lastWord}</span>` : `<span>${lastWord}</span>`;
+    }
+    return res;
+  };
+
+  const swiperOptions = {
+    modules: [Navigation, Pagination, Autoplay, EffectFade, Virtual],
     loop: true,
-    autoplay: true,
-    autoplayTimeout: 7000,
-    smartSpeed: 500,
-    items: 1,
-    lazyLoad:true,
-    lazyContent:true,
-    animateOut: 'fadeOut',
-    animateIn: 'fadeIn',
-    nav: true,
-    dots: false,
-    navContainer: true
-    navElement: 'div',
-    navText: ['<button className="slider-one__carousel__btn__left"> <i className="fa fa-angle-left"></i> </button>', '<button className="slider-one__carousel__btn__right"> <i className="fa fa-angle-right"></i> </button>']
+    autoplay: { delay: 7000 },
+    effect: 'fade',
+    speed: 500,
+    slidesPerView: 1,
+    pagination: { clickable: true },
+    navigation: true,
+    lazy: true,
   };
 
   let slider: any = null;
 
   if (sliders) {
-
-
     switch (sliderStyle) {
       case 1:
         slider = (
           <section className="slider-one">
-            {/* Using OwlCarousel component */}
-            <OwlCarousel className="owl-theme" {...carouselOptions}>
-              {sliders?.map((slide: any) => (
-                <div className="item" key={slide.id}>
+            <Swiper {...swiperOptions}>
+              {sliders.map((slide: any) => (
+                <SwiperSlide key={slide.id}>
                   <div className="slider-one__item">
                     <div className="slider-one__lines">
                       <span></span><span></span><span></span><span></span><span></span>
                     </div>
                     <div
                       className="slider-one__image"
-                      style={{ backgroundImage: `url(${BASE_URL + "uploads/settings/slides/" + slide.image})` }}>
-                    </div>
+                      style={{ backgroundImage: `url(${BASE_URL}uploads/settings/slides/${slide.image})` }}
+                    ></div>
                     <div className="container">
                       <div className="row">
                         <div className="col-lg-7">
                           <p className="slider-one__tagline"><i className="fa fa-chart-pie"></i> {slide.title}</p>
-                          <h2 className="slider-one__title">{slide.description}</h2>
+                          <h2
+                            className="slider-one__title"
+                            dangerouslySetInnerHTML={{ __html: handleSlideHeading(slide.description) }}
+                          ></h2>
                           <p className="slider-one__text">{slide?.body?.replaceAll(/<\/?[^>]+(>|$)/gi, "")}</p>
                           <div className="slider-one__btns">
-                           {(slide.cto.link && slide.cto.cto_text) && <Link to={slide?.cto?.link} className="thm-btn">{slide?.cto?.cot_text}</Link>}
+                            {(slide.cto.link && slide.cto.cto_text) && <Link to={slide.cto.link} className="thm-btn">{slide.cto.cto_text}</Link>}
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="slider-one__carousel__btn nav-container">  </div>
-                  </div>
+                </SwiperSlide>
               ))}
-            </OwlCarousel>
+            </Swiper>
 
             <div className="slider-one__box wow fadeInRight" data-wow-duration="1500ms">
               <div className="slider-one__box__icon">
@@ -84,29 +92,30 @@ const Slider = () => {
       case 2:
         slider = (
           <section className="slider-one slider-one--two">
-            <OwlCarousel className="owl-theme" {...carouselOptions}>
-              {sliders?.map((slide: any) => (
-                <div className="item" key={slide.id}>
+            <Swiper {...swiperOptions}>
+              {sliders.map((slide: any) => (
+                <SwiperSlide key={slide.id}>
                   <div className="slider-one__item">
-                    <div className="slider-one__image" style={{ backgroundImage: `url(${BASE_URL + "uploads/settings/slides/" + slide.image})` }}>
-                    </div>
+                    <div className="slider-one__image" style={{ backgroundImage: `url(${BASE_URL}uploads/settings/slides/${slide.image})` }}></div>
                     <div className="container">
                       <div className="row">
                         <div className="col-lg-6">
-                          <p className="slider-one__tagline"> {slide.title}</p>
-                          <h2 className="slider-one__title">{slide.description}</h2>
+                          <p className="slider-one__tagline">{slide.title}</p>
+                          <h2
+                            className="slider-one__title"
+                            dangerouslySetInnerHTML={{ __html: handleSlideHeading(slide.description) }}
+                          ></h2>
                           <p className="slider-one__text">{slide?.body?.replaceAll(/<\/?[^>]+(>|$)/gi, "")}</p>
                           <div className="slider-one__btns">
-                          {(slide.cto.link && slide.cto.cto_text) &&  <Link to={slide?.cto?.link} className="thm-btn thm-btn--dark-hover">{slide?.cto?.cto_text}</Link>}
+                            {(slide.cto.link && slide.cto.cto_text) && <Link to={slide.cto.link} className="thm-btn thm-btn--dark-hover">{slide.cto.cto_text}</Link>}
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="slider-one__carousel__btn nav-container">  </div> 
-                </div>
+                </SwiperSlide>
               ))}
-            </OwlCarousel>
+            </Swiper>
           </section>
         );
         break;
@@ -114,28 +123,29 @@ const Slider = () => {
       case 3:
         slider = (
           <section className="slider-one slider-one--three">
-            <OwlCarousel className="owl-theme" {...carouselOptions}>
-              {sliders?.map((slide: any) => (
-                <div className="item" key={slide.id}>
+            <Swiper {...swiperOptions}>
+              {sliders.map((slide: any) => (
+                <SwiperSlide key={slide.id}>
                   <div className="slider-one__item">
-                    <div className="slider-one__image" style={{ backgroundImage: `url(${BASE_URL + "uploads/settings/slides/" + slide.image})` }}>
-                    </div>
+                    <div className="slider-one__image" style={{ backgroundImage: `url(${BASE_URL}uploads/settings/slides/${slide.image})` }}></div>
                     <div className="container">
                       <div className="row">
                         <div className="col-lg-12 text-center">
-                          <h2 className="slider-one__title">{slide.description}</h2>
+                          <h2
+                            className="slider-one__title"
+                            dangerouslySetInnerHTML={{ __html: handleSlideHeading(slide.description) }}
+                          ></h2>
                           <p className="slider-one__text">{slide?.body?.replaceAll(/<\/?[^>]+(>|$)/gi, "")}</p>
                           <div className="slider-one__btns">
-                          {(slide.cto.link && slide.cto.cto_text) &&    <Link to={slide?.cto?.link} className="thm-btn">{slide.cto.cto_text}</Link>}
+                            {(slide.cto.link && slide.cto.cto_text) && <Link to={slide.cto.link} className="thm-btn">{slide.cto.cto_text}</Link>}
                           </div>
                         </div>
                       </div>
-                      </div>
+                    </div>
                   </div>
-                  <div className="slider-one__carousel__btn nav-container">  </div>
-                     </div>
+                </SwiperSlide>
               ))}
-            </OwlCarousel>
+            </Swiper>
           </section>
         );
         break;

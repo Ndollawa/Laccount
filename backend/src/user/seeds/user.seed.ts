@@ -34,18 +34,18 @@ const adminUser = {
   wallets: {
     createMany: {
       data: [
-        {
-          balance: 0,
-          type: WalletType.CREDIT,
-          currency: {
-            name: 'LA',
-          },
-        },
+        // {
+        //   balance: 0,
+        //   type: WalletType.CREDIT,
+        //   currency: {
+        //     name: 'LA',
+        //   },
+        // },
         {
           balance: 0,
           type: WalletType.FIAT,
           currency: {
-            name: 'LA',
+            name: 'FIAT',
           },
         },
       ],
@@ -83,18 +83,18 @@ const devUser = {
   wallets: {
     createMany: {
       data: [
-        {
-          balance: 0,
-          type: WalletType.CREDIT,
-          currency: {
-            name: 'LA',
-          },
-        },
+        // {
+        //   balance: 0,
+        //   type: WalletType.CREDIT,
+        //   currency: {
+        //     name: 'LA',
+        //   },
+        // },
         {
           balance: 0,
           type: WalletType.FIAT,
           currency: {
-            name: 'LA',
+            name: 'FIAT',
           },
         },
       ],

@@ -6,9 +6,10 @@ import {
   CacheStore,
 } from '@nestjs/cache-manager';
 
-import { redisStore } from 'cache-manager-redis-store';
+import { redisStore } from 'cache-manager-redis-yet';
 // import type { RedisClientOptions } from 'redis';
 import { SeederModule } from './seeder/seeder.module';
+
 import { RedisModule } from './redis/redis.module';
 import { CacheService, RequestService } from './services';
 import { SeederService } from './seeder/seeder.service';
@@ -28,25 +29,24 @@ import { UserModule } from 'src/user';
         cache: true,
       }),
     ),
-    CacheModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      isGlobal: true,
-      useFactory: async (
-        configService: ConfigService,
-      ): Promise<CacheManagerOptions> => {
-        const store = await redisStore({
-          commandsQueueMaxLength: 10_000,
-          url: configService.getOrThrow<string>('REDIS_URI', 'localhost:6379'),
-          // socket: {
-          //   host: configService.getOrThrow<string>('REDIS_HOST', 'localhost'),
-          //   port: configService.getOrThrow<number>('REDIS_PORT', 6379),
-          //   ttl: configService.getOrThrow<number>('CACHE_TTL', 600),
-          // },
-        });
-        return { store: store as unknown as CacheStore };
-      },
-    }),
+    // CacheModule.registerAsync({
+    //   imports: [ConfigModule],
+    //   inject: [ConfigService],
+    //   isGlobal: true,
+    //   useFactory: async (
+    //     configService: ConfigService,
+    //   ): Promise<CacheManagerOptions> => {
+    //     const store = await redisStore({
+    //       commandsQueueMaxLength: 10_000,
+    //       socket: {
+    //         host: configService.getOrThrow<string>('REDIS_HOST', 'localhost'),
+    //         port: configService.getOrThrow<number>('REDIS_PORT', 6379),
+    //       }
+    //       ttl: configService.getOrThrow<number>('CACHE_TTL', 600),
+    //     });
+    //     return { store: store as unknown as CacheStore };
+    //   },
+    // }),
     forwardRef(() => AppsettingModule),
     forwardRef(() => UserModule),
     SeederModule,

@@ -26,6 +26,15 @@ const DashboardTeam = React.lazy(() => import('./features/dashboard/pages/Team/T
 const DashboardService = React.lazy(() => import('./features/dashboard/pages/Service/Services'));
 const DashboardSlider = React.lazy(() => import('./features/dashboard/pages/Slide/Slide'));
 
+// settings
+const SiteSettings = React.lazy(() => import('./features/dashboard/pages/Settings/SiteSettings'));
+const GeneralSettings = React.lazy(() => import('./features/dashboard/pages/Settings/components/GeneralSettings'));
+const HomePageSettings = React.lazy(() => import('./features/dashboard/pages/Settings/components/HomePageSettings'));
+const AboutUs = React.lazy(() => import('./features/dashboard/pages/Settings/components/AboutUs'));
+const TermsConditionsSetting = React.lazy(() => import('./features/dashboard/pages/Settings/components/TermsConditions'));
+const PrivacyPolicySetting = React.lazy(() => import('./features/dashboard/pages/Settings/components/PrivacyPolicy'));
+const SiteImage = React.lazy(() => import('./features/dashboard/pages/Settings/components/SiteImage'));
+
 
 const LandingHome = React.lazy(() => import('./features/landing/pages/Home/Home'));
 const About = React.lazy(() => import('./features/landing/pages/About/About'));
@@ -101,21 +110,14 @@ const bgImage = `${BASE_URL}uploads/settings/brand/${pagesBg}`
           <Route path="/dashboard" element={<DashboardLayout pageData={{ pageTitle: "Dashboard" }} />}>
             <Route index element={<DashboardHome />} />
             <Route path="profile">
-              <Route index element={<Profile />} />
+              <Route index element={<Profile pageData={{ pageTitle:"Profile", coverImage:bgImage }}/>} />
               <Route path="edit" element={<ProfileEdit />} />
             </Route>
-            <Route path="faq" element={<DashboardFaq />} />
-            <Route path="our-team" element={<DashboardTeam />} />
-            <Route path="services" element={<DashboardService />} />
-            <Route path="sliders" element={<DashboardSlider />} />
-            <Route path="wallet" element={<Wallet pageData={{ pageTitle: "Wallet", coverImage:bgImage }} />} />
+            <Route path="wallets" element={<Wallet pageData={{ pageTitle: "Wallet", coverImage:bgImage }} />} />
             <Route path="market" element={<Market pageData={{ pageTitle: "Market", coverImage:bgImage }} />} />
             <Route path="transaction" element={<Transaction pageData={{ pageTitle: "Transaction", coverImage:bgImage }} />} />
             <Route path="contacts" element={<Contacts pageData={{ pageTitle: "Contacts", coverImage:bgImage }} />} />
-            <Route path="users">
-              <Route index element={<Users pageData={{ pageTitle: "Users", coverImage:bgImage }} />} />
-              <Route path="user/:userId" element={<User pageData={{ pageTitle: "User", coverImage:bgImage }} />} />
-            </Route>
+           
             <Route path="messenger">
               <Route index element={<Chat pageData={{ pageTitle: "Messenger", coverImage:bgImage }} />} />
               <Route path=":id" element={<Chat pageData={{ pageTitle: "Messenger", coverImage:bgImage }} />} />
@@ -124,6 +126,31 @@ const bgImage = `${BASE_URL}uploads/settings/brand/${pagesBg}`
           </Route>
           {/* Admin Routes */}
           <Route element={<RequireAuth allowedRoles={["0001", "0000"]} />} />
+            <Route path="faq" element={<DashboardFaq />} />
+            <Route path="our-team" element={<DashboardTeam />} />
+            <Route path="services" element={<DashboardService />} />
+            <Route path="sliders" element={<DashboardSlider />} />
+           <Route path="users">
+              <Route index element={<Users pageData={{ pageTitle: "Users", coverImage:bgImage }} />} />
+              <Route path="user/:userId" element={<User pageData={{ pageTitle: "User", coverImage:bgImage }} />} />
+            </Route>
+           <Route path="blog">
+              <Route index element={<Users pageData={{ pageTitle: "Posts", coverImage:bgImage }} />} />
+              <Route path="posts"  >
+                     <Route index element={<Users pageData={{ pageTitle: "Users", coverImage:bgImage }} />} />
+                     <Route path=":postId" element={<User pageData={{ pageTitle: "User", coverImage:bgImage }} />} />
+              </Route>
+            </Route>
+          <Route path="dashboard/settings/" element={<SiteSettings pageData={{ pageTitle:"Settings", coverImage:bgImage }}/>} >
+                      <Route index element={<GeneralSettings/>} />
+                      <Route path="general" element={<GeneralSettings/>} />
+                      <Route path="home-page" element={<HomePageSettings/>} />
+                      <Route path="about-us" element={<AboutUs/>} />
+                      <Route path="privacy-and-policy" element={<PrivacyPolicySetting/>} />
+                      <Route path="contact-us" element={<SiteSettings/>} />
+                      <Route path="site-images" element={<SiteImage/>} />
+                      <Route path="terms-and-conditions" element={<TermsConditionsSetting/>} />
+                  </Route> 
         </Route>
       </Route>
     </>
@@ -135,25 +162,25 @@ const bgImage = `${BASE_URL}uploads/settings/brand/${pagesBg}`
       {isPending ? <Preloader /> :
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<LandingLayout/> }>
-          <Route index element={<LandingHome  pageData={{ pageTitle:"Home", coverImage:bgImage }}/>} />
-          <Route path="about" element={<About />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="careers" element={<Career />} />
+        <Route path="/" element={<LandingLayout pageData={{ pageTitle:"Home", coverImage:bgImage }}/> }>
+          <Route index element={<LandingHome />} />
+          <Route path="about" element={<About pageData={{ pageTitle:"About", coverImage:bgImage }} />} />
+          <Route path="contact" element={<Contact pageData={{ pageTitle:"Contact", coverImage:bgImage }}/>} />
+          <Route path="careers" element={<Career pageData={{ pageTitle:"Career", coverImage:bgImage }} />} />
           <Route path="career/apply-now" element={<Form />} />
-          <Route path="faqs" element={<Faq />} />
-          <Route path="terms-and-condition" element={<TermsConditions />} />
+          <Route path="faqs" element={<Faq pageData={{ pageTitle:"Faq", coverImage:bgImage }}/>} />
+          <Route path="terms-and-condition" element={<TermsConditions pageData={{ pageTitle:"Terms & Conditions", coverImage:bgImage }} />} />
           <Route path="our-blog">
-            <Route index element={showBlog ? <Blog /> : <Navigate to="/error/404" />} />
+            <Route index element={showBlog ? <Blog pageData={{ pageTitle:"Our Blog", coverImage:bgImage }}/> : <Navigate to="/error/404" />} />
             <Route path="posts/:id" element={showBlog ? <Post /> : <Navigate to="/error/404" />} />
           </Route>
-          <Route path="privacy-and-policy" element={<PrivacyPolicy />} />
+          <Route path="privacy-and-policy" element={<PrivacyPolicy pageData={{ pageTitle:"Our Privacy Policy", coverImage:bgImage }} />} />
           <Route path="our-team">
-            <Route index element={showTeam ? <Team /> : <Navigate to="/error/404" />} />
+            <Route index element={showTeam ? <Team  pageData={{ pageTitle:"Team", coverImage:bgImage }}/> : <Navigate to="/error/404" />} />
             <Route path=":id" element={showTeam ? <Member /> : <Navigate to="/error/404" />} />
           </Route>
           <Route path="services">
-            <Route index element={<Services />} />
+            <Route index element={<Services pageData={{ pageTitle:"Services", coverImage:bgImage }}/>} />
             <Route path=":id" element={<Service />} />
           </Route>
           <Route path="login" element={<Navigate to="/auth/login" replace />} />

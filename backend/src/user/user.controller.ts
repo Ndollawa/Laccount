@@ -71,18 +71,18 @@ export class UserController {
         wallets: {
           createMany: {
             data: [
-              {
-                balance: 0,
-                type: WalletType.CREDIT,
-                currency: {
-                  name: 'LA',
-                },
-              },
+              // {
+              //   balance: 0,
+              //   type: WalletType.CREDIT,
+              //   currency: {
+              //     name: 'LA',
+              //   },
+              // },
               {
                 balance: 0,
                 type: WalletType.FIAT,
                 currency: {
-                  name: 'FA',
+                  name: 'FIAT',
                 },
               },
             ],
@@ -159,7 +159,7 @@ export class UserController {
   }
 
   @Post('check-duplicates')
-  async checkDuplicate(@Body() { user }: { user: string; }):Promise<boolean>{
+  async checkDuplicate(@Body() { user }: { user: string }): Promise<boolean> {
     const userType = EMAIL_REGEX.test(user);
     const userQuery = userType ? { email: user } : { username: user };
     return await this.userService.exists({
@@ -171,8 +171,8 @@ export class UserController {
   //   return null
   // }
 
-  // @OnEvent('user-created')
-  // sendVerificationEmail(payload: User) {
-  //   console.log(payload,"from controller");
-  // }
+  @OnEvent('user-created')
+  sendVerificationEmail(payload: User) {
+    console.log(payload, 'from controller');
+  }
 }

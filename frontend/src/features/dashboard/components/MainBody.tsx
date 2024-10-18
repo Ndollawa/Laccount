@@ -14,6 +14,7 @@ import useWindowSize from "../../../app/hooks/useWindowSize";
 import AppSettings from "./AppSettings";
 import ThemePanel from "./ThemePanel";
 import useUserActivity from "../../../app/hooks/useUserActivity";
+import useLocalStorage from "../../../app/hooks/useLocalStorage";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -25,7 +26,7 @@ const MainBody = ({ children }: { children: React.ReactNode }) => {
     const [isToggled, setIsToggled] = useState(false);
     const { width, height } = useWindowSize();
     const [isPending, startTransition] = useTransition();
-   
+    const [theme, setTheme] =  useLocalStorage('appThemeMode','light');
     const { settings: { companyDetails: { siteName } = {} } = {} } = useSelector(useCompanyInfo);
     const { settings: { siteImages: { logo, logoIcon, favicon, logoDark } = {} } = {} } = useSelector(useLandingConfig);
     const {
@@ -38,7 +39,7 @@ const MainBody = ({ children }: { children: React.ReactNode }) => {
             } = {}
         } = {}
     } = useSelector(useDashboardConfig);
-
+    const [themeMode, setThemeMode] =  useLocalStorage('appThemeMode','light');
     const toggleMenu = useCallback(() => {
         setIsToggled((prev) => !prev);
     }, []);
@@ -50,7 +51,7 @@ const MainBody = ({ children }: { children: React.ReactNode }) => {
         // Apply layout settings from the Redux state
         body.attr({
             "data-typography": typography,
-            "data-theme-version": version,
+            "data-theme-version": themeMode,
             "data-layout": layout,
             "data-nav-headerbg": navheaderBg,
             "data-headerbg": headerBg,

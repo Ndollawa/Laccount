@@ -8,7 +8,7 @@ import Footer from '../../landing/components/Footer';
 import Js from '../../landing/components/Js';
 import MobileNav from '../../landing/components/MobileNav';
 import Search from '../../landing/components/Search';
-import PageProps from "../../../app/props/PageProps";
+import PageProps from "../../../app/props/pageProps";
 import './styles.css';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;

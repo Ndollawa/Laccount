@@ -114,7 +114,7 @@ export class MailerService {
 
   async create(createMailerData: CreateMailerDto): Promise<Mailer> {
     const { name, type } = createMailerData;
-        try {
+    try {
       const existingMailer = await this.mailerRepository.exists({
         where: { AND: [{ name }, { type }] },
       });

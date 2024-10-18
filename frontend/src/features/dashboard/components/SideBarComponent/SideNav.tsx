@@ -1,6 +1,7 @@
 import React ,{ReactNode, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {UserLinks, AdminLinks} from './Links';
+import useAuth from '../../../../app/hooks/useAuth';
 
 
 
@@ -32,7 +33,7 @@ interface sideBarLink{
 const SideNav = () => {
 let [userLink, setUserLink] = React.useState(UserLinks)
 let [adminLink, setAdminLink] = React.useState(AdminLinks)
-
+const { isAdmin, isDev, isStaff, isUser } = useAuth()
 
 const toggleMenu = (id:number,type:string)=>{
    console.log(id+" "+type)
@@ -118,11 +119,16 @@ const toggleMenu = (id:number,type:string)=>{
   return (
 
        
-             <ul className="metismenu" id="menu">
+             <ul className="metismenu mb-5" id="menu">
                    {userLinks}     
+        {(isAdmin || isDev) &&
         
-                  <li className="nav-label">Admin Section</li>
+        <>
+         <li className="nav-label">Admin Section</li>
                   {adminLinks}
+        </>
+        }
+                 
             </ul> 
   )
 }

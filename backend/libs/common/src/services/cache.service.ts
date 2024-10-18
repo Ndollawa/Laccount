@@ -3,8 +3,7 @@ import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
 export class CacheService {
-  constructor(@Inject(CACHE_MANAGER) private readonly cache: Cache) {}
-
+  // constructor(@Inject(CACHE_MANAGER) private readonly cache: Cache) {}
   // /**
   //  * Set a value in the cache with an optional time to live (TTL).
   //  * @param key The cache key.
@@ -20,7 +19,6 @@ export class CacheService {
   //     );
   //   }
   // }
-
   // /**
   //  * Get a value from the cache.
   //  * @param key The cache key.
@@ -35,7 +33,6 @@ export class CacheService {
   //     );
   //   }
   // }
-
   // /**
   //  * Delete a value from the cache.
   //  * @param key The cache key.
@@ -50,7 +47,6 @@ export class CacheService {
   //     );
   //   }
   // }
-
   // /**
   //  * Set a value in the cache with an expiration time.
   //  * @param key The cache key.
@@ -66,7 +62,6 @@ export class CacheService {
   //     );
   //   }
   // }
-
   // /**
   //  * Check if a cache key exists.
   //  * @param key The cache key.
@@ -82,7 +77,6 @@ export class CacheService {
   //     );
   //   }
   // }
-
   // /**
   //  * Clear all cache keys.
   //  */

@@ -26,7 +26,7 @@ const HomePage = () => {
 
 				)
 			break;
-			case 1:
+			case 2:
 				svg = (
 				<svg width="55" height="34" viewBox="0 0 55 34" fill="none" xmlns="../../www.w3.org/2000/svg.html">
 					<circle cx="38.0091" cy="16.7788" r="16.7788" fill="white" fillOpacity="0.67"/>
@@ -34,9 +34,20 @@ const HomePage = () => {
 				</svg>
 				)
 			break;
-			case 1:
+			case 3:
 				svg = (
-
+					<svg width="55" height="34" viewBox="0 0 55 34" fill="none" xmlns="../../www.w3.org/2000/svg.html">
+						<circle cx="38.0091" cy="16.7788" r="16.7788" fill="white" fillOpacity="0.67"/>
+						<circle cx="17.4636" cy="16.7788" r="16.7788" fill="white" fillOpacity="0.67"/>
+					</svg>
+				)
+			break;
+			case 4:
+				svg = (
+					<svg width="55" height="34" viewBox="0 0 55 34" fill="none" xmlns="../../www.w3.org/2000/svg.html">
+					<circle cx="38.0091" cy="16.7788" r="16.7788" fill="white" fillOpacity="0.67"/>
+					<circle cx="17.4636" cy="16.7788" r="16.7788" fill="white" fillOpacity="0.67"/>
+				</svg>
 				)
 			break;
 			default :
@@ -114,14 +125,14 @@ useEffect(() => {
 						<div className="row">{
 							currentUser.wallets.map((wallet:Wallet,i:number)=>(
 
-								<div className="col-sm-6">
+								<div className="col-sm-6" key={i}>
 								<div className="card-bx stacked card">
 									<img src={`dashboard-assets/images/card/card${i+1}.jpg`} alt=""/>
 									<div className="card-info">
 										<p className="mb-1 text-white fs-14">Wallet Balance</p>
 										<div className="d-flex justify-content-between">
 											<h2 className="num-text text-white mb-5 font-w600">$ {wallet.balance}</h2>
-											{ getWalletSVG(i) }
+											{ getWalletSVG(i+1) }
 										</div>
 										<div className="d-flex">
 							
