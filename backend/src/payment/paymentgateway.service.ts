@@ -1,12 +1,17 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { PaymentGateway, GatewayMode } from '@prisma/client';
-import { handleError } from '@app/common';
+import { handleError, PaymentGateway as PaymentGatewayInterface } from '@app/common';
 import { CreatePaymentGatewayDto, UpdatePaymentGatewayDto } from './dto';
 import { PaymentGatewayRepository } from './paymentgateway.repository';
+import { StripePaymentGateway, PaystackPaymentGateway,  RazorpayPaymentGateway  } from './gateways';
 
 @Injectable()
 export class PaymentGatewayService {
+   private paymentGateway:PaymentGatewayInterface ;
   constructor(
+    protected readonly stripePaymentGateway: StripePaymentGateway,
+    protected readonly razorpayPaymentGateway: RazorpayPaymentGateway,
+    protected readonly paystackPaymentGateway: PaystackPaymentGateway,
     protected readonly paymentGatewayRepository: PaymentGatewayRepository,
   ) {}
 
@@ -75,7 +80,6 @@ export class PaymentGatewayService {
       Logger.debug(newPaymentGateway);
       return newPaymentGateway;
     } catch (error) {
-      Logger.log(error);
       handleError(error);
     }
   }
@@ -101,4 +105,40 @@ export class PaymentGatewayService {
       handleError(error);
     }
   }
+
+  async processPayment(transactionId: string, amount: number, paymentMethod: string) {
+    // This is where you'd call Stripe, Paystack, or Razorpay based on the payment method
+    const activeGateway:string ='stripe';
+    switch (activeGateway) {
+      case 'stripe':
+        this.paymentGateway = this.stripePaymentGateway;
+        break;
+      case 'paystack':
+        this.paymentGateway = this.paystackPaymentGateway;
+        break;
+      case 'razorpay':
+        this.paymentGateway = this.razorpayPaymentGateway;
+        break;
+      default:
+        throw new Error('Unsupported payment gateway');
+    }
+  console.log(this.initializePayment(amount,'usd', '124'))
+    // Simulated webhook callback (In real scenarios, this will be an actual webhook event)
+    return { success: true, transactionId, userId:"bbhj" };
+  }
+
+  // 
+  async initializePayment(amount: number, currency: string, userId: string) {
+    return this.paymentGateway.initializePayment(amount, currency, userId);
+  }
+
+  async verifyPayment(paymentId: string) {
+    return this.paymentGateway.verifyPayment(paymentId);
+  }
+
+  // Verify webhook events (optional, for security)
+  verifyWebhook(webhookData: any) {
+    // You can implement logic here to verify that the webhook is legitimate
+  }
+
 }

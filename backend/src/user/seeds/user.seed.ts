@@ -1,8 +1,9 @@
 import { WalletType } from '@prisma/client';
 import { UserService } from './../services/user.service';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { WalletStatus } from '@prisma/client';
 import { UserRolesEnum, UserRolesKeysEnum } from '../enums/user-roles';
-import { hashData } from '@app/common';
+import { handleError, hashData } from '@app/common';
 
 const adminUser = {
   email: 'admin@admin.com',
@@ -37,6 +38,7 @@ const adminUser = {
         // {
         //   balance: 0,
         //   type: WalletType.CREDIT,
+        //    status: WalletStatus.ACTIVE,
         //   currency: {
         //     name: 'LA',
         //   },
@@ -44,6 +46,7 @@ const adminUser = {
         {
           balance: 0,
           type: WalletType.FIAT,
+          status: WalletStatus.ACTIVE,
           currency: {
             name: 'FIAT',
           },
@@ -86,6 +89,7 @@ const devUser = {
         // {
         //   balance: 0,
         //   type: WalletType.CREDIT,
+        //    status: WalletStatus.ACTIVE,
         //   currency: {
         //     name: 'LA',
         //   },
@@ -93,6 +97,7 @@ const devUser = {
         {
           balance: 0,
           type: WalletType.FIAT,
+          //    status: WalletStatus.ACTIVE,
           currency: {
             name: 'FIAT',
           },
@@ -134,10 +139,14 @@ export class UserSeed {
         },
       }))
     ) {
-      await this.userService.create({
+      try {
+        return  await this.userService.create({
         password: adminHashedPassword,
         ...adminUser,
       });
+      } catch (error) {
+        handleError(error);
+      } 
     }
     if (
       !(await this.userService.findFirst({
@@ -157,10 +166,14 @@ export class UserSeed {
         },
       }))
     ) {
-      await this.userService.create({
+      try {
+        return  await this.userService.create({
         password: devHashedPassword,
         ...devUser,
       });
+      } catch (error) {
+        handleError(error);
+      }
     }
   }
 }

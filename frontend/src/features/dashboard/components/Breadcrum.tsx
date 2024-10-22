@@ -1,5 +1,5 @@
 import React from 'react'
-import PageProps from '../../../app/props/PageProps'
+import PageProps from '../../../app/props/pageProps'
 import useTitle from '../../../app/hooks/useTitle';
 
 

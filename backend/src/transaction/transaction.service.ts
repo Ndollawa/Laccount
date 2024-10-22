@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreateTransactionDto, UpdateTransactionDto } from './dto';
 import { handleError } from '@app/common';
-import { Transaction } from '@prisma/client';
+import { Transaction, TransactionStatus } from '@prisma/client';
 import { TransactionRepository } from './transaction.repository';
 
 @Injectable()
@@ -71,7 +71,6 @@ export class TransactionService {
       Logger.debug(newTransaction);
       return newTransaction;
     } catch (error) {
-      Logger.log(error);
       handleError(error);
     }
   }
@@ -97,4 +96,11 @@ export class TransactionService {
       handleError(error);
     }
   }
+    // Update transaction status (e.g., after webhook confirmation)
+    async updateTransactionStatus(transactionId: string, status: TransactionStatus) {
+      return this.transactionRepository.update({
+        where: { id: transactionId },
+        data: { status },
+      });
+    }
 }

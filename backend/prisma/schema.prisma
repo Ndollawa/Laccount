@@ -45,6 +45,14 @@ enum WalletType {
   TOKEN
 }
 
+enum WalletStatus {
+  ACTIVE
+  INACTIVE
+  DISABLED
+  BLOCKED
+  DELETED
+}
+
 enum ViewState {
   READ
   UNREAD
@@ -154,11 +162,15 @@ enum AttachmentForEnum {
   COMMENT
   TICKETS
   MAILER
+  LISTING
+  SERVICE
+  NOTIFICATION
 }
 
 enum CategoryForEnum {
   POST
-
+  LISTING
+  
 }
 
 enum VerificationStatus {
@@ -352,13 +364,13 @@ model Listing {
   // Relations
   seller         Vendor            @relation(fields: [sellerId], references: [id])
   orders         Order[]
-  attachments    Attachment[]
+ // attachments    Attachment[]
   accountDetails AccountDetails?
 }
 
 model AccountDetails {
   id              String   @id @default(uuid())
-  platform        Platform
+  category        String
   username        String
   url             String
   followers       Int
@@ -484,9 +496,9 @@ model Post {
   // Relations
   categoryId  String
   comments    Comment[]
-  attachments Attachment[]
+ // attachments Attachment[]
   author      User         @relation(fields: [authorId], references: [id])
-  category      Category         @relation(fields: [categoryId], references: [id])
+ // category      Category         @relation(fields: [categoryId], references: [id])
   authorId    String
 }
 
@@ -518,40 +530,40 @@ model Category {
   id        String     @id @default(uuid())
   name      String
   status    PublishStatus @default(PUBLISHED)
-  for      CategoryForEnum
+  image     String?
   parentId  String?
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt()
 
   // Relations
-  posts     Post[]
+   // Polymorphic fields
+  targetId       String   // The ID of the related entity (e.g., postId, messageId, etc.)
+  targetType     CategoryForEnum // Enum to differentiate between types of entities (e.g., Post, Message, etc.)
+
+  // Optional index for faster lookups based on both fields
+  @@index([targetId, targetType])
   parent   Category?  @relation("categoryToCategory", fields: [parentId], references: [id])
   children Category[] @relation("categoryToCategory")
 }
 
-model Attachment {
-  id             String   @id @default(uuid())
-  fileName       String
-  fileType       String
-  fileUrl        String
-  for            AttachmentForEnum
-  postId         String?
-  listingId      String?
-  roomMessageId      String?
-  serviceId      String?
-  messageId      String?
-  notificationId String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt()
 
-  // Relations
-  post         Post?         @relation(fields: [postId], references: [id])
-  listing      Listing?      @relation(fields: [listingId], references: [id])
-  service      Service?      @relation(fields: [serviceId], references: [id])
-  message      Message?      @relation(fields: [messageId], references: [id])
-  roomMessage      RoomMessage?      @relation(fields: [roomMessageId], references: [id])
-  notification Notification? @relation(fields: [notificationId], references: [id])
+model Attachment {
+  id          String   @id @default(uuid())
+  fileName    String
+  fileType    String
+  fileUrl     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt()
+
+  // Polymorphic fields
+  targetId       String   // The ID of the related entity (e.g., postId, messageId, etc.)
+  targetType     AttachmentForEnum // Enum to differentiate between types of entities (e.g., Post, Message, etc.)
+
+  // Optional index for faster lookups based on both fields
+  @@index([targetId, targetType])
 }
+
+
 
 model Testimonial {
   id        String       @id @default(uuid())
@@ -576,7 +588,7 @@ model Service {
   updatedAt   DateTime   @updatedAt()
 
   // Relations
-  attachments Attachment[]
+ // attachments Attachment[]
 }
 
 model Notification {
@@ -586,7 +598,7 @@ model Notification {
   readAt       DateTime?
   status       ViewState
   receiverId   String
-  attachments  Attachment[]
+ // attachments  Attachment[]
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt()
   // Relations
@@ -617,7 +629,7 @@ model Message {
   conversation   Conversation @relation(fields: [conversationId], references: [id])
   sender         User         @relation("sentMessages", fields: [senderId], references: [id])
   receiver         User         @relation("receivedMessages", fields: [receiverId], references: [id])
-  attachments    Attachment[]
+ // attachments    Attachment[]
 }
 model RoomMessage {
   id        String       @id @default(uuid())
@@ -631,7 +643,7 @@ model RoomMessage {
   // Relations
   sender         User         @relation(fields: [senderId], references: [id])
   room           Room         @relation(fields: [roomId], references: [id])
-  attachments    Attachment[]
+ // attachments    Attachment[]
 }
 
 model Room {
@@ -653,10 +665,10 @@ model Wallet {
   id        String     @id @default(uuid())
   type      WalletType
   balance   Decimal    @default(0.0)
-  currency  Json
+  currency  Json?
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt()
-
+  status    WalletStatus @default(ACTIVE)
   // Relations
   userId String
   user   User   @relation(fields: [userId], references: [id])

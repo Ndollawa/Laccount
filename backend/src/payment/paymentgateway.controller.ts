@@ -41,4 +41,10 @@ export class PaymentGatewayController {
   remove(@Param('id') id: string) {
     return this.paymentGatewayService.remove(id);
   }
+
+  @Post('process-payment')
+  processPayment(@Body() processPaymentDto: {transactionId: string, amount: number, paymentMethod: string}) {
+    return this.paymentGatewayService.processPayment('amoun',300, 'nfsdkdfjjk');
+  }
+
 }

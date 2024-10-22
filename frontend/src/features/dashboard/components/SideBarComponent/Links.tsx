@@ -3,8 +3,10 @@ import {FaOpencart, FaPeopleArrows, FaPodcast, FaRegQuestionCircle, FaServicesta
 import {BiTransfer} from 'react-icons/bi'
 import {GiTakeMyMoney} from 'react-icons/gi'
 import {RxDashboard} from 'react-icons/rx'
-// import {RiCurrencyLine} from 'react-icons/ri'
+import { RiHomeGearLine, RiContactsLine } from 'react-icons/ri'
 import {TfiLayoutMediaCenter} from 'react-icons/tfi'
+import { HiOutlineBanknotes } from "react-icons/hi2";
+import { BsBank } from "react-icons/bs";
 import {HiOutlineChatBubbleLeftRight , HiOutlineUsers} from 'react-icons/hi2'
 
 export type sideBarLink ={
@@ -64,7 +66,7 @@ export type sideBarLink ={
     {
         id:5,
         title:'Contacts',
-        icon:<FaUserFriends fontSize={"2rem"}/>,
+        icon:<RiContactsLine  fontSize={"2rem"}/>,
         path:"/dashboard/contacts"
     }
     ]
@@ -113,7 +115,7 @@ export type sideBarLink ={
     ,{
         id:8,
         title:'Home Pages',
-        icon:<IoChatbubblesOutline fontSize={"2rem"}/>,
+        icon:<RiHomeGearLine fontSize={"2rem"}/>,
         isActive:false,
         isOpen:false,
         children:[
@@ -157,14 +159,14 @@ export type sideBarLink ={
     ,{
         id:9,
         title:'Finance',
-        icon:<IoChatbubblesOutline fontSize={"2rem"}/>,
+        icon:<HiOutlineBanknotes fontSize={"2rem"}/>,
         isActive:false,
         isOpen:false,
         children:[
             { 
                id:9.0,
                title:'Summary',
-            icon:<IoChatbubblesOutline fontSize={"2rem"}/>,
+            icon:<BsBank fontSize={"2rem"}/>,
                path: '/dashboard/summary'
            },
            {
@@ -183,5 +185,4 @@ export type sideBarLink ={
     }],
     }
     
-   
-]
+    ]

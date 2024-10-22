@@ -10,11 +10,11 @@ export default defineConfig({
     include: ['datatables.net-dt/css/jquery.dataTables.css'],
   },
   plugins: [
-    inject({
-      $: path.resolve(path.join(__dirname, 'node_modules/jquery')),    // Ensure jQuery is available globally as $
-      jQuery: path.resolve(path.join(__dirname, 'node_modules/jquery')),
-      'window.jQuery': path.resolve(path.join(__dirname, 'node_modules/jquery')),
-    }),
+    // inject({
+    //   $: path.resolve(path.join(__dirname, 'node_modules/jquery/dist/jquery.min.js')),    // Ensure jQuery is available globally as $
+    //   jQuery: path.resolve(path.join(__dirname, 'node_modules/jquery/dist/jquery.min.js')),
+    //   'window.jQuery': path.resolve(path.join(__dirname, 'node_modules/jquery/dist/jquery.min.js')),
+    // }),
     react(),
     tsconfigPaths()
   ],

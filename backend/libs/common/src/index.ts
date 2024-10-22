@@ -3,6 +3,7 @@ export * from './interceptors';
 export * from './guards';
 export * from './filters';
 export * from './constants';
+export * from './interfaces';
 export * from './pipes';
 export * from './middlewares';
 export * from './types';

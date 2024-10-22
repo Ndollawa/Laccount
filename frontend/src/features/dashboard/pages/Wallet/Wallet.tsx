@@ -1,5 +1,5 @@
 import React from 'react';
-import PageProps from '../../../../app/props/PageProps';
+import PageProps from '../../../../app/props/pageProps';
 import MainBody from '../../components/MainBody';
 
 const Wallet:React.FC<PageProps> = ({pageData}:PageProps) => {

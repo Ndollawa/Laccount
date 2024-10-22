@@ -41,6 +41,7 @@ import { SeederModule } from '@app/common/seeder/seeder.module';
 import { FaqModule } from './faq';
 import { TeamModule } from './team';
 import { CacheInterceptor } from '@nestjs/cache-manager';
+import { WebhookController } from './webhook/webhook.controller';
 
 @Module({
   imports: [
@@ -98,7 +99,7 @@ import { CacheInterceptor } from '@nestjs/cache-manager';
     TeamModule,
     SeederModule,
   ],
-  controllers: [],
+  controllers: [WebhookController],
   providers: [
     RequestService,
     {

@@ -14,7 +14,7 @@ import {
 import { OnEvent } from '@nestjs/event-emitter';
 import { EMAIL_REGEX, handleError, hashData } from '@app/common';
 import * as grpc from '@grpc/grpc-js';
-import { User, WalletType } from '@prisma/client';
+import { User, WalletType, WalletStatus } from '@prisma/client';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { UserRolesEnum, UserRolesKeysEnum } from './enums/user-roles';
 import { UserService } from './services/user.service';
@@ -74,6 +74,7 @@ export class UserController {
               // {
               //   balance: 0,
               //   type: WalletType.CREDIT,
+              //    status: WalletStatus.ACTIVE,
               //   currency: {
               //     name: 'LA',
               //   },
@@ -81,6 +82,7 @@ export class UserController {
               {
                 balance: 0,
                 type: WalletType.FIAT,
+                status: WalletStatus.ACTIVE,
                 currency: {
                   name: 'FIAT',
                 },
@@ -99,32 +101,27 @@ export class UserController {
   async findAll(): Promise<User[]> {
     try {
       const users = await this.userService.findAll({
-        // where: {
-        //   roles: {
-        //     some: {
-        //       AND: [
-        //         {
-        //           code: {
-        //             not: UserRolesEnum.DEV,
-        //           },
-        //         },
-        //         {
-        //           role: {
-        //             not: UserRolesKeysEnum.DEV,
-        //           },
-        //         },
-        //       ],
-        //     },
-        //   },
-        // },
-        // select: {
-        //   id: true,
-        //   username: true,
-        //   email: true,
-        //   verificationStatus: true,
-        // },
-        // include: { profile: true, roles: true },
+        where: {
+          roles: {
+            some: {
+              code: {
+                notIn: [UserRolesEnum.DEV, UserRolesEnum.ADMIN], // Assuming you want to exclude both DEV and ADMIN
+              },
+            },
+          },
+        },
+        select: {
+          id: true,
+          username: true,
+          email: true,
+          verificationStatus: true,
+        },
+        include: {
+          profile: true, // Include related profile
+          roles: true,   // Include related roles
+        },
       });
+      
       return users;
     } catch (error) {
       handleError(error);
@@ -135,6 +132,12 @@ export class UserController {
   async findOne(@Param('id') id: string): Promise<User> {
     const query = {
       where: { id },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        verificationStatus: true,
+      },
       include: {
         profile: true,
         roles: true,

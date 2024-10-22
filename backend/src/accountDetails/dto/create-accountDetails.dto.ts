@@ -1,10 +1,9 @@
-import { Platform } from '@prisma/client';
-import { IsEnum, IsNotEmpty, IsNumber, IsString, IsUrl } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsString, IsUrl, IsUUID } from 'class-validator';
 
 export class CreateAccountDetailsDto {
-  @IsEnum(Platform)
+  @IsUUID()
   @IsNotEmpty()
-  platform: Platform;
+  category: string;
 
   @IsString()
   @IsNotEmpty()

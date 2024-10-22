@@ -2,14 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useLandingConfig } from '../../../../dashboard/pages/Settings/slices/settings.slice';
-import $ from 'jquery';
-window.$ = $;
-window.JQuery = $;
-// global.JQuery = $;
-import OwlCarousel from 'react-owl-carousel'; // OwlCarousel component
+import OwlCarousel from 'react-owl-carousel'; // Importing OwlCarousel from react-owl-carousel
 import 'owl.carousel/dist/assets/owl.carousel.css'; // OwlCarousel CSS
 import 'owl.carousel/dist/assets/owl.theme.default.css'; // OwlCarousel default theme CSS
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+const SLIDER_ASSETS = import.meta.env.VITE_SLIDER_ASSETS;
 
 const Slider = () => {
   const {
@@ -28,7 +25,7 @@ const Slider = () => {
       <div className="slider-one__item">
         <div
           className="slider-one__image"
-          style={{ backgroundImage: `url(${BASE_URL}uploads/settings/slides/${slide.image})` }}
+          style={{ backgroundImage: `url(${SLIDER_ASSETS}${slide.image})` }}
         />
         <div className="container">
           <div className="row">
@@ -65,8 +62,8 @@ const Slider = () => {
     animateIn: 'fadeIn',
     nav: true,
     dots: false,
-    navContainer: true,
-    navElement: 'div',
+    // navContainer: true,
+    // navElement: 'div',
     navText: [
       '<button className="slider-one__carousel__btn__left"><i className="fa fa-angle-left"></i></button>',
       '<button className="slider-one__carousel__btn__right"><i className="fa fa-angle-right"></i></button>',
@@ -104,10 +101,10 @@ const Slider = () => {
         </OwlCarousel>
       </section>
     ),
-    default: null,
   };
 
-  return <>{sliderStyles[sliderStyle] || sliderStyles.default}</>;
+  // If the sliderStyle is not 1, 2, or 3, return null (or any default style)
+  return <>{sliderStyles[sliderStyle!] || null}</>;
 };
 
 export default React.memo(Slider);

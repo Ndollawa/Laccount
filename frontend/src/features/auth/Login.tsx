@@ -10,7 +10,7 @@ import {jwtDecode} from 'jwt-decode';
 import OtherBody from '../dashboard/components/OtherBody';
 import ClipLoader from 'react-spinners/ClipLoader';
 import useToggle from '../../app/hooks/useToggle';
-import { AuthProps } from '../../app/props/AuthProps';
+import { AuthProps } from '../../app/props/authProps';
 
 interface LoginFormInputs {
   user: string;

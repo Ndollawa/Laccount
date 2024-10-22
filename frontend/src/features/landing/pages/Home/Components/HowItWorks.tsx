@@ -45,7 +45,8 @@ const HowItWorks = () => {
                         <i className="icon-bill"></i>
                     </div>
                     <h3 className="work-process__title"><a href="#">Start a Transaction</a></h3>
-                    <p className="work-process__text">Once your account is verified, you can initiate a transaction by selecting the "Sell"  option. Provide the necessary details, including the amount, terms, and participants involved.
+                    <p className="work-process__text">Once your account is verified, you can Browse or List Accounts as a vendor, browse available accounts in your preferred category or list your own for sale.
+
                     </p>
                 </div>
             </div>
@@ -54,8 +55,8 @@ const HowItWorks = () => {
                     <div className="work-process__icon">
                         <i className="icon icon-loan"></i>
                     </div>
-                    <h3 className="work-process__title"><a href="#">Fund the Wallet</a></h3>
-                    <p className="work-process__text"> contents.
+                    <h3 className="work-process__title"><a href="#">Fund the Wallet & Make a Transaction</a></h3>
+                    <p className="work-process__text"> Use our secure payment system to purchase or sell accounts with confidence. Once the transaction is completed, rate your experience and receive your account access instantly.
                     </p>
                 </div>
             </div>

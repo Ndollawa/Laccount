@@ -11,15 +11,23 @@ export class CreateCategoryDto {
   @IsString()
   @IsNotEmpty()
   name: string;
+  
+  @IsOptional()
+  image?: string;
+
+  @IsString()
+  @IsOptional()
+  @IsUUID()
+  parentId?: string;
 
   @IsString()
   @IsNotEmpty()
   @IsUUID()
-  parentId: string;
+  targetId: string;
 
   @IsEnum(PublishStatus)
   status: PublishStatus;
 
-  @IsEnum(CategoryForEnum)
-  for: CategoryForEnum;
+  @IsString()
+  targetType: string;
 }

@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React,{useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import { selectCurrentUser } from '../../../auth/slices/auth.slice';
 // import $ from 'jquery';
@@ -9,10 +9,24 @@ import PageHeading from '../../components/PageHeading';
 import { useSelector } from 'react-redux';
 import { getUserFullName } from '../../../../app/utils/getUserName';
 import { Wallet } from '../../../../app/props/userProps';
+import { Button } from 'react-bootstrap';
+import ModalComponent from '../../components/Modal';
+import CheckoutForm from '../../components/CheckoutForm';
+import { FaDollarSign } from 'react-icons/fa';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import StripeElement from '../../components/StripeElement';
+interface FundWalletFormInputs {
+	amount: number;
+  }
+  
 
 
 const HomePage = () => {
 	const currentUser = useSelector(selectCurrentUser);
+	const [topUp, setTopUp] = useState(false)
+	const [amount, setAmount] = useState(0)
+	const { register, handleSubmit, formState: { errors }, reset } = useForm<FundWalletFormInputs>();
+
 	const getWalletSVG = (i:number) =>{
 		let svg;
 		switch(i){
@@ -64,6 +78,10 @@ useEffect(() => {
 //   };
 }, [])
 // console.log(currentUser)
+	const onSubmit: SubmitHandler<FieldValues> = async (formFields, e) => {
+		e?.preventDefault()
+			setAmount(+formFields.amount)
+	}
   return (
     <>
     <MainBody>
@@ -119,9 +137,39 @@ useEffect(() => {
 						</div>
 					</div>
 				</div>
-				
+				{amount && <StripeElement><CheckoutForm {...{styles:{buttonText:'Top up'}, amount:amount}}/></StripeElement>}
 				<div className="row">
 					<div className="col-xl-6 col-xxl-12">
+					{topUp && <ModalComponent {...{size:'sm',header:{show:true,title:'Fund Wallet'}}} >
+									<form onSubmit={(e) => handleSubmit(onSubmit)(e) } >
+									
+						<div className="form-group">
+                        {/* <label htmlFor="amount" className='font-normal fontsize-8'>Amount</label> */}
+                        <div className="input-group">
+                          <span className="input-group-text">
+                            <FaDollarSign />
+                          </span>
+                          <input
+                            type="number"
+                            className={`form-control ${errors.amount ? 'is-invalid' : ''}`}
+                            id="amount"
+                            {...register('amount', { required: 'Amount is required',
+								min:{
+										message:`Minimum of $3`,
+										value:3
+								},
+
+							 })}
+                          />
+                          {errors.amount && <div className="invalid-feedback">{errors.amount.message}</div>}
+                        </div>
+                      </div>
+					  <div className="flex  w-100">
+									<Button type='submit' size='sm' className='bg-primary justify-self-end' >Top up</Button>
+
+									</div>
+					  </form>
+						</ModalComponent>}	
 						<div className="row">{
 							currentUser.wallets.map((wallet:Wallet,i:number)=>(
 
@@ -134,11 +182,17 @@ useEffect(() => {
 											<h2 className="num-text text-white mb-5 font-w600">$ {wallet.balance}</h2>
 											{ getWalletSVG(i+1) }
 										</div>
-										<div className="d-flex">
-							
+										<div className="d-flex justify-content-between">
+										{/* <div className="me-4 text-white">
+												<p className="fs-12 mb-1 op6">VALID THRU</p>
+												<span>08/21</span>
+											</div> */}
 											<div className="text-white">
 												<p className="fs-12 mb-1 op6">CARD HOLDER</p>
 												<span>{getUserFullName(currentUser)}</span>
+											</div>
+										<div className="me-4 text-white">
+												<Button onClick={()=>setTopUp(true)} size='sm' className='bg-transparent border-white border-3'>Fund</Button>
 											</div>
 										</div>
 									</div>

@@ -6,7 +6,7 @@ import { useGetMessagesQuery } from '../slices/messagesApi.slice'
 import { selectCurrentUser } from '../../../../auth/slices/auth.slice'
 import useUserImage from '../../../../../app/hooks/useUserImage'
 import { format } from 'timeago.js'
-import MessageProps from '../../../../../app/props/MessageProps'
+import MessageProps from '../../../../../app/props/messageProps'
 
 const Conversation = ({conversation,i}:any) => {
   const currentUser = useSelector(selectCurrentUser)

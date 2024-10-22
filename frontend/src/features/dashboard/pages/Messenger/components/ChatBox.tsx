@@ -7,8 +7,8 @@ import { useGetConversationsQuery } from '../slices/conversationsApi.slice';
 import { useGetMessagesQuery } from '../slices/messagesApi.slice';
 import useUserImage from '../../../../../app/hooks/useUserImage';
 import useSocketIO from '../../../../../app/hooks/useSocketIO';
-import ConversationProps, { conversationIdProps } from '../../../../../app/props/ConversationProps';
-import MessageProps from '../../../../../app/props/MessageProps';
+import ConversationProps, { conversationIdProps } from '../../../../../app/props/conversationProps';
+import MessageProps from '../../../../../app/props/messageProps';
 
 const ChatBox = ({ receiver, sender }: { receiver: string; sender: string }) => {
     const [chatMessage, setChatMessage] = useState('');

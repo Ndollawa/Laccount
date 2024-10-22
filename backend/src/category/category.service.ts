@@ -35,8 +35,8 @@ export class CategoryService {
       handleError(error);
     }
   }
-  async create(createCategoryData: CreateCategoryDto): Promise<Category> {
-    // const { authorId } = createCategoryData;
+  async create(createCategoryData: CreateCategoryDto) {
+    // const { authorId } = createCategoryData;: Promise<Category>
 
     try {
       // const existingCategory = await this.categoryRepository.exists({
@@ -50,40 +50,37 @@ export class CategoryService {
       //   );
       // }
 
-      const categoryData = {
-        ...createCategoryData,
-      };
+      // const categoryData = {
+      //   ...createCategoryData,
+      // };
 
-      const newCategory = await this.categoryRepository.create({
-        data: categoryData,
-      });
-      Logger.debug(newCategory);
-      return newCategory;
+      // const newCategory = await this.categoryRepository.create({
+      //   data: categoryData,
+      // });
+      // return newCategory;
     } catch (error) {
-      Logger.log(error);
       handleError(error);
     }
   }
 
   async update(id: string, updateCategoryData: UpdateCategoryDto) {
     try {
-      return await this.categoryRepository.update({
-        where: { id },
-        data: updateCategoryData,
-      });
+      // return await this.categoryRepository.update({
+      //   where: { id },
+      //   data: updateCategoryData,
+      // });
     } catch (error) {
       handleError(error);
     }
   }
 
   async upsert(id: string, updateCategoryData: UpdateCategoryDto) {
-    Logger.debug(updateCategoryData);
 
     try {
-      return await this.categoryRepository.upsert({
-        where: { id },
-        data: updateCategoryData,
-      });
+      // return await this.categoryRepository.upsert({
+      //   where: { id },
+      //   data: updateCategoryData,
+      // });
     } catch (error) {
       handleError(error);
     }

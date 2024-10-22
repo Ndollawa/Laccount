@@ -1,6 +1,5 @@
 import React, { useEffect, useTransition } from 'react'
 import { useSelector } from 'react-redux';
-import $ from 'jquery';
 import useWindowSize from "../../../app/hooks/useWindowSize";
 import {useCompanyInfo,useDashboardConfig} from '../pages/Settings/slices/settings.slice';
 import useLocalStorage from '../../../app/hooks/useLocalStorage';
@@ -26,60 +25,88 @@ const [themeMode] =  useLocalStorage('appThemeMode','light');
 
 const { width, height } = useWindowSize();
 useEffect(() => {
- startTransition(() => {
-  const body = $('#body')!;
-  const html = $('html')!;
-  // Apply layout settings from the Redux state
-  body.attr({
-      "data-typography": typography,
-      "data-theme-version": themeMode,
-      "data-layout": layout,
-      "data-nav-headerbg": navheaderBg,
-      "data-headerbg": headerBg,
-      "data-sidebar-style": sidebarStyle,
-      "data-sidebarbg": sidebarBg,
-      "data-sidebar-position": sidebarPosition,
-      "data-header-position": headerPosition,
-      "data-container": containerLayout,
-      "data-direction": direction,
-      "data-primary": primary,
-  });
+  startTransition(() => {
+    const body = document.body;
+    const html = document.documentElement;
 
-  // Handle responsive design based on window width
-  if (width as number < 1200) {
-      body.attr("data-layout", "vertical");
-      body.attr("data-container", "wide");
-  }
-  if (width as number > 767 && width as number < 1200) {
-      body.attr("data-sidebar-style", "mini");
-  }
-  if (width as number < 768) {
-      body.attr("data-sidebar-style", "overlay");
-  }
+    // Apply layout settings from the Redux state
+    body.setAttribute("data-typography", typography as string);
+    body.setAttribute("data-theme-version", themeMode as string);
+    body.setAttribute("data-layout", layout as string);
+    body.setAttribute("data-nav-headerbg", navheaderBg as string);
+    body.setAttribute("data-headerbg", headerBg as string);
+    body.setAttribute("data-sidebar-style", sidebarStyle as string);
+    body.setAttribute("data-sidebarbg", sidebarBg as string);
+    body.setAttribute("data-sidebar-position", sidebarPosition as string);
+    body.setAttribute("data-header-position", headerPosition as string);
+    body.setAttribute("data-container", containerLayout as string);
+    body.setAttribute("data-direction", direction as string);
+    body.setAttribute("data-primary", primary as string);
 
-  // Adjust min height of the content body
-  $(".content-body").css("min-height", `${Math.max(height as number, window.outerHeight) + 60}px`);
+    // Handle responsive design based on window width
+    if (width as number < 1200) {
+      body.setAttribute("data-layout", "vertical");
+      body.setAttribute("data-container", "wide");
+    }
+    if (width as number > 767 && width as number < 1200) {
+      body.setAttribute("data-sidebar-style", "mini");
+    }
+    if (width as number < 768) {
+      body.setAttribute("data-sidebar-style", "overlay");
+    }
 
-  // Scroll behavior for header height
-  const headerHeight = $('.header').innerHeight();
-  $(window).on('scroll', () => {
-      const isHorizontal = body.attr('data-layout') === "horizontal";
-      const isStaticHeader = body.attr('data-header-position') === "static";
-      const isFixedSidebar = body.attr('data-sidebar-position') === "fixed";
+    // Adjust min height of the content body
+    const contentBody = document.querySelector('.content-body') as HTMLElement;
+    if (contentBody) {
+      contentBody.style.minHeight = `${Math.max(height as number, window.outerHeight) + 60}px`;
+    }
 
-      if (isHorizontal && isStaticHeader && isFixedSidebar) {
-          ($(window).scrollTop() as number) >= headerHeight! as number
-              ? $('.deznav').addClass('fixed')
-              : $('.deznav').removeClass('fixed');
+    // Scroll behavior for header height
+    const header = document.querySelector('.header') as HTMLElement;
+    const headerHeight = header?.clientHeight || 0;
+    
+    const handleScroll = () => {
+      const isHorizontal = body.getAttribute('data-layout') === "horizontal";
+      const isStaticHeader = body.getAttribute('data-header-position') === "static";
+      const isFixedSidebar = body.getAttribute('data-sidebar-position') === "fixed";
+
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const deznav = document.querySelector('.deznav');
+
+      if (isHorizontal && isStaticHeader && isFixedSidebar && deznav) {
+        if (scrollTop >= headerHeight) {
+          deznav.classList.add('fixed');
+        } else {
+          deznav.classList.remove('fixed');
+        }
       }
-  });
-  }); 
+    };
 
-  return () => {
-      // Cleanup event listeners
-      $(window).off('scroll');
-  };
-}, [width, height, typography, version, layout, navheaderBg, headerBg, sidebarStyle, sidebarBg, sidebarPosition, headerPosition, containerLayout, direction, primary]);
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      // Cleanup event listener
+      window.removeEventListener('scroll', handleScroll);
+    };
+  });
+}, [
+  width,
+  height,
+  typography,
+  themeMode,
+  layout,
+  navheaderBg,
+  headerBg,
+  sidebarStyle,
+  sidebarBg,
+  sidebarPosition,
+  headerPosition,
+  containerLayout,
+  direction,
+  primary,
+]);
+
 
 
   return (

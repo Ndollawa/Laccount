@@ -7,6 +7,7 @@ import {
   landingDefault,
 } from '../../appsetting/appsettings.default';
 import { SettingsType } from '@prisma/client';
+import { handleError } from '@app/common';
 
 @Injectable()
 export class AppSettingsSeed {
@@ -18,39 +19,52 @@ export class AppSettingsSeed {
         type: SettingsType.DASHBOARD,
       }))
     ) {
-      await this.appSettingsService.create({
+      try {
+        return await this.appSettingsService.create({
         type: SettingsType.DASHBOARD,
         settings: dashboardDefault,
         default: dashboardDefault,
         name: SettingsType.DASHBOARD,
         userDefined: false,
       });
+      } catch (error) {
+        handleError(error);
+      } 
     }
     if (
       !(await this.appSettingsService.find({
         type: SettingsType.LANDING,
       }))
     ) {
-      await this.appSettingsService.create({
+      try {
+        return await this.appSettingsService.create({
         type: SettingsType.LANDING,
         settings: landingDefault,
         default: landingDefault,
         name: SettingsType.LANDING,
         userDefined: false,
       });
+      } catch (error) {
+        handleError(error);
+      }   
     }
     if (
       !(await this.appSettingsService.find({
         type: SettingsType.COMPANY_INFO,
       }))
     ) {
-      await this.appSettingsService.create({
+      try {
+        return await this.appSettingsService.create({
         type: SettingsType.COMPANY_INFO,
         settings: companyInfoDefault,
         default: companyInfoDefault,
         name: SettingsType.COMPANY_INFO,
         userDefined: false,
-      });
+      }); 
+      } catch (error) {
+        handleError(error);
+      }
+      
     }
   }
 }

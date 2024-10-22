@@ -14,7 +14,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { setCredentials } from './slices/auth.slice';
 import { jwtDecode } from 'jwt-decode';
-import { AuthProps } from '../../app/props/AuthProps';
+import { AuthProps } from '../../app/props/authProps';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 

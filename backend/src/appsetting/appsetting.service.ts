@@ -71,13 +71,11 @@ export class AppSettingService {
       this.eventEmitter.emit('AppSettings-created', newAppSettings);
       return newAppSettings;
     } catch (error) {
-      Logger.log(error);
-      handleError(error);
+         handleError(error);
     }
   }
 
   async update(id: string, updateAppSettingsData: UpdateAppSettingsDto) {
-    console.log(updateAppSettingsData);
     try {
       return await this.appSettingsRepository.update({
         where: { id },
@@ -89,7 +87,6 @@ export class AppSettingService {
   }
 
   async upsert(id: string, updateAppSettingsData: UpdateAppSettingsDto) {
-    Logger.debug(updateAppSettingsData);
     try {
       return await this.appSettingsRepository.upsert({
         where: { id },
