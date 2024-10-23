@@ -142,11 +142,11 @@ const Login: React.FC = () => {
                         <Link to="/forgot-password">Forgot Password?</Link>
                       </div>
 
-                      <button type="submit" className="btn btn-primary w-100 flex gap-1 align-items-center">
+                      <button type="submit" className="btn btn-primary w-100 d-flex gap-1 align-items-center">
                         {isLoadingLogin ? (
                           <>
                             Logging In
-                            <PulseLoader loading={isLoadingLogin} color="#ffffff" size="0.95rem" />
+                            <PulseLoader loading={isLoadingLogin} color="#ffffff" size="0.85rem" />
                           </>
                         ) : (
                           'Login'

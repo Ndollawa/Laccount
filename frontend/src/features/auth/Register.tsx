@@ -208,11 +208,11 @@ const Register: React.FC = () => {
                       <div className="text-center mt-4">
                         <button
                           type="submit"
-                          className="btn btn-primary btn-block"
+                          className="btn btn-primary btn-block d-flex align-items-center"
                           disabled={isLoading}
                         >
                           {isLoading ? "Registering" : "Register Me"}{" "}
-                          {isLoading && <PulseLoader loading={isLoading} color="#ffffff" size="0.95rem" />}
+                          {isLoading && <PulseLoader loading={isLoading} color="#ffffff" size="0.85rem" />}
                         </button>
                       </div>
                     </form>
