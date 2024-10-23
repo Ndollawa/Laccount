@@ -7,8 +7,8 @@ export class RazorpayPaymentGateway implements PaymentGateway {
 
   constructor(private readonly configService:ConfigService) {
     this.razorpay = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID as string,
-      key_secret: process.env.RAZORPAY_SECRET_KEY as string,
+      key_id: this.configService?.get('RAZORPAY_KEY_ID') || process.env.RAZORPAY_KEY_ID as string,
+      key_secret: this.configService?.get('RAZORPAY_SECRET_KEY') || process.env.RAZORPAY_SECRET_KEY as string,
     });
   }
 

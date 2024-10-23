@@ -21,7 +21,7 @@ export class PaystackPaymentGateway implements PaymentGateway {
       },
       {
         headers: {
-          Authorization: `Bearer ${this.configService.getOrThrow('PAYSTACK_SECRET_KEY')}`,
+          Authorization: `Bearer ${this.configService?.get('PAYSTACK_SECRET_KEY') || process.env.PAYSTACK_SECRET_KEY}`,
         },
       },
     );
@@ -35,7 +35,7 @@ export class PaystackPaymentGateway implements PaymentGateway {
     try{
     const response = await axios.get(`https://api.paystack.co/transaction/verify/${paymentId}`, {
       headers: {
-        Authorization: `Bearer ${this.configService.getOrThrow('PAYSTACK_SECRET_KEY')}`,
+        Authorization: `Bearer ${this.configService?.get('PAYSTACK_SECRET_KEY') || process.env.PAYSTACK_SECRET_KEY}`,
       },
     });
     return response.data;

@@ -1,34 +1,78 @@
-import { Injectable, Req, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, Req } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
+import { AuthService } from '../auth.service'; // Make sure to import your AuthService
+import {
+  splitRt,
+  Tokens,
+} from '@app/common';
 
 @Injectable()
-export class JwtRefreshStrategy extends PassportStrategy(
-  Strategy,
-  'jwt-refresh',
-) {
-  constructor(private readonly configService: ConfigService) {
+export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly authService: AuthService, // Inject the AuthService to handle DB and token logic
+  ) {
     super({
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        JwtRefreshStrategy.extractJWTFromCookie,
-        // ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ]),
+      jwtFromRequest: ExtractJwt.fromExtractors([JwtRefreshStrategy.extractJWTFromCookie]),
       ignoreExpiration: false,
-      secretOrKey:
-        configService.getOrThrow('ACCESS_TOKEN_SECRET') ||
-        `${process.env.ACCESS_TOKEN_SECRET}`,
+      secretOrKey: configService.getOrThrow('REFRESH_TOKEN_SECRET') || process.env.REFRESH_TOKEN_SECRET,
     });
   }
 
+  // Custom method to extract JWT from cookies
   private static extractJWTFromCookie(@Req() req: any): string | null {
     if (req.cookies && req.cookies.jwt) {
       return req.cookies.jwt;
     }
-
     return null;
   }
-  validate = async (payload: any) => {
-    return { user: payload.sub };
-  };
+
+  // Overriding Passport validate method to include the full refresh token flow
+  async validate(payload: any, @Req() req: any): Promise<any> {
+    const cookies = req?.cookies;
+
+    if (!cookies?.jwt) {
+      throw new UnauthorizedException('No refresh token provided');
+    }
+
+    const { refreshTokenId, refreshToken } = splitRt(cookies.jwt); // Assuming splitRt extracts token ID and actual token
+    const foundUser = await this.authService.findRefreshToken(refreshTokenId);
+
+    // Clear cookie regardless of the outcome
+    req.res.clearCookie('jwt', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+    });
+
+    if (!foundUser) {
+      // Token reuse detection (hacked token case)
+      const hackedUser = await this.authService.verifyToken({refreshToken}); // Assuming verifyToken takes refreshToken and verifies it
+      if (hackedUser) {
+        // If the token is reused, remove all refresh tokens for the hacked user
+        await this.authService.removeManyRefreshToken({
+          where: { userId: hackedUser.id },
+        });
+      }
+      throw new UnauthorizedException('Unauthorized or token reuse detected');
+    }
+
+    // If token is valid, proceed to issue new tokens
+    const { accessToken, refreshToken: newRefreshToken } = await this.authService.refreshUserToken(foundUser.user);
+
+    // Attach new refresh token as cookie
+    req.res.cookie('jwt', newRefreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 24 * 60 * 60 * 1000, // 1 day expiry
+    });
+
+    // Return the user and new access token, can be passed to the controller
+    return { user: foundUser.user, accessToken };
+  }
+
+ 
 }

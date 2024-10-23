@@ -42,6 +42,7 @@ import { FaqModule } from './faq';
 import { TeamModule } from './team';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { WebhookController } from './webhook/webhook.controller';
+import { AppGateway } from './app.gateway';
 
 @Module({
   imports: [
@@ -125,6 +126,7 @@ import { WebhookController } from './webhook/webhook.controller';
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
+    AppGateway,
   ],
 })
 export class AppModule {}

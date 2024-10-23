@@ -8,7 +8,7 @@ import { useCompanyInfo, useLandingConfig } from '../dashboard/pages/Settings/sl
 import { useRegisterMutation } from './slices/authApi.slice';
 import { useCheckDuplicateUserMutation } from '../dashboard/pages/Users/slices/usersApi.slice';
 import OtherBody from '../dashboard/components/OtherBody';
-import { ClipLoader } from 'react-spinners';
+import { PulseLoader } from 'react-spinners';
 import showToast from '../../app/utils/showToast';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -81,7 +81,7 @@ const Register: React.FC = () => {
     <OtherBody>
       <div className="container h-100">
         <div className="row justify-content-center h-100 align-items-center">
-          <div className="col-md-6">
+          <div className="col-lg-6 col-md-9 col-sm-12 ">
             <div className="authincation-content">
               <div className="row no-gutters">
                 <div className="col-xl-12">
@@ -211,8 +211,8 @@ const Register: React.FC = () => {
                           className="btn btn-primary btn-block"
                           disabled={isLoading}
                         >
-                          {isLoading ? "Registering..." : "Register Me"}{" "}
-                          {isLoading && <ClipLoader loading={isLoading} color="#ffffff" size="0.8rem" />}
+                          {isLoading ? "Registering" : "Register Me"}{" "}
+                          {isLoading && <PulseLoader loading={isLoading} color="#ffffff" size="0.95rem" />}
                         </button>
                       </div>
                     </form>

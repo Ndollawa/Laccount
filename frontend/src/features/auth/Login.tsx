@@ -8,7 +8,7 @@ import { useLoginMutation } from './slices/authApi.slice';
 import { setCredentials } from './slices/auth.slice';
 import {jwtDecode} from 'jwt-decode';
 import OtherBody from '../dashboard/components/OtherBody';
-import ClipLoader from 'react-spinners/ClipLoader';
+import {PulseLoader} from 'react-spinners';
 import useToggle from '../../app/hooks/useToggle';
 import { AuthProps } from '../../app/props/authProps';
 
@@ -73,7 +73,7 @@ const Login: React.FC = () => {
     <OtherBody>
       <div className="container h-100">
         <div className="row justify-content-center h-100 align-items-center">
-          <div className="col-md-6">
+          <div className="col-lg-6 col-md-9 col-sm-12 ">
             <div className="authincation-content">
               <div className="row no-gutters">
                 <div className="col-xl-12">
@@ -145,8 +145,8 @@ const Login: React.FC = () => {
                       <button type="submit" className="btn btn-primary w-100 flex gap-1 align-items-center">
                         {isLoadingLogin ? (
                           <>
-                            Logging In...
-                            <ClipLoader loading={isLoadingLogin} color="#ffffff" size="0.8rem" />
+                            Logging In
+                            <PulseLoader loading={isLoadingLogin} color="#ffffff" size="0.95rem" />
                           </>
                         ) : (
                           'Login'
