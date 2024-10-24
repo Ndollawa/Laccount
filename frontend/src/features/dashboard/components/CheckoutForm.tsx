@@ -47,6 +47,15 @@ const CheckoutForm = ({styles:{buttonText}, amount}:{styles:{buttonText:string},
   }
 
 useEffect(() => {
+  if(isSuccess){
+    setClientSecret(data.client_secret)
+  }
+  return () => {
+  
+  };
+}, [isSuccess, isError])
+
+useEffect(() => {
   initPayment()
   return () => {
   
