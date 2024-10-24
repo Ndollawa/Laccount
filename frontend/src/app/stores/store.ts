@@ -40,7 +40,7 @@ export const store = configureStore({
       },
     })
       .concat(apiSlice.middleware)
-      .concat(logger)
+      // .concat(logger)
       ,
   devTools: process.env.NODE_ENV !== "production",
   // enhancers: (getDefaultEnhancers) =>

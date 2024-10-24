@@ -208,7 +208,7 @@ const Register: React.FC = () => {
                       <div className="text-center mt-4">
                         <button
                           type="submit"
-                          className="btn btn-primary btn-block d-flex align-items-center"
+                          className="btn btn-primary btn-block d-flex justify-content-center align-items-center"
                           disabled={isLoading}
                         >
                           {isLoading ? "Registering" : "Register Me"}{" "}

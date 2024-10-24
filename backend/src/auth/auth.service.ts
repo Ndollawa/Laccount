@@ -63,8 +63,6 @@ export class AuthService {
         wallets: true,
       },
     });
-    console.log('first');
-    this.logger.debug(foundUser);
     if (foundUser && (await compareHashData(password, foundUser?.password))) {
       const { password, ...userInfo } = foundUser;
       return userInfo;

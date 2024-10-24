@@ -24,7 +24,8 @@ interface FundWalletFormInputs {
 const HomePage = () => {
 	const currentUser = useSelector(selectCurrentUser);
 	const [topUp, setTopUp] = useState(false)
-	const [amount, setAmount] = useState(0)
+	// const [amount, setAmount] = useState(1)
+	const amount = 600;
 	const { register, handleSubmit, formState: { errors }, reset } = useForm<FundWalletFormInputs>();
 
 	const getWalletSVG = (i:number) =>{
@@ -80,7 +81,7 @@ useEffect(() => {
 // console.log(currentUser)
 	const onSubmit: SubmitHandler<FieldValues> = async (formFields, e) => {
 		e?.preventDefault()
-			setAmount(+formFields.amount)
+			// setAmount(parseFloat(formFields.amount))
 	}
   return (
     <>
@@ -137,7 +138,7 @@ useEffect(() => {
 						</div>
 					</div>
 				</div>
-				{amount && <StripeElement><CheckoutForm {...{styles:{buttonText:'Top up'}, amount:amount}}/></StripeElement>}
+				<StripeElement amount={amount}>{amount && <CheckoutForm {...{styles:{buttonText:'Top up'}, amount:amount}}/>}</StripeElement>
 				<div className="row">
 					<div className="col-xl-6 col-xxl-12">
 					{topUp && <ModalComponent {...{size:'sm',header:{show:true,title:'Fund Wallet'}}} >
@@ -153,11 +154,13 @@ useEffect(() => {
                             type="number"
                             className={`form-control ${errors.amount ? 'is-invalid' : ''}`}
                             id="amount"
+							
                             {...register('amount', { required: 'Amount is required',
 								min:{
 										message:`Minimum of $3`,
 										value:3
 								},
+								value:3
 
 							 })}
                           />

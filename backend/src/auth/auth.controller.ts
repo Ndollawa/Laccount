@@ -85,8 +85,8 @@ export class AuthController {
   @UseGuards(RefreshJwtAuthGuard)
   @Get('/refresh')
   async refreshToken(@Req() req: Request, @Res() res: Response): Promise<any> {
-
     const { accessToken } = (req as any).user; // accessToken is already set in the strategy
+    console.log(accessToken)
     res.json({ accessToken });
   }
 

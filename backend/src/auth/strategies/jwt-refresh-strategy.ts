@@ -12,7 +12,7 @@ import {
 export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
   constructor(
     private readonly configService: ConfigService,
-    private readonly authService: AuthService, // Inject the AuthService to handle DB and token logic
+    private readonly authService: AuthService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([JwtRefreshStrategy.extractJWTFromCookie]),
@@ -32,7 +32,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh'
   // Overriding Passport validate method to include the full refresh token flow
   async validate(payload: any, @Req() req: any): Promise<any> {
     const cookies = req?.cookies;
-
+console.log('hi')
     if (!cookies?.jwt) {
       throw new UnauthorizedException('No refresh token provided');
     }

@@ -76,10 +76,8 @@ export class RefreshTokenService {
         include: { user: true },
       });
       this.eventEmitter.emit('RefreshToken-created', newRefreshToken);
-      Logger.debug(newRefreshToken);
       return newRefreshToken;
     } catch (error) {
-      Logger.log(error);
       handleError(error);
     }
   }
@@ -96,7 +94,6 @@ export class RefreshTokenService {
   }
 
   async upsert(id: string, data: UpdateRefreshTokenDto) {
-    Logger.debug(data);
     try {
       return await this.refreshTokenRepository.upsert({
         where: { id },
@@ -131,7 +128,6 @@ export class RefreshTokenService {
         refreshToken: true,
       },
     });
-    Logger.debug('Tokens', existingRefreshTokens);
     // Compare each token with the hashed input
     for (const token of existingRefreshTokens) {
       const match = await compareHashData(refreshToken, token.refreshToken);

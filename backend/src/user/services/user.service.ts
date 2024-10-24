@@ -70,7 +70,6 @@ export class UserService {
   }
 
   async update(id: string, data: UpdateUserDto) {
-    Logger.debug(data);
     try {
       return await this.userRepository.update({
         where: { id },
@@ -82,7 +81,6 @@ export class UserService {
   }
 
   async upsert(id: string, data: UpdateUserDto) {
-    Logger.debug(data);
     try {
       return await this.userRepository.upsert({
         where: { id },

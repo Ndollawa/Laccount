@@ -122,18 +122,18 @@ export class PaymentGatewayService {
       default:
         throw new Error('Unsupported payment gateway');
     }
-  console.log(this.initializePayment(amount,'usd', '124'))
+  console.log( await this.initializePayment(amount,'usd', '124'))
     // Simulated webhook callback (In real scenarios, this will be an actual webhook event)
     return { success: true, transactionId, userId:"bbhj" };
   }
 
   // 
   async initializePayment(amount: number, currency: string, userId: string) {
-    return this.paymentGateway.initializePayment(amount, currency, userId);
+    return await this.paymentGateway.initializePayment(amount, currency, userId);
   }
 
   async verifyPayment(paymentId: string) {
-    return this.paymentGateway.verifyPayment(paymentId);
+    return await this.paymentGateway.verifyPayment(paymentId);
   }
 
   // Verify webhook events (optional, for security)
