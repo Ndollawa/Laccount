@@ -2,9 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useLandingConfig } from '../../../../dashboard/pages/Settings/slices/settings.slice';
+import 'jquery';
 import OwlCarousel from 'react-owl-carousel'; // Importing OwlCarousel from react-owl-carousel
 import 'owl.carousel/dist/assets/owl.carousel.css'; // OwlCarousel CSS
 import 'owl.carousel/dist/assets/owl.theme.default.css'; // OwlCarousel default theme CSS
+import { HomeSlide } from '../../../../../app/props';
 
 const SLIDER_ASSETS = import.meta.env.VITE_SLIDER_ASSETS;
 
@@ -20,7 +22,7 @@ const Slider = () => {
     return words.length > 0 ? `${words.join(' ')} <span>${lastWord}</span>` : `<span>${lastWord}</span>`;
   };
 
-  const renderSlide = (slide: any) => (
+  const renderSlide = (slide: HomeSlide) => (
     <div className="item" key={slide.id}>
       <div className="slider-one__item">
         <div

@@ -1,10 +1,10 @@
 import React from 'react'
-import PageProps from '../../../../app/props/PageProps'
+import PageProps from '../../../../app/props/pageProps'
 import Breadcrum from '../../components/Breadcrum'
 import { useGetTeamsQuery } from '../../../dashboard/pages/Team/slices/teamsApi.slice'
-import TeamProps from '../../../../app/props/TeamProps'
+import TeamProps from '../../../../app/props/teamProps'
 import TeamMemberCard from './components/TeamMemberCard'
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const TEAM_ASSETS = import.meta.env.VITE_TEAM_ASSETS;
 
 const Team:React.FC<PageProps> = ({pageData}:PageProps) => {
 

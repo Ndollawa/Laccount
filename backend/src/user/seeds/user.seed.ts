@@ -140,13 +140,13 @@ export class UserSeed {
       }))
     ) {
       try {
-        return  await this.userService.create({
-        password: adminHashedPassword,
-        ...adminUser,
-      });
+        return await this.userService.create({
+          password: adminHashedPassword,
+          ...adminUser,
+        });
       } catch (error) {
         handleError(error);
-      } 
+      }
     }
     if (
       !(await this.userService.findFirst({
@@ -167,10 +167,10 @@ export class UserSeed {
       }))
     ) {
       try {
-        return  await this.userService.create({
-        password: devHashedPassword,
-        ...devUser,
-      });
+        return await this.userService.create({
+          password: devHashedPassword,
+          ...devUser,
+        });
       } catch (error) {
         handleError(error);
       }

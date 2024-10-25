@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import {  useCompanyInfo,useLandingConfig } from '../../../../dashboard/pages/Settings/slices/settings.slice';
 
 import { useGetServicesQuery } from '../../../../dashboard/pages/Service/slices/servicesApi.slice'
-import ServiceProps from '../../../../../app/props/ServiceProps'
-
+import ServiceProps from '../../../../../app/props/serviceProps'
+const SERVICE_ASSETS = import.meta.env.VITE_SERVICE_ASSETS;
 
 const WhatWeOffer = () => {
 const {
@@ -190,7 +190,7 @@ switch (whatWeOfferStyle) {
                   <div className="service-card">
                       <div className="service-card__image">
                       <a href={`/services/${service.id}`}>
-                      <img src={BASE_URL+"/uploads/service/"+service?.image} alt={service?.title}/>
+                      <img src={SERVICE_ASSETS+service?.image} alt={service?.title}/>
                           </a>
                       </div>
                       <div className="service-card__content">

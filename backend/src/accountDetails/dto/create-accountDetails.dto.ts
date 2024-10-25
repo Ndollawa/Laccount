@@ -1,4 +1,11 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsString, IsUrl, IsUUID } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsUrl,
+  IsUUID,
+} from 'class-validator';
 
 export class CreateAccountDetailsDto {
   @IsUUID()

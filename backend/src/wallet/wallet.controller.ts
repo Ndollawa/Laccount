@@ -18,9 +18,9 @@ export class WalletController {
   create(@Body() createWalletDto: CreateWalletDto) {
     return this.walletervice.create(createWalletDto);
   }
- 
+
   @Post('topup')
-  topUp(@Body() amount: number|string ) {
+  topUp(@Body() amount: number | string) {
     // return this.walletervice.topUpWallet(amount);
   }
 
@@ -35,10 +35,7 @@ export class WalletController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateWalletDto: UpdateWalletDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateWalletDto: UpdateWalletDto) {
     return this.walletervice.update(id, updateWalletDto);
   }
 

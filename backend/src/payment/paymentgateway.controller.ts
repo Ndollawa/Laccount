@@ -43,8 +43,18 @@ export class PaymentGatewayController {
   }
 
   @Post('process-payment')
-  processPayment(@Body() processPaymentDto: {transactionId: string, amount: number, paymentMethod: string}) {
-    return this.paymentGatewayService.processPayment('amoun',300, 'nfsdkdfjjk');
+  processPayment(
+    @Body()
+    processPaymentDto: {
+      transactionId: string;
+      amount: number;
+      paymentMethod: string;
+    },
+  ) {
+    return this.paymentGatewayService.processPayment(
+      'amoun',
+      300,
+      'nfsdkdfjjk',
+    );
   }
-
 }

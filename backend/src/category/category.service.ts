@@ -35,29 +35,26 @@ export class CategoryService {
       handleError(error);
     }
   }
-  async create(createCategoryData: CreateCategoryDto) {
-    // const { authorId } = createCategoryData;: Promise<Category>
+  async create(createCategoryData: CreateCategoryDto): Promise<Category> {
+    // const { authorId } = createCategoryData;
 
     try {
       // const existingCategory = await this.categoryRepository.exists({
       //   where: { categoryId },
       // });
-
       // if (existingCategory) {
       //   throw new HttpException(
       //     'Category with credentials already exists.',
       //     HttpStatus.CONFLICT,
       //   );
       // }
-
-      // const categoryData = {
-      //   ...createCategoryData,
-      // };
-
-      // const newCategory = await this.categoryRepository.create({
-      //   data: categoryData,
-      // });
-      // return newCategory;
+      const categoryData = {
+            ...createCategoryData,
+      };
+      const newCategory = await this.categoryRepository.create({
+        data: categoryData,
+      });
+      return newCategory;
     } catch (error) {
       handleError(error);
     }
@@ -65,22 +62,21 @@ export class CategoryService {
 
   async update(id: string, updateCategoryData: UpdateCategoryDto) {
     try {
-      // return await this.categoryRepository.update({
-      //   where: { id },
-      //   data: updateCategoryData,
-      // });
+      return await this.categoryRepository.update({
+        where: { id },
+        data: updateCategoryData,
+      });
     } catch (error) {
       handleError(error);
     }
   }
 
   async upsert(id: string, updateCategoryData: UpdateCategoryDto) {
-
     try {
-      // return await this.categoryRepository.upsert({
-      //   where: { id },
-      //   data: updateCategoryData,
-      // });
+      return await this.categoryRepository.upsert({
+        where: { id },
+        data: updateCategoryData,
+      });
     } catch (error) {
       handleError(error);
     }

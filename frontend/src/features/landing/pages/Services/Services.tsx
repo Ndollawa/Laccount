@@ -1,9 +1,9 @@
 import React,{useState,useEffect} from 'react'
-import PageProps from '../../../../app/props/PageProps'
+import PageProps from '../../../../app/props/pageProps'
 import Breadcrum from '../../components/Breadcrum'
 import { useGetServicesQuery } from '../../../dashboard/pages/Service/slices/servicesApi.slice'
-import ServiceProps from '../../../../app/props/ServiceProps'
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import ServiceProps from '../../../../app/props/serviceProps'
+const SERVICE_ASSETS = import.meta.env.VITE_SERVICE_ASSETS;
 
 const Services:React.FC<PageProps> = ({pageData}:PageProps) => {
     // const { services } = useGetServicesQuery("servicesList", {
@@ -43,7 +43,7 @@ const Services:React.FC<PageProps> = ({pageData}:PageProps) => {
                     <div className="col-lg-4 col-md-6 col-sm-12">
                         <div className="service-card">
                             <div className="service-card__image"><a href={`/services/${service.id}`}>
-                                <img src={BASE_URL+"/uploads/settings/service/"+service?.image} alt={service?.title}/>
+                                <img src={SERVICE_ASSETS+service?.image} alt={service?.title}/>
                                 </a>
                             </div>
                             {/* <!-- /.service-card__image --> */}

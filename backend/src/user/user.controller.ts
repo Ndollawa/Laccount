@@ -118,10 +118,10 @@ export class UserController {
         },
         include: {
           profile: true, // Include related profile
-          roles: true,   // Include related roles
+          roles: true, // Include related roles
         },
       });
-      
+
       return users;
     } catch (error) {
       handleError(error);
@@ -161,7 +161,7 @@ export class UserController {
     return await this.userService.remove(id);
   }
 
-  @Post('check-duplicates')
+  @Post('check-duplicate')
   async checkDuplicate(@Body() { user }: { user: string }): Promise<boolean> {
     const userType = EMAIL_REGEX.test(user);
     const userQuery = userType ? { email: user } : { username: user };

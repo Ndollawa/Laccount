@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { useCompanyInfo,useLandingConfig, } from '../../../../dashboard/pages/Settings/slices/settings.slice'
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
 
 
@@ -23,7 +23,7 @@ switch (ourBenefitStyle) {
           <div className="row row-gutter-y-60">
               <div className="col-lg-6">
                   <div className="benefit-one__image wow fadeInUp image-overlay" data-wow-duration="1500ms" data-wow-delay="500ms">
-                      <img src={BASE_URL+"/uploads/settings/brand/"+aboutUsBg} alt={siteName}  />
+                      <img src={BRAND_ASSETS+aboutUsBg} alt={siteName}  />
                       <div className="benefit-one__image__caption image-caption catptio-left">
                           <h3 className="benefit-one__image__title">99.9%</h3>
                           <p className="benefit-one__image__text">Success Rates Guarantee</p>

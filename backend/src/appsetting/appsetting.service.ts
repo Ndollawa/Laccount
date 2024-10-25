@@ -71,7 +71,7 @@ export class AppSettingService {
       this.eventEmitter.emit('AppSettings-created', newAppSettings);
       return newAppSettings;
     } catch (error) {
-         handleError(error);
+      handleError(error);
     }
   }
 

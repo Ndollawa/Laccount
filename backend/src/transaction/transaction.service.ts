@@ -96,11 +96,14 @@ export class TransactionService {
       handleError(error);
     }
   }
-    // Update transaction status (e.g., after webhook confirmation)
-    async updateTransactionStatus(transactionId: string, status: TransactionStatus) {
-      return this.transactionRepository.update({
-        where: { id: transactionId },
-        data: { status },
-      });
-    }
+  // Update transaction status (e.g., after webhook confirmation)
+  async updateTransactionStatus(
+    transactionId: string,
+    status: TransactionStatus,
+  ) {
+    return this.transactionRepository.update({
+      where: { id: transactionId },
+      data: { status },
+    });
+  }
 }

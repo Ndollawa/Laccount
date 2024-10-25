@@ -21,50 +21,49 @@ export class AppSettingsSeed {
     ) {
       try {
         return await this.appSettingsService.create({
-        type: SettingsType.DASHBOARD,
-        settings: dashboardDefault,
-        default: dashboardDefault,
-        name: SettingsType.DASHBOARD,
-        userDefined: false,
-      });
-      } catch (error) {
-        handleError(error);
-      } 
-    }
-    if (
-      !(await this.appSettingsService.find({
-        type: SettingsType.LANDING,
-      }))
-    ) {
-      try {
-        return await this.appSettingsService.create({
-        type: SettingsType.LANDING,
-        settings: landingDefault,
-        default: landingDefault,
-        name: SettingsType.LANDING,
-        userDefined: false,
-      });
-      } catch (error) {
-        handleError(error);
-      }   
-    }
-    if (
-      !(await this.appSettingsService.find({
-        type: SettingsType.COMPANY_INFO,
-      }))
-    ) {
-      try {
-        return await this.appSettingsService.create({
-        type: SettingsType.COMPANY_INFO,
-        settings: companyInfoDefault,
-        default: companyInfoDefault,
-        name: SettingsType.COMPANY_INFO,
-        userDefined: false,
-      }); 
+          type: SettingsType.DASHBOARD,
+          settings: dashboardDefault,
+          default: dashboardDefault,
+          name: SettingsType.DASHBOARD,
+          userDefined: false,
+        });
       } catch (error) {
         handleError(error);
       }
-      
+    }
+    if (
+      !(await this.appSettingsService.find({
+        type: SettingsType.LANDING,
+      }))
+    ) {
+      try {
+        return await this.appSettingsService.create({
+          type: SettingsType.LANDING,
+          settings: landingDefault,
+          default: landingDefault,
+          name: SettingsType.LANDING,
+          userDefined: false,
+        });
+      } catch (error) {
+        handleError(error);
+      }
+    }
+    if (
+      !(await this.appSettingsService.find({
+        type: SettingsType.COMPANY_INFO,
+      }))
+    ) {
+      try {
+        return await this.appSettingsService.create({
+          type: SettingsType.COMPANY_INFO,
+          settings: companyInfoDefault,
+          default: companyInfoDefault,
+          name: SettingsType.COMPANY_INFO,
+          userDefined: false,
+        });
+      } catch (error) {
+        handleError(error);
+      }
     }
   }
 }

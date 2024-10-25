@@ -1,6 +1,7 @@
 export const landingDefault = {
   pages: {
-    aboutUs: '<p>LAccount is a dedicated platform for buying and selling social media accounts and digital services. We connect buyers and sellers in a trusted environment, ensuring every transaction is transparent, secure, and compliant with the latest digital standards. Our goal is to empower entrepreneurs, influencers, and businesses to expand their digital footprints by providing them access to verified, quality accounts across multiple platforms</p>',
+    aboutUs:
+      '<p>LAccount is a dedicated platform for buying and selling social media accounts and digital services. We connect buyers and sellers in a trusted environment, ensuring every transaction is transparent, secure, and compliant with the latest digital standards. Our goal is to empower entrepreneurs, influencers, and businesses to expand their digital footprints by providing them access to verified, quality accounts across multiple platforms</p>',
     privacy: "<p>Company's Privacy policies</p>",
     privacyPolicy: '<p>Hello</p>',
     termsCondition: "<p>Company's terms and condition.</p>",
@@ -12,7 +13,8 @@ export const landingDefault = {
       cto: { link: '/auth/register', cto_text: 'Register Now' },
       title: 'Buy and Sell Accounts Easily',
       body: '<p>Find trusted vendors and verified accounts for all your social media needs.</p>',
-      description: 'Whether you’re looking to expand your digital presence or start fresh, LAccount has you covered. Buy with confidence, sell with ease',
+      description:
+        'Whether you’re looking to expand your digital presence or start fresh, LAccount has you covered. Buy with confidence, sell with ease',
       image: '666b8f32cf352b390e1183624c757dbe.png',
       status: 'active',
     },
@@ -21,7 +23,8 @@ export const landingDefault = {
       cto: { link: '', cto_text: '' },
       title: 'Verified Accounts for Every Need',
       body: '<p>Browse through a wide selection of verified accounts, from Instagram to Twitter, and more. </p>',
-      description: 'Our marketplace connects buyers with reliable sellers for a seamless experience.',
+      description:
+        'Our marketplace connects buyers with reliable sellers for a seamless experience.',
       image: '3906662e1a9877cfda13d910ff9bed984.png',
       status: 'active',
     },
@@ -30,7 +33,8 @@ export const landingDefault = {
       cto: { link: '', cto_text: '' },
       title: 'Safe and Secure Transactions',
       body: '<p>LAccount ensures safe and secure transactions with end-to-end protection.</p>',
-      description: ' With escrow and multi-payment gateway support, your funds are always safe until you are satisfied with your purchase.',
+      description:
+        ' With escrow and multi-payment gateway support, your funds are always safe until you are satisfied with your purchase.',
       image: '3906662e1a9877cfda13d910ff9bed984.png',
       status: 'active',
     },

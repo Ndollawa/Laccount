@@ -8,10 +8,7 @@ import {
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { AuthService } from '../auth.service';
-import { 
-  splitRt,
-  Tokens,
-  handleError } from '@app/common';
+import { splitRt, Tokens, handleError } from '@app/common';
 import { Request } from 'express';
 
 @Injectable()
@@ -55,7 +52,8 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
       }
 
       // Generate new tokens
-      const { accessToken, refreshToken } = await this.authService.login(foundUser);
+      const { accessToken, refreshToken } =
+        await this.authService.login(foundUser);
 
       // Set the new refresh token in the cookies
       req.res.cookie('jwt', refreshToken, {
@@ -72,5 +70,4 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
       handleError(error);
     }
   };
-
 }

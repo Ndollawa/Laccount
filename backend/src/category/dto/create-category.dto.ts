@@ -11,7 +11,7 @@ export class CreateCategoryDto {
   @IsString()
   @IsNotEmpty()
   name: string;
-  
+
   @IsOptional()
   image?: string;
 
@@ -28,6 +28,6 @@ export class CreateCategoryDto {
   @IsEnum(PublishStatus)
   status: PublishStatus;
 
-  @IsString()
-  targetType: string;
+  @IsEnum(CategoryForEnum)
+  targetType: CategoryForEnum;
 }

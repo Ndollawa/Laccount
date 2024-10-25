@@ -1,8 +1,12 @@
+import { WalletType, WalletStatus } from '@prisma/client';
 import {
-  WalletType,
-  WalletStatus,
-} from '@prisma/client';
-import { IsDecimal, IsEnum, IsObject, IsOptional, IsString, IsUUID } from 'class-validator';
+  IsDecimal,
+  IsEnum,
+  IsObject,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class CreateWalletDto {
   @IsEnum(WalletType)
@@ -18,7 +22,7 @@ export class CreateWalletDto {
   @IsOptional()
   currency: object;
 
-   @IsString()
+  @IsString()
   @IsUUID()
   userId: string;
 }

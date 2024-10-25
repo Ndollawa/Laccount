@@ -40,12 +40,8 @@ export class WalletService {
       handleError(error);
     }
   }
-  async create(
-    createWalletData: CreateWalletDto,
-  ): Promise<Wallet> {
-    const {
-      userId,
-    } = createWalletData;
+  async create(createWalletData: CreateWalletDto): Promise<Wallet> {
+    const { userId } = createWalletData;
 
     try {
       const existingWallet = await this.walletRepository.exists({
@@ -94,8 +90,16 @@ export class WalletService {
     }
   }
 
-  async topUpWallet(transactionId:string, amount: number, paymentMethod: string) {
-    const paymentResult = await this.paymentGateway.processPayment(transactionId, amount, paymentMethod);
+  async topUpWallet(
+    transactionId: string,
+    amount: number,
+    paymentMethod: string,
+  ) {
+    const paymentResult = await this.paymentGateway.processPayment(
+      transactionId,
+      amount,
+      paymentMethod,
+    );
 
     if (paymentResult.success) {
       // Update wallet balance in DB
@@ -111,14 +115,14 @@ export class WalletService {
   async transferFunds(senderId: string, recipientId: string, amount: number) {
     // Logic for deducting from sender and crediting the recipient
     await this.prisma.$transaction([
-    //   this.walletRepository.update({
-    //     where: { userId: recipientId },
-    //     data: { balance: { increment: amount } },
-    //   }),
-    //   this.walletRepository.update({
-    //     where: { userId: senderId }, // Replace with actual sender ID from context
-    //     data: { balance: { decrement: amount } },
-    //   }),
+      //   this.walletRepository.update({
+      //     where: { userId: recipientId },
+      //     data: { balance: { increment: amount } },
+      //   }),
+      //   this.walletRepository.update({
+      //     where: { userId: senderId }, // Replace with actual sender ID from context
+      //     data: { balance: { decrement: amount } },
+      //   }),
     ]);
   }
 }

@@ -1,9 +1,9 @@
 import React from 'react';
 import {Helmet} from 'react-helmet-async';
-import PageProps from "../../../app/props/PageProps";
+import PageProps from "../../../app/props/pageProps";
 import { useSelector } from 'react-redux';
 import {useCompanyInfo,useLandingConfig} from '../../dashboard/pages/Settings/slices/settings.slice';
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
 const Head:React.FC<PageProps> = ({pageData: {pageTitle} ={}}:PageProps) => {
   
@@ -16,9 +16,9 @@ const {settings:{siteImages:{favicon}={}}={}} = useSelector(useLandingConfig);
    
     <title>{pageTitle+" - "+siteName}</title>
    
-    <link rel="apple-touch-icon" sizes="180x180" href={BASE_URL+"/uploads/settings/brand/"+favicon}/>
-    <link rel="icon" type="image/png" sizes="32x32" href={BASE_URL+"/uploads/settings/brand/"+favicon} />
-    <link rel="icon" type="image/png" sizes="16x16" href={BASE_URL+"/uploads/settings/brand/"+favicon} />
+    <link rel="apple-touch-icon" sizes="180x180" href={BRAND_ASSETS+favicon}/>
+    <link rel="icon" type="image/png" sizes="32x32" href={BRAND_ASSETS+favicon} />
+    <link rel="icon" type="image/png" sizes="16x16" href={BRAND_ASSETS+favicon} />
     {/* <link rel="manifest" href={BASE_URL+"/uploads/settings/"+favicon} /> */}
     <meta name="description" content={description} />
 
@@ -35,8 +35,6 @@ const {settings:{siteImages:{favicon}={}}={}} = useSelector(useLandingConfig);
     <link rel="stylesheet" href="assets/vendors/nouislider/nouislider.pips.css" type='text/css' />
     <link rel="stylesheet" href="assets/vendors/odometer/odometer.min.css" type='text/css' />
     <link rel="stylesheet" href="assets/vendors/swiper/swiper.min.css" type='text/css' />
-    <link rel="stylesheet" href="assets/vendors/owl-carousel/assets/owl.carousel.min.css" type='text/css' />
-    <link rel="stylesheet" href="assets/vendors/owl-carousel/assets/owl.theme.default.min.css" type='text/css' />
 
     
 </Helmet>

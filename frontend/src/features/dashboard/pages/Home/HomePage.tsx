@@ -1,19 +1,19 @@
 import React,{useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
+import { FaDollarSign } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
+import { Button } from 'react-bootstrap';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { selectCurrentUser } from '../../../auth/slices/auth.slice';
 // import $ from 'jquery';
 // import 'owl.carousel/dist/assets/owl.carousel.css';
 // import 'owl.carousel';
 import MainBody from '../../components/MainBody';
 import PageHeading from '../../components/PageHeading';
-import { useSelector } from 'react-redux';
 import { getUserFullName } from '../../../../app/utils/getUserName';
 import { Wallet } from '../../../../app/props/userProps';
-import { Button } from 'react-bootstrap';
 import ModalComponent from '../../components/Modal';
 import CheckoutForm from '../../components/CheckoutForm';
-import { FaDollarSign } from 'react-icons/fa';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import StripeElement from '../../components/StripeElement';
 interface FundWalletFormInputs {
 	amount: number;
@@ -24,8 +24,8 @@ interface FundWalletFormInputs {
 const HomePage = () => {
 	const currentUser = useSelector(selectCurrentUser);
 	const [topUp, setTopUp] = useState(false)
-	// const [amount, setAmount] = useState(1)
-	const amount = 600;
+	const [showCheckout, setShowCheckout] = useState(false)
+	const [amount, setAmount] = useState(1)
 	const { register, handleSubmit, formState: { errors }, reset } = useForm<FundWalletFormInputs>();
 
 	const getWalletSVG = (i:number) =>{
@@ -81,7 +81,8 @@ useEffect(() => {
 // console.log(currentUser)
 	const onSubmit: SubmitHandler<FieldValues> = async (formFields, e) => {
 		e?.preventDefault()
-			// setAmount(parseFloat(formFields.amount))
+			setAmount(parseFloat(formFields.amount))
+			setShowCheckout(true)
 	}
   return (
     <>
@@ -138,11 +139,15 @@ useEffect(() => {
 						</div>
 					</div>
 				</div>
-				<StripeElement amount={amount}>{amount && <CheckoutForm {...{styles:{buttonText:'Top up'}, amount:amount}}/>}</StripeElement>
+			
 				<div className="row">
 					<div className="col-xl-6 col-xxl-12">
-					{topUp && <ModalComponent {...{size:'sm',header:{show:true,title:'Fund Wallet'}}} >
-									<form onSubmit={(e) => handleSubmit(onSubmit)(e) } >
+					{topUp && <ModalComponent {...{size:()=>showCheckout? 'lg':'sm',header:{show:true,title:'Fund Wallet'}}} >
+								{showCheckout ?
+								<StripeElement amount={amount}>{amount && <CheckoutForm {...{styles:{buttonText:`Top up $ ${amount} `}, amount:amount}}/>}</StripeElement>
+													
+							:
+							<form onSubmit={(e) => handleSubmit(onSubmit)(e) } >
 									
 						<div className="form-group">
                         {/* <label htmlFor="amount" className='font-normal fontsize-8'>Amount</label> */}
@@ -167,11 +172,13 @@ useEffect(() => {
                           {errors.amount && <div className="invalid-feedback">{errors.amount.message}</div>}
                         </div>
                       </div>
-					  <div className="flex  w-100">
+					  <div className="d-flex  w-100">
 									<Button type='submit' size='sm' className='bg-primary justify-self-end' >Top up</Button>
 
 									</div>
 					  </form>
+							}		
+					
 						</ModalComponent>}	
 						<div className="row">{
 							currentUser.wallets.map((wallet:Wallet,i:number)=>(

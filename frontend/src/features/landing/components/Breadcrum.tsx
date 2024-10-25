@@ -2,15 +2,15 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import {useCompanyInfo,useLandingConfig,} from '../../dashboard/pages/Settings/slices/settings.slice';
 
-import PageProps from '../../../app/props/PageProps'
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import PageProps from '../../../app/props/pageProps'
+const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
 
 const Breadcrum:React.FC<PageProps> = ({pageData: {pageTitle}={}}:PageProps) => {
 const {settings:{siteImages:{pagesBg}={}}={}} = useSelector(useLandingConfig); 
   return (
 <section className="page-header">
-    <div className="page-header__bg" style={{backgroundImage: `url('${BASE_URL+"/uploads/settings/brand/"+pagesBg}')`}}>
+    <div className="page-header__bg" style={{backgroundImage: `url('${BRAND_ASSETS+pagesBg}')`}}>
     </div>
     <div className="container"><div className="thm-breadcrumb list-unstyled"> 
     <span property="itemListElement" typeof="ListItem">

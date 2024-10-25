@@ -46,7 +46,6 @@ export class AuthController {
     @Res() res: Response,
     // @Body(ValidationPipe) loginUserDto: LoginUserDto,
   ): Promise<any> {
-
     const { accessToken } = (req as any).user; // accessToken is already set in the strategy
     res.json({ accessToken });
   }
@@ -86,7 +85,7 @@ export class AuthController {
   @Get('/refresh')
   async refreshToken(@Req() req: Request, @Res() res: Response): Promise<any> {
     const { accessToken } = (req as any).user; // accessToken is already set in the strategy
-    console.log(accessToken)
+    console.log(accessToken);
     res.json({ accessToken });
   }
 

@@ -39,8 +39,8 @@ export class SavedItemService {
           listingId: createSavedItemDto.listingId,
         },
       });
-       } catch (error) {
-         handleError(error);
+    } catch (error) {
+      handleError(error);
     }
   }
 
@@ -56,7 +56,7 @@ export class SavedItemService {
   }
 
   async upsert(userId: string, data: UpdateSavedItemDto) {
-       try {
+    try {
       return await this.savedItemRepository.upsert({
         where: { userId },
         data: data,

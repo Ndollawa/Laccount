@@ -1,7 +1,7 @@
 import React, {FormEvent, useEffect, useState} from 'react';
 import {useStripe, useElements, PaymentElement} from '@stripe/react-stripe-js';
 import { useProcessPaymentMutation } from '../pages/Wallet/slices/paymentApi.slice';
-import { data } from 'jquery';
+import { Button } from 'react-bootstrap';
 
 const CheckoutForm = ({styles:{buttonText}, amount}:{styles:{buttonText:string}, amount:number}) => {
   const stripe = useStripe();
@@ -43,28 +43,24 @@ const CheckoutForm = ({styles:{buttonText}, amount}:{styles:{buttonText:string},
   };
   const initPayment = async ()=>{
   await processPayment({amount,transactionId:'ghdgdg',userId:'cdfgtg'})
-  console.log(data)
-  }
 
-useEffect(() => {
-  if(isSuccess){
-    setClientSecret(data.client_secret)
   }
-  return () => {
-  
-  };
-}, [isSuccess, isError])
 
 useEffect(() => {
   initPayment()
+    if(isSuccess){
+    setClientSecret(data.data.client_secret) 
+  }
   return () => {
   
   };
-}, [amount])
+}, [amount, isSuccess, isError])
   return (
     <form onSubmit={handleSubmit}>
      {clientSecret && <PaymentElement />} 
-      <button disabled={!stripe}>{buttonText}</button>
+     <div className="d-flex justify-content-end mt-5">
+      <Button size="sm" className="" disabled={!stripe}>{buttonText}</Button>
+      </div>
       {/* Show error message to your customers */}
       {errorMessage && <div>{errorMessage}</div>}
     </form>

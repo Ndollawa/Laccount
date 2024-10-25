@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 import { useCompanyInfo, useLandingConfig } from '../../../../dashboard/pages/Settings/slices/settings.slice';
 
 const AboutUs = () => {
@@ -72,7 +73,7 @@ aboutUsSection = (<section className="about-four pt-120 pb-120">
               <div className="about-four__image image-style-1 clearfix">
                    <div className="about-four__image__bg"></div> 
                   <div className="about-four__image-inner">
-                  <img src={BASE_URL+"uploads/settings/brand/"+aboutUsBg} alt={siteName} />
+                  <img src={BRAND_ASSETS+aboutUsBg} alt={siteName} />
                   <div className="about-four__image__caption  image-caption caption-right">
                       <h3 className="about-four__image__caption__year">{yearsExp}<i>+</i></h3>
                       <p className="about-four__image__caption__text">Years
@@ -98,7 +99,7 @@ aboutUsSection = (<section className="about-four pt-120 pb-120">
         <div className="row row-gutter-y-60">
             <div className="col-lg-6">
                 <div className="about-five__image wow fadeInLeft p-5" data-wow-duration="1500ms">
-                    <img src={BASE_URL+"uploads/settings/brand/"+aboutUsBg} alt={siteName}/>
+                    <img src={BRAND_ASSETS+aboutUsBg} alt={siteName}/>
                     <div className="about-five__image__caption">
                         <div className="about-five__image__caption__shape-1"></div>
                         
@@ -120,11 +121,11 @@ aboutUsSection = (<section className="about-four pt-120 pb-120">
                         <p className="block-title__tagline">About Company</p>
                         <h2 className="block-title__title">We Provide Reliable Escrow Services</h2>
                     </div>
-                    <h3 className="about-five__subtitle">Why Choose {siteName}: Your Trusted Acoount Selling Escrow Partner</h3>
+                    <h3 className="about-five__subtitle">Why Choose {siteName}:</h3>
                     
                     <p className="about-five__text" dangerouslySetInnerHTML={{__html:aboutUs}}></p>
                     <div className="team-progress__item">
-                        <h4 className="team-progress__title">Our Story: Building Trust in Online Transactions</h4>
+                        <h4 className="team-progress__title mb-5">Our Story: Building Trust in Online Transactions</h4>
                         <div className="team-progress__bar">
                             <div className="team-progress__bar__inner count-bar" data-percent="99%">
                                 <div className="team-progress__bar__text count-text">99%</div>
@@ -180,7 +181,7 @@ aboutUsSection = (<section className="about-four pt-120 pb-120">
                         </div>
                         <div className="col-md-6">
                             <div className="about-five__video">
-                                <img src={BASE_URL+"uploads/settings/brand/"+aboutUsBg} alt={siteName}/>
+                                <img src={BRAND_ASSETS+aboutUsBg} alt={siteName}/>
                                 <a href="#" className="video-popup about-five__video__btn">
                                     <i className="fa fa-play"></i>
                                     <span className="ripple"></span>
@@ -204,7 +205,7 @@ aboutUsSection = (<section className="about-four pt-120 pb-120">
         <div className="row row-gutter-y-60">
             <div className="col-lg-6">
                 <div className="about-six__image">
-                    <img src={BASE_URL+"uploads/settings/brand/"+aboutUsBg} alt={siteName}/>
+                    <img src={BRAND_ASSETS+aboutUsBg} alt={siteName}/>
                     <div className="about-six__image__caption wow fadeInRight" data-wow-duration="1500ms">
                         <h4 className="about-six__image__caption__year count-box">
                             <span className="count-text" data-stop="20" data-speed="1500"></span>
@@ -238,7 +239,7 @@ aboutUsSection = (<section className="about-four pt-120 pb-120">
                     <p className="about-six__text" dangerouslySetInnerHTML={{__html:aboutUs}}></p>
                     <div className="about-six__author">
                         <div className="about-six__author__image">
-                            <img src={BASE_URL+"uploads/settings/brand/"+aboutUsBg} alt={siteName}/>
+                            <img src={BRAND_ASSETS+aboutUsBg} alt={siteName}/>
                         </div>
                         <div className="about-six__author__name">
                             {siteName}
