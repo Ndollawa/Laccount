@@ -38,7 +38,7 @@ const Home:React.FC<PageProps>=({pageData}:PageProps) => {
                         </div>
                         {/* <!-- /.col-md-6 --> */}
                         <div className="col-md-6">
-                            <p className="loan-calculator__top__text">Choosing {siteName} as your trusted Account escrow partner comes with a range of benefits. We prioritize transparency, reliability, and customer satisfaction to deliver an exceptional experience to our users. Here's why you should choose {siteName}:</p>
+                            <p className="loan-calculator__top__text">Choosing {siteName} as your trusted Social Account escrow partner comes with a range of benefits. We prioritize transparency, reliability, and customer satisfaction to deliver an exceptional experience to our users. Here's why you should choose {siteName}:</p>
                                 {/* <!-- /.loan-calculator__top__text --> */}
                         </div>
                         {/* <!-- /.col-md-6 --> */}
@@ -60,7 +60,7 @@ const Home:React.FC<PageProps>=({pageData}:PageProps) => {
                                   <h4 className="about-four__feature__title fs-16">Security</h4>
                                   
                               </div>
-                              <div className="about-four__feature__text text-justify px-4 py-2">We employ advanced security measures to protect your funds and personal information. Our platform is designed with robust encryption and authentication protocols to ensure a secure environment for your transactions.
+                              <div className="about-four__feature__text text-justify px-4">We use advanced encryption and authentication to keep your funds and personal information safe.
                               </div>
                           </div>
                       </div>
@@ -73,7 +73,7 @@ const Home:React.FC<PageProps>=({pageData}:PageProps) => {
                                   <h4 className="about-four__feature__title fs-16 flex-no-wrap">Dispute Resolution</h4>
                                   
                               </div>
-                              <div className="about-four__feature__text  text-justify px-4 py-2">In the unlikely event of a dispute, our experienced team provides fair and impartial resolution services. We work diligently to find a satisfactory outcome for all parties involved, fostering trust and confidence in the process.
+                              <div className="about-four__feature__text  text-justify px-4"> Our experienced team provides fair, impartial dispute resolution to ensure trust and confidence.
                               </div>
                           </div>
                       </div>
@@ -86,7 +86,7 @@ const Home:React.FC<PageProps>=({pageData}:PageProps) => {
                                   <h4 className="about-four__feature__title fs-16 flex-no-wrap">User-Friendly Interface</h4>
                                   
                               </div>
-                              <div className="about-four__feature__text  text-justify px-4 py-2">Our intuitive and user-friendly interface makes it easy for both buyers and sellers to navigate the platform. With clear instructions and a straightforward layout, you can quickly initiate and manage your transactions with ease.
+                              <div className="about-four__feature__text  text-justify px-4">A straightforward, intuitive layout makes navigating and managing transactions easy for both buyers and sellers.
                               </div>
                           </div>
                       </div>
@@ -99,7 +99,7 @@ const Home:React.FC<PageProps>=({pageData}:PageProps) => {
                                   <h4 className="about-four__feature__title fs-16 flex-no-wrap">Dedicated Support</h4>
                                   
                               </div>
-                              <div className="about-four__feature__text  text-justify px-4 py-2">We have a dedicated customer support team available to assist you every step of the way. Whether you have questions, need guidance, or encounter any issues, our knowledgeable representatives are here to provide timely and helpful assistance.
+                              <div className="about-four__feature__text  text-justify px-4">Knowledgeable support staff are available to assist with any questions or issues you encounter.
                               </div>
                           </div>
                       </div>
@@ -113,7 +113,7 @@ const Home:React.FC<PageProps>=({pageData}:PageProps) => {
                                   <h4 className="about-four__feature__title fs-16 flex-no-wrap">Buyer and Seller Protection</h4>
                                   
                               </div>
-                              <div className="about-four__feature__text  text-justify px-4 py-2">We prioritize the safety and satisfaction of both buyers and sellers. By using {siteName}, buyers can be confident that their funds are protected until they receive the goods or services they paid for. Sellers, on the other hand, can rest assured that they will be paid promptly once the buyer's requirements are met.
+                              <div className="about-four__feature__text  text-justify px-4">Funds are securely held until buyers receive their goods or services, ensuring fair transactions for both parties.
                               </div>
                           </div>
                       </div>

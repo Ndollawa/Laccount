@@ -18,7 +18,7 @@ import { AuthEventsService } from './auth.events';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('ACCESS_TOKEN_SECRET'),
+        secret: configService.getOrThrow('ACCESS_TOKEN_SECRET'),
         signOptions: { expiresIn: '1800s' },
       }),
       inject: [ConfigService],

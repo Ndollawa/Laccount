@@ -9,7 +9,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private readonly configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
-        // JwtStrategy.extractJWTFromCookie,
         ExtractJwt.fromAuthHeaderAsBearerToken(),
       ]),
       ignoreExpiration: false,
@@ -17,14 +16,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         configService.getOrThrow('ACCESS_TOKEN_SECRET') ||
         `${process.env.ACCESS_TOKEN_SECRET}`,
     });
-  }
-
-  private static extractJWTFromCookie(@Req() req: Request): string | null {
-    if (req.cookies && req.cookies.jwt) {
-      return req.cookies.jwt;
-    }
-
-    return null;
   }
 
   validate = async (payload: any) => {

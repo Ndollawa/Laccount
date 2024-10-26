@@ -1,70 +1,109 @@
-import React, {FormEvent, useEffect, useState} from 'react';
-import {useStripe, useElements, PaymentElement} from '@stripe/react-stripe-js';
-import { useProcessPaymentMutation } from '../pages/Wallet/slices/paymentApi.slice';
+import React, { FormEvent, useEffect, useState } from 'react';
+import { DotLoader, PulseLoader } from 'react-spinners';
 import { Button } from 'react-bootstrap';
+import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
+import { useProcessPaymentMutation } from '../pages/Wallet/slices/paymentApi.slice';
 
-const CheckoutForm = ({styles:{buttonText}, amount}:{styles:{buttonText:string}, amount:number}) => {
+const CheckoutForm = ({ styles: { buttonText }, amount }: { styles: { buttonText: string }, amount: number }) => {
   const stripe = useStripe();
   const elements = useElements();
-
+  const [clientSecret, setClientSecret] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [clientSecret, setClientSecret] = useState('');
-  const [processPayment, {data, isLoading, isSuccess, isError, error }] = useProcessPaymentMutation();
-  
-  const handleSubmit = async (event:FormEvent) => {
-    event.preventDefault();
+  const [processPayment, { data, isLoading, isSuccess, isError, error }] = useProcessPaymentMutation();
 
-    if (!stripe || !elements) {
-      // Stripe.js hasn't yet loaded.
-      // Make sure to disable form submission until Stripe.js has loaded.
+  // Prevent unnecessary calls by controlling the initialization flag
+  const [paymentInitialized, setPaymentInitialized] = useState(false);
+
+  // Error handling utility
+  const handleError = (error: any) => {
+    setLoading(false);
+    setErrorMessage(error?.message || 'Payment failed');
+  };
+
+  // Payment submission logic
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    if (!stripe || !elements || !clientSecret) return;
+
+    setLoading(true);
+    
+    const { error: submitError } = await elements.submit();
+    if (submitError) {
+      handleError(submitError);
       return;
     }
 
-    const {error} = await stripe.confirmPayment({
-      //`Elements` instance that was used to create the Payment Element
+    const { error } = await stripe.confirmPayment({
       elements,
       clientSecret,
       confirmParams: {
-        return_url: 'https://example.com/order/123/complete',
+        return_url: 'http://localhost:5173/payment-status',
       },
     });
 
-
     if (error) {
-      // This point will only be reached if there is an immediate error when
-      // confirming the payment. Show error to your customer (for example, payment
-      // details incomplete)
-      setErrorMessage(error?.message as string);
-    } else {
-      // Your customer will be redirected to your `return_url`. For some payment
-      // methods like iDEAL, your customer will be redirected to an intermediate
-      // site first to authorize the payment, then redirected to the `return_url`.
+      handleError(error);
     }
   };
-  const initPayment = async ()=>{
-  await processPayment({amount,transactionId:'ghdgdg',userId:'cdfgtg'})
 
-  }
+  // Initialize payment
+  const initPayment = async () => {
+    if (paymentInitialized) return; // Prevent multiple initializations
 
-useEffect(() => {
-  initPayment()
-    if(isSuccess){
-    setClientSecret(data.data.client_secret) 
-  }
-  return () => {
-  
+    try {
+      const paymentResponse = await processPayment({
+        amount,
+        transactionId: 'ghdgdg',
+        userId: 'cdfgtg',
+      });
+      if (paymentResponse?.data?.data?.client_secret) {
+        setClientSecret(paymentResponse.data?.data?.client_secret);
+        setPaymentInitialized(true); // Mark payment as initialized
+      }
+    } catch (err) {
+      setErrorMessage('Error processing payment.');
+    }
   };
-}, [amount, isSuccess, isError])
+
+  // useEffect to manage payment initialization
+  useEffect(() => {
+    if (!paymentInitialized) {
+      initPayment();
+    }
+  }, [paymentInitialized, amount]); // Only trigger on mount and when amount changes
+
+  // Show loading spinner if necessary data isn't loaded yet
+  if (!clientSecret || !stripe || !elements || isLoading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center w-100 h-64 relative pt-3">
+        <div>
+          <DotLoader size="3rem" />
+          <div className="my-4 text-center">
+            <small>Loading...</small>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit}>
-     {clientSecret && <PaymentElement />} 
-     <div className="d-flex justify-content-end mt-5">
-      <Button size="sm" className="" disabled={!stripe}>{buttonText}</Button>
+      {clientSecret && <PaymentElement />}
+      <div className="d-flex justify-content-end mt-5">
+        <Button
+          size="sm"
+          type="submit"
+          className="btn btn-primary"
+          disabled={!stripe || loading}
+        >
+          {loading ? <PulseLoader /> : buttonText}
+        </Button>
       </div>
       {/* Show error message to your customers */}
       {errorMessage && <div>{errorMessage}</div>}
     </form>
-  )
+  );
 };
 
 export default CheckoutForm;

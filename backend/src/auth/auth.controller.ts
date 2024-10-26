@@ -46,8 +46,36 @@ export class AuthController {
     @Res() res: Response,
     // @Body(ValidationPipe) loginUserDto: LoginUserDto,
   ): Promise<any> {
-    const { accessToken } = (req as any).user; // accessToken is already set in the strategy
-    res.json({ accessToken });
+    const foundUser = (req as any).user;
+    if (!foundUser) throw new UnauthorizedException();
+    const { cookies } = req;
+    if (cookies?.jwt) {
+      const { refreshTokenId, refreshToken } = splitRt(cookies.jwt);
+      await this.authService.findRefreshToken(refreshTokenId);
+      await this.authService.removeRefreshToken(refreshTokenId);
+
+      res.clearCookie('jwt', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+      });
+    }
+    // const foundUser = await this.authService.validateUser(loginUserDto);
+    const { accessToken, refreshToken }: Tokens =
+      await this.authService.login(foundUser);
+    // console.log(foundUser);
+    if (accessToken) {
+      // this.requestService.setUser(foundUser);
+
+      // Create secure cookie with refresh token
+      res.cookie('jwt', refreshToken, {
+        httpOnly: true, //accessible only by web server
+        secure: true, //https
+        sameSite: 'none', //cross-site cookie
+        maxAge: 7 * 24 * 60 * 60 * 1000, //cookie expiry: set to match rT
+      });
+    }
+    return res.json({ accessToken });
   }
 
   @Post('/logout')
@@ -84,8 +112,36 @@ export class AuthController {
   @UseGuards(RefreshJwtAuthGuard)
   @Get('/refresh')
   async refreshToken(@Req() req: Request, @Res() res: Response): Promise<any> {
-    const { accessToken } = (req as any).user; // accessToken is already set in the strategy
-    console.log(accessToken);
+    const cookies = req.cookies;
+    if (!cookies?.jwt) throw new UnauthorizedException({ message: 'no token' });
+    const { refreshTokenId, refreshToken } = splitRt(cookies.jwt);
+    //check for user  in the DB
+    // break;
+    // const foundUser = await this.authService.findRefreshToken(refreshTokenId);
+    const foundUser = (req as any).user;
+    res.clearCookie('jwt', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+    });
+    if (!foundUser) {
+      const hackedUser = await this.authService.verifyToken({ refreshToken });
+      if (hackedUser) {
+        await this.authService.removeManyRefreshToken({
+          where: { userId: hackedUser.id },
+        });
+      }
+      throw new UnauthorizedException('Unauthorized user');
+    }
+    // Detect refresh token reuse! (Hacked token)
+    const { accessToken, refreshToken: newRefreshToken } =
+      await this.authService.refreshUserToken(foundUser?.user);
+    res.cookie('jwt', newRefreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 24 * 60 * 60 * 1000,
+    });
     res.json({ accessToken });
   }
 

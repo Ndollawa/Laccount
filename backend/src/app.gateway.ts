@@ -4,10 +4,10 @@ import {
   WebSocketGateway,
 } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
+import { websocketConfig } from '@app/common';
 
-@WebSocketGateway()
+@WebSocketGateway(websocketConfig)
 export class AppGateway implements OnGatewayConnection {
   async handleConnection(socket: Socket) {}
-
   private disconnect() {}
 }

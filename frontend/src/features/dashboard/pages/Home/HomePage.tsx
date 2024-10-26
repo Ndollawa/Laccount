@@ -24,6 +24,7 @@ interface FundWalletFormInputs {
 const HomePage = () => {
 	const currentUser = useSelector(selectCurrentUser);
 	const [topUp, setTopUp] = useState(false)
+	const [showModal, setShowModal] = useState(false)
 	const [showCheckout, setShowCheckout] = useState(false)
 	const [amount, setAmount] = useState(1)
 	const { register, handleSubmit, formState: { errors }, reset } = useForm<FundWalletFormInputs>();
@@ -83,6 +84,7 @@ useEffect(() => {
 		e?.preventDefault()
 			setAmount(parseFloat(formFields.amount))
 			setShowCheckout(true)
+			setShowModal(true)
 	}
   return (
     <>
@@ -142,15 +144,15 @@ useEffect(() => {
 			
 				<div className="row">
 					<div className="col-xl-6 col-xxl-12">
-					{topUp && <ModalComponent {...{size:()=>showCheckout? 'lg':'sm',header:{show:true,title:'Fund Wallet'}}} >
+					{topUp && <ModalComponent {...{size:"sm", header:{show:showModal,title:'Fund Wallet'}}} >
 								{showCheckout ?
-								<StripeElement amount={amount}>{amount && <CheckoutForm {...{styles:{buttonText:`Top up $ ${amount} `}, amount:amount}}/>}</StripeElement>
+								<StripeElement amount={amount}>{amount && <CheckoutForm {...{styles:{buttonText:`Top up $${amount} `}, amount:amount}}/>}</StripeElement>
 													
 							:
 							<form onSubmit={(e) => handleSubmit(onSubmit)(e) } >
 									
 						<div className="form-group">
-                        {/* <label htmlFor="amount" className='font-normal fontsize-8'>Amount</label> */}
+                        <label htmlFor="amount" className='font-normal font-size-xs'>Amount</label>
                         <div className="input-group">
                           <span className="input-group-text">
                             <FaDollarSign />
@@ -172,8 +174,8 @@ useEffect(() => {
                           {errors.amount && <div className="invalid-feedback">{errors.amount.message}</div>}
                         </div>
                       </div>
-					  <div className="d-flex  w-100">
-									<Button type='submit' size='sm' className='bg-primary justify-self-end' >Top up</Button>
+					  <div className="d-flex justify-content-end  w-100">
+									<Button type='submit' size='sm' className='bg-primary' >Top up</Button>
 
 									</div>
 					  </form>

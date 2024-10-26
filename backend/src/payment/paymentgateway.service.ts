@@ -135,7 +135,7 @@ export class PaymentGatewayService {
     }
     // console.log();
     // Simulated webhook callback (In real scenarios, this will be an actual webhook event)
-    return await this.initializePayment(amount, 'usd', '124')
+    return await this.initializePayment(amount, 'usd', '124');
   }
 
   //

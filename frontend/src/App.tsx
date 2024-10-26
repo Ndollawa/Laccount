@@ -8,6 +8,9 @@ import LandingLayout from './features/layouts/landing/Layout';
 import { useLandingConfig } from './features/dashboard/pages/Settings/slices/settings.slice';
 
 // Lazy Load components
+const StripeElement = React.lazy(() => import('./features/dashboard/components/StripeElement'));
+const PaymentStatus = React.lazy(() => import('./features/dashboard/components/PaymentStatus'));
+
 const PersistLogin = React.lazy(() => import('./features/components/PersistLogin'));
 const RequireAuth = React.lazy(() => import('./features/components/RequireAuth'));
 const Wallet = React.lazy(() => import('./features/dashboard/pages/Wallet/Wallet'));
@@ -60,7 +63,7 @@ const Error403 = React.lazy(() => import( './features/errorPages/Error403'));
 const Error404 = React.lazy(() => import( './features/errorPages/Error404'));
 const Error500 = React.lazy(() => import( './features/errorPages/Error500'));
 const Error503 = React.lazy(() => import( './features/errorPages/Error503'));
- const BASE_URL = import.meta.env.VITE_BASE_URL;
+ const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
 const Preloader = ()=>{
   return (
@@ -79,7 +82,7 @@ const App = () => {
   const location = useLocation();
   const currentToken = useSelector(selectCurrentToken);
   const { settings: { landingPageConfig: { showBlog, showTeam } = {}, siteImages: {pagesBg}={} } = {} } = useSelector(useLandingConfig);
-const bgImage = `${BASE_URL}uploads/settings/brand/${pagesBg}`
+const bgImage = `${BRAND_ASSETS}${pagesBg}`
 
   const [isPending, startTransition] = useTransition();
 
@@ -187,6 +190,9 @@ const bgImage = `${BASE_URL}uploads/settings/brand/${pagesBg}`
           <Route path="register" element={<Navigate to="/auth/register" />} />
          
         </Route>
+         <Route path="payment-status" element={<DashboardLayout pageData={{ pageTitle: "Dashboard" }} />}>
+          <Route index element={<StripeElement><PaymentStatus /></StripeElement>} />
+         </Route>
          <Route path="auth" element={<DashboardLayout pageData={{ pageTitle: "Dashboard" }} />}>
           <Route index element={currentToken ? <Navigate state={{ from: location }} to="/dashboard" /> : <Login />} />
           <Route path="login" element={currentToken ? <Navigate state={{ from: location }} to="/dashboard" /> : <Login />} />

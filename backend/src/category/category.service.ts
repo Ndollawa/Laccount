@@ -49,7 +49,7 @@ export class CategoryService {
       //   );
       // }
       const categoryData = {
-            ...createCategoryData,
+        ...createCategoryData,
       };
       const newCategory = await this.categoryRepository.create({
         data: categoryData,

@@ -54,7 +54,7 @@ export class AuthService {
   validateUser = async ({ user, password }: LoginUserDto) => {
     const userType = EMAIL_REGEX.test(user);
     const userQuery = userType ? { email: user } : { username: user };
-    const foundUser = await this.userService.find({
+    const foundUser = await this.userService.findFirst({
       where: userQuery,
       include: {
         profile: true,

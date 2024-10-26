@@ -16,7 +16,7 @@ interface ModalInterface{
     show?:boolean;
 
 }
-const ModalComponent = ({children, header, footer, size }:contextProps & ModalInterface) => {
+const ModalComponent = ({children},{ header, footer, size }:contextProps & ModalInterface) => {
     const [show, setShow] = useState(true);
     const handleClose = useCallback(() => setShow(false), [show]);
   return (

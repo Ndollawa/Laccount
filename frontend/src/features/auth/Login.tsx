@@ -18,11 +18,11 @@ interface LoginFormInputs {
 }
 
 interface ErrMessages {
-  type: string;
-  msg: string;
+  type: string | undefined;
+  msg: string | undefined;
 }
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
 const Login: React.FC = () => {
   const { settings: { companyDetails:{siteName }={}} = {} } = useSelector(useCompanyInfo);
@@ -80,7 +80,7 @@ const Login: React.FC = () => {
                   <div className="auth-form">
                     <div className="text-center mb-3">
                       <Link to="/" className="brand-logo">
-                        <img src={`${BASE_URL}/uploads/settings/brand/${logo}`} alt={siteName} width="150" />
+                        <img src={`${BRAND_ASSETS}${logo}`} alt={siteName} width="150" />
                       </Link>
                     </div>
                     <h4 className="text-center mb-4">Sign in to your account</h4>
@@ -88,7 +88,7 @@ const Login: React.FC = () => {
                       {errMsg && (
                         <div className={`alert alert-${errMsg.type} alert-dismissible fade show`} role="alert">
                           <strong>{errMsg.type === 'warning' ? 'Warning!' : 'Error!'}</strong> {errMsg.msg}
-                          <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                          <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" onClick={()=>setErrMsg({type:undefined, msg:undefined})}></button>
                         </div>
                       )}
 

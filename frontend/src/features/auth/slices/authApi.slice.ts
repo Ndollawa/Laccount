@@ -53,7 +53,6 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 try {
                     const {data}= await queryFulfilled
                     const{accessToken} = data
-                    console.log(accessToken)
                     const decodedToken: AuthProps['token'] | undefined = accessToken ? jwtDecode(accessToken) : undefined;
                     const user_info = decodedToken?.sub;
               
