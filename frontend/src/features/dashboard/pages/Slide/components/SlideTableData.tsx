@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux'
 import { useUpdateSettingMutation } from '../../Settings/slices/settingApi.slice'
 import { setLandingSetting, useLandingConfig } from '../../Settings/slices/settings.slice'
 import { useDispatch } from 'react-redux'
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const SLIDER_ASSETS = import.meta.env.VITE_SLIDER_ASSETS;
 const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;
 
 
@@ -104,11 +104,11 @@ const SlideTableData = ({slide,index,showEditForm}:any) => {
             <><tr key={slide.id}>
                     <td>{++index}</td>
                     <td>
-                    <LightGallery plugins={[lgZoom]} > <a href={`${BASE_URL}/uploads/settings/slides/${slide.image}`}  data-lightbox={`image-${++index}`} data-exthumbimage={BASE_URL+"/uploads/slide/"+slide.image} data-src={BASE_URL+"/uploads/slide/"+slide.image} data-title={slide.title}>
-                        <img src={`${BASE_URL}/uploads/settings/slides/${slide.image}`} alt={slide.title} width="150" /></a></LightGallery></td>
-                    <td>{slide.title}</td>
-                    <td>{slide.description}</td>
-                    <td  dangerouslySetInnerHTML={{__html:slide.body}} ></td>
+                    <LightGallery plugins={[lgZoom]} > <a href={`${SLIDER_ASSETS}${slide.image}`}  data-lightbox={`image-${++index}`} data-exthumbimage={SLIDER_ASSETS+slide.image} data-src={SLIDER_ASSETS+slide.image} data-title={slide.title}>
+                        <img src={`${SLIDER_ASSETS}${slide.image}`} alt={slide.title} width="150" /></a></LightGallery></td>
+                    <td><p  className="text-wrap text-left" >{slide.title}</p></td>
+                    <td><p className="text-wrap text-left" >{slide.description}</p></td>
+                    <td>  <div className="text-wrap text-left w-40" dangerouslySetInnerHTML={{__html:slide.body}}></div> </td>
                     <td align="center">{slideStatus}</td>
                     <td>
                     <div className="d-flex">
