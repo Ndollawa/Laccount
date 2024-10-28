@@ -15,7 +15,7 @@ import ThemePanel from "./ThemePanel";
 import useUserActivity from "../../../app/hooks/useUserActivity";
 import useLocalStorage from "../../../app/hooks/useLocalStorage";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
 const MainBody = ({ children }: { children: React.ReactNode }) => {
     const currentUser = useSelector(selectCurrentUser);
@@ -137,9 +137,9 @@ const MainBody = ({ children }: { children: React.ReactNode }) => {
                     <div className="nav-header">
                         <Link to="/dashboard" className="brand-logo">
                             {(isToggled || width as number < 728 || sidebarStyle === 'mini') ? (
-                                <img src={`${BASE_URL}/uploads/settings/brand/${ logoIcon || favicon }`} alt={siteName} width="30" />
+                                <img src={`${BRAND_ASSETS}${ logoIcon || favicon }`} alt={siteName} width="30" />
                             ) : (
-                                <img src={version === 'dark' ? `${BASE_URL}/uploads/settings/brand/${logoDark}` : `${BASE_URL}/uploads/settings/brand/${logo}`} alt={siteName} width="150" />
+                                <img src={version === 'dark' ? `${BRAND_ASSETS}${logoDark}` : `${BRAND_ASSETS}${logo}`} alt={siteName} width="150" />
                             )}
                         </Link>
                         <div className="nav-control">

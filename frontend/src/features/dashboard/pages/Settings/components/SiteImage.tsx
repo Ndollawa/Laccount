@@ -12,7 +12,7 @@ import {
 } from "../slices/settingApi.slice";
 import { useLandingConfig } from "../slices/settings.slice";
 import showToast from "../../../../../app/utils/showToast";
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
 const SiteImage = () => {
   const {
@@ -75,14 +75,14 @@ const SiteImage = () => {
     >
       <LightGallery plugins={[lgZoom]}>
         <a
-          href={`${BASE_URL}/uploads/settings/brand/${image}`}
-          data-exthumbimage={`${BASE_URL}/uploads/settings/brand/${image}`}
-          data-src={`${BASE_URL}/uploads/settings/brand/${image}`}
+          href={`${BRAND_ASSETS}${image}`}
+          data-exthumbimage={`${BRAND_ASSETS}${image}`}
+          data-src={`${BRAND_ASSETS}${image}`}
           data-title={type}
         >
           <img
             className="img-responsive offset-1"
-            src={`${BASE_URL}/uploads/settings/brand/${image}`}
+            src={`${BRAND_ASSETS}${image}`}
             alt={type}
             width={width}
           />
@@ -227,7 +227,7 @@ const SiteImage = () => {
               >
                 <video
                   className="img-responsive offset-1"
-                  src={`${BASE_URL}/uploads/settings/brand/${aboutVideo}`}
+                  src={`${BRAND_ASSETS}${aboutVideo}`}
                   controls
                   width="320"
                 ></video>

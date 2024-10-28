@@ -11,7 +11,7 @@ import Search from '../../landing/components/Search';
 import PageProps from "../../../app/props/pageProps";
 import './styles.css';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
 const Home: React.FC<PageProps> = ({ pageData }: PageProps) => {
   const preloaderRef = useRef<HTMLDivElement | null>(null);
@@ -71,7 +71,7 @@ const Home: React.FC<PageProps> = ({ pageData }: PageProps) => {
         <div className="custom-cursor__cursor-two"></div>
 
         <div className="preloader" ref={preloaderRef}>
-          <div className="preloader__image" style={{ backgroundImage: `url(${BASE_URL}/settings/brand/${logoIcon || favicon})` }}></div>
+          <div className="preloader__image" style={{ backgroundImage: `url(${BRAND_ASSETS}${logoIcon || favicon})` }}></div>
         </div>
 
         <div className="page-wrapper">

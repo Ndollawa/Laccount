@@ -113,7 +113,7 @@ const initialState:SettingsState = {
 }
 
 
-export const settingsSlice = createSlice({
+export const appSettingsSlice = createSlice({
     name:'appSettings',
     initialState,
     reducers:{
@@ -144,5 +144,5 @@ export const useCompanyInfo = (state:RootState)=>state.appSettings.companyInfo;
 export const useLandingConfig = (state:RootState)=>state.appSettings.landingConfig;
 export const useDashboardConfig = (state:RootState)=>state.appSettings.dashboardConfig;
 export const useSettings = (state:RootState)=>state.appSettings
-export const {setCompanyInfoSetting,setDashboardSetting,setLandingSetting,setSettings} = settingsSlice.actions;
-export default settingsSlice.reducer;
+export const {setCompanyInfoSetting,setDashboardSetting,setLandingSetting,setSettings} = appSettingsSlice.actions;
+export default appSettingsSlice.reducer;

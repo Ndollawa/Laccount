@@ -31,19 +31,19 @@ const HomePageSettings = () => {
       )
       .join('');
   // Watching the toggle states independently
-  const affiliateToggle = watch("landingPageConfig.showAffiliate", false);
-  const blogToggle = watch("landingPageConfig.showBlog", false);
-  const testimonialToggle = watch("landingPageConfig.showTestimonial", false);
-  const metricsToggle = watch("landingPageConfig.showMetrics", false);
-  const whatWeOfferToggle = watch("landingPageConfig.showWhatWeOffer", false);
-  const teamToggle = watch("landingPageConfig.showTeam", false);
-  const ourBenefitToggle = watch("landingPageConfig.showOurBenefit", false);
-  const partnersToggle = watch("landingPageConfig.showPartners", false);
+  // const affiliateToggle = watch("landingPageConfig.showAffiliate", false);
+  const blogToggle = watch("landingPageConfig.showBlog", landingPageConfig.showBlog);
+  const testimonialToggle = watch("landingPageConfig.showTestimonial", landingPageConfig.showTestimonial);
+  const metricsToggle = watch("landingPageConfig.showMetrics", landingPageConfig.showMetrics);
+  const whatWeOfferToggle = watch("landingPageConfig.showWhatWeOffer", landingPageConfig.showWhatWeOffer);
+  const teamToggle = watch("landingPageConfig.showTeam", landingPageConfig.showTeam);
+  const ourBenefitToggle = watch("landingPageConfig.showOurBenefit", landingPageConfig.showOurBenefit);
+  const partnersToggle = watch("landingPageConfig.showPartners", landingPageConfig.showPartners);
 
   const updateSettings: SubmitHandler<FieldValues> = async (formFields, e) => {
     e.preventDefault();
-    const { colors, ...otherFormFields} = formFields;
-    const settings = { landingPageConfig: { ...landingPageConfig, ...otherFormFields }, colors, ...otherSettings };
+    const { colors, landingPageConfig} = formFields;
+    const settings = { landingPageConfig, colors, ...otherSettings };
     try {
       await updateSetting({ id, settings }).unwrap();
       dispatch(setLandingSetting({...landingConfig, settings}));
@@ -66,7 +66,7 @@ const HomePageSettings = () => {
 
                 {/* Toggle Component */}
                 {[
-                  { label: "Show Affiliate Section", field: "landingPageConfig.showAffiliate", toggle: affiliateToggle },
+                  // { label: "Show Affiliate Section", field: "landingPageConfig.showAffiliate", toggle: affiliateToggle },
                   { label: "Show Testimonial Section", field: "landingPageConfig.showTestimonial", toggle: testimonialToggle },
                   { label: "Show Blog Section", field: "landingPageConfig.showBlog", toggle: blogToggle },
                   { label: "Show Metric Section", field: "landingPageConfig.showMetrics", toggle: metricsToggle },
@@ -77,7 +77,7 @@ const HomePageSettings = () => {
                   
                 ].map(({ label, field, toggle }, index) => (
                   <div key={index} className="my-1 col-md-12 d-flex justify-content-between">
-                    <div><strong>{label}</strong></div>
+                    <div>{label}</div>
                     <div>
                       <label htmlFor={field} className="p-10">
                         {toggle ? <BsToggle2On className='text-primary' fontSize={'2rem'} /> : <BsToggle2Off className='text-default' fontSize={'2rem'} />}
@@ -85,6 +85,7 @@ const HomePageSettings = () => {
                       <input
                         id={field}
                         type="checkbox"
+                        checked={toggle}
                         className="setting-checkbox d-none"
                         {...register(field)}
                       />
@@ -100,13 +101,14 @@ const HomePageSettings = () => {
                 {/* Colors */}
                 <div className="col-12 row my-3">
               <div className="mb-5 col-md-4">
-                <label className="form-label"><strong>Primary Color</strong></label>
+                <label className="form-label">Primary Color</label>
                 <input
                   type="color"
                   className="form-control"
-                  value={colors.primary}
+                  
                   {...register('colors.primary', {
-                    required: "Field: Primary color is required!"
+                    required: "Field: Primary color is required!",
+                    value:colors.primary
                   })}
                 />
                 {errors.colors?.primary && (
@@ -118,13 +120,13 @@ const HomePageSettings = () => {
               </div>
 
               <div className="mb-5 col-md-4">
-                <label className="form-label"><strong>Secondary Color</strong></label>
+                <label className="form-label">Secondary Color</label>
                 <input
                   type="color"
                   className="form-control"
-                  value={colors.secondary}
                   {...register('colors.secondary', {
-                    required: "Field: Secondary color is required!"
+                    required: "Field: Secondary color is required!",
+                  value:colors.secondary
                   })}
                 />
                 {errors.colors?.secondary && (
@@ -136,13 +138,13 @@ const HomePageSettings = () => {
               </div>
 
               <div className="mb-5 col-md-4">
-                <label className="form-label"><strong>Tertiary Color</strong></label>
+                <label className="form-label">Tertiary Color</label>
                 <input
                   type="color"
                   className="form-control"
-                  value={colors.tertiary}
                   {...register('colors.tertiary', {
-                    required: "Field: Tertiary color is required!"
+                    required: "Field: Tertiary color is required!",
+                  value:colors.tertiary
                   })}
                 />
                 {errors.colors?.tertiary && (
@@ -156,7 +158,7 @@ const HomePageSettings = () => {
 {/* Additional Style Fields */}
 {['Slider Style', 'About Us Style', 'Service Style', 'What We Offer Style', 'Testimonial Style', 'Our Benefit Style', 'Our Blog Style'].map((style, index) => (
                 <div key={index} className="mb-5 col-md-4 col-sm-2">
-                  <label className="form-label"><strong>{style}</strong></label>
+                  <label className="form-label">{style}</label>
                   <select
                     className="default-select form-control wide"
                     {...register(`landingPageConfig.${toCamelCase(style)}`, {
@@ -165,7 +167,7 @@ const HomePageSettings = () => {
                   >
                     <option value="">Choose...</option>
                     {[1, 2, 3].map(option => (
-                      <option key={option} value={option}>Style {option}</option>
+                      <option key={option} selected={landingPageConfig?.[`${toCamelCase(style)}`] === option} value={option}>Style {option}</option>
                     ))}
                   </select>
                   {errors.landingPageConfig?.[`${toCamelCase(style)}`] && (

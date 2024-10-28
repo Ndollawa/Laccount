@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react';
+import React,{useEffect, useState, useCallback} from 'react';
 import { Link } from 'react-router-dom';
 import { FaDollarSign } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
@@ -23,8 +23,9 @@ interface FundWalletFormInputs {
 
 const HomePage = () => {
 	const currentUser = useSelector(selectCurrentUser);
-	const [topUp, setTopUp] = useState(false)
-	const [showModal, setShowModal] = useState(false)
+	const [show, setShow] = useState(false);
+    const handleOpen = useCallback(() => setShow(true), [show]);
+    const handleClose = useCallback(() => setShow(false), [show]);
 	const [showCheckout, setShowCheckout] = useState(false)
 	const [amount, setAmount] = useState(1)
 	const { register, handleSubmit, formState: { errors }, reset } = useForm<FundWalletFormInputs>();
@@ -84,7 +85,6 @@ useEffect(() => {
 		e?.preventDefault()
 			setAmount(parseFloat(formFields.amount))
 			setShowCheckout(true)
-			setShowModal(true)
 	}
   return (
     <>
@@ -144,7 +144,7 @@ useEffect(() => {
 			
 				<div className="row">
 					<div className="col-xl-6 col-xxl-12">
-					{topUp && <ModalComponent {...{size:"sm", header:{show:showModal,title:'Fund Wallet'}}} >
+					<ModalComponent {...{size:showCheckout? "lg": "sm", header:{show:true,title:'Fund Wallet'},modalStates:{show,handleOpen,handleClose}}} >
 								{showCheckout ?
 								<StripeElement amount={amount}>{amount && <CheckoutForm {...{styles:{buttonText:`Top up $${amount} `}, amount:amount}}/>}</StripeElement>
 													
@@ -181,7 +181,7 @@ useEffect(() => {
 					  </form>
 							}		
 					
-						</ModalComponent>}	
+						</ModalComponent>	
 						<div className="row">{
 							currentUser.wallets.map((wallet:Wallet,i:number)=>(
 
@@ -204,7 +204,7 @@ useEffect(() => {
 												<span>{getUserFullName(currentUser)}</span>
 											</div>
 										<div className="me-4 text-white">
-												<Button onClick={()=>setTopUp(true)} size='sm' className='bg-transparent border-white border-3'>Fund</Button>
+												<Button onClick={handleOpen} size='sm' className='bg-transparent border-white border-3'>Fund</Button>
 											</div>
 										</div>
 									</div>

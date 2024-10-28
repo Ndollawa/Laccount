@@ -5,7 +5,7 @@ import { FallbackProps } from 'react-error-boundary'
 
 
 const Error400 = () => {
-    // const navigate =useNavigate()onClick={()=>navigate(-1)}
+    const navigate =useNavigate()
   return (
    <OtherBody>
         

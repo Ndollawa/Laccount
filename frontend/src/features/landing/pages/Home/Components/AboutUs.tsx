@@ -6,7 +6,7 @@ const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 import { useCompanyInfo, useLandingConfig } from '../../../../dashboard/pages/Settings/slices/settings.slice';
 
 const AboutUs = () => {
-  const {settings:{companyDetails:{siteName}={}}={}} = useSelector(useCompanyInfo);  
+  const {settings:{companyDetails:{siteName, description}={}}={}} = useSelector(useCompanyInfo);  
 const {settings:{landingPageConfig:{aboutStyle}={}, siteImages:{aboutUsBg}={}, pages:{aboutUs}={}}={}} = useSelector(useLandingConfig); 
   const startDate = new Date('2022-01-01').getFullYear()
   const endDate =   new Date(Date.now()).getFullYear()
@@ -33,7 +33,7 @@ aboutUsSection = (<section className="about-four pt-120 pb-120">
                               services.</h3>
                       </div>
                   </div>
-                  <p className="about-four__text text-justify w-100" dangerouslySetInnerHTML={{__html:aboutUs}}></p>
+                  <p className="about-four__text text-justify w-100" dangerouslySetInnerHTML={{__html:description}}></p>
                   
                   <div className="row row-gutter-y-20">
                       <div className="col-md-6 col-sm-12">
@@ -45,8 +45,7 @@ aboutUsSection = (<section className="about-four pt-120 pb-120">
                                   <h4 className="about-four__feature__title fs-16">Escrow Services</h4>
                                   
                               </div>
-                              <div className="about-four__feature__text text-justify">Our core offering is our escrow service, where we act as a trusted third party, holding funds until both the buyer and seller fulfill their obligations. This ensures that your money is protected, and you can buy or sell with confidence.
-                              In the unlikely event of a dispute, {siteName} provides a fair and impartial resolution process.
+                              <div className="about-four__feature__text text-justify">Our core service is escrow, where we securely hold funds until both buyer and seller meet their obligations, ensuring safe transactions. In case of disputes, we offer a fair and impartial resolution process.
                               </div>
                           </div>
                       </div>
@@ -59,7 +58,8 @@ aboutUsSection = (<section className="about-four pt-120 pb-120">
                                   <h4 className="about-four__feature__title fs-16 flex-no-wrap">Buyer and Seller Protection</h4>
                                   
                               </div>
-                              <div className="about-four__feature__text  text-justify">We prioritize the safety and satisfaction of both buyers and sellers. By using {siteName}, buyers can be confident that their funds are protected until they receive the goods or services they paid for. Sellers, on the other hand, can rest assured that they will be paid promptly once the buyer's requirements are met.
+                              <div className="about-four__feature__text  text-justify">We ensure the safety and satisfaction of both buyers and sellers. Buyers' funds are protected until they receive their purchase, while sellers are guaranteed prompt payment once buyer requirements are met.
+
                               </div>
                           </div>
                       </div>

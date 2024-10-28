@@ -19,6 +19,7 @@
     "@types/axios": "^0.14.0",
     "@types/bootstrap": "^5.2.10",
     "@types/jquery": "^3.5.30",
+    "@types/lodash": "^4.17.12",
     "@types/owl.carousel": "^2.3.6",
     "@types/react-file-reader-input": "^2.0.4",
     "@types/react-helmet": "^6.1.11",

@@ -118,7 +118,7 @@ export class UserSeed {
     const adminHashedPassword = await hashData('admin@123', 10);
     const devHashedPassword = await hashData('dev@123', 10);
     if (
-      !(await this.userService.findFirst({
+      !(await this.userService.exists({
         where: {
           roles: {
             // This line is different
@@ -149,7 +149,7 @@ export class UserSeed {
       }
     }
     if (
-      !(await this.userService.findFirst({
+      !(await this.userService.exists({
         where: {
           roles: {
             some: {

@@ -43,10 +43,10 @@ export const store = configureStore({
       // .concat(logger)
       ,
   devTools: process.env.NODE_ENV !== "production",
-  // enhancers: (getDefaultEnhancers) =>
-  //   getDefaultEnhancers({
-  //     autoBatch: false,
-  //   }).concat(batchedSubscribe(debounceNotify)),
+  enhancers: (getDefaultEnhancers) =>
+    getDefaultEnhancers({
+      autoBatch: false,
+    }).concat(batchedSubscribe(debounceNotify)),
 });
 
 export const persistor = persistStore(store);

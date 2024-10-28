@@ -14,7 +14,7 @@ import {Styles} from '../../../app/props/settingsProps';
 import useWindowSize from '../../../app/hooks/useWindowSize';
 import useUserImage from '../../../app/hooks/useUserImage';
 import { selectCurrentUser } from '../../auth/slices/auth.slice';
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETSL;
 
 
 
@@ -39,7 +39,7 @@ const userImage = useUserImage(currentUser)
                         }
 
                     <Link to="/">
-                        <img src={width! < 320? BASE_URL+"/uploads/settings/brand/"+(logoIcon || favicon) : BASE_URL+"/uploads/settings/brand/"+logo} width={width! <320?"50" :"150"} alt={siteName} />
+                        <img src={width! < 320? BRAND_ASSETS+(logoIcon || favicon) : BRAND_ASSETS+logo} width={width! <320?"50" :"150"} alt={siteName} />
                     </Link>
                 </div>
                 {/* <!-- /.main-menu__logo --> */}
@@ -49,7 +49,7 @@ const userImage = useUserImage(currentUser)
                             <NavLink className={({isActive})=> isActive ?"current":""} to="/">Home</NavLink>
                         </li>
                         <li>
-                            <NavLink to="/about"  className={({isActive})=> isActive ?"current":""} >About</NavLink>
+                            <NavLink to="/about-us"  className={({isActive})=> isActive ?"current":""} >About</NavLink>
                         </li>
 
                         <li><NavLink to="/services" className={({isActive})=> isActive ?"current":""} >Services</NavLink> </li>

@@ -1,14 +1,13 @@
 import React from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { useDispatch ,useSelector} from "react-redux";
-import useInput from "../../../../../app/hooks/useInput";
+import 'react-toastify/dist/ReactToastify.css';
+import { BsInfoCircleFill } from "react-icons/bs";
+import { PulseLoader } from "react-spinners";
 import { useUpdateSettingMutation } from "../slices/settingApi.slice";
 import { setCompanyInfoSetting, useSettings } from "../slices/settings.slice";
 import { useCompanyInfo } from "../slices/settings.slice";
 import showToast from "../../../../../app/utils/showToast";
-import 'react-toastify/dist/ReactToastify.css';
-import { BsInfoCircleFill } from "react-icons/bs";
-import { PulseLoader } from "react-spinners";
 
 const GeneralSettings = () => {
 const dispatch = useDispatch();
@@ -31,7 +30,15 @@ const {
 
 const updateSettings:SubmitHandler<FieldValues> = async(formFields, e)=>{
 e.preventDefault();
-const settings = {companyDetails:{...companyDetails, ...formFields}, ...otherSettings}
+  const emailArray = formFields.email
+      ?.split(',')
+      ?.map((email:string) => email.trim()) // Remove whitespace from each email
+      ?.filter((email:string) => email.length > 0);
+      const contactArray = formFields.contact
+      ?.split(',')
+      ?.map((contact:string) => contact.trim()) // Remove whitespace from each email
+      ?.filter((contact:string) => contact.length > 0);
+const settings = {companyDetails:{...companyDetails, ...{...formFields, email:emailArray, contact:contactArray}}, ...otherSettings}
 try{
   const res = await updateSetting({id,settings}).unwrap()
 dispatch(setCompanyInfoSetting({ ...companyInfo, settings }))
@@ -78,9 +85,14 @@ showToast('success',"Settings Updated successfully!")
                     type="email"
                     className="form-control"
                     placeholder=""
-                    {...register('email',{
-                      required:"Field: Company email required!"
-                    })} 
+                      {...register('email', {
+                      required: 'Field: Company email required!',
+                      validate: (value) => {
+                        const emails = (Array.isArray(value) ? value.join(',') : value)?.split(',')?.map(email => email.trim());
+                        const validEmails = emails.every(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+                        return validEmails || 'Please enter valid email addresses';
+                      }
+                    })}
                   />
                   <div>
               {errors?.email && (
@@ -122,9 +134,15 @@ showToast('success',"Settings Updated successfully!")
                     className="form-control"
                    
                     placeholder=""
-                    {...register('contact',{
-                      required:"Field Company or Site name required!"
-                    })} 
+                
+                    {...register('contact', {
+                      required: 'Field: Company contact required!',
+                        validate: (value) => {
+                          const contacts = (Array.isArray(value) ? value.join(',') : value).split(',').map(contact => contact.trim());
+                          const validContacts = contacts.every(contact => /^\+?[1-9]\d{1,14}$/.test(contact)); // Basic phone number validation
+                          return validContacts || 'Please enter valid contact numbers with Country code @example +234***';
+                        }
+                      })}
                   />
                   <div>
               {errors?.contact && (

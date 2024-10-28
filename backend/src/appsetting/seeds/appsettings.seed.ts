@@ -15,7 +15,7 @@ export class AppSettingsSeed {
 
   async seedSettings() {
     if (
-      !(await this.appSettingsService.find({
+      !(await this.appSettingsService.exists({
         type: SettingsType.DASHBOARD,
       }))
     ) {
@@ -32,7 +32,7 @@ export class AppSettingsSeed {
       }
     }
     if (
-      !(await this.appSettingsService.find({
+      !(await this.appSettingsService.exists({
         type: SettingsType.LANDING,
       }))
     ) {
@@ -49,7 +49,7 @@ export class AppSettingsSeed {
       }
     }
     if (
-      !(await this.appSettingsService.find({
+      !(await this.appSettingsService.exists({
         type: SettingsType.COMPANY_INFO,
       }))
     ) {

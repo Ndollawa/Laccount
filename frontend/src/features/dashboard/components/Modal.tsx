@@ -13,12 +13,14 @@ interface ModalInterface{
         content:ReactNode;
     },
     size?: 'sm'|'lg'|'xl';
-    show?:boolean;
-
+modalStates:{
+  show:boolean
+  handleOpen:()=>void;
+  handleClose:()=>void;
 }
-const ModalComponent = ({children},{ header, footer, size }:contextProps & ModalInterface) => {
-    const [show, setShow] = useState(true);
-    const handleClose = useCallback(() => setShow(false), [show]);
+}
+const ModalComponent = ({children, header, footer, size,modalStates:{ show,handleOpen,handleClose }}:contextProps & ModalInterface) => {
+ 
   return (
     <Modal show={show} size={size} centered backdrop="static" onHide={handleClose} animation={false}>
     {header?.show && <Modal.Header closeButton>

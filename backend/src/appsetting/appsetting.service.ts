@@ -40,6 +40,15 @@ export class AppSettingService {
       handleError(error);
     }
   }
+  async exists(query: any): Promise<boolean> {
+    try {
+      return await this.appSettingsRepository.exists({
+        where: query,
+      });
+    } catch (error) {
+      handleError(error);
+    }
+  }
 
   async findAll(query: any): Promise<AppSettings[]> {
     try {

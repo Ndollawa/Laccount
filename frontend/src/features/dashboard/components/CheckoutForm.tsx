@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 import { DotLoader, PulseLoader } from 'react-spinners';
 import { Button } from 'react-bootstrap';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
@@ -48,7 +48,7 @@ const CheckoutForm = ({ styles: { buttonText }, amount }: { styles: { buttonText
   };
 
   // Initialize payment
-  const initPayment = async () => {
+  const initPayment = useCallback( async () => {
     if (paymentInitialized) return; // Prevent multiple initializations
 
     try {
@@ -64,7 +64,7 @@ const CheckoutForm = ({ styles: { buttonText }, amount }: { styles: { buttonText
     } catch (err) {
       setErrorMessage('Error processing payment.');
     }
-  };
+  },[])
 
   // useEffect to manage payment initialization
   useEffect(() => {
@@ -89,17 +89,18 @@ const CheckoutForm = ({ styles: { buttonText }, amount }: { styles: { buttonText
 
   return (
     <form onSubmit={handleSubmit}>
-      {clientSecret && <PaymentElement />}
+      {clientSecret &&
+      <> <PaymentElement />
       <div className="d-flex justify-content-end mt-5">
         <Button
           size="sm"
           type="submit"
-          className="btn btn-primary"
+          className="btn btn-primary text-white"
           disabled={!stripe || loading}
         >
-          {loading ? <PulseLoader /> : buttonText}
+          {loading ? <PulseLoader className='' /> : buttonText}
         </Button>
-      </div>
+      </div></>}
       {/* Show error message to your customers */}
       {errorMessage && <div>{errorMessage}</div>}
     </form>

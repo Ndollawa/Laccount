@@ -1,12 +1,13 @@
 import { createSelector, createEntityAdapter } from "@reduxjs/toolkit";
 import { apiSlice } from "../../../../../app/api/apiSlice";
-import { ResponseProps } from "../../../../../app/props/ResponseProps";
+import { ResponseProps } from "../../../../../app/props/responseProps";
 import { Settings } from "../../../../../app/props/settingsProps";
 import { setSettings } from "./settings.slice";
+import { RootState } from "../../../../../app/stores/store";
 
 // Create an entity adapter for settings
 const settingsAdapter = createEntityAdapter({
-  selectId: (instance) => instance.id || instance.id, // Custom ID field selector (id or id)
+  // selectId: (instance) => instance?.id || instance?.id, // Custom ID field selector (id or id)
 });
 
 // Initial state with the adapter
@@ -32,7 +33,7 @@ export const settingsApiSlice = apiSlice.injectEndpoints({
           };
 
           // Process and organize the settings into your custom state structure
-         Object.values(entities)?.forEach((setting: any) => {
+         Object.values(entities)?.forEach((setting: Settings<LandingConfig | DashboardConfig | CompanyInfo>) => {
             switch (setting.type) {
               case "DASHBOARD":
                 settingState.dashboardConfig = setting;
@@ -56,7 +57,7 @@ export const settingsApiSlice = apiSlice.injectEndpoints({
         }
       },
       transformResponse: ({data}: ResponseProps) => {
-        const loadedSettings =data?.map((setting: any) => {
+        const loadedSettings =data?.map((setting: Settings<LandingConfig | DashboardConfig | CompanyInfo>) => {
           return setting;
         });
         // Use the entity adapter to normalize the response data
@@ -168,4 +169,4 @@ export const {
   selectAll: selectAllSettings,
   selectById: selectSettingById,
   selectIds: selectSettingIds,
-} = settingsAdapter.getSelectors((state: any) => selectSettingsData(state) ?? initialState);
+} = settingsAdapter.getSelectors((state: RootState) => selectSettingsData(state) ?? initialState);

@@ -102,13 +102,13 @@ export type sideBarLink ={
             id:6.0,
             title:'Posts',
         // icon:
-            path: '/dashboard/posts'
+            path: '/dashboard/blog/posts'
         },
         {
             id:6.1,
             title:'Category',
             // icon:
-            path: '/dashboard/posts/category'
+            path: '/dashboard/blog/posts/category'
         }],
        
     }

@@ -19,13 +19,13 @@ import { Outlet } from "react-router-dom";
 const Prefetch =()=>{
   // const user = useSelector(selectCurrentUser)
   useEffect(() => {
-    store.dispatch(settingsApiSlice.util.prefetch('getSettings', 'settingsList', { force: true }))
-    // store.dispatch(faqsApiSlice.util.prefetch('getFaqs', 'faqsList', { force: true }))
+    store.dispatch(settingsApiSlice.util.prefetch('getAppSettings', 'appSettingsList', { force: true }))
+    store.dispatch(faqsApiSlice.util.prefetch('getFaqs', 'faqsList', { force: true }))
     // store.dispatch(slidesApiSlice.util.prefetch('getSlides', 'slidesList', { force: true }))
-  //   store.dispatch(slices/teamsApi.slice.util.prefetch('getTeams', 'teamsList', { force: true }))
-  //   store.dispatch(servicesApiSlice.util.prefetch('getServices', 'servicesList', { force: true }))
-  //   store.dispatch(slices/postCategoryApi.slice.util.prefetch('getPostCategory', 'categoriesList', { force: true }))
-  //   store.dispatch(postsApiSlice.util.prefetch('getPosts', 'postsList', { force: true }))
+    store.dispatch(slices/teamsApi.slice.util.prefetch('getTeams', 'teamsList', { force: true }))
+    store.dispatch(servicesApiSlice.util.prefetch('getServices', 'servicesList', { force: true }))
+    store.dispatch(slices/postCategoryApi.slice.util.prefetch('getPostCategory', 'categoriesList', { force: true }))
+    store.dispatch(postsApiSlice.util.prefetch('getPosts', 'postsList', { force: true }))
   //  if(user.id){
     // store.dispatch(slices/usersApi.slice.util.prefetch('getUsers', 'usersList', { force: true }))
     // store.dispatch(slices/contactsApi.slice.util.prefetch('getContacts', 'contactsList', { force: true }))

@@ -6,6 +6,7 @@ import { selectCurrentToken } from './features/auth/slices/auth.slice';
 import DashboardLayout from './features/layouts/dashboard/Layout';
 import LandingLayout from './features/layouts/landing/Layout';
 import { useLandingConfig } from './features/dashboard/pages/Settings/slices/settings.slice';
+import { useGetSettingsQuery } from './features/dashboard/pages/Settings/slices/settingApi.slice';
 
 // Lazy Load components
 const StripeElement = React.lazy(() => import('./features/dashboard/components/StripeElement'));
@@ -85,6 +86,13 @@ const App = () => {
 const bgImage = `${BRAND_ASSETS}${pagesBg}`
 
   const [isPending, startTransition] = useTransition();
+  const {
+    data
+  } = useGetSettingsQuery('appSettingsList',{
+    pollingInterval: 15000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true
+  })
 
   // useEffect(() => {
   //   startTransition(() => {
@@ -118,7 +126,7 @@ const bgImage = `${BRAND_ASSETS}${pagesBg}`
             </Route>
             <Route path="wallets" element={<Wallet pageData={{ pageTitle: "Wallet", coverImage:bgImage }} />} />
             <Route path="market" element={<Market pageData={{ pageTitle: "Market", coverImage:bgImage }} />} />
-            <Route path="transaction" element={<Transaction pageData={{ pageTitle: "Transaction", coverImage:bgImage }} />} />
+            <Route path="transactions" element={<Transaction pageData={{ pageTitle: "Transaction", coverImage:bgImage }} />} />
             <Route path="contacts" element={<Contacts pageData={{ pageTitle: "Contacts", coverImage:bgImage }} />} />
            
             <Route path="messenger">
@@ -129,15 +137,15 @@ const bgImage = `${BRAND_ASSETS}${pagesBg}`
           </Route>
           {/* Admin Routes */}
           <Route element={<RequireAuth allowedRoles={["0001", "0000"]} />} />
-            <Route path="faq" element={<DashboardFaq />} />
-            <Route path="our-team" element={<DashboardTeam />} />
-            <Route path="services" element={<DashboardService />} />
-            <Route path="sliders" element={<DashboardSlider />} />
-           <Route path="users">
+            <Route path="dashboard/faq" element={<DashboardFaq />} />
+            <Route path="dashboard/our-team" element={<DashboardTeam />} />
+            <Route path="dashboard/services" element={<DashboardService />} />
+            <Route path="dashboard/sliders" element={<DashboardSlider />} />
+           <Route path="dashboard/users">
               <Route index element={<Users pageData={{ pageTitle: "Users", coverImage:bgImage }} />} />
               <Route path="user/:userId" element={<User pageData={{ pageTitle: "User", coverImage:bgImage }} />} />
             </Route>
-           <Route path="blog">
+           <Route path="dashboard/blog">
               <Route index element={<Users pageData={{ pageTitle: "Posts", coverImage:bgImage }} />} />
               <Route path="posts"  >
                      <Route index element={<Users pageData={{ pageTitle: "Users", coverImage:bgImage }} />} />
@@ -167,7 +175,7 @@ const bgImage = `${BRAND_ASSETS}${pagesBg}`
         {/* Public Routes */}
         <Route path="/" element={<LandingLayout pageData={{ pageTitle:"Home", coverImage:bgImage }}/> }>
           <Route index element={<LandingHome />} />
-          <Route path="about" element={<About pageData={{ pageTitle:"About", coverImage:bgImage }} />} />
+          <Route path="about-us" element={<About pageData={{ pageTitle:"About", coverImage:bgImage }} />} />
           <Route path="contact" element={<Contact pageData={{ pageTitle:"Contact", coverImage:bgImage }}/>} />
           <Route path="careers" element={<Career pageData={{ pageTitle:"Career", coverImage:bgImage }} />} />
           <Route path="career/apply-now" element={<Form />} />
@@ -191,7 +199,7 @@ const bgImage = `${BRAND_ASSETS}${pagesBg}`
          
         </Route>
          <Route path="payment-status" element={<DashboardLayout pageData={{ pageTitle: "Dashboard" }} />}>
-          <Route index element={<StripeElement><PaymentStatus /></StripeElement>} />
+          <Route index element={ isPending ? <Preloader /> :<StripeElement><PaymentStatus /></StripeElement>} />
          </Route>
          <Route path="auth" element={<DashboardLayout pageData={{ pageTitle: "Dashboard" }} />}>
           <Route index element={currentToken ? <Navigate state={{ from: location }} to="/dashboard" /> : <Login />} />
@@ -212,5 +220,6 @@ const bgImage = `${BRAND_ASSETS}${pagesBg}`
     </>
   );
 };
+
 
 export default React.memo(App);

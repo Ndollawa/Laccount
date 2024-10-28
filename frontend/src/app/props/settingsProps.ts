@@ -24,7 +24,7 @@ export enum SettingsType {
 
     navStyle: Styles;
     sliderStyle: Styles;
-    aboutStyle: Styles;
+    aboutUsStyle: Styles;
     testimonialStyle: Styles;
     serviceStyle: Styles;
     ourBenefitStyle: Styles;
