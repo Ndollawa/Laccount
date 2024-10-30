@@ -34,7 +34,15 @@ import { PrismaModule } from '@app/prisma';
         template: {
           path: join(__dirname, 'templates'),
           dir: join(__dirname, 'templates'),
-          adapter: new HandlebarsAdapter(), // or any other adapter
+          adapter: new HandlebarsAdapter(),
+          //   {
+          //   viewEngine: {
+          //     partialsDir: join(__dirname, './templates'),
+          //     layoutsDir: join(__dirname, './templates'),
+          //     defaultLayout: false, // not using layouts in this example
+          //   },
+          //   extName: '.hbs',
+          // } // or any other adapter
           options: {
             strict: true,
           },

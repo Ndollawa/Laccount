@@ -69,25 +69,13 @@ export class UserController {
           },
         },
         wallets: {
-          createMany: {
-            data: [
-              // {
-              //   balance: 0,
-              //   type: WalletType.CREDIT,
-              //    status: WalletStatus.ACTIVE,
-              //   currency: {
-              //     name: 'LA',
-              //   },
-              // },
-              {
-                balance: 0,
-                type: WalletType.FIAT,
-                status: WalletStatus.ACTIVE,
-                currency: {
-                  name: 'FIAT',
-                },
-              },
-            ],
+          create: {
+            balance: 0,
+            type: WalletType.FIAT,
+            status: WalletStatus.ACTIVE,
+            currency: {
+              name: 'FIAT',
+            },
           },
         },
       };

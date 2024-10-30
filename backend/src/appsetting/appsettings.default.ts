@@ -13,8 +13,7 @@ export const landingDefault = {
       cto: { link: '/auth/register', cto_text: 'Register Now' },
       title: 'Buy and Sell Accounts Easily',
       body: '<p>Find trusted vendors and verified accounts for all your social media needs.</p>',
-      description:
-        'Buy with confidence, sell with ease',
+      description: 'Buy with confidence, sell with ease',
       image: '666b8f32cf352b390e1183624c757dbe.png',
       status: 'active',
     },
@@ -23,8 +22,7 @@ export const landingDefault = {
       cto: { link: '', cto_text: '' },
       title: 'Verified Accounts for Every Need',
       body: '<p>Browse through a wide selection of verified accounts, from Instagram to Twitter, and more. </p>',
-      description:
-        'Visit Our Marketplace Now',
+      description: 'Visit Our Marketplace Now',
       image: '3906662e1a9877cfda13d910ff9bed984.png',
       status: 'active',
     },
@@ -33,8 +31,7 @@ export const landingDefault = {
       cto: { link: '', cto_text: '' },
       title: 'Safe and Secure Transactions',
       body: '<p>LAccount ensures safe and secure transactions with end-to-end protection. With escrow and multi-payment gateway support, your funds are always safe until you are satisfied with your purchase.</p>',
-      description:
-        'Be rest assured your funds are Safe',
+      description: 'Be rest assured your funds are Safe',
       image: '3906662e1a9877cfda13d910ff9bed984.png',
       status: 'active',
     },

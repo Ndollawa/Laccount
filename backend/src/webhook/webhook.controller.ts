@@ -46,7 +46,7 @@ export class WebhookController {
 
     console.log(req);
     // Return a response to acknowledge receipt of the event
-   return res.json({received: true});
+    return res.json({ received: true });
   }
 
   @Post('paystack')

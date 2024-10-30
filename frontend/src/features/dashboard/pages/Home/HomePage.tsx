@@ -191,7 +191,7 @@ useEffect(() => {
 									<div className="card-info">
 										<p className="mb-1 text-white fs-14">Wallet Balance</p>
 										<div className="d-flex justify-content-between">
-											<h2 className="num-text text-white mb-5 font-w600">$ {wallet.balance}</h2>
+											<h2 className="num-text text-white mb-5 font-w600">$ {parseFloat(wallet.balance).toFixed(2)}</h2>
 											{ getWalletSVG(i+1) }
 										</div>
 										<div className="d-flex justify-content-between">

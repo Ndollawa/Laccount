@@ -2,7 +2,7 @@ import React from 'react'
 import {useGetPostCategoryQuery,useDeletePostCategoryMutation } from '../slices/postCategoryApi.slice'
 import showToast from '../../../../../app/utils/showToast'
 import Swal from 'sweetalert2'
-import PostCategoryProps from '../../../../../app/props/PostCategoryProps'
+import PostCategoryProps from '../../../../../app/props/postCategoryProps'
 
 interface modalDataProps {
     modalData:{

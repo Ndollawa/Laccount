@@ -18,7 +18,7 @@ import {
 } from '@prisma/client';
 import { hashData, handleError } from '@app/common';
 import { MailerRepository } from './mailer.repository';
-import { CreateMailerDto, UpdateMailerDto } from './dto';
+import { CreateMailTemplateDto, UpdateMailTemplateDto } from './dto';
 
 const { ALREADY_EXISTS, UNAUTHENTICATED } = grpc.status;
 
@@ -112,7 +112,7 @@ export class MailerService {
     }
   }
 
-  async create(createMailerData: CreateMailerDto): Promise<Mailer> {
+  async create(createMailerData: CreateMailTemplateDto): Promise<Mailer> {
     const { name, type } = createMailerData;
     try {
       const existingMailer = await this.mailerRepository.exists({
@@ -138,7 +138,7 @@ export class MailerService {
     }
   }
 
-  async update(id: string, data: UpdateMailerDto) {
+  async update(id: string, data: UpdateMailTemplateDto) {
     Logger.debug(data);
     try {
       return await this.mailerRepository.update({
@@ -150,7 +150,7 @@ export class MailerService {
     }
   }
 
-  async upsert(id: string, data: UpdateMailerDto) {
+  async upsert(id: string, data: UpdateMailTemplateDto) {
     Logger.debug(data);
     try {
       return await this.mailerRepository.upsert({

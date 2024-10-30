@@ -1,11 +1,44 @@
-import { MailerTemplateStatus, MailerTemplateEnum } from '@prisma/client';
-import { IsEnum, IsString, IsObject, IsNotEmpty } from 'class-validator';
+import {
+  MailerTemplateStatus,
+  MailerTemplateEnum,
+  ActiveStatus,
+} from '@prisma/client';
+import {
+  IsEnum,
+  IsString,
+  IsObject,
+  IsNotEmpty,
+  IsEmail,
+} from 'class-validator';
 
-export class CreateMailerDto {
+export class CreateHandlebarTemplateDto {
   @IsString()
   @IsNotEmpty()
   template: string;
 
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+}
+
+export class SendMailDto {
+  @IsEmail()
+  @IsNotEmpty()
+  to: string;
+
+  @IsString()
+  @IsNotEmpty()
+  subject: string;
+
+  @IsString()
+  @IsNotEmpty()
+  template: string;
+
+  @IsNotEmpty()
+  context: any; // context will hold variables for the Handlebars template
+}
+
+export class CreateMailTemplateDto {
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -20,8 +53,12 @@ export class CreateMailerDto {
   @IsString()
   @IsNotEmpty()
   @IsObject()
-  data: any;
+  context: any;
 
   @IsEnum(MailerTemplateStatus)
   status: MailerTemplateStatus;
+
+  @IsString()
+  @IsNotEmpty()
+  content: string; // This is the actual template content in handlebars format
 }
