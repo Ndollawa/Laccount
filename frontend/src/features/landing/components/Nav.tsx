@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import NavBar from './NavBar'
 import { useSelector } from 'react-redux';
-import {useCompanyInfo,useLandingConfig} from '../../dashboard/pages/Settings/slices/settings.slice';
-import { selectCurrentUser } from '../../auth/slices/auth.slice';
-import { Styles } from '../../../app/props/settingsProps';
+import {useCompanyInfo,useLandingConfig} from '@dashboard/pages/Settings/slices/settings.slice';
+import { selectCurrentUser } from '@auth/slices/auth.slice';
+import { Styles } from '@props/settingsProps';
 
 
 const Nav = () => {

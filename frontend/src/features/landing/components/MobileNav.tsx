@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { useSelector } from 'react-redux';
-import {useCompanyInfo, useLandingConfig} from '../../dashboard/pages/Settings/slices/settings.slice';
-import useWindowSize from '../../../app/hooks/useWindowSize';
+import {useCompanyInfo, useLandingConfig} from '@dashboard/pages/Settings/slices/settings.slice';
+import useWindowSize from '@hooks/useWindowSize';
 const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
 const MobileNav = forwardRef<HTMLDivElement>((_, ref) => {

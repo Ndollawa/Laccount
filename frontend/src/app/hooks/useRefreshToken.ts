@@ -1,8 +1,8 @@
-import axios from "../api/axios";
 import {jwtDecode} from 'jwt-decode';
 import {useDispatch, useSelector} from 'react-redux';
-import { authProps } from "../props/authProps";
-import {setCredentials} from '../../features/auth/slices/auth.slice';
+import axios from "@api/axios";
+import { authProps } from "@props/authProps";
+import {setCredentials} from '@auth/slices/auth.slice';
 
 const useRefreshToken = ()=>{
    const dispatch = useDispatch()

@@ -7,7 +7,7 @@ import DashboardLayout from './features/layouts/dashboard/Layout';
 import LandingLayout from './features/layouts/landing/Layout';
 import { useLandingConfig } from './features/dashboard/pages/Settings/slices/settings.slice';
 import { useGetSettingsQuery } from './features/dashboard/pages/Settings/slices/settingApi.slice';
-
+import './App.css'
 // Lazy Load components
 const StripeElement = React.lazy(() => import('./features/dashboard/components/StripeElement'));
 const PaymentStatus = React.lazy(() => import('./features/dashboard/components/PaymentStatus'));
@@ -28,6 +28,8 @@ const ProfileEdit = React.lazy(() => import('./features/dashboard/pages/Profile/
 const DashboardFaq = React.lazy(() => import('./features/dashboard/pages/Faq/Faq'));
 const DashboardTeam = React.lazy(() => import('./features/dashboard/pages/Team/Team'));
 const DashboardService = React.lazy(() => import('./features/dashboard/pages/Service/Services'));
+const DashboardPost = React.lazy(() => import('./features/dashboard/pages/Post/Post'));
+const DashboardPostCategory = React.lazy(() => import('./features/dashboard/pages/PostCategory/PostCategory'));
 const DashboardSlider = React.lazy(() => import('./features/dashboard/pages/Slide/Slide'));
 
 // settings
@@ -121,8 +123,8 @@ const bgImage = `${BRAND_ASSETS}${pagesBg}`
           <Route path="/dashboard" element={<DashboardLayout pageData={{ pageTitle: "Dashboard" }} />}>
             <Route index element={<DashboardHome />} />
             <Route path="profile">
-              <Route index element={<Profile pageData={{ pageTitle:"Profile", coverImage:bgImage }}/>} />
-              <Route path="edit" element={<ProfileEdit />} />
+              <Route index element={<Profile pageData={{ pageTitle:"My Profile", coverImage:bgImage }}/>} />
+              <Route path="edit" element={<ProfileEdit pageData={{ pageTitle: "Edit Profile", coverImage:bgImage }}  />} />
             </Route>
             <Route path="wallets" element={<Wallet pageData={{ pageTitle: "Wallet", coverImage:bgImage }} />} />
             <Route path="market" element={<Market pageData={{ pageTitle: "Market", coverImage:bgImage }} />} />
@@ -137,20 +139,21 @@ const bgImage = `${BRAND_ASSETS}${pagesBg}`
           </Route>
           {/* Admin Routes */}
           <Route element={<RequireAuth allowedRoles={["0001", "0000"]} />} />
-            <Route path="dashboard/faq" element={<DashboardFaq />} />
-            <Route path="dashboard/our-team" element={<DashboardTeam />} />
-            <Route path="dashboard/services" element={<DashboardService />} />
-            <Route path="dashboard/sliders" element={<DashboardSlider />} />
+            <Route path="dashboard/faq" element={<DashboardFaq pageData={{ pageTitle: "Users", coverImage:bgImage }}  />} />
+            <Route path="dashboard/our-team" element={<DashboardTeam pageData={{ pageTitle: "Users", coverImage:bgImage }}  />} />
+            <Route path="dashboard/services" element={<DashboardService pageData={{ pageTitle: "Users", coverImage:bgImage }}  />} />
+            <Route path="dashboard/sliders" element={<DashboardSlider pageData={{ pageTitle: "Users", coverImage:bgImage }}  />} />
            <Route path="dashboard/users">
               <Route index element={<Users pageData={{ pageTitle: "Users", coverImage:bgImage }} />} />
-              <Route path="user/:userId" element={<User pageData={{ pageTitle: "User", coverImage:bgImage }} />} />
+              <Route path=":userId" element={<User pageData={{ pageTitle: "User", coverImage:bgImage }} />} />
             </Route>
            <Route path="dashboard/blog">
-              <Route index element={<Users pageData={{ pageTitle: "Posts", coverImage:bgImage }} />} />
+              <Route index element={<DashboardPost pageData={{ pageTitle: "Posts", coverImage:bgImage }} />} />
               <Route path="posts"  >
-                     <Route index element={<Users pageData={{ pageTitle: "Users", coverImage:bgImage }} />} />
+                     <Route index element={<DashboardPost pageData={{ pageTitle: "Users", coverImage:bgImage }} />} />
                      <Route path=":postId" element={<User pageData={{ pageTitle: "User", coverImage:bgImage }} />} />
               </Route>
+                     <Route path="category" element={<DashboardPostCategory pageData={{ pageTitle: "Post Category", coverImage:bgImage }} />} />
             </Route>
           <Route path="dashboard/settings/" element={<SiteSettings pageData={{ pageTitle:"Settings", coverImage:bgImage }}/>} >
                       <Route index element={<GeneralSettings/>} />

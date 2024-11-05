@@ -2,9 +2,9 @@ import {
     createSelector,
     createEntityAdapter
 } from "@reduxjs/toolkit";
-import { RootState } from "../../../../app/stores/store";
-import { apiSlice } from "../../../../app/api/apiSlice";
-// import PostProps from "../../../../app/utils/props/PostProps";
+import { RootState } from "@store/store";
+import { apiSlice } from "@api/apiSlice";
+// import PostProps from "@utils/props/PostProps";
 // interface postCommentProp extends  PostProps{}
 
 
@@ -25,7 +25,7 @@ export const postCommentApiSlice = apiSlice.injectEndpoints({
             }),
             transformResponse: (responseData:any) => {
                 const loadedPostComment = responseData.map((comment:any) => {
-                    comment.id = comment._id
+                    comment.id = comment.id
                     return comment
                 });
                 return postCommentAdapter.setAll(initialState, loadedPostComment)

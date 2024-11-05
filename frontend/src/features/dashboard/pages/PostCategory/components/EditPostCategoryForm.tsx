@@ -1,7 +1,7 @@
 import React, {ChangeEvent,FormEvent,useState,useEffect} from 'react'
 import { useUpdatePostCategoryMutation} from '../slices/postCategoryApi.slice'
-import showToast from '../../../../../app/utils/showToast'
-import PostCategoryProps from '../../../../../app/props/PostCategoryProps';
+import showToast from '@utils/showToast'
+import PostCategoryProps from '@props/PostCategoryProps';
 
 
 
@@ -37,7 +37,7 @@ const canSave = [title,status].every(Boolean) && !isLoading
 const handleSubmit = async(e:FormEvent)=>{
 e.preventDefault();
  if (canSave) {
-      await updatePostCategory({title,status,_id:data?._id})
+      await updatePostCategory({title,status,_id:data?.id})
       if(isError) return showToast('error',JSON.stringify(error?.data?.message))
       showToast('success', 'Post category updated successfully')
   }

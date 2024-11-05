@@ -5,10 +5,10 @@ import { useUpdatePostMutation} from '../slices/postApi.slice'
 import { useGetPostCategoryQuery } from '../../PostCategory/slices/postCategoryApi.slice'
 import {Modal} from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import showToast from '../../../../../app/utils/showToast'
+import showToast from '@utils/showToast'
 import $ from 'jquery'
-import PostProps from '../../../../../app/props/PostProps'
-
+import PostProps from '@props/postProps'
+const BLOG_ASSETS = import.meta.env.VITE_BLOG_ASSETS
 
 
 
@@ -56,7 +56,7 @@ setBody(data?.body!)
 setCategory(data?.category!)
 setStatus(data?.status!)
 setTags(data?.tags!)
-setPreviewImage(process.env.REACT_APP_BASE_URL+"/uploads/posts/"+data?.coverImage!)
+setPreviewImage(BLOG_ASSETS+data?.coverImage!)
   setShow(showModal)
     return () => {
       setShow(false)
@@ -93,7 +93,7 @@ const {
 let categoryOptions;
 if(postCategory){
 const {entities} = postCategory
- categoryOptions = Object.values(entities).map((category:any,i:number)=><option key={i} value={category._id}>{category.title}</option>)
+ categoryOptions = Object.values(entities).map((category:any,i:number)=><option key={i} value={category.id}>{category.title}</option>)
 }
 const canSave = [title, description, body,status].every(Boolean);
 
@@ -101,7 +101,7 @@ const handleSubmit = async(e:FormEvent)=>{
 e.preventDefault();
  if (canSave) {
 
-      await updatePost({_id:data?._id!,title,body,description,tags,category,status,coverImage:postBg})
+      await updatePost({_id:data?.id!,title,body,description,tags,category,status,coverImage:postBg})
       if(isError)return  showToast('error',JSON.stringify(error?.data?.message))
      showToast('success', 'Post updated successfully')
   }
@@ -226,7 +226,7 @@ setPreviewImage(fileurl)
                 <div className="col-12">
                   <label className="form-label"><strong>Response</strong></label>
                   <Editor
-        tinymceScriptSrc={process.env.VITE_PUBLIC_URL + '/tinymce/tinymce.min.js'}
+        tinymceScriptSrc={'/tinymce/tinymce.min.js'}
        onEditorChange={(newValue,editor)=>setBody(newValue)}
        value={body}
         init={{

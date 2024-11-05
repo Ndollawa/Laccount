@@ -1,15 +1,14 @@
 import React,{useState,useEffect, useRef, ChangeEvent,FormEvent} from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../../auth/slices/auth.slice';
-import { useGetMessagesQuery } from '../../pages/Messenger/slices/messagesApi.slice'; 
-import { useGetConversationsQuery } from '../../pages/Messenger/slices/conversationsApi.slice';
-import { useGetUsersQuery } from '../../pages/Users/slices/usersApi.slice';
-import useUserImage from '../../../../app/hooks/useUserImage';
-import MessageProps from '../../../../app/props/MessageProps';
-import useSocketIO from '../../../../app/hooks/useSocketIO';
-import ConversationProps,{conversationIdProps} from '../../../../app/props/ConversationProps';
 import { format } from 'timeago.js';
+import { selectCurrentUser } from '@auth/slices/auth.slice';
+import { useGetMessagesQuery } from '@dashboard/pages/Messenger/slices/messagesApi.slice'; 
+import { useGetConversationsQuery } from '@dashboard/pages/Messenger/slices/conversationsApi.slice';
+import { useGetUsersQuery } from '@dashboard/pages/Users/slices/usersApi.slice';
+import useUserImage from '@hooks/useUserImage';
+import useSocketIO from '@hooks/useSocketIO';
+import {ConversationProps, MessageProps, conversationIdProps} from '@props/';
  
 const ChatModal = ({currentChat, closeChat}:any) => {
 
@@ -22,8 +21,8 @@ const [attchment, setAttchment] = useState([])
 const [imageUpload, setImageUpload] = useState([])
 const [isUpload, setIsUpload] = useState(false)
 const socket = useSocketIO()
-	const conversationId:conversationIdProps = [currentChat as string,currentUser?._id! as string]
-	const conversationId2:conversationIdProps = [currentUser?._id! as string,currentChat as string]
+	const conversationId:conversationIdProps = [currentChat as string,currentUser?.id! as string]
+	const conversationId2:conversationIdProps = [currentUser?.id! as string,currentChat as string]
 
 	  const { conversation } = useGetConversationsQuery("conversationsList", {
 		selectFromResult: ({ data }) => ({
@@ -34,7 +33,7 @@ const socket = useSocketIO()
 	  });
 		const { messages } = useGetMessagesQuery("messagesList", {
 		selectFromResult: ({ data }) => ({
-			messages: data && (Object.values(data?.entities) as MessageProps[])?.filter((m:MessageProps)=> m?.conversationId === conversation?._id)		 
+			messages: data && (Object.values(data?.entities) as MessageProps[])?.filter((m:MessageProps)=> m?.conversationId === conversation?.id)		 
 		}),
 	  }) 
 	const { contact } = useGetUsersQuery("usersList", {
@@ -76,7 +75,7 @@ msgRef.current?.scrollIntoView({behavior:'smooth'})
 
   const sendChat = () =>{
 		if(chatMessage !== '' || isUpload){
-		const msgData = {message:chatMessage,sender:currentUser._id,receiver:contact._id}
+		const msgData = {message:chatMessage,sender:currentUser.id,receiver:contact.id}
 		socket.current.emit("sendMessage",(msgData), (err:any,sentMessage:MessageProps)=>{
 		setConversations(prev=>[...prev,sentMessage])
 		}) 
@@ -109,8 +108,8 @@ msgRef.current?.scrollIntoView({behavior:'smooth'})
 							</div>
 							<div className="card-body msg_card_body dz-scroll" id="DZ_W_Contacts_Body3">
 								{conversations?.map((m:MessageProps,i:number)=> m &&(
-									(m?.sender !== currentUser?._id)?
-									<div className="d-flex justify-content-start mb-4" key={m?._id+i} ref={msgRef}>
+									(m?.sender !== currentUser?.id)?
+									<div className="d-flex justify-content-start mb-4" key={m?.id+i} ref={msgRef}>
 										<div className="img_cont_msg">
 											<img src={contactImage} className="rounded-circle user_img_msg" alt={contact?.username}/>
 										</div>
@@ -120,7 +119,7 @@ msgRef.current?.scrollIntoView({behavior:'smooth'})
 										</div>
 									</div>
 								:
-								<div className="d-flex justify-content-end mb-4" key={m?._id+i} ref={msgRef}>
+								<div className="d-flex justify-content-end mb-4" key={m?.id+i} ref={msgRef}>
 									<div className="msg_cotainer_send">
 										{m?.message}
 										<span className="msg_time_send">{format(m?.createdAt!)}</span>

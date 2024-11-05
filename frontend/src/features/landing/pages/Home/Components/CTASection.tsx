@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
-import {useCompanyInfo,useLandingConfig} from '../../../../dashboard/pages/Settings/slices/settings.slice';
+import {useCompanyInfo,useLandingConfig} from '@dashboard/pages/Settings/slices/settings.slice';
 
 
 const CTASection = () => {

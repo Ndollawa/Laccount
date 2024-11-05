@@ -3,7 +3,7 @@ import {useGetContactsQuery } from '../slices/contactsApi.slice'
 import { Link } from 'react-router-dom'
 import { FaEye } from 'react-icons/fa'
 import ContactTableData from './ContactTableData'
-import contactProps from '../../../../../app/props/contactProps'
+import contactProps from '@props/contactProps'
 
 
 const ContactsTable = ({contactId,index,showEditForm}:any) => {

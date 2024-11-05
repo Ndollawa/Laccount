@@ -2,10 +2,10 @@ import {
     createSelector,
     createEntityAdapter
 } from "@reduxjs/toolkit";
-import { RootState } from "../../../../../app/stores/store";
-import { apiSlice } from "../../../../../app/api/apiSlice";
-import { ResponseProps } from "../../../../../app/props/responseProps";
-// import PostCategoryProps from "../../../../app/utils/props/PostCategoryProps";
+import { RootState } from "@store/store";
+import { apiSlice } from "@api/apiSlice";
+import { ResponseProps } from "@props/responseProps";
+// import PostCategoryProps from "@utils/props/PostCategoryProps";
 // interface postCategoryProp extends  PostCategoryProps{}
 
 

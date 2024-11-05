@@ -1,9 +1,10 @@
 import React from 'react'
-import { useGetPostCategoryQuery } from '../../../../dashboard/pages/PostCategory/slices/postCategoryApi.slice'
-import { useGetUsersQuery } from '../../../../dashboard/pages/Users/slices/usersApi.slice'
-import PostProps from '../../../../../app/props/PostProps'
+import { useGetPostCategoryQuery } from '@dashboard/pages/PostCategory/slices/postCategoryApi.slice'
+import { useGetUsersQuery } from '@dashboard/pages/Users/slices/usersApi.slice'
+import PostProps from '@props/postProps'
 import { format } from 'timeago.js'
-import PostCategoryProps from '../../../../../app/props/PostCategoryProps'
+import PostCategoryProps from '@props/postCategoryProps'
+const BLOG_ASSETS =  import.meta.env.VITE_BLOG_ASSETS
 
 const RecentPostList = ({post}:{post:PostProps}) => {
     const { category } = useGetPostCategoryQuery("categoryList", {
@@ -18,10 +19,10 @@ const RecentPostList = ({post}:{post:PostProps}) => {
         })
 
   return (
-    <li className="blog-sidebar__post__item" key={post?._id}>
+    <li className="blog-sidebar__post__item" key={post?.id}>
     <div className="blog-sidebar__post__image">
       <img
-        src={process.env.REACT_APP_BASE_URL+"/uploads/posts/"+post?.coverImage} 
+        src={BLOG_ASSETS+post?.image} 
         alt={post?.title}
       />
     </div>
@@ -36,7 +37,7 @@ const RecentPostList = ({post}:{post:PostProps}) => {
         </a>
       </span>
       <h3 className="blog-sidebar__post__title">
-        <a href={`/our-blog/posts/${post?._id}`}>
+        <a href={`/our-blog/posts/${post?.id}`}>
           {post?.title}
         </a>
       </h3>

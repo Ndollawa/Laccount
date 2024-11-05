@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { useLandingConfig } from '../../../../dashboard/pages/Settings/slices/settings.slice';
 import 'jquery';
 import OwlCarousel from 'react-owl-carousel'; // Importing OwlCarousel from react-owl-carousel
 import 'owl.carousel/dist/assets/owl.carousel.css'; // OwlCarousel CSS
 import 'owl.carousel/dist/assets/owl.theme.default.css'; // OwlCarousel default theme CSS
-import { HomeSlide } from '../../../../../app/props';
+import { HomeSlide } from '@props';
+import { useLandingConfig } from '@dashboard/pages/Settings/slices/settings.slice';
 
 const SLIDER_ASSETS = import.meta.env.VITE_SLIDER_ASSETS;
 
@@ -14,7 +14,37 @@ const Slider = () => {
   const {
     settings: { landingPageConfig: { sliderStyle } = {}, sliders = [] } = {},
   } = useSelector(useLandingConfig);
+  React.useEffect(() => {
+    const nextButton = document.querySelector('.owl-next');
+    const prevButton = document.querySelector('.owl-prev');
+    const navContainer = document.querySelector('.owl-nav');
 
+    if (nextButton) {
+      nextButton.classList.add('slider-one__carousel__btn__right');
+    }
+
+    if (prevButton) {
+      prevButton.classList.add('slider-one__carousel__btn__left');
+    }
+
+    if (navContainer) {
+      navContainer.classList.add('slider-one__carousel__btn');
+    }
+
+    // Cleanup if necessary when component unmounts
+    return () => {
+      if (nextButton) {
+        nextButton.classList.remove('slider-one__carousel__btn__right');
+      }
+      if (prevButton) {
+        prevButton.classList.remove('slider-one__carousel__btn__left');
+      }
+      
+      if (navContainer) {
+        navContainer.classList.remove('slider-one__carousel__btn');
+      }
+    };
+  }, []);
   const handleSlideHeading = (phrase: string): string => {
     if (!phrase) return '';
     const words = phrase.trim().split(' ');
@@ -48,7 +78,6 @@ const Slider = () => {
           </div>
         </div>
       </div>
-      <div className="slider-one__carousel__btn nav-container"></div>
     </div>
   );
 
@@ -63,12 +92,10 @@ const Slider = () => {
     animateOut: 'fadeOut',
     animateIn: 'fadeIn',
     nav: true,
-    dots: false,
-    // navContainer: true,
-    // navElement: 'div',
+    dots: true,
     navText: [
-      '<button className="slider-one__carousel__btn__left"><i className="fa fa-angle-left"></i></button>',
-      '<button className="slider-one__carousel__btn__right"><i className="fa fa-angle-right"></i></button>',
+      '<i className="fa fa-angle-left"></i>',
+      '<i className="fa fa-angle-right"></i>',
     ],
   };
 

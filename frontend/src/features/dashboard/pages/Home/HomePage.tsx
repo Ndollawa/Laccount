@@ -4,17 +4,17 @@ import { FaDollarSign } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import { selectCurrentUser } from '../../../auth/slices/auth.slice';
+import { selectCurrentUser } from '@auth/slices/auth.slice';
 // import $ from 'jquery';
 // import 'owl.carousel/dist/assets/owl.carousel.css';
 // import 'owl.carousel';
-import MainBody from '../../components/MainBody';
-import PageHeading from '../../components/PageHeading';
-import { getUserFullName } from '../../../../app/utils/getUserName';
-import { Wallet } from '../../../../app/props/userProps';
-import ModalComponent from '../../components/Modal';
-import CheckoutForm from '../../components/CheckoutForm';
-import StripeElement from '../../components/StripeElement';
+import MainBody from '@dashboard/components/MainBody';
+import PageHeading from '@dashboard/components/PageHeading';
+import { getUserFullName } from '@utils/getUserName';
+import { Wallet } from '@props/userProps';
+import ModalComponent from '@dashboard/components/Modal';
+import CheckoutForm from '@dashboard/components/CheckoutForm';
+import StripeElement from '@dashboard/components/StripeElement';
 interface FundWalletFormInputs {
 	amount: number;
   }

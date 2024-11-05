@@ -1,9 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import {  useCompanyInfo,useLandingConfig } from '../../../../dashboard/pages/Settings/slices/settings.slice';
+import {  useCompanyInfo,useLandingConfig } from '@dashboard/pages/Settings/slices/settings.slice';
 
-import { useGetServicesQuery } from '../../../../dashboard/pages/Service/slices/servicesApi.slice'
-import ServiceProps from '../../../../../app/props/serviceProps'
+import { useGetServicesQuery } from '@dashboard/pages/Service/slices/servicesApi.slice'
+import ServiceProps from '@props/serviceProps'
 const SERVICE_ASSETS = import.meta.env.VITE_SERVICE_ASSETS;
 
 const WhatWeOffer = () => {

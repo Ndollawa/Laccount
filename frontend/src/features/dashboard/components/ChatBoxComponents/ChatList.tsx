@@ -1,16 +1,14 @@
 import React,{useState,useEffect} from 'react'
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../../auth/slices/auth.slice';
-import { useGetConversationsQuery } from '../../pages/Messenger/slices/conversationsApi.slice';
+import { selectCurrentUser } from '@auth/slices/auth.slice';
+import { useGetConversationsQuery } from '@dashboard/pages/Messenger/slices/conversationsApi.slice';
 import Conversation from './Conversation';
-import { useGetUsersQuery } from '../../pages/Users/slices/usersApi.slice';
-import { useGetMessagesQuery } from '../../pages/Messenger/slices/messagesApi.slice';
-import ConversationProps from '../../../../app/props/ConversationProps';
-import MessageProps from '../../../../app/props/MessageProps';
+import { useGetUsersQuery } from '@dashboard/pages/Users/slices/usersApi.slice';
+import { useGetMessagesQuery } from '@dashboard/pages/Messenger/slices/messagesApi.slice';
+import {MessageProps, userInterface, ConversationProps} from '@props/';
 
-import useDebounce from '../../../../app/hooks/useDebounce';
-import userInterface from '../../../../app/props/userProps';
+import useDebounce from '@hooks/useDebounce';
 
 
 
@@ -22,7 +20,7 @@ const [showSearch, setShowSearch] = useState(false)
 const [userConversations, setUserConversations] = useState<ConversationProps[] | []>([])
   	const { conversations } = useGetConversationsQuery("conversationsList", {
 	selectFromResult: ({ data }) => ({
-		conversations: data && (Object.values(data?.entities)as ConversationProps[])?.filter((c)=>c?.members?.includes(currentUser?._id!))
+		conversations: data && (Object.values(data?.entities)as ConversationProps[])?.filter((c)=>c?.members?.includes(currentUser?.id!))
   })
 })
 
@@ -42,10 +40,10 @@ const [userConversations, setUserConversations] = useState<ConversationProps[] |
 	const keys = ['firstName','lastName','username']
 const searchData = (data:any)=>{
 	return data?.filter((item:any)=>{
-	const contactId = item?.members.find((m:string) => m !== currentUser?._id )
-	const contact = users.find((user:userInterface['user']) =>user._id === contactId)
+	const contactId = item?.members.find((m:string) => m !== currentUser?.id )
+	const contact = users.find((user:userInterface['user']) =>user.id === contactId)
 	return keys?.some((key:string)=>contact[key]?.toLowerCase()?.includes(debouncedQuery)) 
-	//|| (messages as MessageProps[])?.filter((m:MessageProps)=> m?.conversationId === item?._id && m?.message.includes(debouncedQuery)).length
+	//|| (messages as MessageProps[])?.filter((m:MessageProps)=> m?.conversationId === item?.id && m?.message.includes(debouncedQuery)).length
 		 
 	}
 		)
@@ -78,7 +76,7 @@ const searchData = (data:any)=>{
   <div className="card-body contacts_body p-0 dz-scroll  " id="DZ_W_Contacts_Body">
   <ul className="contacts">
     {
-        userConversations?.map((c:ConversationProps,i:number)=> <Conversation openChat={openChat} key={c?._id} conversation={c} i={i}/>)
+        userConversations?.map((c:ConversationProps,i:number)=> <Conversation openChat={openChat} key={c?.id} conversation={c} i={i}/>)
     }     
   </ul>
 </div>

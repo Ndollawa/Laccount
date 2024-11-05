@@ -20,5 +20,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "../backend/src/listing/listing.gateway.ts", "../backend/src/listing/listing.gateway.spec.ts", "../backend/src/message/message.gateway.ts", "../backend/src/message/message.gateway.spec.ts", "../backend/src/notification/notification.gateway.ts", "../backend/src/notification/test/notification.gateway.spec.ts"]
+  "include": ["src", "../backend/src/listing/listing.gateway.ts", "../backend/src/listing/listing.gateway.spec.ts", "../backend/src/message/message.gateway.ts", "../backend/src/message/message.gateway.spec.ts", "../backend/src/notification/notification.gateway.ts", "../backend/src/notification/test/notification.gateway.spec.ts", "public/assets/vendors"]
 }

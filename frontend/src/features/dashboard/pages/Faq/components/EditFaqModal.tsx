@@ -3,8 +3,8 @@ import { Editor } from '@tinymce/tinymce-react'
 import { useUpdateFaqMutation } from '../slices/faqApi.slice'
 import { Modal } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import showToast from '../../../../../app/utils/showToast'
-import { FaqProps } from '../../../../../app/props/FaqProps'
+import showToast from '@utils/showToast'
+import { FaqProps } from '@props/FaqProps'
 
 interface modalDataProps {
 modalData:{

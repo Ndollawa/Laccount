@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
-import { useCompanyInfo, useLandingConfig } from '../../../../dashboard/pages/Settings/slices/settings.slice';
+import { useCompanyInfo, useLandingConfig } from '@dashboard/pages/Settings/slices/settings.slice';
 
 const AboutUs = () => {
   const {settings:{companyDetails:{siteName, description}={}}={}} = useSelector(useCompanyInfo);  

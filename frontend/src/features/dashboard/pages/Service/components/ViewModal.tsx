@@ -3,9 +3,9 @@ import { Editor } from '@tinymce/tinymce-react'
 import { useUpdateServiceMutation} from '../slices/servicesApi.slice'
 import {Modal} from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import showToast from '../../../../../app/utils/showToast'
+import showToast from '@utils/showToast'
 import Swal from 'sweetalert2'
-import ServiceProps from '../../../../../app/props/ServiceProps'
+import ServiceProps from '@props/ServiceProps'
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;
 

@@ -84,12 +84,7 @@ export type sideBarLink ={
         // icon:
             path: '/dashboard/users'
         },
-        {
-            id:6.1,
-            title:'Our Team',
-            // icon:
-                path: '/dashboard/our-team'
-        }],
+       ],
         
     },
     {
@@ -108,7 +103,7 @@ export type sideBarLink ={
             id:6.1,
             title:'Category',
             // icon:
-            path: '/dashboard/blog/posts/category'
+            path: '/dashboard/blog/category'
         }],
        
     }
@@ -131,30 +126,30 @@ export type sideBarLink ={
                icon:<TfiLayoutMediaCenter fontSize={"2rem"}/>,
                path: '/dashboard/sliders'
            } 
-        ,{
-        id:8.2,
-        title:'Team',
-        icon:<FaPeopleArrows fontSize={"2rem"}/>,
-        path:'/dashboard/our-team',
-        isActive:false,
-        isOpen:false
-    }
-    ,{
-        id:8.3,
-        title:'Services',
-        icon:<FaServicestack fontSize={"2rem"}/>,
-        path:'/dashboard/services',
-        isActive:false,
-        isOpen:false
-    }
-    ,{
-        id:8.4,
-        title:'FAQ',
-        icon:<FaRegQuestionCircle fontSize={"2rem"}/>,
-        path:'/dashboard/faq',
-        isActive:false,
-        isOpen:false
-    }],
+            ,{
+                id:8.2,
+                title:'Team',
+                icon:<FaPeopleArrows fontSize={"2rem"}/>,
+                path:'/dashboard/our-team',
+                isActive:false,
+                isOpen:false
+            }
+            ,{
+                id:8.3,
+                title:'Services',
+                icon:<FaServicestack fontSize={"2rem"}/>,
+                path:'/dashboard/services',
+                isActive:false,
+                isOpen:false
+            }
+            ,{
+                id:8.4,
+                title:'FAQ',
+                icon:<FaRegQuestionCircle fontSize={"2rem"}/>,
+                path:'/dashboard/faq',
+                isActive:false,
+                isOpen:false
+            }],
     }
     ,{
         id:9,

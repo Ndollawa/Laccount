@@ -1,6 +1,6 @@
 import { useState,useEffect, useRef } from "react";
-import { useGetContactsQuery } from "../../features/dashboard/pages/Contact/slices/contactsApi.slice";
-import { selectCurrentUser } from "../../features/auth/slices/auth.slice";
+import { useGetContactsQuery } from "@dashboard/pages/Contact/slices/contactsApi.slice";
+import { selectCurrentUser } from "@auth/slices/auth.slice";
 import { useSelector } from "react-redux";
 
 

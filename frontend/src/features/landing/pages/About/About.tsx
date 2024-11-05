@@ -1,17 +1,17 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { useLandingConfig } from '../../../dashboard/pages/Settings/slices/settings.slice'
-import PageProps from '../../../../app/props/PageProps'
+import { useLandingConfig } from '@dashboard/pages/Settings/slices/settings.slice'
+import PageProps from '@props/PageProps'
 import Breadcrum from '../../components/Breadcrum'
 import CTASection from '../Home/Components/CTASection'
-import { LandingConfig } from '../../../../app/props/settingsProps'
-import { useGetTeamsQuery } from '../../../dashboard/pages/Team/slices/teamsApi.slice'
+import { LandingConfig } from '@props/settingsProps'
+import { useGetTeamsQuery } from '@dashboard/pages/Team/slices/teamsApi.slice'
 import TeamMemberCard from '../Team/components/TeamMemberCard'
-import TeamProps from '../../../../app/props/TeamProps'
+import TeamProps from '@props/teamProps'
 import PerformanceMetric from '../../components/PerformanceMetric'
 import BrandPartners from '../../components/BrandPartners'
 import Testimonial from '../Home/Components/Testimonial'
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
 const About:React.FC<PageProps> = ({pageData}:PageProps) => {
     
@@ -30,7 +30,7 @@ return (
         <div className="row row-gutter-y-50">
             <div className="col-lg-6">
                 <div className="about-two__image">
-                    <img src={BASE_URL+"/uploads/settings/brand/"+aboutUsBg} alt=""/>
+                    <img src={BRAND_ASSETS+aboutUsBg} alt=""/>
                 </div>
                 {/* <!-- /.about-two__image --> */}
             </div>

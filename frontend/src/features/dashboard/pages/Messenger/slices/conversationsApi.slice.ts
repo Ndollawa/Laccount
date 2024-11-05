@@ -2,9 +2,9 @@ import {
     createSelector,
     createEntityAdapter
 } from "@reduxjs/toolkit";
-import { apiSlice } from "../../../../../app/api/apiSlice";
-import { RootState } from "../../../../../app/stores/store";
-import { ResponseProps } from "../../../../../app/props/responseProps";
+import { apiSlice } from "@api/apiSlice";
+import { RootState } from "@store/store";
+import { ResponseProps } from "@props/responseProps";
 
 const conversationsAdapter = createEntityAdapter({
     // sortComparer: (a, b) => (a.completed === b.completed) ? 0 : a.completed ? 1 : -1

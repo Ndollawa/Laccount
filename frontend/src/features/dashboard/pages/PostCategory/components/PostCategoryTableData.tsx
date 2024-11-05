@@ -1,8 +1,8 @@
 import React from 'react'
 import {useGetPostCategoryQuery,useDeletePostCategoryMutation } from '../slices/postCategoryApi.slice'
-import showToast from '../../../../../app/utils/showToast'
+import showToast from '@utils/showToast'
 import Swal from 'sweetalert2'
-import PostCategoryProps from '../../../../../app/props/postCategoryProps'
+import PostCategoryProps from '@props/postCategoryProps'
 
 interface modalDataProps {
     modalData:{
@@ -68,7 +68,7 @@ const PostCategoryTableData = ({categoryId,index,showEditForm}:any) => {
         const created = new Date(category.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year:'numeric' })
     const categoryData = {
         data:{
-        id:category._id,
+        id:category.id,
         title:category.title,
         status:category.status
 
@@ -93,7 +93,7 @@ const PostCategoryTableData = ({categoryId,index,showEditForm}:any) => {
 
     
         return (
-          <>  <tr key={category._id}>
+          <>  <tr key={category.id}>
                     <td>{++index}</td>
                     <td>{category.title}</td>
                     <td align="center">{categoryStatus}</td>
@@ -101,7 +101,7 @@ const PostCategoryTableData = ({categoryId,index,showEditForm}:any) => {
                     <td>
                     <div className="d-flex">
                             <button type="button" className="btn btn-info light shadow btn-xs sharp me-1"   onClick={()=>showEditForm(categoryData)}><i className="fas fa-pencil-alt"></i></button>
-                            <button className="btn btn-danger light shadow btn-xs sharp" onClick={()=>onDeleteCategory(category._id)}><i className="fa fa-trash"></i></button>
+                            <button className="btn btn-danger light shadow btn-xs sharp" onClick={()=>onDeleteCategory(category.id)}><i className="fa fa-trash"></i></button>
                         </div>													
                     </td>												
                 </tr></>

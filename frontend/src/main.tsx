@@ -4,13 +4,13 @@ import {disableReactDevTools} from '@fvilers/disable-react-devtools'
 import { BrowserRouter as Router , Routes, Route} from 'react-router-dom';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import {persistStore} from 'redux-persist';
-import { store } from './app/stores/store';
 import { Provider } from 'react-redux';
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import { HelmetProvider } from 'react-helmet-async';
+import { store } from '@store/store';
 import App from './App';
-import OtherBody from './features/dashboard/components/OtherBody';
-import GeneralPreloader from './features/components/preloader/GeneralPreloader';
+import OtherBody from '@dashboard/components/OtherBody';
+import GeneralPreloader from '@components/preloader/GeneralPreloader';
 
 const NODE_ENV = import.meta.env.NODE_ENV;
 if(NODE_ENV === 'production') disableReactDevTools();

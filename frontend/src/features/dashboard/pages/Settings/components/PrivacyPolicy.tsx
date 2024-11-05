@@ -4,7 +4,7 @@ import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { useDispatch,useSelector } from 'react-redux';
 import { useUpdateSettingMutation} from '../slices/settingApi.slice';
 import {setLandingSetting, useLandingConfig } from '../slices/settings.slice';
-import showToast from '../../../../../app/utils/showToast';
+import showToast from '@utils/showToast';
 import { BsInfoCircleFill } from 'react-icons/bs';
 import { PulseLoader } from 'react-spinners';
 

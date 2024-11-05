@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { useGetCategoriesQuery } from './apiSlice'; // Assuming the API slice for fetching categories
-import { ListCategory } from './types'; // Assuming you have a type for ListCategory based on Prisma model
+// import { useGetPostCategoryQuery } from '../slices/postCategoryApi.slice'; // Assuming the API slice for fetching categories
+// import { ListCategory } from './types'; // Assuming you have a type for ListCategory based on Prisma model
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 interface FormInputs {
@@ -9,7 +9,7 @@ interface FormInputs {
 }
 
 interface RecursiveCategorySelectorProps {
-  categories: ListCategory[];
+  categories: any; ///ListCategory[];
   depth: number;
   name: string;
   control: any;

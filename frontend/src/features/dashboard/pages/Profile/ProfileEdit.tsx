@@ -3,9 +3,9 @@ import { useForm } from 'react-hook-form';
 import MainBody from '../../components/MainBody';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../auth/slices/auth.slice';
-import useUserImage from '../../../../app/hooks/useUserImage';
+import useUserImage from '@hooks/useUserImage';
 import { FaPencilAlt, FaRegTimesCircle } from 'react-icons/fa';
-import showToast from '../../../../app/utils/showToast';
+import showToast from '@utils/showToast';
 import { useUpdateUserMutation, useCheckDuplicateUserMutation, useUserUploadMutation, useUserRemoveFileMutation } from '../Users/slices/usersApi.slice';
 import * as yup from 'yup';  // For schema validation if needed
 
@@ -53,7 +53,7 @@ const ProfileEdit = () => {
 
     const onSubmit = async (data: any) => {
         if (USER_REGEX.test(data.username) && EMAIL_REGEX.test(data.email)) {
-            await updateUser({ _id: currentUser._id, data, type: 'profileUpdate' });
+            await updateUser({ _id: currentUser.id, data, type: 'profileUpdate' });
             showToast('success', 'Profile updated successfully!');
         } else {
             showToast('error', 'Validation error');
@@ -64,13 +64,13 @@ const ProfileEdit = () => {
         const files = e.target.files!;
         const formData = new FormData();
         formData.append("avatar", files[0]!);
-        formData.append('_id', currentUser._id);
+        formData.append('_id', currentUser.id);
         await userUpload(formData);
         showToast('success', 'Profile Picture Uploaded successfully');
     };
 
     const removeImage = async () => {
-        await userRemoveFile({ _id: currentUser._id, file: currentUser.userImage, type: 'avatar' });
+        await userRemoveFile({ _id: currentUser.id, file: currentUser.userImage, type: 'avatar' });
         showToast('success', 'Image removed successfully');
     };
 

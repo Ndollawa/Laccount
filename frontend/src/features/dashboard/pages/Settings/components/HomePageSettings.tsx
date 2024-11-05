@@ -6,7 +6,7 @@ import { PulseLoader } from "react-spinners";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { useUpdateSettingMutation } from '../slices/settingApi.slice';
 import { setLandingSetting } from '../slices/settings.slice';
-import showToast from '../../../../../app/utils/showToast';
+import showToast from '@utils/showToast';
 
 const HomePageSettings = () => {
   const dispatch = useDispatch();

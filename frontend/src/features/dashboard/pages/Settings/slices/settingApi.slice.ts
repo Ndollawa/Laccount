@@ -1,9 +1,9 @@
 import { createSelector, createEntityAdapter } from "@reduxjs/toolkit";
-import { apiSlice } from "../../../../../app/api/apiSlice";
-import { ResponseProps } from "../../../../../app/props/responseProps";
-import { Settings } from "../../../../../app/props/settingsProps";
+import { apiSlice } from "@api/apiSlice";
+import { ResponseProps } from "@props/responseProps";
+import { Settings } from "@props/settingsProps";
 import { setSettings } from "./settings.slice";
-import { RootState } from "../../../../../app/stores/store";
+import { RootState } from "@store/store";
 
 // Create an entity adapter for settings
 const settingsAdapter = createEntityAdapter({

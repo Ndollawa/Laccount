@@ -1,23 +1,23 @@
 import React, { useState, useEffect, ReactNode, useCallback, useTransition } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import Preloader from "../../components/preloader/Preloader";
-import { useIsLoading } from "../../components/preloader/slices/preloader.slice";
+import Preloader from "@components/preloader/Preloader";
+import { useIsLoading } from "@components/preloader/slices/preloader.slice";
 import Header from "./Header";
 import SideBar from "./SideBar";
 import Chatbox from "./ChatBox";
 import Footer from "./Footer";
-import { useCompanyInfo, useDashboardConfig, useLandingConfig } from '../pages/Settings/slices/settings.slice';
-import { selectCurrentUser } from "../../auth/slices/auth.slice";
-import useWindowSize from "../../../app/hooks/useWindowSize";
+import { useCompanyInfo, useDashboardConfig, useLandingConfig } from '@dashboard/pages/Settings/slices/settings.slice';
+import { selectCurrentUser } from "@auth/slices/auth.slice";
+import useWindowSize from "@hooks/useWindowSize";
+import useUserActivity from "@hooks/useUserActivity";
+import useLocalStorage from "@hooks/useLocalStorage";
 import AppSettings from "./AppSettings";
 import ThemePanel from "./ThemePanel";
-import useUserActivity from "../../../app/hooks/useUserActivity";
-import useLocalStorage from "../../../app/hooks/useLocalStorage";
 
 const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
-const MainBody = ({ children }: { children: React.ReactNode }) => {
+const MainBody = ({ children }: { children: ReactNode }) => {
     const currentUser = useSelector(selectCurrentUser);
     useUserActivity();
 
@@ -143,7 +143,7 @@ const MainBody = ({ children }: { children: React.ReactNode }) => {
                             )}
                         </Link>
                         <div className="nav-control">
-                            <div className={isToggled ? "hamburger is-active" : "hamburger"} onClick={toggleMenu}>
+                            <div className={`hamburger ${isToggled ? " is-active" : null}`} onClick={toggleMenu}>
                                 <span className="line"></span>
                                 <span className="line"></span>
                                 <span className="line"></span>

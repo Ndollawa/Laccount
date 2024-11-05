@@ -1,7 +1,6 @@
 import { createSelector, createEntityAdapter } from "@reduxjs/toolkit";
-import { apiSlice } from "../../../../../app/api/apiSlice";
-import { ResponseProps } from "../../../../../app/props/ResponseProps";
-import { Cart, CartItem } from "../../../../../app/props/cartProps";
+import { apiSlice } from "@api/apiSlice";
+import { ResponseProps, Cart, CartItem } from "@props/";
 import { setCart } from "./cart.slice";
 
 // Create an entity adapter for cart

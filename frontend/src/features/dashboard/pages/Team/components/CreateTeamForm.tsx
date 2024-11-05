@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
-import { Modal } from "react-bootstrap";
+import { PulseLoader } from 'react-spinners';
 import Button from "react-bootstrap/Button";
 import { useAddNewTeamMutation } from "../slices/teamsApi.slice";
-import showToast from "../../../../../app/utils/showToast";
+import showToast from "@utils/showToast";
+import useWindowSize from '@hooks/useWindowSize';
+import ModalComponent from '@dashboard/components/Modal';
+import FileUpload from '@components/FileUpload';
 
 interface TeamFormInputs {
   firstName: string;
@@ -27,6 +30,10 @@ const CreateTeamForm = () => {
   const [addNewTeam, { isLoading, isSuccess, isError, error }] = useAddNewTeamMutation();
   const userImage = watch("userImage");
 
+    const {width} = useWindowSize()
+    const [show, setShow] = useState(false);
+    const handleOpen = useCallback(() => setShow(true), [show]);
+    const handleClose = useCallback(() => setShow(false), [show]);
   const onSubmit:SubmitHandler<FieldValues> = async (formFields, e) => {
     e?.preventDefault()
     const formData = new FormData();
@@ -63,14 +70,9 @@ const CreateTeamForm = () => {
 
   return (
     <>
-      <Button onClick={() => setValue("show", true)}>Add New</Button>
-
-      <Modal show={watch("show")} size="lg" centered backdrop="static" onHide={() => setValue("show", false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add New Team Member</Modal.Title>
-        </Modal.Header>
+      <Button onClick={handleOpen}>Add New</Button>
+      <ModalComponent {...{size:((width as number) < 600)? "xl": "lg", header:{show:true,title:'Add New Team Member'},modalStates:{show,handleOpen,handleClose}}} >
         <form onSubmit={(e) => handleSubmit(onSubmit)(e) } encType="multipart/form-data">
-          <Modal.Body>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
@@ -136,21 +138,12 @@ const CreateTeamForm = () => {
                 <div className="form-group">
                   <label>Status</label>
                   <select className="form-control" {...register("status", { required: "Status is required" })}>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="INACTIVE">Inactive</option>
                   </select>
                   {errors.status && <div className="invalid-feedback">{errors.status.message}</div>}
                 </div>
               </div>
-
-              <div className="col-md-12">
-                <div className="form-group">
-                  <label>Bio</label>
-                  <textarea className="form-control" rows={4} {...register("bio", { required: "Bio is required" })}></textarea>
-                  {errors.bio && <div className="invalid-feedback">{errors.bio.message}</div>}
-                </div>
-              </div>
-
               <div className="col-md-6">
                 <div className="form-group">
                   <label>Facebook Handle</label>
@@ -195,21 +188,33 @@ const CreateTeamForm = () => {
                 </div>
               </div>
 
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label>User Image</label>
-                  <input type="file" className="form-control" onChange={handleImageUpload} />
-                  {userImage && userImage[0] && <img src={URL.createObjectURL(userImage[0])} alt="Preview" width="100" />}
-                </div>
+                <div className="col-md-6">
+                    <label className="form-label">User Image</label>
+                   <FileUpload onChange={handleImageUpload}/>
+                  </div>
+                  <div className="col-md-6">Preview
+                    <div id="preview w-100 position-relative" >
+                  {userImage && userImage[0] && <img className="img-responsive w-100 position-relative" src={URL.createObjectURL(userImage[0])} alt="Preview" />}
+                    </div>
+                  </div>
+
               </div>
+
+              <div className="col-md-12">
+                <div className="form-group">
+                  <label>Bio</label>
+                  <textarea className="form-control" rows={4} {...register("bio", { required: "Bio is required" })}></textarea>
+                  {errors.bio && <div className="invalid-feedback">{errors.bio.message}</div>}
+                </div>
             </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setValue("show", false)}>Close</Button>
-            <Button type="submit" variant="primary" disabled={isSubmitting || isLoading}>Save</Button>
-          </Modal.Footer>
+            <div className="d-flex gap-2 my-3 justify-content-end">
+            <Button variant="primary" size="sm" onClick={handleClose}>Close</Button>
+          <Button variant="secondary" size="sm" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? <PulseLoader loading={isSubmitting} color="#ffffff" size="0.7rem" /> : 'Create New Member'}
+          </Button>
+          </div>
         </form>
-      </Modal>
+        </ModalComponent>
     </>
   );
 };

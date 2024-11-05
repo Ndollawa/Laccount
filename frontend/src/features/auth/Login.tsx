@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { FaRegUserCircle, FaKeycdn, FaRegEyeSlash, FaRegEye } from 'react-icons/fa';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { useCompanyInfo, useLandingConfig } from '../dashboard/pages/Settings/slices/settings.slice';
+import {jwtDecode} from 'jwt-decode';
+import { FaRegUserCircle, FaKeycdn, FaRegEyeSlash, FaRegEye } from 'react-icons/fa';
+import {PulseLoader} from 'react-spinners';
+import { useCompanyInfo, useLandingConfig } from '@dashboard/pages/Settings/slices/settings.slice';
 import { useLoginMutation } from './slices/authApi.slice';
 import { setCredentials } from './slices/auth.slice';
-import {jwtDecode} from 'jwt-decode';
-import OtherBody from '../dashboard/components/OtherBody';
-import {PulseLoader} from 'react-spinners';
-import useToggle from '../../app/hooks/useToggle';
-import { AuthProps } from '../../app/props/authProps';
+import OtherBody from '@dashboard/components/OtherBody';
+import useToggle from '@hooks/useToggle';
+import { AuthProps } from '@props/authProps';
 
 interface LoginFormInputs {
   user: string;

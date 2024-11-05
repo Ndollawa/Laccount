@@ -1,14 +1,14 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { useGetUsersQuery } from '../../pages/Users/slices/usersApi.slice'
-import { selectCurrentUser } from '../../../auth/slices/auth.slice'
-import useUserImage from '../../../../app/hooks/useUserImage'
+import { useGetUsersQuery } from '@dashboard/pages/Users/slices/usersApi.slice'
+import { selectCurrentUser } from '@auth/slices/auth.slice'
+import useUserImage from '@hooks/useUserImage'
 import { format } from 'timeago.js'
 
 const Conversation = ({openChat,conversation ,i}:any) => {
   const currentUser = useSelector(selectCurrentUser)
   
-  const contactId = conversation?.members.filter((m:string) => m !== currentUser?._id )
+  const contactId = conversation?.members.filter((m:string) => m !== currentUser?.id )
   const { user } = useGetUsersQuery("usersList", {
     selectFromResult: ({ data }) => ({
       user: data?.entities[contactId]		 
@@ -16,7 +16,7 @@ const Conversation = ({openChat,conversation ,i}:any) => {
     }) 
 const userImage = useUserImage(user)
   return (
-    <li className="active dz-chat-user"key={conversation?._id+i} onClick={()=>openChat(user?._id)}>
+    <li className="active dz-chat-user"key={conversation?.id+i} onClick={()=>openChat(user?.id)}>
     <div className="d-flex bd-highlight">
         <div className="img_cont">
             <img src={userImage} className="rounded-circle user_img" alt=""/>

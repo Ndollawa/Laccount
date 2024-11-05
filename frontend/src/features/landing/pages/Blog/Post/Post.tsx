@@ -1,18 +1,18 @@
 import React,{useState,FormEvent} from "react";
 import {useParams, useNavigate} from 'react-router-dom'
-import { useGetPostsQuery } from "../../../../dashboard/pages/Post/slices/postApi.slice";
-import { useAddNewPostCommentMutation, useGetPostCommentQuery } from "../../../../dashboard/pages/Post/postCommentApiSlice";
-import { useGetUsersQuery } from "../../../../dashboard/pages/Users/slices/usersApi.slice";
-import PostCommentProps from "../../../../../app/props/PostCommentProps";
-import PageProps from "../../../../../app/props/PageProps";
-import Breadcrum from "../../../components/Breadcrum";
 import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../../../../auth/slices/auth.slice";
-import useLocalStorage from "../../../../../app/hooks/useLocalStorage";
-import showToast from "../../../../../app/utils/showToast";
-import PostProps from "../../../../../app/props/PostProps";
-import PostComment from "./components/PostComment";
-import PostSidebar from "./components/PostSidebar";
+import { useGetPostsQuery } from "@dashboard/pages/Post/slices/postApi.slice";
+import { useAddNewPostCommentMutation, useGetPostCommentQuery } from "@dashboard/pages/Post/postCommentApiSlice";
+import { useGetUsersQuery } from "@dashboard/pages/Users/slices/usersApi.slice";
+import Breadcrum from "@landing/components/Breadcrum";
+import { selectCurrentUser } from "@auth/slices/auth.slice";
+import useLocalStorage from "@hooks/useLocalStorage";
+import showToast from "@utils/showToast";
+import PostProps from "@props/postProps";
+import PostCommentProps from "@props/postCommentProps";
+import PageProps from "@props/pageProps";
+import PostComment from "./components/postComment";
+import PostSidebar from "./components/postSidebar";
 import { filterPosts } from "../Blog";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -44,7 +44,7 @@ const navigate = useNavigate()
       
       const { postComment } = useGetPostCommentQuery("postCommentsList", {
         selectFromResult: ({ data }) => ({
-          postComment: data && data.ids.map((id:string) => data?.entities[id]).filter((comment:PostCommentProps) =>comment.postId === post?._id) 
+          postComment: data && data.ids.map((id:string) => data?.entities[id]).filter((comment:PostCommentProps) =>comment.postId === post?.id) 
         }),
         })
         const { data } = useGetPostsQuery("postsList");
@@ -83,12 +83,12 @@ const submitComment = async(e:FormEvent)=>{
  }
  await addNewPostComment({
   comment,
-  postId:post?._id,
-  author:currentUser?._id,
-  authorType:currentUser?._id? 'user': 'guest',
-  fullName:currentUser?._id? currentUser?.fullName: fullName,
-  email:currentUser?._id? currentUser?.email: email,
-  phone:currentUser?._id? currentUser?.phone : phone,
+  postId:post?.id,
+  author:currentUser?.id,
+  authorType:currentUser?.id? 'user': 'guest',
+  fullName:currentUser?.id? currentUser?.fullName: fullName,
+  email:currentUser?.id? currentUser?.email: email,
+  phone:currentUser?.id? currentUser?.phone : phone,
   subject
 })
 if(isError) return showToast('error', 'Sorry couldn\'t submit post comment.')
@@ -107,8 +107,8 @@ setShowCommentForm(false)
             <div className="col-lg-8">
               <div id="primary" className="site-main layout-right-sidebar">
                 <article
-                  id={`post-${post?._id}`}
-                  className={`post-${post?._id} post type-post status-${post?.status} format-standard has-post-thumbnail hentry category-finance category-studies tag-education-loan tag-mortage`}
+                  id={`post-${post?.id}`}
+                  className={`post-${post?.id} post type-post status-${post?.status} format-standard has-post-thumbnail hentry category-finance category-studies tag-education-loan tag-mortage`}
                 >
                   <div className="blog-card__image">
                     <div className="post-thumbnail">
@@ -185,10 +185,10 @@ setShowCommentForm(false)
                    <div className="col-md-6 prev-post">
                    <div className="single-next-pre-box">
                       <div className="single-next-pre-inner">
-                        <a href={`/our-blog/posts/${prevPost?._id}`} className="next-link single-post-pre-next-link">
+                        <a href={`/our-blog/posts/${prevPost?.id}`} className="next-link single-post-pre-next-link">
                           <span>Previous</span></a>
                         </div>
-                        <a href={`/our-blog/posts/${prevPost?._id}`} title={prevPost?.title} className="post-title">
+                        <a href={`/our-blog/posts/${prevPost?.id}`} title={prevPost?.title} className="post-title">
                           <span className="single-post-link-title">{prevPost?.title}</span>
                           </a>
                      </div>
@@ -200,11 +200,11 @@ setShowCommentForm(false)
                         <div className="col-md-6 next-post">
                             <div className="single-next-pre-box">
                               <div className="single-next-pre-inner">
-                                <a href={`/our-blog/posts/${nextPost?._id}`} className="prev-link single-post-pre-next-link">
+                                <a href={`/our-blog/posts/${nextPost?.id}`} className="prev-link single-post-pre-next-link">
                                   <span>Next</span>
                                   </a>
                               </div>
-                              <a href={`/our-blog/posts/${nextPost?._id}`} title={nextPost?.title} className="post-title">
+                              <a href={`/our-blog/posts/${nextPost?.id}`} title={nextPost?.title} className="post-title">
                                 <span className="single-post-link-title">{nextPost?.title}</span></a>
                                 </div>
                                 </div>}
@@ -238,7 +238,7 @@ setShowCommentForm(false)
                           id="commentform"
                           className="comment-form"
                         >
-                          { !currentUser._id &&
+                          { !currentUser.id &&
                            <p className="comment-notes">
                             <span id="email-notes">
                               Your email address will not be published.
@@ -249,7 +249,7 @@ setShowCommentForm(false)
                             </span>
                           </p>}
                           <div className="row">
-                          { !currentUser._id &&  <>
+                          { !currentUser.id &&  <>
                           <div className="comment-form-author col-lg-6 mb-4">
                               <input
                                 id="author"
@@ -309,7 +309,7 @@ setShowCommentForm(false)
                                 area-required="true"
                               ></textarea>
                             </div>
-                           { !currentUser._id && <p className="comment-form-cookies-consent">
+                           { !currentUser.id && <p className="comment-form-cookies-consent">
                               <input
                                 id="wp-comment-cookies-consent"
                                 name="wp-comment-cookies-consent"

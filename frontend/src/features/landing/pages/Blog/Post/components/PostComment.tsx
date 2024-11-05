@@ -1,14 +1,14 @@
 import React,{useState,useEffect,useRef,FormEvent} from 'react'
 import { useSelector } from 'react-redux'
-import { selectCurrentUser } from '../../../../../auth/slices/auth.slice'
-import { useGetUsersQuery } from '../../../../../dashboard/pages/Users/slices/usersApi.slice'
-import { useAddNewPostCommentReplyMutation } from '../../../../../dashboard/pages/Post/postCommentApiSlice'
-import PostCommentProps,{postCommentReplyProps} from '../../../../../../app/props/PostCommentProps'
-import useLocalStorage from '../../../../../../app/hooks/useLocalStorage'
-import useUserImage from '../../../../../../app/hooks/useUserImage'
-import defaultUser from '../../../../../../assets/images/user/defaultUser.jpeg'
-import defaultUser2 from '../../../../../../assets/images/user/defaultUser2.jpeg'
-import showToast from '../../../../../../app/utils/showToast'
+import { selectCurrentUser } from '@auth/slices/auth.slice'
+import { useGetUsersQuery } from '@dashboard/pages/Users/slices/usersApi.slice'
+import { useAddNewPostCommentReplyMutation } from '@dashboard/pages/Post/postCommentApiSlice'
+import PostCommentProps,{postCommentReplyProps} from '@props/PostCommentProps'
+import useLocalStorage from '@hooks/useLocalStorage'
+import useUserImage from '@hooks/useUserImage'
+import defaultUser from '@assets/images/user/defaultUser.jpeg'
+import defaultUser2 from '@assets/images/user/defaultUser2.jpeg'
+import showToast from '@utils/showToast'
 import PostCommentReply from './PostCommentReply'
 
 const PostComment = ({pc}:{pc:PostCommentProps}) => {
@@ -45,12 +45,12 @@ const PostComment = ({pc}:{pc:PostCommentProps}) => {
        e.preventDefault() 
        await addNewPostCommentReply({
         comment,
-        commentId:pc?._id,
-        author:currentUser?._id,
-        authorType:currentUser?._id? 'user': 'guest',
-        fullName:currentUser?._id? currentUser?.fullName: fullName,
-        email:currentUser?._id? currentUser?.email: email,
-        phone:currentUser?._id? currentUser?.phone : phone,
+        commentId:pc?.id,
+        author:currentUser?.id,
+        authorType:currentUser?.id? 'user': 'guest',
+        fullName:currentUser?.id? currentUser?.fullName: fullName,
+        email:currentUser?.id? currentUser?.email: email,
+        phone:currentUser?.id? currentUser?.phone : phone,
         subject
       })
       if(isError) return showToast('error', 'Sorry couldn\'t submit post comment.')
@@ -64,8 +64,8 @@ const PostComment = ({pc}:{pc:PostCommentProps}) => {
         setComment(`@${replyTo} `)
       }
   return (
-    <li className="comment even thread-even depth-1  " id={`comment-${pc?._id}`} key={pc?._id}>
-    <div id={`div-comment-${pc?._id}`} className="blog-comment__box"><div className="post_comment">
+    <li className="comment even thread-even depth-1  " id={`comment-${pc?.id}`} key={pc?.id}>
+    <div id={`div-comment-${pc?.id}`} className="blog-comment__box"><div className="post_comment">
       <div className="post_replay_inner"><div className="comment-author-img post_reply_thumb"> 
       <img alt="" src={userImage || defaultUser2} className="avatar avatar-140 photo" height="80" width="80" loading="lazy" decoding="async"/>
         </div>
@@ -101,7 +101,7 @@ const PostComment = ({pc}:{pc:PostCommentProps}) => {
                           id="commentform"
                           className="comment-form container m-5" style={{width:'80%'}}
                         >
-                          { !currentUser._id &&
+                          { !currentUser.id &&
                            <p className="comment-notes">
                             <span id="email-notes">
                               Your email address will not be published.
@@ -112,7 +112,7 @@ const PostComment = ({pc}:{pc:PostCommentProps}) => {
                             </span>
                           </p>}
                           <div className="row">
-                          { !currentUser._id &&  <>
+                          { !currentUser.id &&  <>
                           <div className="comment-form-author col-lg-6 mb-4">
                               <input
                                 id="author"

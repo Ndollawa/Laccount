@@ -1,14 +1,14 @@
 import React,{useState,useEffect,useMemo} from 'react'
 import Swal from 'sweetalert2'
 import { useGetFaqsQuery, useDeleteFaqMutation } from '../slices/faqApi.slice'
-import showToast from '../../../../../app/utils/showToast'
+import showToast from '@utils/showToast'
 import EditFaqModal from './EditFaqModal'
 import ViewModal from './ViewModal'
 import { setPreloader } from '../../../../components/preloader/slices/preloader.slice'
 import { useDispatch } from 'react-redux'
 import $ from 'jquery'
-import initDataTables, { destroyDataTables } from '../../../../../app/utils/initDataTables'
-import { FaqProps } from '../../../../../app/props/FaqProps'
+import initDataTables, { destroyDataTables } from '@hooks/useDataTables'
+import { FaqProps } from '@props/FaqProps'
 
 interface modalDataProps {
     data:FaqProps | null,

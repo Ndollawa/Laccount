@@ -1,5 +1,5 @@
 import React from 'react'
-import { contextProps } from '../../../app/props'
+import { contextProps } from '@props'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 

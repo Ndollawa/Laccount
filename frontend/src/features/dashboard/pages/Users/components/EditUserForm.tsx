@@ -2,8 +2,8 @@ import React, {ChangeEvent,FormEvent,useState,useEffect,useRef} from 'react'
 import { useUpdateUserMutation} from '../slices/usersApi.slice'
 import {Modal} from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import showToast from '../../../../../app/utils/showToast'
-import useInput from '../../../../../app/hooks/useInput'
+import showToast from '@utils/showToast'
+import useInput from '@hooks/useInput'
 
 
 

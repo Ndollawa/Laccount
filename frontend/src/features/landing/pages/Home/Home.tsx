@@ -1,7 +1,7 @@
 import React from 'react';
-import PageProps from '../../../../app/props/pageProps';
+import PageProps from '@props/pageProps';
 import { useSelector } from 'react-redux';
-import {useCompanyInfo,useLandingConfig} from '../../../dashboard/pages/Settings/slices/settings.slice';
+import {useCompanyInfo,useLandingConfig} from '@dashboard/pages/Settings/slices/settings.slice';
 import Slider from './Components/Slider';
 import AboutUs from './Components/AboutUs';
 import WhatWeOffer from './Components/WhatWeOffer';
@@ -9,8 +9,8 @@ import OurBenefit from './Components/OurBenefit';
 import Testimonial from './Components/Testimonial';
 import HowItWorks from './Components/HowItWorks';
 import CTASection from './Components/CTASection';
-import PerformanceMetric from '../../components/PerformanceMetric';
-import BrandPartners from '../../components/BrandPartners';
+import PerformanceMetric from '@landing/components/PerformanceMetric';
+import BrandPartners from '@landing/components/BrandPartners';
 
 const Home:React.FC<PageProps>=({pageData}:PageProps) => {
 

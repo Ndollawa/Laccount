@@ -2,10 +2,9 @@ import {
     createSelector,
     createEntityAdapter
 } from "@reduxjs/toolkit";
-import { RootState } from "../../../../../app/stores/store";
-import { apiSlice } from "../../../../../app/api/apiSlice";
-import userInterface from "../../../../../app/props/userProps";
-import { ResponseProps } from "../../../../../app/props/responseProps";
+import { RootState } from "@store/store";
+import { apiSlice } from "@api/apiSlice";
+import { ResponseProps, userInterface} from "@props/";
 
 
 

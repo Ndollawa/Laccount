@@ -1,38 +1,58 @@
-{"compilerOptions": {
-    "baseUrl": "./", // Base URL of the projectes
-    "paths": {
-      "@app/*": [
-        "src/*" // Adjusted for general usage in the src folder
-      ],
-      "@app/public/*": [
-        "public/*"
-      ],
-      "@app/assets/*": [
-        "src/assets/*"
-      ],
-      "@app/features/*": [
-        "src/features/*" 
-      ],
-      "@app/utils/*": [
-        "src/app/utils/*" 
-      ],
-      "@app/hooks/*": [
-        "src/app/hooks/*" 
-      ],
-      "@app/props/*": [
-        "src/app/props/*" 
-      ],
-      "@app/interfaces/*": [
-        "src/app/interfaces/*" 
-      ],
-      "@app/types/*/": [
-        "src/app/types/*" 
-      ],
-      "@app/api/*": [
-        "src/app/api/*" 
-      ],
-      "@app/stores/*": [
-        "src/app/stores/*" 
-      ]
-    }
-  },}
+{
+    "compilerOptions": {
+        "baseUrl": "./", // Base URL of the projectes
+        "paths": {
+          "@app/*": [
+            "src/*" // Adjusted for general usage in the src folder
+          ],
+          "@dashboard/*": [
+            "src/features/dashboard/*" 
+          ],
+          "@auth/*": [
+            "src/features/auth/*" 
+          ],
+          "@landing/*": [
+            "src/features/landing/*" 
+          ],
+          "@errorPage/*": [
+            "src/features/errorPage/*" 
+          ],
+          "@uploads/*": [
+            "src/features/uploads/*" 
+          ],
+          "@layouts/*": [
+            "src/features/layouts/*" 
+          ],
+          "@components/*": [
+            "src/features/components/*" 
+          ],
+          "@public/*": [
+            "public/*"
+          ],
+          "@assets/*": [
+            "src/assets/*"
+          ],
+          "@utils/*": [
+            "src/app/utils/*" 
+          ],
+          "@hooks/*": [
+            "src/app/hooks/*" 
+          ],
+          "@props/*": [
+            "src/app/props/*" 
+          ],
+          "@interfaces/*": [
+            "src/app/interfaces/*" 
+          ],
+          "@types/*/": [
+            "src/app/types/*" 
+          ],
+          "@api/*": [
+            "src/app/api/*" 
+          ],
+          "@store/*": [
+            "src/app/store/*" 
+          ]
+        }
+      },   
+}

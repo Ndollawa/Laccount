@@ -11,7 +11,7 @@ import {
   useSettingsRemoveFileMutation,
 } from "../slices/settingApi.slice";
 import { useLandingConfig } from "../slices/settings.slice";
-import showToast from "../../../../../app/utils/showToast";
+import showToast from "@utils/showToast";
 const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
 const SiteImage = () => {

@@ -1,6 +1,6 @@
 import React from 'react'
-import PageProps from '../../../app/props/pageProps'
-import useTitle from '../../../app/hooks/useTitle';
+import PageProps from '@props/pageProps'
+import useTitle from '@hooks/useTitle';
 
 
 const Breadcrum:React.FC<PageProps> = ({pageData}:PageProps) => {

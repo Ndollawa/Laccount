@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { store } from '../stores/store';
+import { store } from '@store/store';
 import 'react-toastify/dist/ReactToastify.css';
 
 const version = store?.getState()?.appSettings?.dashboardConfig?.settings?.dashboardConfig?.layoutOptions?.version;

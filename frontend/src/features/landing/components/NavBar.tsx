@@ -9,11 +9,11 @@ import {BiTransfer} from 'react-icons/bi'
 import {GiTakeMyMoney} from 'react-icons/gi'
 import {RxDashboard} from 'react-icons/rx'
 import { HiOutlineChatBubbleLeftRight } from 'react-icons/hi2'
-import {useCompanyInfo,useLandingConfig} from '../../dashboard/pages/Settings/slices/settings.slice';
-import {Styles} from '../../../app/props/settingsProps';
-import useWindowSize from '../../../app/hooks/useWindowSize';
-import useUserImage from '../../../app/hooks/useUserImage';
-import { selectCurrentUser } from '../../auth/slices/auth.slice';
+import {useCompanyInfo,useLandingConfig} from '@dashboard/pages/Settings/slices/settings.slice';
+import {Styles} from '@props/settingsProps';
+import useWindowSize from '@hooks/useWindowSize';
+import useUserImage from '@hooks/useUserImage';
+import { selectCurrentUser } from '@auth/slices/auth.slice';
 const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETSL;
 
 

@@ -1,8 +1,8 @@
 import React from 'react'
-import userInterface from '../../../../../app/props/userProps'
+import userInterface from '@props/userProps'
 import { useGetContactsQuery } from '../slices/contactsApi.slice'
-import { useGetUsersQuery } from '../../Users/slices/usersApi.slice'
-import getUserImage from '../../../../../app/utils/getUserImage'
+import { useGetUsersQuery } from '@dashboard/pages/Users/slices/usersApi.slice'
+import getUserImage from '@utils/getUserImage'
 import { Link } from 'react-router-dom'
 
 // :userInterface
@@ -23,7 +23,7 @@ const userImage = getUserImage(user)
 
   return (
 					<>
-					<div className="col-xl-3 col-xxl-4 col-lg-4 col-md-6 col-sm-6 items" key={user._id}>
+					<div className="col-xl-3 col-xxl-4 col-lg-4 col-md-6 col-sm-6 items" key={user.id}>
 								<div className="card contact-bx item-content">
 									<div className="card-header border-0">
 										<div className="action-dropdown">

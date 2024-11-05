@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import {useCompanyInfo,useLandingConfig} from '../../dashboard/pages/Settings/slices/settings.slice';
-import { settingsProps } from '../../../app/props/settingsProps';
+import {useCompanyInfo,useLandingConfig} from '@dashboard/pages/Settings/slices/settings.slice';
+import { settingsProps } from '@props/settingsProps';
 const  BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
 

@@ -1,9 +1,9 @@
 import React from 'react'
 import { NavLink, useParams,useNavigate } from 'react-router-dom'
-import { useGetServicesQuery } from '../../../../dashboard/pages/Service/slices/servicesApi.slice'
-import PageProps from '../../../../../app/props/PageProps'
-import Breadcrum from '../../../components/Breadcrum'
-import ServiceProps from '../../../../../app/props/ServiceProps'
+import { useGetServicesQuery } from '@dashboard/pages/Service/slices/servicesApi.slice'
+import PageProps from '@props/PageProps'
+import Breadcrum from '@landing/components/Breadcrum'
+import ServiceProps from '@props/serviceProps'
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Service = ({pageData}:PageProps)  => {

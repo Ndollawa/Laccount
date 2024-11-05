@@ -3,15 +3,18 @@ import { useSelector, shallowEqual } from 'react-redux';
 import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 import { Editor } from '@tinymce/tinymce-react';
 import { PulseLoader } from 'react-spinners';
-import { Modal, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { BsToggleOff, BsToggleOn } from 'react-icons/bs';
-import showToast from '../../../../../app/utils/showToast';
-import { HomeSlide } from '../../../../../app/props/settingsProps';
+import showToast from '@utils/showToast';
+import { HomeSlide } from '@props/settingsProps';
 import { useUpdateSlideSettingMutation } from '../../Settings/slices/settingApi.slice';
 import { useLandingConfig } from '../../Settings/slices/settings.slice';
-import { ModalDataProps } from '../../../../../app/props/modalProps';
+import { ModalDataProps } from '@props/modalProps';
+import useWindowSize from '@hooks/useWindowSize';
+import ModalComponent from '@dashboard/components/Modal';
+import FileUpload from '@components/FileUpload';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const SLIDER_ASSETS = import.meta.env.VITE_SLIDER_ASSETS;
 
 interface FormInputs {
   title: string;
@@ -27,6 +30,11 @@ const EditSlideModal = ({ modalData: { data, showModal } }: ModalDataProps<HomeS
   const { id } = useSelector(useLandingConfig, shallowEqual);
   const [addCTOToggle, setAddCTOToggle] = useState(false);
   const [previewImage, setPreviewImage] = useState<string>('');
+  const [show, setShow] = useState(false);
+  const {width} = useWindowSize()
+
+  const handleOpen = useCallback(() => setShow(true), [show]);
+  const handleClose = useCallback(() => setShow(false), [show]);
 
   const { register, handleSubmit, formState: { errors, isSubmitting }, setValue, reset, watch } = useForm<FormInputs>({
     defaultValues: {
@@ -40,7 +48,6 @@ const EditSlideModal = ({ modalData: { data, showModal } }: ModalDataProps<HomeS
   });
 
   const [updateSlideSetting, { isLoading, isSuccess, isError, error }] = useUpdateSlideSettingMutation();
-  const [show, setShow] = useState(false);
   useEffect(() => {
     // When `data` is available, reset form fields with the new default values
     if (data) {
@@ -58,7 +65,7 @@ const EditSlideModal = ({ modalData: { data, showModal } }: ModalDataProps<HomeS
       }
       // Set preview image if available
       if (data.image) {
-        setPreviewImage(`${BASE_URL}uploads/settings/slides/${data.image}`);
+        setPreviewImage(`${SLIDER_ASSETS}${data.image}`);
       }
     }
   }, [data, reset]);
@@ -74,8 +81,6 @@ const EditSlideModal = ({ modalData: { data, showModal } }: ModalDataProps<HomeS
         showToast('error', error?.message);
       }
       }, [isSuccess, isError]);
-
-  const handleClose = useCallback(() => setShow(false), [show]);
   const updateSettings: SubmitHandler<FieldValues> = useCallback(async (formFields, e) => {
     e?.preventDefault();
     
@@ -99,12 +104,9 @@ const EditSlideModal = ({ modalData: { data, showModal } }: ModalDataProps<HomeS
   }, [setValue]);
 
   return (
-    <Modal show={show} size="lg" centered backdrop="static" onHide={handleClose} animation={false}>
-      <Modal.Header closeButton>
-        <Modal.Title>Edit Slide</Modal.Title>
-      </Modal.Header>
+      
+    <ModalComponent {...{size:((width as number) < 600)? "xl": "lg", header:{show:true,title:'Edit Slide'},modalStates:{show,handleOpen,handleClose}}} >
       <form onSubmit={handleSubmit(updateSettings)} encType="multipart/form-data">
-        <Modal.Body>
           <div className="row">
             <div className="mb-3 col-md-9">
               <label className="form-label"><strong>Title or Heading</strong></label>
@@ -122,8 +124,8 @@ const EditSlideModal = ({ modalData: { data, showModal } }: ModalDataProps<HomeS
                 className={`form-control ${errors.status ? 'is-invalid' : ''}`}
                 {...register('status', { required: 'Status is required' })}
               >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
+                <option value="ACTIVE">Active</option>
+                <option value="INACTIVE">Inactive</option>
               </select>
               <div className="invalid-feedback">{errors.status?.message}</div>
             </div>
@@ -138,13 +140,7 @@ const EditSlideModal = ({ modalData: { data, showModal } }: ModalDataProps<HomeS
               <div className="invalid-feedback">{errors.description?.message}</div>
             </div>
             <div className="col-md-6">
-              <label className="form-label">Background Image</label>
-              <input
-                type="file"
-                accept=".jpeg, .jpg, .png, .gif"
-                onChange={uploadBg}
-                className={`form-control ${errors.image ? 'is-invalid' : ''}`}
-              />
+             <FileUpload onChange={uploadBg}/>
               <div className="invalid-feedback">{errors.image?.message}</div>
             </div>
             <div className="col-md-6">
@@ -195,15 +191,14 @@ const EditSlideModal = ({ modalData: { data, showModal } }: ModalDataProps<HomeS
               }}
             />
           </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" size="sm" onClick={handleClose}>Close</Button>
+          <div className="d-flex gap-2 my-3 justify-content-end">
+            <Button variant="primary" size="sm" onClick={handleClose}>Close</Button>
           <Button variant="secondary" size="sm" type="submit" disabled={isSubmitting}>
             {isSubmitting ? <PulseLoader loading={isSubmitting} color="#ffffff" size="0.7rem" /> : 'Update Slide'}
           </Button>
-        </Modal.Footer>
+          </div>
       </form>
-    </Modal>
+    </ModalComponent>      
   );
 };
 

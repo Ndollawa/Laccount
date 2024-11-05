@@ -79,6 +79,7 @@ export class UserController {
           },
         },
       };
+
       return await this.userService.create(userData);
     } catch (error) {
       handleError(error);
@@ -92,8 +93,8 @@ export class UserController {
         where: {
           roles: {
             some: {
-              code: {
-                notIn: [UserRolesEnum.DEV, UserRolesEnum.ADMIN], // Assuming you want to exclude both DEV and ADMIN
+              role: {
+                notIn: [UserRolesKeysEnum.DEV], //, UserRolesKeysEnum.ADMIN Assuming you want to exclude both DEV and ADMIN
               },
             },
           },
@@ -103,10 +104,11 @@ export class UserController {
           username: true,
           email: true,
           verificationStatus: true,
-        },
-        include: {
-          profile: true, // Include related profile
-          roles: true, // Include related roles
+          createdAt: true,
+          profile: true,
+          roles: true,
+        //   refreshTokens: true,
+          wallets: true,
         },
       });
 
@@ -125,8 +127,6 @@ export class UserController {
         username: true,
         email: true,
         verificationStatus: true,
-      },
-      include: {
         profile: true,
         roles: true,
         refreshTokens: true,

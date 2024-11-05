@@ -1,5 +1,5 @@
 import React from 'react'
-import TeamProps from '../../../../../app/props/teamProps'
+import TeamProps from '@props/teamProps'
 const TEAM_ASSETS = import.meta.env.VITE_TEAM_ASSETS;
 
 const TeamMemberCard = ({member:t}:{member:TeamProps}) => {

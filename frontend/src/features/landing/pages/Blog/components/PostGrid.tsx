@@ -1,10 +1,11 @@
 import React from 'react'
-import { useGetPostCategoryQuery } from '../../../../dashboard/pages/PostCategory/slices/postCategoryApi.slice'
-import { useGetUsersQuery } from '../../../../dashboard/pages/Users/slices/usersApi.slice'
-import { useGetPostCommentQuery } from '../../../../dashboard/pages/Post/postCommentApiSlice'
-import PostProps from '../../../../../app/props/PostProps'
-import PostCommentProps from '../../../../../app/props/PostCommentProps'
-import PostCategoryProps from '../../../../../app/props/PostCategoryProps'
+import { useGetPostCategoryQuery } from '@dashboard/pages/PostCategory/slices/postCategoryApi.slice'
+import { useGetUsersQuery } from '@dashboard/pages/Users/slices/usersApi.slice'
+import { useGetPostCommentQuery } from '@dashboard/pages/Post/postCommentApiSlice'
+import PostProps from '@props/postProps'
+import PostCommentProps from '@props/postCommentProps'
+import PostCategoryProps from '@props/postCategoryProps'
+const BLOG_ASSETS =  import.meta.env.VITE_BLOG_ASSETS
 
 const PostList = ({post}:{post:PostProps}) => {
     const { category } = useGetPostCategoryQuery("categoryList", {
@@ -26,16 +27,16 @@ const PostList = ({post}:{post:PostProps}) => {
 
   return (
 
-    <div className="col-lg-4 col-md-12 col-sm-12" key={post?._id}>
+    <div className="col-lg-4 col-md-12 col-sm-12" key={post?.id}>
     <div className="blog-card">
       <div className="blog-card__image">
         <div className="blog-card__date">
           <span>{new Date(user.updatedAt).toLocaleString('en-US', { day: 'numeric'})}</span>{new Date(user.createdAt).toLocaleString('en-US', {month: 'short'})}
         </div>
-        <a href={`/our-blog/posts/${post?._id}`}>
+        <a href={`/our-blog/posts/${post?.id}`}>
         <img
           decoding="async"
-            src={process.env.REACT_APP_BASE_URL+"/uploads/posts/"+post?.coverImage} alt={post?.title}
+            src={BLOG_ASSETS+post?.image} alt={post?.title}
           className="img-fluid"
 
         /></a>
@@ -55,20 +56,20 @@ const PostList = ({post}:{post:PostProps}) => {
           <span className="meta-list blog_comment">
             
             <i className="far fa-comments"></i>
-            <a href={`/our-blog/posts/${post?._id}`}>
+            <a href={`/our-blog/posts/${post?.id}`}>
              {postComment?.length} Comment(s)
             </a>
           </span>
         </div>
         <h3 className="blog-card__title">
-          <a href={`/our-blog/posts/${post?._id}`}>
+          <a href={`/our-blog/posts/${post?.id}`}>
             {post?.title}
           </a>
         </h3>
         <p className="blog-card__text" dangerouslySetInnerHTML={{__html:post?.description || (post?.body.length > 100)? post?.body?.substring(0,100)+"..." : post?.body?.substring(0,100)}}>
         </p>
         <a
-          href={`/our-blog/posts/${post?._id}`}
+          href={`/our-blog/posts/${post?.id}`}
           className="blog-card__link"
         >
           Read More

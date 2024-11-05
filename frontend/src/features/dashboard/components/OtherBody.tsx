@@ -1,8 +1,8 @@
 import React, { useEffect, useTransition } from 'react'
 import { useSelector } from 'react-redux';
-import useWindowSize from "../../../app/hooks/useWindowSize";
-import {useCompanyInfo,useDashboardConfig} from '../pages/Settings/slices/settings.slice';
-import useLocalStorage from '../../../app/hooks/useLocalStorage';
+import useWindowSize from '@hooks/useWindowSize';
+import useLocalStorage from '@hooks/useLocalStorage';
+import {useCompanyInfo,useDashboardConfig} from '@dashboard/pages/Settings/slices/settings.slice';
 
 
 const OtherBody = ({children}:{children:React.ReactNode}) => {

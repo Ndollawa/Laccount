@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { Editor } from '@tinymce/tinymce-react';
-import { Modal } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
-import { BsToggleOff, BsToggleOn } from 'react-icons/bs';
-import showToast from '../../../../../app/utils/showToast';
-import { useUpdateSlideSettingMutation } from '../../Settings/slices/settingApi.slice';
-import { useSelector } from 'react-redux';
-import { useLandingConfig } from '../../Settings/slices/settings.slice';
 import { PulseLoader } from 'react-spinners';
+import Button from 'react-bootstrap/Button';
+import { useSelector } from 'react-redux';
+import { BsToggleOff, BsToggleOn } from 'react-icons/bs';
+import showToast from '@utils/showToast';
+import useWindowSize from '@hooks/useWindowSize';
+import { useUpdateSlideSettingMutation } from '../../Settings/slices/settingApi.slice';
+import { useLandingConfig } from '../../Settings/slices/settings.slice';
+import ModalComponent from '@dashboard/components/Modal';
+import FileUpload from '@components/FileUpload';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;
@@ -25,13 +27,14 @@ interface FormInputs {
 
 const CreateSlideForm = () => {
   const {id, settings: { sliders } = {} } = useSelector(useLandingConfig);
-  
+  const {width} = useWindowSize()
   const [addCTOToggle, setAddCTOToggle] = useState(false);
   const [previewImage, setPreviewImage] = useState<string>('');
   const [updateSlideSetting, { isLoading, isSuccess, isError, error }] = useUpdateSlideSettingMutation();
   
   const [show, setShow] = useState(false);
-  
+  const handleOpen = useCallback(() => setShow(true), [show]);
+  const handleClose = useCallback(() => setShow(false), [show]);
   const { register, handleSubmit, formState: { errors, isSubmitting }, setValue, reset, watch } = useForm<FormInputs>({
     defaultValues: {
       title: '',
@@ -60,8 +63,6 @@ const CreateSlideForm = () => {
     }
   }, [isSuccess,isError, reset]);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   const updateSettings: SubmitHandler<FieldValues> = async (formFields, e) => {
     e?.preventDefault()
@@ -87,15 +88,12 @@ const formData = new FormData();
 
   return (
     <>
-      <button type="button" className="btn btn-primary btn-sm mb-2" onClick={handleShow}>Add New</button>
+      <button type="button" className="btn btn-primary btn-sm mb-2" onClick={handleOpen}>Add New</button>
 
-      <Modal show={show} size="lg" centered backdrop='static' onHide={handleClose} animation={false}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add New Slide</Modal.Title>
-        </Modal.Header>
-
+      
+          <ModalComponent {...{size:((width as number) < 600)? "xl": "lg", header:{show:true,title:'Add New Slide'},modalStates:{show,handleOpen,handleClose}}} >
+					
         <form onSubmit={(e) => handleSubmit(updateSettings)(e) } encType="multipart/form-data">
-          <Modal.Body>
             <div className="card-body">
               <div className="basic-form">
                 <div className="row">
@@ -119,8 +117,8 @@ const formData = new FormData();
                       className={`form-control default-select form-control wide ${errors.status ? 'is-invalid' : ''}`}
                       {...register('status',{required:"Status is required"})}
                     >
-                      <option value='active'>Active</option>
-                      <option value='inactive'>Inactive</option>
+                      <option value='ACTIVE'>Active</option>
+                      <option value='INACTIVE'>Inactive</option>
                     </select>
                     <div className="invalid-feedback">{errors.status?.message}</div>
                   </div>
@@ -139,18 +137,7 @@ const formData = new FormData();
 
                   {/* Background Image */}
                   <div className="col-md-6">
-                    <label className="form-label">Background Image</label>
-                    <div className="input-group mb-3">
-                      <div className="form-file">
-                        <input
-                          type="file"
-                          accept=".jpeg, .jpg, .png, .gif"
-                          onChange={uploadBg}
-                          className={`form-control ${errors.image ? 'is-invalid' : ''}`}
-                        />
-                      </div>
-                      <span className="input-group-text">Upload</span>
-                    </div>
+                    <FileUpload onChange={uploadBg}/>
                     <div className="invalid-feedback">{errors.image?.message}</div>
                   </div>
 
@@ -222,10 +209,8 @@ const formData = new FormData();
                 </div>
               </div>
             </div>
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button variant="primary" size='sm' className='rounded-md' onClick={handleClose}>
+            <div className="d-flex justify-content-end gap-2 my-3">
+             <Button variant="primary" size='sm' className='rounded-md' onClick={handleClose}>
               Close
             </Button>
             <Button variant="secondary" size="sm" type="submit" className="rounded-md" >
@@ -238,9 +223,11 @@ const formData = new FormData();
                           'Create Slide'
                         )}  
             </Button>
-          </Modal.Footer>
+            </div>
         </form>
-      </Modal>
+        </ModalComponent>
+         
+           
     </>
   );
 };

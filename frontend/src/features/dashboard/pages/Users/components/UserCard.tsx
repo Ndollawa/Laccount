@@ -1,7 +1,7 @@
 import React from 'react'
-import userInterface from '../../../../../app/props/userProps'
+import userInterface from '@props/userProps'
 import { useGetUsersQuery } from '../slices/usersApi.slice'
-import useUserImage from '../../../../../app/hooks/useUserImage'
+import useUserImage from '@hooks/useUserImage'
 import { Link } from 'react-router-dom'
 
 // :userInterface
@@ -23,7 +23,7 @@ const userImage = useUserImage(user)
 										<img src={userImage} alt="avatar"/>
 									</div>
 									<div>
-										<h5 className="title"><Link to={`/dashboard/users/user/${user._id}`} >{}</Link></h5>
+										<h5 className="title"><Link to={`/dashboard/users/user/${user.id}`} >{}</Link></h5>
 										<span className="text-primary">{user?.firstName && user?.lastName && user?.firstName+" "+user?.lastName}</span>
 									</div>
 								</div>

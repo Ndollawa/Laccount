@@ -1,10 +1,11 @@
 import React from 'react'
-import { useGetPostCategoryQuery } from '../../../../dashboard/pages/PostCategory/slices/postCategoryApi.slice'
-import { useGetUsersQuery } from '../../../../dashboard/pages/Users/slices/usersApi.slice'
-import { useGetPostCommentQuery } from '../../../../dashboard/pages/Post/postCommentApiSlice'
-import PostProps from '../../../../../app/props/PostProps'
-import PostCategoryProps from '../../../../../app/props/PostCategoryProps'
-import PostCommentProps from '../../../../../app/props/PostCommentProps'
+import { useGetPostCategoryQuery } from '@dashboard/pages/PostCategory/slices/postCategoryApi.slice'
+import { useGetUsersQuery } from '@dashboard/pages/Users/slices/usersApi.slice'
+import { useGetPostCommentQuery } from '@dashboard/pages/Post/postCommentApiSlice'
+import PostProps from '@props/postProps'
+import PostCategoryProps from '@props/postCategoryProps'
+import PostCommentProps from '@props/postCommentProps'
+const BLOG_ASSETS =  import.meta.env.VITE_BLOG_ASSETS
 
 const PostList = ({post}:{post:PostProps}) => {
     const { category } = useGetPostCategoryQuery("categoryList", {
@@ -19,22 +20,22 @@ const PostList = ({post}:{post:PostProps}) => {
         })
     const { postComment } = useGetPostCommentQuery("postCommentsList", {
         selectFromResult: ({ data }) => ({
-          postComment: data && data.ids.map((id:string) => data?.entities[id]).filter((comment:PostCommentProps) =>comment.postId === post?._id)	 
+          postComment: data && data.ids.map((id:string) => data?.entities[id]).filter((comment:PostCommentProps) =>comment.postId === post?.id)	 
         }),
         })
 
   return (
-    <div className="col-lg-12 single-post-item mb-5" key={post?._id}>
+    <div className="col-lg-12 single-post-item mb-5" key={post?.id}>
     <article
-      id={`post-${post?._id}`}
+      id={`post-${post?.id}`}
       className="post type-post status-publish format-standard has-post-thumbnail hentry category-finance category-studies tag-education-loan tag-mortage"
     >
       <div className="blog-card">
         <div className="blog-card__image">
           <a
-            href={`/our-blog/${post?._id}`}
+            href={`/our-blog/${post?.id}`}
             rel="bookmark"
-          > <img src={process.env.REACT_APP_BASE_URL+"/uploads/posts/"+post?.coverImage} alt={post?.title} />
+          > <img src={BLOG_ASSETS+post?.image} alt={post?.title} />
          </a>
         </div>
         <div className="blog-card__content">
@@ -44,7 +45,7 @@ const PostList = ({post}:{post:PostProps}) => {
               <span className="meta-list posted-on">
                 <i className="far fa-calendar-alt"></i>
                 <a
-                  href={`/our-blog/${post?._id}`}
+                  href={`/our-blog/${post?.id}`}
                   rel="bookmark"
                 >{
                   (new Date(post?.createdAt!).getUTCDate >=  new Date(post?.updatedAt!).getUTCDate)?
@@ -76,14 +77,14 @@ const PostList = ({post}:{post:PostProps}) => {
               <span className="meta-list blog_comment">
                 
                 <i className="far fa-comments"></i>
-                <a href={`/our-blog/posts/${post?._id}`}>
+                <a href={`/our-blog/posts/${post?.id}`}>
                   {postComment?.length} Comment(s)
                 </a>
               </span>
             </div>
             <h3 className="blog-card__title">
               <a
-                href={`/our-blog/posts/${post?._id}`}
+                href={`/our-blog/posts/${post?.id}`}
                 rel="bookmark"
               >
                 {post?.title}
@@ -97,7 +98,7 @@ const PostList = ({post}:{post:PostProps}) => {
             <div className="blog-card-bottom-btn">
               
               <a
-                href={`/our-blog/posts/${post?._id}`}
+                href={`/our-blog/posts/${post?.id}`}
                 className="blog-card-btn-link"
               >
                 Read More

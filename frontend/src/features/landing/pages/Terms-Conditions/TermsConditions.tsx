@@ -1,6 +1,6 @@
   import React from 'react'
-  import PageProps from '../../../../app/props/PageProps'
-  import Breadcrum from '../../components/Breadcrum'
+  import PageProps from '@props/pageProps'
+  import Breadcrum from '@landing/components/Breadcrum'
   
   
   const TermsConditions:React.FC<PageProps> = ({pageData}:PageProps) => {

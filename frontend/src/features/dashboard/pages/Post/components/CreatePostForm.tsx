@@ -4,7 +4,7 @@ import {IoMdPricetags,IoIosList,IoMdColorWand,IoIosCreate,IoIosClose} from 'reac
 import { useAddNewPostMutation } from '../slices/postApi.slice'
 import { Modal } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import showToast from '../../../../../app/utils/showToast'
+import showToast from '@utils/showToast'
 import $ from 'jquery'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '../../../../auth/slices/auth.slice'
@@ -49,7 +49,7 @@ const {
 let categoryOptions;
 if(postCategory){
 const {entities} = postCategory
- categoryOptions = Object.values(entities).map((category:any,i:number)=><option key={i} value={category._id}>{category.title}</option>)
+ categoryOptions = Object.values(entities).map((category:any,i:number)=><option key={i} value={category.id}>{category.title}</option>)
 }
 const removeTag = (key:string) =>{
   setTags((tags:string[])=>{return tags.filter(tag=> tag !== key )})
@@ -93,7 +93,7 @@ formData.append("tags",tags)
 formData.append("category",category)
 formData.append("status",status)
 formData.append("coverImage",postBg)
-formData.append("author",author._id!)
+formData.append("author",author.id!)
       await addNewPost(formData)
       if(isError) return showToast('error',JSON.stringify(error?.data?.message))
     showToast('success', 'Post created successfully')
@@ -217,7 +217,7 @@ setPreviewImage(fileurl)
                 <div className="col-12">
                   <label className="form-label"><strong>Response</strong></label>
                   <Editor
-        tinymceScriptSrc={process.env.VITE_PUBLIC_URL + '/tinymce/tinymce.min.js'}
+        tinymceScriptSrc={'/tinymce/tinymce.min.js'}
        onEditorChange={(newValue,editor)=>setBody(newValue)}
        value={body}
         init={{

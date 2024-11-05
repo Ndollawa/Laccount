@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useTransition } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../auth/slices/auth.slice';
-import { useCompanyInfo, useLandingConfig } from '../pages/Settings/slices/settings.slice';
-import { useSendLogoutMutation } from '../../auth/slices/authApi.slice';
-import useUserImage from '../../../app/hooks/useUserImage';
-import useWindowSize from '../../../app/hooks/useWindowSize';
+import { selectCurrentUser } from '@auth/slices/auth.slice';
+import { useSendLogoutMutation } from '@auth/slices/authApi.slice';
+import { useCompanyInfo, useLandingConfig } from '@dashboard/pages/Settings/slices/settings.slice';
+import useUserImage from '@hooks/useUserImage';
+import useLocalStorage from '@hooks/useLocalStorage';
+import useWindowSize from '@hooks/useWindowSize';
 import Notification from './NavComponents/Notification';
 import Notice from './NavComponents/Notice';
-import { getUserFullName } from '../../../app/utils/getUserName';
-import useLocalStorage from '../../../app/hooks/useLocalStorage';
+import { getUserFullName } from '@utils/getUserName';
 
 const Nav = ({ pageData }) => {
   const [toggleNotification, setToggleNotification] = useState(false);

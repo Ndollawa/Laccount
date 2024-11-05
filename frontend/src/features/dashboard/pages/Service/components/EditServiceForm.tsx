@@ -1,12 +1,16 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Modal, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { Editor } from '@tinymce/tinymce-react';
+import { PulseLoader } from 'react-spinners';
 import { useUpdateServiceMutation } from '../slices/servicesApi.slice';
-import showToast from '../../../../../app/utils/showToast';
-import ServiceProps from '../../../../../app/props/ServiceProps';
+import showToast from '@utils/showToast';
+import ServiceProps from '@props/ServiceProps';
+import useWindowSize from '@hooks/useWindowSize';
+import ModalComponent from '@dashboard/components/Modal';
+import FileUpload from '@components/FileUpload';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const SERVICE_ASSETS = import.meta.env.VITE_SERVICE_ASSETS;
 
 interface FormInputs {
   title: string;
@@ -25,8 +29,13 @@ interface ModalDataProps {
 }
 
 const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps) => {
-  const [previewImage, setPreviewImage] = useState<string>(`${BASE_URL}/uploads/settings/service/${data?.image}`);
+  const [previewImage, setPreviewImage] = useState<string>(`${SERVICE_ASSETS}${data?.image}`);
   const [updateService, { isLoading, isSuccess, isError, error }] = useUpdateServiceMutation();
+  const {width} = useWindowSize()
+
+  const [show, setShow] = useState(false);
+  const handleOpen = useCallback(() => setShow(true), [show]);
+  const handleClose = useCallback(() => setShow(false), [show]);
   const { register, handleSubmit, setValue, reset, formState: { errors, isSubmitting }, watch } = useForm<FormInputs>({
     defaultValues: {
       title: data?.title,
@@ -51,7 +60,7 @@ const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps) =>
 
   useEffect(() => {
     if (data?.image) {
-      setPreviewImage(`${BASE_URL}/uploads/settings/service/${data?.image}`);
+      setPreviewImage(`${SERVICE_ASSETS}${data?.image}`);
     }
   }, [data?.image]);
 
@@ -78,12 +87,8 @@ const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps) =>
   };
 
   return (
-    <Modal show={showModal} size="lg" centered backdrop="static" onHide={() => setShow(false)} animation={false}>
-      <Modal.Header closeButton>
-        <Modal.Title>Edit Service</Modal.Title>
-      </Modal.Header>
+    <ModalComponent {...{size:((width as number) < 600)? "xl": "lg", header:{show:true,title:'Edit Service'},modalStates:{show,handleOpen,handleClose}}} >
       <form onSubmit={(e) => handleSubmit(onSubmit)(e) } encType="multipart/form-data">
-        <Modal.Body>
           <div className="row">
             <div className="mb-3 col-md-7">
               <label className="form-label"><strong>Name or Title</strong></label>
@@ -128,13 +133,7 @@ const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps) =>
             </div>
 
             <div className="col-md-6">
-              <label className="form-label">Background Image</label>
-              <input
-                type="file"
-                accept=".jpeg, .jpg, .png, .gif"
-                onChange={uploadBg}
-                className={`form-control ${errors.image ? 'is-invalid' : ''}`}
-              />
+            <FileUpload onChange={uploadBg}/>
               <div className="invalid-feedback">{errors.image?.message}</div>
             </div>
 
@@ -165,17 +164,15 @@ const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps) =>
               />
             </div>
           </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={() => setShow(false)}>
-            Close
+          
+          <div className="d-flex gap-2 my-3 justify-content-end">
+            <Button variant="primary" size="sm" onClick={handleClose}>Close</Button>
+          <Button variant="secondary" size="sm" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? <PulseLoader loading={isSubmitting} color="#ffffff" size="0.7rem" /> : 'Update Slide'}
           </Button>
-          <Button variant="secondary" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Updating...' : 'Update Service'}
-          </Button>
-        </Modal.Footer>
+          </div>
       </form>
-    </Modal>
+      </ModalComponent>    
   );
 };
 

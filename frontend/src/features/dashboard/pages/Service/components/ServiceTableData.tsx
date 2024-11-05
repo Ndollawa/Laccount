@@ -1,6 +1,6 @@
 import React,{useState,useEffect,useMemo} from 'react'
 import {useGetServicesQuery,useDeleteServiceMutation } from '../slices/servicesApi.slice'
-import showToast from '../../../../../app/utils/showToast'
+import showToast from '@utils/showToast'
 import LightGallery from 'lightgallery/react'
 import 'lightgallery/css/lightgallery.css'
 import 'lightgallery/css/lg-zoom.css'
@@ -10,8 +10,8 @@ import lgZoom from 'lightgallery/plugins/zoom'
 // import 'lightgallery/css/lg-thumbnail.css'
 import $ from 'jquery'
 import Swal  from 'sweetalert2'
-import ServiceProps from '../../../../../app/props/ServiceProps'
-import initDataTables,{destroyDataTables} from '../../../../../app/utils/initDataTables'
+import ServiceProps from '@props/ServiceProps'
+import initDataTables,{destroyDataTables} from '@hooks/useDataTables'
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;
 

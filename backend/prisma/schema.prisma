@@ -680,8 +680,16 @@ model Mailer {
   template  String
   body      String
   name      String
-  data      Json
+  context      Json
   status    MailerTemplateStatus
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt()
+}
+
+model MailTemplate {
+  id        String               @id @default(uuid())
+  body      String
+  name      String
   createdAt DateTime             @default(now())
   updatedAt DateTime             @updatedAt()
 }

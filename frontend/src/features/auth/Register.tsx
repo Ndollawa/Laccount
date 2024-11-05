@@ -1,22 +1,22 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { GoKey } from 'react-icons/go';
-import { GrMail } from 'react-icons/gr';
-import { FaUser, FaRegUserCircle, FaKeycdn, FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
-import { useForm } from 'react-hook-form';
-import { useCompanyInfo, useLandingConfig } from '../dashboard/pages/Settings/slices/settings.slice';
-import { useRegisterMutation } from './slices/authApi.slice';
-import { useCheckDuplicateUserMutation } from '../dashboard/pages/Users/slices/usersApi.slice';
-import OtherBody from '../dashboard/components/OtherBody';
-import { PulseLoader } from 'react-spinners';
-import showToast from '../../app/utils/showToast';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { setCredentials } from './slices/auth.slice';
 import { jwtDecode } from 'jwt-decode';
-import { AuthProps } from '../../app/props/authProps';
+import { GoKey } from 'react-icons/go';
+import { GrMail } from 'react-icons/gr';
+import { PulseLoader } from 'react-spinners';
+import { FaUser, FaRegUserCircle, FaKeycdn, FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
+import { useForm } from 'react-hook-form';
+import { useCompanyInfo, useLandingConfig } from '@dashboard/pages/Settings/slices/settings.slice';
+import { useRegisterMutation } from './slices/authApi.slice';
+import { useCheckDuplicateUserMutation } from '@dashboard/pages/Users/slices/usersApi.slice';
+import OtherBody from '@dashboard/components/OtherBody';
+import showToast from '@utils/showToast';
+import { setCredentials } from './slices/auth.slice';
+import { AuthProps } from '@props/authProps';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
 const USER_REGEX = /^[a-zA-Z][a-zA-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -88,7 +88,7 @@ const Register: React.FC = () => {
                   <div className="auth-form">
                     <div className="text-center mb-3">
                       <Link to="/" className="brand-logo d-flex justify-content-center align-items-center">
-                        <img src={`${BASE_URL}/uploads/settings/brand/${logo}`} alt={siteName} width="150" />
+                        <img src={`${BRAND_ASSETS}${logo}`} alt={siteName} width="150" />
                       </Link>
                     </div>
                     <h4 className="text-center mb-4">Sign up your account</h4>

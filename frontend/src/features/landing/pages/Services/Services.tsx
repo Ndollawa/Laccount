@@ -1,8 +1,8 @@
 import React,{useState,useEffect} from 'react'
-import PageProps from '../../../../app/props/pageProps'
-import Breadcrum from '../../components/Breadcrum'
-import { useGetServicesQuery } from '../../../dashboard/pages/Service/slices/servicesApi.slice'
-import ServiceProps from '../../../../app/props/serviceProps'
+import PageProps from '@props/pageProps'
+import Breadcrum from '@landing/components/Breadcrum'
+import { useGetServicesQuery } from '@dashboard/pages/Service/slices/servicesApi.slice'
+import ServiceProps from '@props/serviceProps'
 const SERVICE_ASSETS = import.meta.env.VITE_SERVICE_ASSETS;
 
 const Services:React.FC<PageProps> = ({pageData}:PageProps) => {

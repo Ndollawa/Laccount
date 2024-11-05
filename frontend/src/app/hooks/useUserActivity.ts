@@ -1,6 +1,6 @@
 import {useEffect,useState} from 'react'
 import { useSelector } from 'react-redux'
-import { selectCurrentUser } from '../../features/auth/slices/auth.slice'
+import { selectCurrentUser } from '@auth/slices/auth.slice'
 import useLocalStorage from './useLocalStorage'
 import useSocketIO from './useSocketIO'
 

@@ -1,10 +1,13 @@
 import {
+  BadRequestException,
   ConflictException,
   Inject,
   Injectable,
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
+import { join } from 'path';
+import * as fs from 'fs-extra';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import {
   ISendMailOptions,
@@ -18,7 +21,12 @@ import {
 } from '@prisma/client';
 import { hashData, handleError } from '@app/common';
 import { MailerRepository } from './mailer.repository';
-import { CreateMailTemplateDto, UpdateMailTemplateDto } from './dto';
+import {
+  CreateMailTemplateDto,
+  CreateHandlebarTemplateDto,
+  UpdateMailTemplateDto,
+  SendMailDto,
+} from './dto';
 
 const { ALREADY_EXISTS, UNAUTHENTICATED } = grpc.status;
 
@@ -26,9 +34,10 @@ const { ALREADY_EXISTS, UNAUTHENTICATED } = grpc.status;
 export class MailerService {
   constructor(
     protected readonly mailerRepository: MailerRepository,
-    protected readonly eventEmitter: EventEmitter2,
+    // protected readonly eventEmitter: EventEmitter2,
     private readonly nestMailService: NestMailerService,
   ) {}
+  private readonly templatePath = join(__dirname, './templates'); // folder to store templates
 
   async plainTextEmail(sendMailDto: ISendMailOptions) {
     const { to, from, subject, template, html, context, attachments } =
@@ -76,25 +85,25 @@ export class MailerService {
     });
   }
 
-  async sendMail({ data, mailOption }: any) {
-    switch (mailOption.type) {
-      case 'Plain':
-        const res = await this.plainTextEmail(data);
-        console.log(res);
-        return res;
-        break;
+  // async sendMail({ data, mailOption }: any) {
+  //   switch (mailOption.type) {
+  //     case 'Plain':
+  //       const res = await this.plainTextEmail(data);
+  //       console.log(res);
+  //       return res;
+  //       break;
 
-      case 'Html':
-        return await this.plainTextEmail(data);
-        break;
-      case 'Attachment':
-        return await this.plainTextEmail(data);
-        break;
+  //     case 'Html':
+  //       return await this.plainTextEmail(data);
+  //       break;
+  //     case 'Attachment':
+  //       return await this.plainTextEmail(data);
+  //       break;
 
-      default:
-        return await this.plainTextEmail(data);
-    }
-  }
+  //     default:
+  //       return await this.plainTextEmail(data);
+  //   }
+  // }
 
   async find(query: any): Promise<Mailer> {
     try {
@@ -112,7 +121,7 @@ export class MailerService {
     }
   }
 
-  async create(createMailerData: CreateMailTemplateDto): Promise<Mailer> {
+  async create(createMailerData: any | CreateMailTemplateDto): Promise<Mailer> {
     const { name, type } = createMailerData;
     try {
       const existingMailer = await this.mailerRepository.exists({
@@ -130,10 +139,8 @@ export class MailerService {
         data: createMailerData,
       });
 
-      this.eventEmitter.emit('Mailer-created', newMailer);
       return newMailer;
     } catch (error) {
-      Logger.log(error);
       handleError(error);
     }
   }
@@ -172,9 +179,57 @@ export class MailerService {
     }
   }
 
-  // @OnEvent('Mailer-created')
-  // sendVerificationEmail(payload: Mailer) {
-  //   console.log(payload);
-  //   return this.mailClient.emit('sendMail', payload);
-  // }
+  // Send email using a template and context
+  async sendMail(sendMailDto: SendMailDto) {
+    const { to, subject, template, context } = sendMailDto;
+
+    // Check if the template exists
+    if (!(await this.templateExists(template))) {
+      throw new BadRequestException('Template not found');
+    }
+
+    // Send the email
+    await this.sendMail({
+      to,
+      subject,
+      template,
+      context, // dynamic context for Handlebars
+    });
+  }
+
+  // Save a new email template to the filesystem
+  async saveTemplate(createHandlebarTemplateDto: CreateHandlebarTemplateDto) {
+    const { name, template } = createHandlebarTemplateDto;
+    const templateFile = this.getTemplatePath(name);
+
+    // Save the template file
+    await fs.writeFile(templateFile, template, 'utf-8');
+  }
+
+  // Retrieve a list of available templates
+  async getTemplates() {
+    return fs.readdir(this.templatePath);
+  }
+
+  // Retrieve a template by name
+  async getTemplate(name: string) {
+    const templateFile = this.getTemplatePath(name);
+
+    if (await this.templateExists(name)) {
+      return fs.readFile(templateFile, 'utf-8');
+    }
+
+    throw new BadRequestException('Template not found');
+  }
+
+  // Check if a template exists
+  private async templateExists(name: string) {
+    const templateFile = this.getTemplatePath(name);
+    return fs.pathExists(templateFile);
+  }
+
+  // Utility to get the full path of a template file
+  private getTemplatePath(name: string): string {
+    return join(this.templatePath, `${name}.hbs`);
+  }
 }

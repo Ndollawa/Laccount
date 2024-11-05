@@ -4,13 +4,13 @@ import {  Link } from 'react-router-dom'
 import { useGetUsersQuery } from '../../Users/slices/usersApi.slice'
 import { useGetMessagesQuery } from '../slices/messagesApi.slice'
 import { selectCurrentUser } from '../../../../auth/slices/auth.slice'
-import useUserImage from '../../../../../app/hooks/useUserImage'
+import useUserImage from '@hooks/useUserImage'
 import { format } from 'timeago.js'
-import MessageProps from '../../../../../app/props/messageProps'
+import MessageProps from '@props/messageProps'
 
 const Conversation = ({conversation,i}:any) => {
   const currentUser = useSelector(selectCurrentUser)
-  const contactId = conversation?.members.filter((m:string) => m !== currentUser?._id )
+  const contactId = conversation?.members.filter((m:string) => m !== currentUser?.id )
   const { user } = useGetUsersQuery("usersList", {
     selectFromResult: ({ data }) => ({
       user: data?.entities[contactId]		 
@@ -19,14 +19,14 @@ const Conversation = ({conversation,i}:any) => {
   
       const { messages } = useGetMessagesQuery("messagesList", {
       selectFromResult: ({ data }) => ({
-        messages: data && (Object.values(data?.entities) as MessageProps[])?.filter((m:MessageProps)=> m?.conversationId === conversation?._id)		 
+        messages: data && (Object.values(data?.entities) as MessageProps[])?.filter((m:MessageProps)=> m?.conversationId === conversation?.id)		 
       }),
       }) 
       // console.log(messages)
 const userImage = useUserImage(user)
 const lastMsg = messages[messages.length-1]
   const userConversation =(
-    <Link to={`/dashboard/messenger/${user._id}`}>
+    <Link to={`/dashboard/messenger/${user.id}`}>
   <div className="chat-list-area">
   <div className="image-bx">
     <img src={userImage} alt="" className="rounded-circle object-fit-cover img-1"/>

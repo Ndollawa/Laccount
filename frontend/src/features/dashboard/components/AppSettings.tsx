@@ -1,11 +1,11 @@
 import React, { ChangeEventHandler, FormEvent, FormEventHandler, useEffect, useState, useTransition } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useUpdateSettingMutation } from "../pages/Settings/slices/settingApi.slice";
-import { useDashboardConfig } from "../pages/Settings/slices/settings.slice";
-import { setDashboardSetting } from "../pages/Settings/slices/settings.slice";
 import $ from "jquery";
-import useLocalStorage from "../../../app/hooks/useLocalStorage";
+import { useUpdateSettingMutation } from "@dashboard/pages/Settings/slices/settingApi.slice";
+import { useDashboardConfig } from "@dashboard/pages/Settings/slices/settings.slice";
+import { setDashboardSetting } from "@dashboard/pages/Settings/slices/settings.slice";
+import useLocalStorage from "@hooks/useLocalStorage";
 
 const AppSettings = () => {
   const dashboardConfig = useSelector(useDashboardConfig);

@@ -1,12 +1,13 @@
 import { BaseQueryFn } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { RootState } from "../stores/store";
-import { logOut, setCredentials } from "../../features/auth/slices/auth.slice";
+import { RootState } from "@store/store";
+import { logOut, setCredentials } from "@auth/slices/auth.slice";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Prepare the headers with token
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:3500/api/v1/",
+  baseUrl: BASE_URL,
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;

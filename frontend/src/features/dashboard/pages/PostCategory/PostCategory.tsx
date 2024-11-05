@@ -3,13 +3,14 @@ import MainBody from '../../components/MainBody'
 import { useDispatch } from 'react-redux'
 import { useGetPostCategoryQuery, useAddNewPostCategoryMutation } from './slices/postCategoryApi.slice'
 import { setPreloader } from '../../../components/preloader/slices/preloader.slice'
-import PageProps from '../../../../app/props/PageProps'
+import PageProps from '@props/pageProps'
 import PostCategoryTableData from './components/PostCategoryTableData'   
-import showToast from '../../../../app/utils/showToast'
-import initDataTables,{destroyDataTables} from '../../../../app/utils/initDataTables'
+import showToast from '@utils/showToast'
+import initDataTables,{destroyDataTables} from '@hooks/useDataTables'
 import $ from 'jquery'
 import EditPostCategoryForm from './components/EditPostCategoryForm'
-import PostCategoryProps from '../../../../app/props/PostCategoryProps'
+import PostCategoryProps from '@props/postCategoryProps'
+// import CategorySelector from './components/CategorySelector'
 
     
 
@@ -94,6 +95,7 @@ e.preventDefault();
         <>
         <MainBody>
         <div className="container-fluid row">
+            {/* <CategorySelector/> */}
             <div className="col-md-4 col-sm-12">
                 <div className="card">
                     <div className="card-header font-weight-semibold">Create Category</div>

@@ -7,14 +7,36 @@ import { PulseLoader } from "react-spinners";
 import { useUpdateSettingMutation } from "../slices/settingApi.slice";
 import { setCompanyInfoSetting, useSettings } from "../slices/settings.slice";
 import { useCompanyInfo } from "../slices/settings.slice";
-import showToast from "../../../../../app/utils/showToast";
+import showToast from "@utils/showToast";
 
+interface FormInput {
+  siteName:string;
+  city:string;
+  state:string;
+  country:string;
+  zip:string;
+  description:string;
+  email:string,
+  contact:string,
+  address:string;
+  activeHours:string;
+  socialMedia:{
+  facebookHandle:string;
+  twitterHandle:string;
+  instagram:string;
+  whatsapp:string;
+}
+}
 const GeneralSettings = () => {
 const dispatch = useDispatch();
 const {companyInfo} = useSelector(useSettings)
 const {id, settings:{companyDetails, ...otherSettings}={}} = useSelector(useCompanyInfo);
 const [updateSetting,isLoading] = useUpdateSettingMutation();
-const initialState = companyDetails;
+const initialState = {
+  ...companyDetails,
+  contact: companyDetails?.contact?.join(","),
+  email: companyDetails?.email?.join(","),
+};
 const {
   register,
   handleSubmit,
@@ -30,11 +52,11 @@ const {
 
 const updateSettings:SubmitHandler<FieldValues> = async(formFields, e)=>{
 e.preventDefault();
-  const emailArray = formFields.email
+  const emailArray = (formFields.email as string)
       ?.split(',')
       ?.map((email:string) => email.trim()) // Remove whitespace from each email
       ?.filter((email:string) => email.length > 0);
-      const contactArray = formFields.contact
+      const contactArray = (formFields.contact as string)
       ?.split(',')
       ?.map((contact:string) => contact.trim()) // Remove whitespace from each email
       ?.filter((contact:string) => contact.length > 0);

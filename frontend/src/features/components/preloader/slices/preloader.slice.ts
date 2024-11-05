@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import { RootState } from '../../../../app/stores/store';
+import { RootState } from '@store/store';
 
 const PreloaderSlice = createSlice({
     name:'preloader',

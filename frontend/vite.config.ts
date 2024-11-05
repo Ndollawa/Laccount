@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import path from 'path';
 import inject from '@rollup/plugin-inject';
+import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -11,26 +11,32 @@ export default defineConfig({
   },
   plugins: [
     // inject({
-    //   $: path.resolve(path.join(__dirname, 'node_modules/jquery/')),    // Ensure jQuery is available globally as $
-    //   jQuery: path.resolve(path.join(__dirname, 'node_modules/jquery/')),
-    //   'window.jQuery': path.resolve(path.join(__dirname, 'node_modules/jquery/')),
+    //   $: 'node_modules/jquery/dist/jquery.min',    // Ensure jQuery is available globally as $
+    //   jQuery: 'node_modules/jquery/dist/jquery.min',
+    //   'window.jQuery': 'node_modules/jquery/dist/jquery.min',
     // }),
     react(),
     tsconfigPaths()
   ],
   resolve: {
     alias: {
-      "@app/*": path.resolve(path.join(__dirname, './src')),
-      '@app/assets/*': path.resolve(path.join(__dirname, './src/assets/*')),
-      '@app/features/*': path.resolve(path.join(__dirname, './src/features/*')),
-      '@app/public/*': path.resolve(path.join(__dirname, './public/*')),
-      '@app/utils/*': path.resolve(path.join(__dirname, './src/app/utils/*')),
-      '@app/hooks/*': path.resolve(path.join(__dirname, './src/app/hooks/*')),
-      '@app/props/*': path.resolve(path.join(__dirname, './src/app/props/*')),
-      '@app/interfaces/*': path.resolve(path.join(__dirname, './src/app/interfaces/*')),
-      '@app/types/*': path.resolve(path.join(__dirname, './src/app/types/*')),
-      '@app/api/*': path.resolve(path.join(__dirname, './src/app/api/*')),
-      '@app/stores/*': path.resolve(path.join(__dirname, './src/app/stores/*')),
+      "@app/": path.resolve(__dirname, '/src/'),
+      '@auth/': path.resolve(__dirname, '/src/features/auth/'),
+      '@dashboard/': path.resolve(__dirname, '/src/features/dashboard/'),
+      '@landing/': path.resolve(__dirname, '/src/features/landing/'),
+      '@components/': path.resolve(__dirname, '/src/features/components/'),
+      '@layouts/': path.resolve(__dirname, '/src/features/layouts/'),
+      '@errorPages/': path.resolve(__dirname, '/src/features/errorPages/'),
+      '@uploads/': path.resolve(__dirname, '/src/features/uploads/'),
+      '@assets/': path.resolve(__dirname, '/src/assets/'),
+      '@public/': path.resolve(__dirname, '/public/'),
+      '@utils/': path.resolve(__dirname, '/src/app/utils/'),
+      '@hooks/': path.resolve(__dirname, '/src/app/hooks/'),
+      '@props/': path.resolve(__dirname, '/src/app/props/'),
+      '@interfaces/': path.resolve(__dirname, '/src/app/interfaces/'),
+      '@types/': path.resolve(__dirname, '/src/app/types/'),
+      '@api/': path.resolve(__dirname, '/src/app/api/'),
+      '@store/': path.resolve(__dirname, '/src/app/store/'),
       // Add more aliases as needed
     }
   }

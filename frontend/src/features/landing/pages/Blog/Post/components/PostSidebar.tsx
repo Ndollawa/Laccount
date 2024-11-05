@@ -1,11 +1,11 @@
 import React,{FormEvent, useState} from 'react'
 import { useSearchParams,useNavigate } from 'react-router-dom'
 import RecentPostList from '../../components/RecentPostList'
-import PostProps from '../../../../../../app/props/PostProps'
-import { useGetPostsQuery } from '../../../../../dashboard/pages/Post/slices/postApi.slice'
-import { useGetPostCategoryQuery } from '../../../../../dashboard/pages/PostCategory/slices/postCategoryApi.slice'	
-import PostCategoryProps from '../../../../../../app/props/PostCategoryProps'
-import useDebounce from '../../../../../../app/hooks/useDebounce'
+import PostProps from '@props/PostProps'
+import { useGetPostsQuery } from '@dashboard/pages/Post/slices/postApi.slice'
+import { useGetPostCategoryQuery } from '@dashboard/pages/PostCategory/slices/postCategoryApi.slice'	
+import PostCategoryProps from '@props/postCategoryProps'
+import useDebounce from '@hooks/useDebounce'
 
 
 const PostSidebar = ({posts,filterPosts,setPostList, sFormA =false}:{posts:PostProps[],filterPosts:any,setPostList?:any,sFormA?:boolean}) => { 
@@ -76,7 +76,7 @@ const searchPost = (e:FormEvent)=>{
     >
       <h3 className="blog-sidebar__title">Recent Posts</h3>
       <ul className="list-unstyled blog-sidebar__post">
-        {  posts?.slice(0,6)?.map((post:PostProps)=><RecentPostList post={post} key={post?._id}/>)}
+        {  posts?.slice(0,6)?.map((post:PostProps)=><RecentPostList post={post} key={post?.id}/>)}
        
       
       </ul>
@@ -89,7 +89,7 @@ const searchPost = (e:FormEvent)=>{
       <ul>
         {
            category?.map((c:PostCategoryProps,i:number)=> ( 
-           <li className={`cat-item cat-item-${i}`} key={c?._id}>
+           <li className={`cat-item cat-item-${i}`} key={c?.id}>
           <a href={`/our-blog/posts?category=${c?.title}`}>
             {c?.title}
           </a>

@@ -1,8 +1,8 @@
 import React from 'react'
 import { useParams,useNavigate } from 'react-router-dom'
-import { useGetTeamsQuery } from '../../../../dashboard/pages/Team/slices/teamsApi.slice'
-import PageProps from '../../../../../app/props/pageProps'
-import Breadcrum from '../../../components/Breadcrum'
+import { useGetTeamsQuery } from '@dashboard/pages/Team/slices/teamsApi.slice'
+import PageProps from '@props/pageProps'
+import Breadcrum from '@landing/components/Breadcrum'
 const TEAM_ASSETS = import.meta.env.VITE_TEAM_ASSETS;
 
 const Member:React.FC<PageProps> = ({pageData}:PageProps) => {

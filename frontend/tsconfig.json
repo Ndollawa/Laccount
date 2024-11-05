@@ -1,47 +1,9 @@
 {
   "files": [],
-
-  "compilerOptions": {
-    "baseUrl": "./", // Base URL of the projectes
-    "paths": {
-      "@app/*": [
-        "src/*" // Adjusted for general usage in the src folder
-      ],
-      "@app/public/*": [
-        "public/*"
-      ],
-      "@app/assets/*": [
-        "src/assets/*"
-      ],
-      "@app/features/*": [
-        "src/features/*" 
-      ],
-      "@app/utils/*": [
-        "src/app/utils/*" 
-      ],
-      "@app/hooks/*": [
-        "src/app/hooks/*" 
-      ],
-      "@app/props/*": [
-        "src/app/props/*" 
-      ],
-      "@app/interfaces/*": [
-        "src/app/interfaces/*" 
-      ],
-      "@app/types/*/": [
-        "src/app/types/*" 
-      ],
-      "@app/api/*": [
-        "src/app/api/*" 
-      ],
-      "@app/stores/*": [
-        "src/app/stores/*" 
-      ]
-    }
-  },
+  "types":["node"],
   "exclude": ["node_modules", "dist"], // Ensure these are excluded from compilation
     "references": [
     { "path": "./tsconfig.app.json" },
-    // { "path": "./tsconfig.node.json" }
+    { "path": "./tsconfig.node.json" }
   ],
 }

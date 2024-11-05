@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { useLandingConfig } from '../../../../dashboard/pages/Settings/slices/settings.slice';
+import { useLandingConfig } from '@dashboard/pages/Settings/slices/settings.slice';
 
 
 const Testimonial = ()  => {

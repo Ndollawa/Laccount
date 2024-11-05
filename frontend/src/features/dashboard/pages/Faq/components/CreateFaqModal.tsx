@@ -3,7 +3,7 @@ import { Editor } from '@tinymce/tinymce-react'
 import { useAddNewFaqMutation } from '../slices/faqApi.slice'
 import { Modal } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import showToast from '../../../../../app/utils/showToast'
+import showToast from '@utils/showToast'
 
 const CreateFaqModal = () => {
   const [show, setShow] = useState(false);

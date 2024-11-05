@@ -2,10 +2,10 @@ import {
     createSelector,
     createEntityAdapter
 } from "@reduxjs/toolkit";
-import { RootState } from "../../../../../app/stores/store";
-import { apiSlice } from "../../../../../app/api/apiSlice";
-import { ResponseProps } from "../../../../../app/props/responseProps";
-// import RoomProps from "../../../../app/utils/props/RoomProps";
+import { RootState } from "@store/store";
+import { apiSlice } from "@api/apiSlice";
+import { ResponseProps } from "@props/responseProps";
+// import RoomProps from "@utils/props/RoomProps";
 // interface roomsProp extends  RoomProps{}
 
 

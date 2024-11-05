@@ -1,18 +1,20 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect, useTransition} from 'react'
 import MainBody from '../../components/MainBody'
 import { useDispatch } from 'react-redux'
-import { useGetContactsQuery } from './slices/contactsApi.slice'
-import { setPreloader } from '../../../components/preloader/slices/preloader.slice'
-import PageProps from '../../../../app/props/PageProps'
-import ContactsTable from './components/ContactsTable'
-import useToggle from '../../../../app/hooks/useToggle'
-import ContactCard from './components/ContactCard'
 import { FaListAlt } from 'react-icons/fa'
 import { IoGridOutline } from 'react-icons/io5'
 import { useSelector } from 'react-redux'
-import { selectCurrentUser } from '../../../auth/slices/auth.slice'
-import contactProps from '../../../../app/props/contactProps'
-import { ModalDataProps } from '../../../../app/props/modalProps'
+import $ from 'jquery'
+import { useGetContactsQuery } from './slices/contactsApi.slice'
+import { setPreloader } from '@components/preloader/slices/preloader.slice'
+import PageProps from '@props/pageProps'
+import ContactsTable from './components/ContactsTable'
+import useToggle from '@hooks/useToggle'
+import ContactCard from './components/ContactCard'
+import { selectCurrentUser } from '@auth/slices/auth.slice'
+import contactProps from '@props/contactProps'
+import { ModalDataProps } from '@props/modalProps'
+import GeneralPreloader from '@components/preloader/GeneralPreloader'
 
     
     const Contacts = ({pageData}:PageProps)  => {
@@ -21,6 +23,7 @@ import { ModalDataProps } from '../../../../app/props/modalProps'
     const [viewType,toggleViewType] = useToggle('viewType','List');
     const dispatch =useDispatch()
   const currentUser = useSelector(selectCurrentUser)
+  const [isPending, startTransition] = useTransition();
     const {
         data:contacts,
         isLoading,
@@ -51,7 +54,7 @@ import { ModalDataProps } from '../../../../app/props/modalProps'
 let contactsCard
    if(isSuccess && !isLoading){
     const {ids,entities} = contacts
-    const userContactId = ids.filter((contactId:string)=> entities[contactId].user === currentUser._id)
+    const userContactId = ids.filter((contactId:string)=> entities[contactId].user === currentUser.id)
 
 contactsCard =  <ContactCard key={userContactId}  contactId={userContactId} />
 tableContent = <ContactsTable key={userContactId} contactId={userContactId} showEditForm={showEditForm} />
@@ -63,6 +66,7 @@ tableContent = <ContactsTable key={userContactId} contactId={userContactId} show
         toggleViewType(true)
         }
     }
+
      return (
         <>
         <MainBody>
@@ -101,8 +105,8 @@ tableContent = <ContactsTable key={userContactId} contactId={userContactId} show
                                                        </thead>
                                                        <tbody>
                                                           
-                                                          
-                                                          {tableContent}
+                                                           
+                                               {isPending? <GeneralPreloader/> : tableContent}
                                                        
                                                        </tbody>
                                                    </table>

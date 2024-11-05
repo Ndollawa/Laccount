@@ -1,5 +1,5 @@
 import React from 'react';
-import useImportScript from '../../../app/hooks/useImportScript';
+import useImportScript from '@hooks/useImportScript';
 // import ScriptTag from 'react-script-tag';
 
 const Js = () => {

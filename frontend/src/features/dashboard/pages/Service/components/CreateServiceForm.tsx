@@ -1,9 +1,13 @@
-import React from 'react';
+import React , { useEffect, useState, useCallback } from 'react';
 import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
-import { Modal, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import { PulseLoader } from 'react-spinners';
 import { Editor } from '@tinymce/tinymce-react';
 import { useAddNewServiceMutation } from '../slices/servicesApi.slice';
-import showToast from '../../../../../app/utils/showToast';
+import showToast from '@utils/showToast';
+import useWindowSize from '@hooks/useWindowSize';
+import ModalComponent from '@dashboard/components/Modal';
+import FileUpload from '@components/FileUpload';
 
 type FormValues = {
   title: string;
@@ -15,10 +19,13 @@ type FormValues = {
 };
 
 const CreateServiceForm = () => {
-  const { register, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm<FormValues>();
+  const { register, handleSubmit, watch, setValue, reset, formState: { errors, isSubmitting } } = useForm<FormValues>();
   const [addNewService, { isLoading, isSuccess, isError, error }] = useAddNewServiceMutation();
   const [previewImage, setPreviewImage] = React.useState<string>("");
-
+  const {width} = useWindowSize()
+  const [show, setShow] = useState(false);
+  const handleOpen = useCallback(() => setShow(true), [show]);
+  const handleClose = useCallback(() => setShow(false), [show]);
   const onSubmit: SubmitHandler<FieldValues> = async (formFields, e) => {
     e?.preventDefault()
     const formData = new FormData();
@@ -51,17 +58,13 @@ const CreateServiceForm = () => {
 
   return (
     <>
-      <button type="button" className="btn btn-primary mb-2" onClick={() => setValue("status", "active")}>
+      <button type="button" className="btn btn-primary mb-2" onClick={handleOpen}>
         Add New
       </button>
 
-      <Modal show={watch("status") === "active"} size="lg" centered backdrop="static" onHide={() => setValue("status", "inactive")} animation={false}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add New Service</Modal.Title>
-        </Modal.Header>
-
+          <ModalComponent {...{size:((width as  number)< 600)? "xl": "lg", header:{show:true,title:'Add New Service'},modalStates:{show,handleOpen,handleClose}}} >
+					
         <form onSubmit={(e) => handleSubmit(onSubmit)(e) } encType="multipart/form-data">
-          <Modal.Body>
             <div className="card-body">
               <div className="basic-form">
                 <div className="row">
@@ -107,13 +110,8 @@ const CreateServiceForm = () => {
                   </div>
 
                   <div className="col-md-6">
-                    <label className="form-label">Background Image</label>
-                    <input
-                      type="file"
-                      className="form-control"
-                      accept=".jpeg, .jpg, .png, .gif"
-                      onChange={uploadBg}
-                    />
+                 <FileUpload onChange={uploadBg}/>
+
                     {errors.image && <div className="invalid-feedback">Background image is required</div>}
                   </div>
 
@@ -139,18 +137,14 @@ const CreateServiceForm = () => {
                 </div>
               </div>
             </div>
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button variant="primary" onClick={() => setValue("status", "inactive")}>
-              Close
-            </Button>
-            <Button variant="secondary" type="submit" disabled={isLoading}>
-              Save Service
-            </Button>
-          </Modal.Footer>
+            <div className="d-flex gap-2 my-3 justify-content-end">
+            <Button variant="primary" size="sm" onClick={handleClose}>Close</Button>
+          <Button variant="secondary" size="sm" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? <PulseLoader loading={isSubmitting} color="#ffffff" size="0.7rem" /> : 'Create Service'}
+          </Button>
+          </div>
         </form>
-      </Modal>
+        </ModalComponent>
     </>
   );
 };

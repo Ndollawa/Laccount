@@ -16,4 +16,3 @@ export default interface TeamProps{
     createdAt?:Date;
     updatedAt?:Date;
 }
- teamProps

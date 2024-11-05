@@ -1,8 +1,8 @@
 import React from 'react';
 import {Helmet} from 'react-helmet-async';
-import PageProps from "../../../app/props/pageProps";
+import PageProps from "@props/pageProps";
 import { useSelector } from 'react-redux';
-import {useCompanyInfo,useLandingConfig} from '../../dashboard/pages/Settings/slices/settings.slice';
+import {useCompanyInfo,useLandingConfig} from '@dashboard/pages/Settings/slices/settings.slice';
 const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
 const Head:React.FC<PageProps> = ({pageData: {pageTitle} ={}}:PageProps) => {
@@ -24,17 +24,7 @@ const {settings:{siteImages:{favicon}={}}={}} = useSelector(useLandingConfig);
 
 
     <base href="/"/>
-    <link rel="stylesheet" href="assets/vendors/reey-font/stylesheet.css" type='text/css' />
-     {/* <link rel="stylesheet" href="assets/vendors/bootstrap/css/bootstrap.min.css" type='text/css' /> */}
-    <link rel="stylesheet" href="assets/vendors/animate/animate.min.css" type='text/css' />
-    <link rel="stylesheet" href="assets/vendors/fontawesome/css/all.min.css" type='text/css' />
-    <link rel="stylesheet" href="assets/vendors/finlon-icons/style.css" type='text/css' />
-    <link rel="stylesheet" href="assets/vendors/jarallax/jarallax.css" type='text/css' />
-    <link rel="stylesheet" href="assets/vendors/jquery-magnific-popup/jquery.magnific-popup.css" type='text/css' />
-    <link rel="stylesheet" href="assets/vendors/nouislider/nouislider.min.css" type='text/css' />
-    <link rel="stylesheet" href="assets/vendors/nouislider/nouislider.pips.css" type='text/css' />
-    <link rel="stylesheet" href="assets/vendors/odometer/odometer.min.css" type='text/css' />
-    <link rel="stylesheet" href="assets/vendors/swiper/swiper.min.css" type='text/css' />
+
 
     
 </Helmet>

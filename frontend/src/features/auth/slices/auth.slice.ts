@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
-import { RootState } from '../../../app/stores/store';
-import { AuthProps } from '../../../app/props/AuthProps';
+import { RootState } from '@store/store';
+import { AuthProps } from '@props/AuthProps';
 
 
 const defaultUserState =  {

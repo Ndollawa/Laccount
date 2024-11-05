@@ -1,7 +1,7 @@
 import React from 'react'
 import {useGetPostsQuery,useDeletePostMutation } from '../slices/postApi.slice'
 import { useGetPostCategoryQuery } from '../../PostCategory/slices/postCategoryApi.slice'
-import showToast from '../../../../../app/utils/showToast'
+import showToast from '@utils/showToast'
 import Swal from 'sweetalert2'
 import LightGallery from 'lightgallery/react'
 import 'lightgallery/css/lightgallery.css'
@@ -9,7 +9,7 @@ import 'lightgallery/css/lg-zoom.css'
 // import 'lightgallery/css/lg-thumbnail.css'
 import lgThumbnail from 'lightgallery/plugins/thumbnail'
 import lgZoom from 'lightgallery/plugins/zoom'
-import PostProps from '../../../../../app/props/PostProps'
+import PostProps from '@props/PostProps'
 // import 'lightgallery/css/lg-thumbnail.css'
 
 interface modalDataProps {
@@ -122,7 +122,7 @@ const { category } = useGetPostCategoryQuery("categoriesList", {
                     <td>
                     <div className="d-flex">
                             <button type="button" className="btn btn-info light shadow btn-xs sharp me-1"   onClick={()=>showEditForm(postData)}><i className="fas fa-pencil-alt"></i></button>
-                            <button className="btn btn-danger light shadow btn-xs sharp" onClick={()=>onDeletePost(post._id)}><i className="fa fa-trash"></i></button>
+                            <button className="btn btn-danger light shadow btn-xs sharp" onClick={()=>onDeletePost(post.id)}><i className="fa fa-trash"></i></button>
                         </div>													
                     </td>												
                 </tr>

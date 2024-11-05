@@ -4,10 +4,10 @@ import { Editor } from '@tinymce/tinymce-react';
 import { Modal } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { BsToggleOff, BsToggleOn } from 'react-icons/bs';
-import showToast from '../../../../../app/utils/showToast';
+import showToast from '@utils/showToast';
 import { useUpdateMailerSettingMutation } from '../../Settings/slices/settingApi.slice';
 import { PulseLoader } from 'react-spinners';
-import { MailerTemplateEnum, MailerTemplateStatus } from '../../../../../app/props/mailerProps';
+import { MailerTemplateEnum, MailerTemplateStatus } from '@props/mailerProps';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;

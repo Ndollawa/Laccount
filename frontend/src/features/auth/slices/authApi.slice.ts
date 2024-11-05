@@ -1,7 +1,7 @@
-import { apiSlice } from "../../../app/api/apiSlice";
+import { apiSlice } from "@api/apiSlice";
 import { logOut , setCredentials} from "./auth.slice";
 import {jwtDecode} from 'jwt-decode';
-import { uthProps } from "../../../app/props/AuthProps";
+import { uthProps } from "@props/AuthProps";
 import localStorage from "redux-persist/es/storage";
 
 export const authApiSlice = apiSlice.injectEndpoints({

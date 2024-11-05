@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import { RootState } from '../../../../../app/stores/store';
-import { CartItem, CartState } from '../../../../../app/props';
+import { RootState } from '@store/store';
+import { CartItem, CartState } from '@props';
 
       
 const initialState: CartState = {

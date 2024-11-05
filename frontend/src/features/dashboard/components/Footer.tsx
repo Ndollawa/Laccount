@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import {useCompanyInfo} from '../pages/Settings/slices/settings.slice';
-import PageProps from '../../../app/props/pageProps'
+import {useCompanyInfo} from '@dashboard/pages/Settings/slices/settings.slice';
+import PageProps from '@props/pageProps'
 
 
 

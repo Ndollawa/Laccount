@@ -1,20 +1,20 @@
 import React,{useEffect,useState} from 'react'
 import { useDeleteContactMutation } from '../slices/contactsApi.slice'
 import { useGetUsersQuery } from '../../Users/slices/usersApi.slice'
-import showToast from '../../../../../app/utils/showToast'
-import useUserImage from '../../../../../app/hooks/useUserImage'
+import showToast from '@utils/showToast'
+import useUserImage from '@hooks/useUserImage'
 import { Link } from 'react-router-dom'
 import { FaEye } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import $ from 'jquery'
-import initDataTables,{destroyDataTables} from '../../../../../app/utils/initDataTables'  
+import initDataTables,{destroyDataTables} from '@hooks/useDataTables'  
 import { HiChatBubbleLeftRight } from 'react-icons/hi2'
 
 import { useSelector } from 'react-redux'
-import useUserContacts from '../../../../../app/hooks/useUserContacts'
+import useUserContacts from '@hooks/useUserContacts'
 import { useAddNewContactMutation, useUpdateContactMutation } from '../slices/contactsApi.slice'
 import { selectCurrentUser } from '../../../../auth/slices/auth.slice'
-import contactProps from '../../../../../app/props/contactProps'
+import contactProps from '@props/contactProps'
 
 const ContactsTableData = ({contactId,index,showEditForm}:any) => {
     const { user } = useGetUsersQuery("usersList", {
@@ -39,11 +39,11 @@ const ContactsTableData = ({contactId,index,showEditForm}:any) => {
         error:updateContactError,
     }] = useUpdateContactMutation()
 const addContact = async(contactId:string)=>{
- await addNewContact({userId:currentUser._id,contactId})
+ await addNewContact({userId:currentUser.id,contactId})
 //  if(addContactIsError) return Swal.fire()
 }
     const removeContact = async(contactId:string)=>{
-        await updateContact({userId:currentUser._id,contactId})
+        await updateContact({userId:currentUser.id,contactId})
         // if(updateContactIsError) return Swal.fire()
     }
     
@@ -94,14 +94,7 @@ const addContact = async(contactId:string)=>{
           })
       
     }
-    useEffect(() => {
 
-            destroyDataTables($('#dataTable'))
-              initDataTables($('#dataTable'),"Contacts")
-            return () => {
-             destroyDataTables($('#dataTable'))
-            }
-          }, [user])
     if (user) {
         const userData = {
         data:{
@@ -153,7 +146,7 @@ const addContact = async(contactId:string)=>{
     }
     
         return (
-            <tr role="row" className="odd" key={user._id}>
+            <tr role="row" className="odd" key={user.id}>
 										<td className="sorting_1">
 											<h6>{++index}.</h6>
 										</td>
@@ -189,10 +182,10 @@ const addContact = async(contactId:string)=>{
 										<td>
 											<div className="d-flex action-button">
 												
-                                                <Link to={`/dashboard/messenger/${user._id}`} className='btn btn-info btn-xs light px-2 ms-2'>
+                                                <Link to={`/dashboard/messenger/${user.id}`} className='btn btn-info btn-xs light px-2 ms-2'>
                                                     <HiChatBubbleLeftRight fontSize={'1.2rem'}/>
                                                 </Link>
-                                                <Link to={`/dashboard/users/user/${user._id}`} className='btn btn-dark btn-xs light px-2 ms-2'>
+                                                <Link to={`/dashboard/users/user/${user.id}`} className='btn btn-dark btn-xs light px-2 ms-2'>
                                                     <FaEye fontSize={'1.2rem'}/>
                                                 </Link>
 												{!isContact(user.id)

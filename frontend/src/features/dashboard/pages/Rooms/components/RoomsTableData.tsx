@@ -1,8 +1,8 @@
 import React from 'react'
 import {useGetRoomsQuery,useDeleteRoomMutation } from '../slices/roomsApi.slice'
-import showToast from '../../../../../app/utils/showToast'
+import showToast from '@utils/showToast'
 import Swal from 'sweetalert2'
-import RoomProps from '../../../../../app/props/RoomProps'
+import RoomProps from '@props/RoomProps'
 
 interface modalDataProps {
     modalData:{
@@ -102,7 +102,7 @@ const RoomTableData = ({roomId,index,showEditForm}:any) => {
                     <td>
                     <div className="d-flex">
                             <button type="button" className="btn btn-info light shadow btn-xs sharp me-1"   onClick={()=>showEditForm(roomData)}><i className="fas fa-pencil-alt"></i></button>
-                            <button className="btn btn-danger light shadow btn-xs sharp" onClick={()=>onDeleteRoom(room._id)}><i className="fa fa-trash"></i></button>
+                            <button className="btn btn-danger light shadow btn-xs sharp" onClick={()=>onDeleteRoom(room.id)}><i className="fa fa-trash"></i></button>
                         </div>													
                     </td>												
                 </tr>

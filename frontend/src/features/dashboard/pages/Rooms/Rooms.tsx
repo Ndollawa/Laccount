@@ -6,10 +6,10 @@
     import { useGetRoomsQuery } from './slices/roomsApi.slice'
     import $ from 'jquery'
     import { setPreloader } from '../../../components/preloader/slices/preloader.slice'
-    import PageProps from '../../../../app/props/PageProps'
+    import PageProps from '@props/PageProps'
     import RoomTableData from './components/RoomsTableData'
-    import initDataTables,{destroyDataTables} from '../../../../app/utils/initDataTables'
-import RoomProps from '../../../../app/props/RoomProps'
+    import initDataTables,{destroyDataTables} from '@hooks/useDataTables'
+import RoomProps from '@props/RoomProps'
     
     
 

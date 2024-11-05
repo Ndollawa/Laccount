@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { useCompanyInfo, useLandingConfig, usePages, useSiteImages } from '../../../../dashboard/pages/Settings/slices/settings.slice';
+import { useCompanyInfo, useLandingConfig, usePages, useSiteImages } from '@dashboard/pages/Settings/slices/settings.slice';
 import { GrShieldSecurity } from 'react-icons/gr';
 
 

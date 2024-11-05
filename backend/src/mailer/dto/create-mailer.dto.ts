@@ -57,8 +57,4 @@ export class CreateMailTemplateDto {
 
   @IsEnum(MailerTemplateStatus)
   status: MailerTemplateStatus;
-
-  @IsString()
-  @IsNotEmpty()
-  content: string; // This is the actual template content in handlebars format
 }

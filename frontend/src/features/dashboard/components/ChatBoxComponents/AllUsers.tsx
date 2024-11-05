@@ -1,17 +1,15 @@
 import React,{useEffect, useState} from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { useGetUsersQuery } from '../../pages/Users/slices/usersApi.slice'
-import { useGetConversationsQuery } from '../../pages/Messenger/slices/conversationsApi.slice'
-import Conversation from './Conversation'
-import { useGetMessagesQuery } from '../../pages/Messenger/slices/messagesApi.slice'
-import ConversationProps from '../../../../app/props/ConversationProps'
-import useDebounce from '../../../../app/hooks/useDebounce'
-import { selectCurrentUser } from '../../../auth/slices/auth.slice'
+import { useGetUsersQuery } from '@dashboard/pages/Users/slices/usersApi.slice'
+import { useGetConversationsQuery } from '@dashboard/pages/Messenger/slices/conversationsApi.slice'
+import { useGetMessagesQuery } from '@dashboard/pages/Messenger/slices/messagesApi.slice'
+import {useGetContactsQuery} from '@dashboard/pages/Contact/slices/contactsApi.slice'
+import {ConversationProps, userInterface, contactProps } from '@props/'
+import useDebounce from '@hooks/useDebounce'
+import { selectCurrentUser } from '@auth/slices/auth.slice'
 import User from './User'
-import userInterface from '../../../../app/props/userProps'
-import contactProps from '../../../../app/props/contactProps'
-import {useGetContactsQuery} from '../../pages/Contact/slices/contactsApi.slice'
+import Conversation from './Conversation'
 
 const AllUsers = ({openChat}:any) => {
 	const currentUser = useSelector(selectCurrentUser)
@@ -21,19 +19,19 @@ const [showSearch, setShowSearch] = useState(false)
 const [users, setUsers] = useState<ConversationProps[] | []>([])
 const { contact } = useGetContactsQuery("contactsList", {
 	selectFromResult: ({ data }) => ({
-		contact: data && (Object.values(data?.entities)as contactProps[]).find((i:contactProps) => i.user === currentUser._id)		 
+		contact: data && (Object.values(data?.entities)as contactProps[]).find((i:contactProps) => i.user === currentUser.id)		 
 	}),
   }) 
 	const { allUsers } = useGetUsersQuery("usersList", {
 		selectFromResult: ({ data }) => ({
-			allUsers: data && (Object.values(data?.entities)as userInterface['user'][])?.filter((u:userInterface['user'])=> u?._id !== currentUser._id)
+			allUsers: data && (Object.values(data?.entities)as userInterface['user'][])?.filter((u:userInterface['user'])=> u?.id !== currentUser.id)
 		
 	  })
 	})
 	
   	const { conversations } = useGetConversationsQuery("conversationsList", {
 	selectFromResult: ({ data }) => ({
-		conversations: data && (Object.values(data?.entities)as ConversationProps[])?.filter((c)=>c?.members?.includes(currentUser?._id!))
+		conversations: data && (Object.values(data?.entities)as ConversationProps[])?.filter((c)=>c?.members?.includes(currentUser?.id!))
   })
 })
 //   console.log(contact)
@@ -74,11 +72,11 @@ const searchData = (data:any)=> data?.filter((item:any)=>keys?.some((key:string)
 							
 									<li className="name-first-letter">My Contacts</li>
 									{ users?.map((user:any,i:number)=> {	
-									if(contact?.contacts?.includes(user?._id)) return <User key={i} user={user} openChat={openChat} />
+									if(contact?.contacts?.includes(user?.id)) return <User key={i} user={user} openChat={openChat} />
 									})}
 									<li className="name-first-letter">Other Users</li>
 									{ users?.map((user:any,i:number)=>{
-									if(!contact?.contacts?.includes(user?._id)) return <User key={i} user={user} openChat={openChat} />
+									if(!contact?.contacts?.includes(user?.id)) return <User key={i} user={user} openChat={openChat} />
 								})}
 									
 									

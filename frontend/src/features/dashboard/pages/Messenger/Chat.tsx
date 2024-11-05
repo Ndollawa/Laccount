@@ -7,18 +7,18 @@ import $ from 'jquery';
 import { Link, useParams } from 'react-router-dom';
 import Conversation from './components/Conversation';
 import MainBody from '../../components/MainBody';
-import PageProps from '../../../../app/props/pageProps';
-import useWindowSize from '../../../../app/hooks/useWindowSize';
+import PageProps from '@props/pageProps';
+import useWindowSize from '@hooks/useWindowSize';
 import { selectCurrentUser } from '../../../auth/slices/auth.slice';
-import useUserImage from '../../../../app/hooks/useUserImage';
+import useUserImage from '@hooks/useUserImage';
 import { useGetConversationsQuery } from './slices/conversationsApi.slice';
 import { useGetUsersQuery } from '../Users/slices/usersApi.slice';
 import { useGetMessagesQuery } from './slices/messagesApi.slice';
-import ConversationProps from '../../../../app/props/conversationProps';
-import MessageProps from '../../../../app/props/messageProps';
+import ConversationProps from '@props/conversationProps';
+import MessageProps from '@props/messageProps';
 import ChatBox from './components/ChatBox';
-import useDebounce from '../../../../app/hooks/useDebounce';
-import userInterface from '../../../../app/props/userProps';
+import useDebounce from '@hooks/useDebounce';
+import userInterface from '@props/userProps';
 
 const Chat: React.FC<PageProps> = ({ pageData }: PageProps) => {
   const [query, setQuery] = useState('');

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { useCompanyInfo, useLandingConfig } from '../../../../dashboard/pages/Settings/slices/settings.slice';
+import { useCompanyInfo, useLandingConfig } from '@dashboard/pages/Settings/slices/settings.slice';
 const BLOG_ASSETS = import.meta.env.VITE_BLOG_ASSETS;
 
 const AboutUs = () => {

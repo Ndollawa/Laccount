@@ -3,9 +3,9 @@ import { Editor } from '@tinymce/tinymce-react'
 import { useUpdateRoomMutation} from '../slices/roomsApi.slice'
 import {Modal} from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
-import showToast from '../../../../../app/utils/showToast'
+import showToast from '@utils/showToast'
 import $ from 'jquery'
-import RoomProps from '../../../../../app/props/RoomProps'
+import RoomProps from '@props/RoomProps'
 
 
 
@@ -62,7 +62,7 @@ const handleSubmit = async(e:FormEvent)=>{
 e.preventDefault();
 const formData = new FormData()
  if (canSave) {
-formData.append("_id",data?._id!)
+formData.append("_id",data?.id!)
 formData.append("title",title)
 formData.append("description",description)
 formData.append("status",status)

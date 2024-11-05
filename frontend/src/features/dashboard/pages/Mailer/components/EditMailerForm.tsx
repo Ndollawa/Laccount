@@ -5,11 +5,11 @@ import { Editor } from '@tinymce/tinymce-react';
 import { PulseLoader } from 'react-spinners';
 import { Modal, Button } from 'react-bootstrap';
 import { BsToggleOff, BsToggleOn } from 'react-icons/bs';
-import showToast from '../../../../../app/utils/showToast';
-import { HomeMailer } from '../../../../../app/props/settingsProps';
+import showToast from '@utils/showToast';
+import { HomeMailer } from '@props/settingsProps';
 import { useUpdateMailerSettingMutation } from '../../Settings/slices/settingApi.slice';
 import { useLandingConfig } from '../../Settings/slices/settings.slice';
-import { ModalDataProps } from '../../../../../app/props/modalProps';
+import { ModalDataProps } from '@props/modalProps';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 

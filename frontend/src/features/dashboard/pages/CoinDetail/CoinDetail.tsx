@@ -1,6 +1,6 @@
 import React from 'react';
 import MainBody from '../../components/MainBody';
-import PageProps from '../../../../app/props/PageProps';
+import PageProps from '@props/PageProps';
 
 const CoinDetail:React.FC<PageProps> = ({pageData}:PageProps)  => {
   return (

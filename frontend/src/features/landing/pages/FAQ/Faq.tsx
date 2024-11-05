@@ -1,9 +1,9 @@
 import React from 'react'
-import PageProps from '../../../../app/props/PageProps'
-import Breadcrum from '../../components/Breadcrum'
-import { useGetFaqsQuery } from '../../../dashboard/pages/Faq/slices/faqApi.slice'
-import { FaqProps } from '../../../../app/props/FaqProps'
-import NoResult from '../../components/NoResult'
+import PageProps from '@props/PageProps'
+import Breadcrum from '@landing/components/Breadcrum'
+import { useGetFaqsQuery } from '@dashboard/pages/Faq/slices/faqApi.slice'
+import { FaqProps } from '@props/FaqProps'
+import NoResult from '@landing/components/NoResult'
 
 const Faq:React.FC<PageProps> = ({pageData}:PageProps) => {
 

@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { FaListAlt } from 'react-icons/fa'
 import { IoGridOutline } from 'react-icons/io5'
 import { useSearchParams } from 'react-router-dom'
-import useToggle from '../../../../app/hooks/useToggle'
+import useToggle from '@hooks/useToggle'
 import { useGetPostCategoryQuery } from '../../../dashboard/pages/PostCategory/slices/postCategoryApi.slice'
 import { useGetPostsQuery } from '../../../dashboard/pages/Post/slices/postApi.slice'		
-import PageProps from '../../../../app/props/PageProps'
-import PostProps from '../../../../app/props/PostProps'
+import PageProps from '@props/PageProps'
+import PostProps from '@props/PostProps'
 import Breadcrum from '../../components/Breadcrum'
 import PostList from './components/PostList'
 import PostGrid from './components/PostGrid'
 import PostSidebar from './Post/components/PostSidebar'
-import PostCategoryProps from '../../../../app/props/PostCategoryProps'
+import PostCategoryProps from '@props/PostCategoryProps'
 import NoResult from '../../components/NoResult'
 
  export function filterPosts(posts: any, search?:string | null, category?: string, tag?: string | null): PostProps[] {
@@ -58,7 +58,7 @@ const Blog:React.FC<PageProps> = ({pageData}:PageProps) => {
             }),
             }) 
             useEffect(() => {
-         setPostList(filterPosts(posts,search,cat?._id,tag)) 
+         setPostList(filterPosts(posts,search,cat?.id,tag)) 
               
             }, [])
   return (

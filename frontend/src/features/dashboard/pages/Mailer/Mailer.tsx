@@ -4,13 +4,13 @@
     import EditMailerForm from './components/EditMailerForm'
     import { useDispatch, useSelector } from 'react-redux'
     import { setPreloader } from '../../../components/preloader/slices/preloader.slice'
-    import PageProps from '../../../../app/props/PageProps'
+    import PageProps from '@props/PageProps'
     import MailerTableData from './components/MailerTableData'
-    import initDataTables,{destroyDataTables} from '../../../../app/utils/initDataTables'
+    import initDataTables,{destroyDataTables} from '@hooks/useDataTables'
     import $ from 'jquery'
-    import {HomeMailer} from '../../../../app/props/settingsProps'
+    import {HomeMailer} from '@props/settingsProps'
 import { useLandingConfig } from '../Settings/slices/settings.slice'
-import { ModalDataProps } from '../../../../app/props/modalProps'
+import { ModalDataProps } from '@props/modalProps'
 
 
     const Mailer = ({pageData}:PageProps)  => {

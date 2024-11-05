@@ -1,9 +1,8 @@
 import {useLocation,Navigate,Outlet} from 'react-router-dom';
-import {AuthProps, allowedRolesProps} from '../../app/props/AuthProps';
 import {jwtDecode} from 'jwt-decode';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../auth/slices/auth.slice';
-import { Role } from '../../app/props/userProps';
+import {AuthProps, allowedRolesProps, Role} from '@props';
+import { selectCurrentToken } from '@auth/slices/auth.slice';
 
 const RequireAuth = ({allowedRoles}:allowedRolesProps) =>{
     const location = useLocation();

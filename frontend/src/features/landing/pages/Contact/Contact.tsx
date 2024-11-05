@@ -1,8 +1,8 @@
 import React from 'react'
-import PageProps from '../../../../app/props/PageProps'
-import Breadcrum from '../../components/Breadcrum'
+import PageProps from '@props/PageProps'
+import Breadcrum from '@landing/components/Breadcrum'
 import { useSelector } from 'react-redux';
-import {useCompanyInfo} from '../../../dashboard/pages/Settings/slices/settings.slice';
+import {useCompanyInfo} from '@dashboard/pages/Settings/slices/settings.slice';
 
 
 const Contact :React.FC<PageProps> = ({pageData}:PageProps) => {

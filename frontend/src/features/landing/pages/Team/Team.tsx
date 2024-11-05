@@ -1,8 +1,8 @@
 import React from 'react'
-import PageProps from '../../../../app/props/pageProps'
-import Breadcrum from '../../components/Breadcrum'
-import { useGetTeamsQuery } from '../../../dashboard/pages/Team/slices/teamsApi.slice'
-import TeamProps from '../../../../app/props/teamProps'
+import PageProps from '@props/pageProps'
+import Breadcrum from '@landing/components/Breadcrum'
+import { useGetTeamsQuery } from '@dashboard/pages/Team/slices/teamsApi.slice'
+import TeamProps from '@props/teamProps'
 import TeamMemberCard from './components/TeamMemberCard'
 const TEAM_ASSETS = import.meta.env.VITE_TEAM_ASSETS;
 

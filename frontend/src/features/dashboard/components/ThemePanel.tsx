@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useUpdateSettingMutation } from "../pages/Settings/slices/settingApi.slice";
-import { setDashboardSetting, useDashboardConfig } from '../pages/Settings/slices/settings.slice';
+import { useUpdateSettingMutation } from "@dashboard/pages/Settings/slices/settingApi.slice";
+import { setDashboardSetting, useDashboardConfig } from '@dashboard/pages/Settings/slices/settings.slice';
 import ThemeOptions from "./Themes/ThemeOptions";
 import { themeProps } from "./Themes/ThemeOptions";
 

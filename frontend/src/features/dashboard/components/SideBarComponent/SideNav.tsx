@@ -1,7 +1,7 @@
 import React ,{ReactNode, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {UserLinks, AdminLinks} from './Links';
-import useAuth from '../../../../app/hooks/useAuth';
+import useAuth from '@hooks/useAuth';
 
 
 

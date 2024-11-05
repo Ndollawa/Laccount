@@ -2,13 +2,13 @@ import { Outlet , useLocation, Navigate} from "react-router-dom";
 import React,{ useState, useEffect,useRef, useTransition } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import $ from 'jquery';
-import { useRefreshMutation } from "../auth/slices/authApi.slice";
-import { selectCurrentToken } from '../auth/slices/auth.slice';
+import { useRefreshMutation } from "@auth/slices/authApi.slice";
+import { selectCurrentToken } from '@auth/slices/auth.slice';
 import { setPreloader } from "./preloader/slices/preloader.slice";
-import useLocalStorage from "../../app/hooks/useLocalStorage";
-import { useDashboardConfig } from '../dashboard/pages/Settings/slices/settings.slice';
+import useWindowSize from '@hooks/useWindowSize';
+import useLocalStorage from '@hooks/useLocalStorage';
+import { useDashboardConfig } from '@dashboard/pages/Settings/slices/settings.slice';
 import Preloader from "./preloader/Preloader";
-import useWindowSize from "../../app/hooks/useWindowSize";
 
 const PersistLogin = () =>{
     const [trueSuccess, setTrueSuccess] = useState(false);

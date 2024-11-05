@@ -5,10 +5,10 @@ import { format } from 'timeago.js';
 import { useGetUsersQuery } from '../../Users/slices/usersApi.slice';
 import { useGetConversationsQuery } from '../slices/conversationsApi.slice';
 import { useGetMessagesQuery } from '../slices/messagesApi.slice';
-import useUserImage from '../../../../../app/hooks/useUserImage';
-import useSocketIO from '../../../../../app/hooks/useSocketIO';
-import ConversationProps, { conversationIdProps } from '../../../../../app/props/conversationProps';
-import MessageProps from '../../../../../app/props/messageProps';
+import useUserImage from '@hooks/useUserImage';
+import useSocketIO from '@hooks/useSocketIO';
+import ConversationProps, { conversationIdProps } from '@props/conversationProps';
+import MessageProps from '@props/messageProps';
 
 const ChatBox = ({ receiver, sender }: { receiver: string; sender: string }) => {
     const [chatMessage, setChatMessage] = useState('');
@@ -36,7 +36,7 @@ const ChatBox = ({ receiver, sender }: { receiver: string; sender: string }) => 
     const { messages } = useGetMessagesQuery("messagesList", {
         selectFromResult: ({ data }) => ({
             messages: data && Object.values(data.entities as MessageProps[])
-                .filter(m => m.conversationId === conversation?._id),
+                .filter(m => m.conversationId === conversation?.id),
         }),
     });
 

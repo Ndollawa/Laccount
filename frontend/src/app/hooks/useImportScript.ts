@@ -1,38 +1,42 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 
-const useImportScript = (resourceUrl:string[],jsType="javascript")=> {
- 
-      const scriptHolder = document.createElement('div');
-      scriptHolder.id='scriptHolder';
-      document.body.appendChild(scriptHolder);
-      
-  useEffect(
-    () => {
-      // let scripts
-      let script:HTMLScriptElement;
-    resourceUrl.map(url=>{
-    script = document.createElement('script');
-    script.src = url;
-    script.type= `text/${jsType}`;
-    // script.async = true;
-    script.defer = true;
+const useImportScript = (resourceUrls: string[], jsType = "javascript") => {
+  useEffect(() => {
+    const existingScripts = new Set<string>(
+      Array.from(document.body.getElementsByTagName('script')).map((script) => script.src)
+    );
 
-  script.onload = () => {
-  // console.log(`The script '${url}'has loaded.'`);
-  };
+    const scriptElements: HTMLScriptElement[] = [];
 
-  script.onerror = () => {
-  console.log('Error occurred while loading script');
-  };
+    resourceUrls.forEach((url) => {
+      if (!existingScripts.has(url)) {
+        const script = document.createElement('script');
+        script.src = url;
+        script.type = `text/${jsType}`;
+        script.defer = true;
 
-  document?.getElementById('scriptHolder')?.appendChild(script);
-   
-    // console.log(scriptHolder)
-      })
-return () => {
-  
-      document?.getElementById('scriptHolder')?.remove();
-    }
-  }, []);
+        script.onload = () => {
+          console.log(`Script '${url}' has loaded successfully.`);
+        };
+
+        script.onerror = () => {
+          console.error(`Error occurred while loading script '${url}'.`);
+        };
+
+        document.body.appendChild(script);
+        scriptElements.push(script);
+      }
+    });
+
+    // Cleanup function to remove only the scripts that were added by this hook
+    return () => {
+      scriptElements.forEach((script) => {
+        if (script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
+      });
+    };
+  }, [resourceUrls, jsType]); // Only re-run if URLs or type changes
 };
+
 export default useImportScript;

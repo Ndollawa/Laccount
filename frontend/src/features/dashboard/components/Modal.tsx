@@ -1,7 +1,7 @@
 import React, { ReactNode, useCallback, useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
 import { PulseLoader } from 'react-spinners'
-import { contextProps } from '../../../app/props';
+import { contextProps } from '@props';
 
 interface ModalInterface{
     header?:{

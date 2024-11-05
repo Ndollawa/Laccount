@@ -1,12 +1,12 @@
 import React,{useEffect, useState} from 'react'
-import useUserImage from '../../../../app/hooks/useUserImage'
-import { selectCurrentUser } from '../../../auth/slices/auth.slice'
-import { useSelector } from 'react-redux'
-import useUserContacts from '../../../../app/hooks/useUserContacts'
 import Swal from 'sweetalert2'
-import { useAddNewContactMutation, useUpdateContactMutation } from '../../pages/Contact/slices/contactsApi.slice'
 import { Link } from 'react-router-dom'
 import { HiChatBubbleLeftRight } from 'react-icons/hi2'
+import useUserImage from '@hooks/useUserImage'
+import useUserContacts from '@hooks/useUserContacts'
+import { selectCurrentUser } from '@auth/slices/auth.slice'
+import { useSelector } from 'react-redux'
+import { useAddNewContactMutation, useUpdateContactMutation } from '../../pages/Contact/slices/contactsApi.slice'
 
 const User = ({user, openChat}:any) => {
 	const [allUsers, setAllUsers] = useState([])
@@ -26,17 +26,17 @@ const User = ({user, openChat}:any) => {
         error:updateContactError,
     }] = useUpdateContactMutation()
 const addContact = async(contactId:string)=>{
- await addNewContact({userId:currentUser._id,contactId})
+ await addNewContact({userId:currentUser.id,contactId})
 //  if(addContactIsError) return Swal.fire()
 }
     const removeContact = async(contactId:string)=>{
-        await updateContact({userId:currentUser._id,contactId})
+        await updateContact({userId:currentUser.id,contactId})
         // if(updateContactIsError) return Swal.fire()
     }
 
     
   return (
-    				<li key={user._id}>
+    				<li key={user.id}>
 									<div className="d-flex bd-highlight">
 										{/* <div className="img_cont primary">AU<i className="icon fa fa-user-plus"></i></div> */}
 										<div className="img_cont">
@@ -48,13 +48,13 @@ const addContact = async(contactId:string)=>{
 											<p>{`${user.username} is ${(user?.online?.status)? 'Online': 'Offline'}`}</p>
 										</div>
                                         <div className="ms-auto">
-												<button type="button" className="btn btn-info btn-xs sharp me-1" onClick={()=>openChat(user._id)} title='Message User'><HiChatBubbleLeftRight fontSize={'1.2rem'}/></button>
-                                                {!isContact(user._id)
+												<button type="button" className="btn btn-info btn-xs sharp me-1" onClick={()=>openChat(user.id)} title='Message User'><HiChatBubbleLeftRight fontSize={'1.2rem'}/></button>
+                                                {!isContact(user.id)
                                                 ? 
-                                                <button type='button' onClick={()=>addContact(user._id)} className="btn btn-info btn-xs sharp me-1" title='Add Contact'><i className="fas fa-user-plus"></i></button>
+                                                <button type='button' onClick={()=>addContact(user.id)} className="btn btn-info btn-xs sharp me-1" title='Add Contact'><i className="fas fa-user-plus"></i></button>
 												:<>
                                                 {user.phone && <a href={`tel:${user?.phone}`} className="btn btn-info btn-xs sharp" title='Remove Contact'><i className="fa fa-phone"></i></a>}
-                                                <button type='button' onClick={()=>removeContact(user._id)} className="btn btn-success btn-xs sharp" title='Remove Contact'><i className="fa fa-users"></i></button>
+                                                <button type='button' onClick={()=>removeContact(user.id)} className="btn btn-success btn-xs sharp" title='Remove Contact'><i className="fa fa-users"></i></button>
                                                 </> } 
                                                 </div>
 									</div>

@@ -2,7 +2,7 @@ import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 import { DotLoader, PulseLoader } from 'react-spinners';
 import { Button } from 'react-bootstrap';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
-import { useProcessPaymentMutation } from '../pages/Wallet/slices/paymentApi.slice';
+import { useProcessPaymentMutation } from '@dashboard/pages/Wallet/slices/paymentApi.slice';
 
 const CheckoutForm = ({ styles: { buttonText }, amount }: { styles: { buttonText: string }, amount: number }) => {
   const stripe = useStripe();

@@ -1,5 +1,5 @@
 import React from 'react'
-import PageProps from '../../../../app/props/PageProps'
+import PageProps from '@props/PageProps'
 import Breadcrum from '../../components/Breadcrum'
 
 

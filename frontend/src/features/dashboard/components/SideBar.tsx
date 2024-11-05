@@ -1,14 +1,14 @@
 import React,{useEffect, useTransition} from 'react'
 import { Link } from 'react-router-dom'
-import SideNav from './SideBarComponent/SideNav'
-import PageProps from '../../../app/props/PageProps'
-import { useSelector } from 'react-redux';
-import { useCompanyInfo } from '../pages/Settings/slices/settings.slice';
-import { selectCurrentUser } from '../../auth/slices/auth.slice';
-import useUserImage from '../../../app/hooks/useUserImage';
 import PerfectScroll from 'react-perfect-scrollbar'
 import $ from 'jquery'
-import { getUserFullName } from '../../../app/utils/getUserName';
+import { useSelector } from 'react-redux';
+import SideNav from './SideBarComponent/SideNav'
+import PageProps from '@props/pageProps'
+import { useCompanyInfo } from '@dashboard/pages/Settings/slices/settings.slice';
+import { selectCurrentUser } from '@auth/slices/auth.slice';
+import useUserImage from '@hooks/useUserImage';
+import { getUserFullName } from '@utils/getUserName';
 
 enum Styles{STYLE_1,STYLE_2, STYLE_3};
 
