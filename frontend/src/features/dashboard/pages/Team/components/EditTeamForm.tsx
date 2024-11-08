@@ -8,15 +8,9 @@ import { useUpdateTeamMutation } from '../slices/teamsApi.slice';
 import useWindowSize from '@hooks/useWindowSize';
 import ModalComponent from '@dashboard/components/Modal';
 import FileUpload from '@components/FileUpload';
+import { ModalDataProps } from '@props';
 
 const TEAM_ASSETS = import.meta.env.VITE_TEAM_ASSETS;
-
-interface modalDataProps {
-  modalData: {
-    data: TeamProps | null;
-    showModal: boolean;
-  };
-}
 
 interface TeamFormInputs {
   firstName: string;
@@ -35,7 +29,7 @@ interface TeamFormInputs {
   };
 }
 
-const EditTeamModal = ({ modalData: { data, showModal } }: modalDataProps) => {
+const EditTeamModal = ({ modalData: { data, showModal } }: ModalDataProps<TeamProps>) => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [userImage, setUserImage] = useState<FileList | null>(null);
   const {width} = useWindowSize()
@@ -100,7 +94,7 @@ const EditTeamModal = ({ modalData: { data, showModal } }: modalDataProps) => {
     }
 
     await updateTeam(formDataToSend);
-    if (isError) return showToast('error', JSON.stringify(error?.data?.message));
+    if (isError) return showToast('error', error?.data?.message);
     showToast('success', 'Team member updated successfully');
   };
 

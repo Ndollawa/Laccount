@@ -35,10 +35,10 @@ export const contactsApiSlice = apiSlice.injectEndpoints({
             providesTags: (result, error, arg) => {
                 if (result?.ids) {
                     return [
-                        { type: 'Contact', id: 'LIST' },
-                        ...result.ids.map((id:string) => ({ type: 'Contact', id }))
+                        { type: 'Contacts', id: 'LIST' },
+                        ...result.ids.map((id:string) => ({ type: 'Contacts', id }))
                     ]
-                } else return [{ type: 'Contact', id: 'LIST' }]
+                } else return [{ type: 'Contacts', id: 'LIST' }]
             }
         }),
         addNewContact: builder.mutation({
@@ -48,7 +48,7 @@ export const contactsApiSlice = apiSlice.injectEndpoints({
                 body: initialContact
             }),
             invalidatesTags: [
-                { type: 'Contact', id: "LIST" }
+                { type: 'Contacts', id: "LIST" }
             ]
         }),
         updateContact: builder.mutation({
@@ -58,7 +58,7 @@ export const contactsApiSlice = apiSlice.injectEndpoints({
                 body: initialContact
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Contact', id: arg.id }
+                { type: 'Contacts', id: arg.id }
             ]
         }),
       
@@ -69,7 +69,7 @@ export const contactsApiSlice = apiSlice.injectEndpoints({
                 body: { id }
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Contact', id: arg.id }
+                { type: 'Contacts', id: arg.id }
             ]
         }),
     }),
@@ -83,7 +83,7 @@ export const {
 } = contactsApiSlice
 
 // returns the query result object
-export const selectContactsResult = contactsApiSlice.endpoints.getContacts.select('Contact')
+export const selectContactsResult = contactsApiSlice.endpoints.getContacts.select('Contacts')
 
 // creates memoized selector
 const selectContactsData = createSelector(

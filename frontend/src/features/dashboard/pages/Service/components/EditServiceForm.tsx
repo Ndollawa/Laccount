@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 import { Button } from 'react-bootstrap';
 import { Editor } from '@tinymce/tinymce-react';
 import { PulseLoader } from 'react-spinners';
@@ -9,6 +9,8 @@ import ServiceProps from '@props/ServiceProps';
 import useWindowSize from '@hooks/useWindowSize';
 import ModalComponent from '@dashboard/components/Modal';
 import FileUpload from '@components/FileUpload';
+import { ModalDataProps } from '@props';
+import { IoIosClose, IoMdPricetags } from 'react-icons/io';
 
 const SERVICE_ASSETS = import.meta.env.VITE_SERVICE_ASSETS;
 
@@ -17,36 +19,59 @@ interface FormInputs {
   icon: string;
   description: string;
   body: string;
+  tags?: string[];
   status: string;
   image: File | null;
 }
 
-interface ModalDataProps {
-  modalData: {
-    data: ServiceProps | null;
-    showModal: boolean;
-  };
-}
 
-const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps) => {
+const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps<ServiceProps>) => {
   const [previewImage, setPreviewImage] = useState<string>(`${SERVICE_ASSETS}${data?.image}`);
   const [updateService, { isLoading, isSuccess, isError, error }] = useUpdateServiceMutation();
-  const {width} = useWindowSize()
-
+  const [tagName, setTagName] = useState("")
+  const [id, setId] = useState("")
   const [show, setShow] = useState(false);
+  const {width} = useWindowSize()
   const handleOpen = useCallback(() => setShow(true), [show]);
   const handleClose = useCallback(() => setShow(false), [show]);
-  const { register, handleSubmit, setValue, reset, formState: { errors, isSubmitting }, watch } = useForm<FormInputs>({
-    defaultValues: {
+  const { register, handleSubmit, setValue, getValues, reset, formState: { errors, isSubmitting }, watch } = useForm<FormInputs>();
+  const createTag = (e:any)=>{
+    setTagName(e.target.value) 
+  }
+  // const tagwrapper= document.getElementsByClassName('tag-wrapper')!;
+  const addTag = (e:any) =>{
+  if( e.key === 'Enter' ){
+    if(tagName !== ""){
+    setValue('tags',  [...(getValues('tags') as string[]),tagName])
+    setTagName("")
+  } 
+  }
+  };
+  const removeTag = (key:string) =>{
+    setValue('tags', (getValues('tags') as string[]).filter(tag=> tag !== key ))
+    setTagName("")
+  };
+  useEffect(() => {
+    // When `data` is available, reset form fields with the new default values
+    if (data) {
+      setShow(showModal)
+      setId(data.id)
+      reset({
       title: data?.title,
       icon: data?.icon,
       description: data?.description,
       body: data?.body,
+      tags: data?.tags,
       status: data?.status,
-      image: null,
-    },
-  });
-
+      image: undefined
+    });
+      // Set preview image if available
+      if (data.image) {
+        setPreviewImage(`${SERVICE_ASSETS}${data.image}`);
+      }
+    }
+  }, [data, reset]);
+ 
   useEffect(() => {
     if (isSuccess) {
       reset();
@@ -67,7 +92,7 @@ const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps) =>
   const uploadBg = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setValue('upload', file);
+      setValue('image', file);
       setPreviewImage(URL.createObjectURL(file));
     }
   }, [setValue]);
@@ -75,15 +100,15 @@ const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps) =>
   const onSubmit: SubmitHandler<FieldValues> = async (formFields, e) => {
     e?.preventDefault()
     const formData = new FormData();
-    formData.append('id', data?.id!);
     formData.append('title', formFields.title);
     formData.append('icon', formFields.icon);
     formData.append('description', formFields.description);
     formData.append('body', formFields.body);
+    formData.append('tags', JSON.stringify(formFields.tags));
     formData.append('status', formFields.status);
     formData.append('file', formFields.image!);
 
-    await updateService(formData);
+    await updateService({id, formData});
   };
 
   return (
@@ -116,8 +141,8 @@ const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps) =>
                 className={`form-control ${errors.status ? 'is-invalid' : ''}`}
                 {...register('status', { required: 'Status is required' })}
               >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
+                <option value="ACTIVE">Active</option>
+                <option value="INACTIVE">Inactive</option>
               </select>
               <div className="invalid-feedback">{errors.status?.message}</div>
             </div>
@@ -131,15 +156,42 @@ const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps) =>
               />
               <div className="invalid-feedback">{errors.description?.message}</div>
             </div>
-
+            <div className="col-12 my-5">
+                <label
+                  htmlFor="postTag"
+                  className="block text-sm font-medium text-gray"
+                >
+                  Tags {/* <span className="required"> * </span> */}
+                </label> 
+                <div className="mt-1 d-flex rounded-md shadow-sm align-items-stretch overflow-hidden h-100">
+                  <span className="d-flex w-10 align-items-center rounded-l-md border border-r-0  bg-secondary bg-opacity-10 px-3 text-xl ">
+                 <IoMdPricetags fontSize={'1.5rem'}/> </span>
+                   <div className="mt-1 rounded-md shadow-sm p-1 border-2 border-secondary rounded-sm d-flex flex-wrap align-items-center m-0 w-100">
+                      {getValues('tags')?.map((tagName:string,i:number)=>{
+                   return(<div className="p-1 font-xs border border-secondary rounded-sm d-flex align-items-center bg-gray-light mx-1" key={i}>
+                      <span >{tagName}</span>
+                      <IoIosClose className="text-sm ml-1.5" onClick={(e)=>removeTag(tagName)}/>
+                      </div>)})
+                      }
+                    <input 
+                      className="d-flex font-16 p-2 outline-none bg-transparent border-0 w-100 form-control" 
+                      name="tag-input"
+                      value={tagName}
+                      onChange={createTag}
+                      onKeyDown={addTag} 
+                      type="text" />
+                  </div>
+                </div>
+              </div>
+              
             <div className="col-md-6">
             <FileUpload onChange={uploadBg}/>
               <div className="invalid-feedback">{errors.image?.message}</div>
             </div>
 
             <div className="col-md-6">
-              <label className="form-label block w-100">Preview</label>
-              {previewImage && <img className="img-responsive" src={previewImage} alt="Preview" width="240" />}
+              <label className="form-label block w-100 position-relative">Preview</label>
+              {previewImage && <img className="img-responsive w-100 position-relative" src={previewImage} alt="Preview" />}
             </div>
 
             <div className="col-12">
@@ -168,7 +220,7 @@ const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps) =>
           <div className="d-flex gap-2 my-3 justify-content-end">
             <Button variant="primary" size="sm" onClick={handleClose}>Close</Button>
           <Button variant="secondary" size="sm" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? <PulseLoader loading={isSubmitting} color="#ffffff" size="0.7rem" /> : 'Update Slide'}
+            {isSubmitting ? <PulseLoader loading={isSubmitting} color="#ffffff" size="0.7rem" /> : 'Update Service'}
           </Button>
           </div>
       </form>

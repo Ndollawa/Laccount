@@ -31,10 +31,10 @@ export const messagesApiSlice = apiSlice.injectEndpoints({
             providesTags: (result, error, arg) => {
                 if (result?.ids) {
                     return [
-                        { type: 'Message', id: 'LIST' },
-                        ...result.ids.map((id:string) => ({ type: 'Message', id }))
+                        { type: 'Messages', id: 'LIST' },
+                        ...result.ids.map((id:string) => ({ type: 'Messages', id }))
                     ]
-                } else return [{ type: 'Message', id: 'LIST' }]
+                } else return [{ type: 'Messages', id: 'LIST' }]
             }
         }),
         sendMessage: builder.mutation({
@@ -46,7 +46,7 @@ export const messagesApiSlice = apiSlice.injectEndpoints({
                 }
             }),
             invalidatesTags: [
-                { type: 'Message', id: "LIST" }
+                { type: 'Messages', id: "LIST" }
             ]
         }),
         updateMessage: builder.mutation({
@@ -58,7 +58,7 @@ export const messagesApiSlice = apiSlice.injectEndpoints({
                 }
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Message', id: arg.id }
+                { type: 'Messages', id: arg.id }
             ]
         }),
         deleteMessage: builder.mutation({
@@ -68,7 +68,7 @@ export const messagesApiSlice = apiSlice.injectEndpoints({
                 body: { id }
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Message', id: arg.id }
+                { type: 'Messages', id: arg.id }
             ]
         }),
     }),
@@ -82,7 +82,7 @@ export const {
 } = messagesApiSlice
 
 // returns the query result object
-export const selectMessagesResult = messagesApiSlice.endpoints.getMessages.select('Message')
+export const selectMessagesResult = messagesApiSlice.endpoints.getMessages.select('Messages')
 
 // creates memoized selector
 const selectMessagesData = createSelector(

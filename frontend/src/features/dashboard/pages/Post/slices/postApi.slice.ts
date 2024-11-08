@@ -32,10 +32,10 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             providesTags: (result, error, arg) => {
                 if (result?.ids) {
                     return [
-                        { type: 'Post', id: 'LIST' },
+                        { type: 'Posts', id: 'LIST' },
                         ...result.ids.map((id:string) => ({ type: 'Posts', id }))
                     ]
-                } else return [{ type: 'Post', id: 'LIST' }]
+                } else return [{ type: 'Posts', id: 'LIST' }]
             }
         }),
         addNewPost: builder.mutation({
@@ -45,7 +45,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
                 body: post
             }),
             invalidatesTags: [
-                { type: 'Post', id: "LIST" }
+                { type: 'Posts', id: "LIST" }
             ]
         }),
         updatePost: builder.mutation({
@@ -56,7 +56,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
                 
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Post', id: arg.id }
+                { type: 'Posts', id: arg.id }
             ]
         }),
         deletePost: builder.mutation({
@@ -66,7 +66,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
                 body: { id }
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Post', id: arg.id }
+                { type: 'Posts', id: arg.id }
             ]
         }),
     }),

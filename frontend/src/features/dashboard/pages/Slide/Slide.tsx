@@ -48,7 +48,7 @@ const Slide = ({ pageData }: PageProps) => {
         await updateSetting({ id, settings }).unwrap();
         dispatch(setLandingSetting(settings));
 
-        if (isDelError) return showToast('error', JSON.stringify(delError?.data));
+        if (isDelError) return showToast('error', delError?.data.message);
         Swal.fire('Deleted!', 'Slide has been deleted.', 'success');
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire('Cancelled', 'Operation aborted, entry is safe :)', 'error');
@@ -64,11 +64,11 @@ const Slide = ({ pageData }: PageProps) => {
 
   const renderSlideStatus = (status: string) => {
     switch (status) {
-      case 'pending':
+      case 'PENDING':
         return <span className="badge badge-primary">{status}</span>;
-      case 'active':
+      case 'ACTIVE':
         return <span className="badge badge-success">{status}</span>;
-      case 'inactive':
+      case 'INACTIVE':
         return <span className="badge badge-danger">{status}</span>;
       default:
         return null;
@@ -126,7 +126,7 @@ const Slide = ({ pageData }: PageProps) => {
           ],
       autoWidth: true,
       processing: true,
-      responsive: true,
+      // responsive: true,
       scrollX: true,
       scrollY: 'true',
       stateSave: true,

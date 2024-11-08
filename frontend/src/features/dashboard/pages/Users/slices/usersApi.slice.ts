@@ -33,10 +33,10 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             providesTags: (result, error, arg) => {
                 if (result?.ids) {
                     return [
-                        { type: 'User', id: 'LIST' },
-                        ...result.ids.map((id:string) => ({ type: 'User', id }))
+                        { type: 'Users', id: 'LIST' },
+                        ...result.ids.map((id:string) => ({ type: 'Users', id }))
                     ]
-                } else return [{ type: 'User', id: 'LIST' }]
+                } else return [{ type: 'Users', id: 'LIST' }]
             }
         }),
         addNewUser: builder.mutation({
@@ -46,7 +46,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
                 body: data 
             }),
             invalidatesTags: [
-                { type: 'User', id: "LIST" }
+                { type: 'Users', id: "LIST" }
             ]
         }),
         updateUser: builder.mutation({
@@ -56,7 +56,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
                 body: data,
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'User', id: arg.id }
+                { type: 'Users', id: arg.id }
             ]
         }),
         checkDuplicateUser: builder.mutation({
@@ -66,7 +66,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
                 body:userInfo,
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'User', id: arg.id }
+                { type: 'Users', id: arg.id }
             ]
         }),
         userUpload:builder.mutation<any, any>({
@@ -76,7 +76,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
                 body:data,
             }),
                 invalidatesTags: (result, error, arg) => [
-                    { type: 'Setting', id: arg.id }
+                    { type: 'Users', id: arg.id }
                 ]
         }),
         userRemoveFile:builder.mutation<any, any>({
@@ -86,7 +86,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
                 body:data,
             }),
                 invalidatesTags: (result, error, arg) => [
-                    { type: 'Setting', id: arg.id }
+                    { type: 'Users', id: arg.id }
                 ]
         }),
         deleteUser: builder.mutation({
@@ -96,7 +96,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
                 body: { id }
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'User', id: arg.id }
+                { type: 'Users', id: arg.id }
             ]
         }),
     }),
@@ -113,7 +113,7 @@ export const {
 } = usersApiSlice
 
 // returns the query result object
-export const selectUsersResult = usersApiSlice.endpoints.getUsers.select('User')
+export const selectUsersResult = usersApiSlice.endpoints.getUsers.select('Users')
 
 // creates memoized selector
 const selectUsersData = createSelector(

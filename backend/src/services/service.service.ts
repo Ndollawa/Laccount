@@ -71,10 +71,13 @@ export class ServiceService {
     updateServiceData: UpdateServiceDto,
     file: Express.Multer.File,
   ) {
+    const data = file
+    ? updateServiceData
+      : { ...updateServiceData, image: file.filename }
     try {
       return await this.serviceRepository.update({
         where: { id },
-        data: { ...updateServiceData, image: file.filename },
+        data,
       });
     } catch (error) {
       handleError(error);

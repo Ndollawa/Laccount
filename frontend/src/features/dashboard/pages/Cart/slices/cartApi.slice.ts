@@ -29,10 +29,10 @@ transformResponse: ({data}:Response) => {
 providesTags: (result, error, arg) => {
     if (result?.ids) {
         return [
-            { type: 'Cart', id: 'LIST' },
-            ...result.ids.map((id:string) => ({ type: 'Cart', id }))
+            { type: 'Carts', id: 'LIST' },
+            ...result.ids.map((id:string) => ({ type: 'Carts', id }))
         ]
-    } else return [{ type: 'Cart', id: 'LIST' }]
+    } else return [{ type: 'Carts', id: 'LIST' }]
 }
     }),
     addCart: builder.mutation<CartItem, {userId:string; newItem: Partial<CartItem>}>({
@@ -42,7 +42,7 @@ providesTags: (result, error, arg) => {
         body: newItem,
       }),
       invalidatesTags: [
-        { type: 'Cart', id: "LIST" }
+        { type: 'Carts', id: "LIST" }
     ]
     }),
     updateCart: builder.mutation<void, {userId:string; updatedItem:Partial<CartItem>}>({
@@ -52,7 +52,7 @@ providesTags: (result, error, arg) => {
         body: updatedItem,
       }),
       invalidatesTags: (result, error, arg) => [
-        { type: 'Cart', id: arg.id }
+        { type: 'Carts', id: arg.id }
     ],
     }),
     removeCart: builder.mutation<void, {userId:string; listingId:string }>({
@@ -61,7 +61,7 @@ providesTags: (result, error, arg) => {
         method: 'DELETE',
       }),
       invalidatesTags: (result, error, arg) => [
-        { type: 'Cart', id: arg.id }
+        { type: 'Carts', id: arg.id }
     ],
     }),
     clearCart: builder.mutation<void, void>({
@@ -70,7 +70,7 @@ providesTags: (result, error, arg) => {
         method: 'POST',
       }),
       invalidatesTags: (result, error, arg) => [
-        { type: 'Cart', id: arg.id }
+        { type: 'Carts', id: arg.id }
     ],
     }),
   }),
@@ -86,7 +86,7 @@ export const {
 } = cartApiSlice;
 
 // Select the result of the getCart query
-export const selectcartResult = cartApiSlice.endpoints.getCart.select('Cart');
+export const selectcartResult = cartApiSlice.endpoints.getCart.select('Carts');
 
 // Create memoized selector for cart data
 const selectCartData = createSelector(

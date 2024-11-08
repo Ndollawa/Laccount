@@ -35,10 +35,10 @@ export const faqsApiSlice = apiSlice.injectEndpoints({
             providesTags: (result, error, arg) => {
                 if (result?.ids) {
                     return [
-                        { type: 'Faq', id: 'LIST' },
-                        ...result.ids.map((id:string) => ({ type: 'Faq', id }))
+                        { type: 'Faqs', id: 'LIST' },
+                        ...result.ids.map((id:string) => ({ type: 'Faqs', id }))
                     ]
-                } else return [{ type: 'Faq', id: 'LIST' }]
+                } else return [{ type: 'Faqs', id: 'LIST' }]
             }
         }),
         addNewFaq: builder.mutation({
@@ -50,7 +50,7 @@ export const faqsApiSlice = apiSlice.injectEndpoints({
                 }
             }),
             invalidatesTags: [
-                { type: 'Faq', id: "LIST" }
+                { type: 'Faqs', id: "LIST" }
             ]
         }),
         updateFaq: builder.mutation({
@@ -62,7 +62,7 @@ export const faqsApiSlice = apiSlice.injectEndpoints({
                 }
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Faq', id: arg.id }
+                { type: 'Faqs', id: arg.id }
             ]
         }),
         deleteFaq: builder.mutation({
@@ -72,7 +72,7 @@ export const faqsApiSlice = apiSlice.injectEndpoints({
                 body: { id }
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Faq', id: arg.id }
+                { type: 'Faqs', id: arg.id }
             ]
         }),
     }),
@@ -86,7 +86,7 @@ export const {
 } = faqsApiSlice
 
 // returns the query result object
-export const selectFaqsResult = faqsApiSlice.endpoints.getFaqs.select('Faq')
+export const selectFaqsResult = faqsApiSlice.endpoints.getFaqs.select('Faqs')
 
 // creates memoized selector
 const selectFaqsData = createSelector(

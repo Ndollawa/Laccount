@@ -6,7 +6,6 @@ import { setPreloader } from '../../../components/preloader/slices/preloader.sli
 import PageProps from '@props/pageProps'
 import PostCategoryTableData from './components/PostCategoryTableData'   
 import showToast from '@utils/showToast'
-import initDataTables,{destroyDataTables} from '@hooks/useDataTables'
 import $ from 'jquery'
 import EditPostCategoryForm from './components/EditPostCategoryForm'
 import PostCategoryProps from '@props/postCategoryProps'

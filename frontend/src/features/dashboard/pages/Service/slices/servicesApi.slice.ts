@@ -33,10 +33,10 @@ export const servicesApiSlice = apiSlice.injectEndpoints({
             providesTags: (result, error, arg) => {
                 if (result?.ids) {
                     return [
-                        { type: 'Service', id: 'LIST' },
+                        { type: 'Services', id: 'LIST' },
                         ...result.ids.map((id:string) => ({ type: 'Services', id }))
                     ]
-                } else return [{ type: 'Service', id: 'LIST' }]
+                } else return [{ type: 'Services', id: 'LIST' }]
             }
         }),
         addNewService: builder.mutation({
@@ -46,28 +46,28 @@ export const servicesApiSlice = apiSlice.injectEndpoints({
                 body: service
             }),
             invalidatesTags: [
-                { type: 'Service', id: "LIST" }
+                { type: 'Services', id: "LIST" }
             ]
         }),
         updateService: builder.mutation({
-            query: service => ({
-                url: '/services',
+            query: ({id, ...service}) => ({
+                url: `/services/${service.id}`,
                 method: 'PATCH',
                 body: service,
                 
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Service', id: arg.id }
+                { type: 'Services', id: arg.id }
             ]
         }),
         deleteService: builder.mutation({
             query: ({ id }) => ({
-                url: `/services`,
+                url: `/services/${id}`,
                 method: 'DELETE',
                 body: { id }
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Service', id: arg.id }
+                { type: 'Services', id: arg.id }
             ]
         }),
     }),

@@ -66,10 +66,10 @@ export const settingsApiSlice = apiSlice.injectEndpoints({
       providesTags: (result, error, arg) => {
         if (result?.ids) {
           return [
-            { type: 'appSettings', id: 'LIST' },
-            ...result.ids.map((id: string) => ({ type: 'Setting', id })),
+            { type: 'AppSettings', id: 'LIST' },
+            ...result.ids.map((id: string) => ({ type: 'AppSettings', id })),
           ];
-        } else return [{ type: 'appSettings', id: 'LIST' }];
+        } else return [{ type: 'AppSettings', id: 'LIST' }];
       },
     }),
     getSettingsByType: builder.query<any, any>({
@@ -82,10 +82,10 @@ export const settingsApiSlice = apiSlice.injectEndpoints({
          providesTags: (result, error, arg) => {
         if (result?.ids) {
           return [
-            { type: 'appSettings', id: 'LIST' },
-            ...result.ids.map((id: string) => ({ type: 'appSettings', id })),
+            { type: 'AppSettings', id: 'LIST' },
+            ...result.ids.map((id: string) => ({ type: 'AppSettings', id })),
           ];
-        } else return [{ type: 'appSettings', id: 'LIST' }];
+        } else return [{ type: 'AppSettings', id: 'LIST' }];
       },
     }),
     addNewSetting: builder.mutation({
@@ -96,7 +96,7 @@ export const settingsApiSlice = apiSlice.injectEndpoints({
           ...initialSetting,
         },
       }),
-      invalidatesTags: [{ type: 'appSettings', id: "LIST" }],
+      invalidatesTags: [{ type: 'AppSettings', id: "LIST" }],
     }),
     updateSetting: builder.mutation({
       query: ({ id, ...initialSetting }) => ({
@@ -106,7 +106,7 @@ export const settingsApiSlice = apiSlice.injectEndpoints({
           ...initialSetting,
         },
       }),
-      invalidatesTags: (result, error, arg) => [{ type: 'appSettings', id: arg.id }],
+      invalidatesTags: (result, error, arg) => [{ type: 'AppSettings', id: arg.id }],
     }),
     updateSlideSetting: builder.mutation({
       query: ( initialSetting ) => ({
@@ -114,7 +114,7 @@ export const settingsApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body:initialSetting,
         }),
-      invalidatesTags: (result, error, arg) => [{ type: 'appSettings', id: arg.id }],
+      invalidatesTags: (result, error, arg) => [{ type: 'AppSettings', id: arg.id }],
     }),
     deleteSetting: builder.mutation({
       query: ({ id }) => ({
@@ -122,7 +122,7 @@ export const settingsApiSlice = apiSlice.injectEndpoints({
         method: "DELETE",
         body: { id },
       }),
-      invalidatesTags: (result, error, arg) => [{ type: 'appSettings', id: arg.id }],
+      invalidatesTags: (result, error, arg) => [{ type: 'AppSettings', id: arg.id }],
     }),
     settingsUpload: builder.mutation<any, any>({
       query: (data) => ({
@@ -130,7 +130,7 @@ export const settingsApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: (result, error, arg) => [{ type: 'appSettings', id: arg.id }],
+      invalidatesTags: (result, error, arg) => [{ type: 'AppSettings', id: arg.id }],
     }),
     settingsRemoveFile: builder.mutation<any, any>({
       query: (data) => ({
@@ -138,7 +138,7 @@ export const settingsApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: (result, error, arg) => [{ type: 'appSettings', id: arg.id }],
+      invalidatesTags: (result, error, arg) => [{ type: 'AppSettings', id: arg.id }],
     }),
   }),
 });
@@ -156,7 +156,7 @@ export const {
 } = settingsApiSlice;
 
 // Select the result of the getSettings query
-export const selectSettingsResult = settingsApiSlice.endpoints.getSettings.select('appSettings');
+export const selectSettingsResult = settingsApiSlice.endpoints.getSettings.select('AppSettings');
 
 // Create memoized selector for settings data
 const selectSettingsData = createSelector(

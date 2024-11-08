@@ -30,10 +30,10 @@ export const conversationsApiSlice = apiSlice.injectEndpoints({
             providesTags: (result, error, arg) => {
                 if (result?.ids) {
                     return [
-                        { type: 'Conversation', id: 'LIST' },
-                        ...result.ids.map((id:string) => ({ type: 'Conversation', id }))
+                        { type: 'Conversations', id: 'LIST' },
+                        ...result.ids.map((id:string) => ({ type: 'Conversations', id }))
                     ]
-                } else return [{ type: 'Conversation', id: 'LIST' }]
+                } else return [{ type: 'Conversations', id: 'LIST' }]
             }
         }),
         addNewConversation: builder.mutation({
@@ -45,7 +45,7 @@ export const conversationsApiSlice = apiSlice.injectEndpoints({
                 }
             }),
             invalidatesTags: [
-                { type: 'Conversation', id: "LIST" }
+                { type: 'Conversations', id: "LIST" }
             ]
         }),
         updateConversation: builder.mutation({
@@ -57,7 +57,7 @@ export const conversationsApiSlice = apiSlice.injectEndpoints({
                 }
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Conversation', id: arg.id }
+                { type: 'Conversations', id: arg.id }
             ]
         }),
         deleteConversation: builder.mutation({
@@ -67,7 +67,7 @@ export const conversationsApiSlice = apiSlice.injectEndpoints({
                 body: { id }
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Conversation', id: arg.id }
+                { type: 'Conversations', id: arg.id }
             ]
         }),
     }),
@@ -81,7 +81,7 @@ export const {
 } = conversationsApiSlice
 
 // returns the query result object
-export const selectConversationsResult = conversationsApiSlice.endpoints.getConversations.select('Conversation')
+export const selectConversationsResult = conversationsApiSlice.endpoints.getConversations.select('Conversations')
 
 // creates memoized selector
 const selectConversationsData = createSelector(

@@ -3,9 +3,9 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button } from 'react-bootstrap';
 import { Editor } from '@tinymce/tinymce-react';
 import { PulseLoader } from 'react-spinners';
-import { useUpdateMailerMutation } from '../slices/mailersApi.slice';
+import { useUpdateServiceMutation } from '../slices/servicesApi.slice';
 import showToast from '@utils/showToast';
-import MailerProps from '@props/MailerProps';
+import ServiceProps from '@props/ServiceProps';
 import useWindowSize from '@hooks/useWindowSize';
 import ModalComponent from '@dashboard/components/Modal';
 import FileUpload from '@components/FileUpload';
@@ -23,14 +23,14 @@ interface FormInputs {
 
 interface ModalDataProps {
   modalData: {
-    data: MailerProps | null;
+    data: ServiceProps | null;
     showModal: boolean;
   };
 }
 
-const EditMailerModal = ({ modalData: { data, showModal } }: ModalDataProps) => {
+const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps) => {
   const [previewImage, setPreviewImage] = useState<string>(`${SERVICE_ASSETS}${data?.image}`);
-  const [updateMailer, { isLoading, isSuccess, isError, error }] = useUpdateMailerMutation();
+  const [updateService, { isLoading, isSuccess, isError, error }] = useUpdateServiceMutation();
   const {width} = useWindowSize()
 
   const [show, setShow] = useState(false);
@@ -50,7 +50,7 @@ const EditMailerModal = ({ modalData: { data, showModal } }: ModalDataProps) => 
   useEffect(() => {
     if (isSuccess) {
       reset();
-      showToast('success', 'Mailer updated successfully');
+      showToast('success', 'Service updated successfully');
       setPreviewImage('');
     }
     if (isError) {
@@ -83,11 +83,11 @@ const EditMailerModal = ({ modalData: { data, showModal } }: ModalDataProps) => 
     formData.append('status', formFields.status);
     formData.append('file', formFields.image!);
 
-    await updateMailer(formData);
+    await updateService(formData);
   };
 
   return (
-    <ModalComponent {...{size:((width as number) < 600)? "xl": "lg", header:{show:true,title:'Edit Mailer'},modalStates:{show,handleOpen,handleClose}}} >
+    <ModalComponent {...{size:((width as number) < 600)? "xl": "lg", header:{show:true,title:'Edit Service'},modalStates:{show,handleOpen,handleClose}}} >
       <form onSubmit={(e) => handleSubmit(onSubmit)(e) } encType="multipart/form-data">
           <div className="row">
             <div className="mb-3 col-md-7">
@@ -176,4 +176,4 @@ const EditMailerModal = ({ modalData: { data, showModal } }: ModalDataProps) => 
   );
 };
 
-export default React.memo(EditMailerModal);
+export default React.memo(EditServiceModal);

@@ -82,8 +82,6 @@ export class AppSettingController {
     )
     file: Express.Multer.File,
   ) {
-    console.log(slide);
-    // console.log(Jso);
     return this.appSettingsService.updateSlider({
       id,
       type,

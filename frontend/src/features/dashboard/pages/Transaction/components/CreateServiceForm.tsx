@@ -3,7 +3,7 @@ import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 import { Button } from 'react-bootstrap';
 import { PulseLoader } from 'react-spinners';
 import { Editor } from '@tinymce/tinymce-react';
-import { useAddNewMailerMutation } from '../slices/mailerApi.slice';
+import { useAddNewServiceMutation } from '../slices/servicesApi.slice';
 import showToast from '@utils/showToast';
 import useWindowSize from '@hooks/useWindowSize';
 import ModalComponent from '@dashboard/components/Modal';
@@ -18,9 +18,9 @@ type FormValues = {
   image: FileList;
 };
 
-const CreateMailerForm = () => {
+const CreateServiceForm = () => {
   const { register, handleSubmit, watch, setValue, reset, formState: { errors, isSubmitting } } = useForm<FormValues>();
-  const [addNewMailer, { isLoading, isSuccess, isError, error }] = useAddNewMailerMutation();
+  const [addNewService, { isLoading, isSuccess, isError, error }] = useAddNewServiceMutation();
   const [previewImage, setPreviewImage] = React.useState<string>("");
   const {width} = useWindowSize()
   const [show, setShow] = useState(false);
@@ -36,12 +36,12 @@ const CreateMailerForm = () => {
     formData.append("status", formFields.status);
     formData.append("file", formFields.image[0]);
 
-    await addNewMailer(formData);
+    await addNewService(formData);
 
     if (isError) {
       showToast('error', JSON.stringify(error?.data?.message));
     } else {
-      showToast('success', 'Mailer created successfully');
+      showToast('success', 'Service created successfully');
       reset();
       setPreviewImage("")
     }
@@ -62,7 +62,7 @@ const CreateMailerForm = () => {
         Add New
       </button>
 
-          <ModalComponent {...{size:((width as  number)< 600)? "xl": "lg", header:{show:true,title:'Add New Mailer'},modalStates:{show,handleOpen,handleClose}}} >
+          <ModalComponent {...{size:((width as  number)< 600)? "xl": "lg", header:{show:true,title:'Add New Service'},modalStates:{show,handleOpen,handleClose}}} >
 					
         <form onSubmit={(e) => handleSubmit(onSubmit)(e) } encType="multipart/form-data">
             <div className="card-body">
@@ -140,7 +140,7 @@ const CreateMailerForm = () => {
             <div className="d-flex gap-2 my-3 justify-content-end">
             <Button variant="primary" size="sm" onClick={handleClose}>Close</Button>
           <Button variant="secondary" size="sm" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? <PulseLoader loading={isSubmitting} color="#ffffff" size="0.7rem" /> : 'Create Mailer'}
+            {isSubmitting ? <PulseLoader loading={isSubmitting} color="#ffffff" size="0.7rem" /> : 'Create Service'}
           </Button>
           </div>
         </form>
@@ -149,4 +149,4 @@ const CreateMailerForm = () => {
   );
 };
 
-export default CreateMailerForm;
+export default CreateServiceForm;

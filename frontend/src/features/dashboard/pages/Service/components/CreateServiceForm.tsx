@@ -8,6 +8,7 @@ import showToast from '@utils/showToast';
 import useWindowSize from '@hooks/useWindowSize';
 import ModalComponent from '@dashboard/components/Modal';
 import FileUpload from '@components/FileUpload';
+import { IoIosClose, IoMdPricetags } from 'react-icons/io';
 
 type FormValues = {
   title: string;
@@ -15,13 +16,24 @@ type FormValues = {
   description: string;
   body: string;
   status: string;
+  tags?: string[];
   image: FileList;
 };
 
 const CreateServiceForm = () => {
-  const { register, handleSubmit, watch, setValue, reset, formState: { errors, isSubmitting } } = useForm<FormValues>();
+  const { register, handleSubmit, watch, setValue, getValues, reset, formState: { errors, isSubmitting } } = useForm<FormValues>({
+    defaultValues: {
+    title: "",
+    icon: "",
+    description: "",
+    body: "",
+    tags: [],
+    status: 'ACTIVE',
+    image: undefined,
+  },});
   const [addNewService, { isLoading, isSuccess, isError, error }] = useAddNewServiceMutation();
-  const [previewImage, setPreviewImage] = React.useState<string>("");
+  const [tagName, setTagName] = useState("")
+  const [previewImage, setPreviewImage] = useState<string>("");
   const {width} = useWindowSize()
   const [show, setShow] = useState(false);
   const handleOpen = useCallback(() => setShow(true), [show]);
@@ -33,20 +45,38 @@ const CreateServiceForm = () => {
     formData.append("icon", formFields.icon);
     formData.append("description", formFields.description);
     formData.append("body", formFields.body);
+    formData.append("tags", formFields.tags);
     formData.append("status", formFields.status);
-    formData.append("file", formFields.image[0]);
-
+    formData.append("file", formFields.image);
+    
     await addNewService(formData);
-
+    
     if (isError) {
-      showToast('error', JSON.stringify(error?.data?.message));
+      showToast('error', error?.data?.message);
     } else {
       showToast('success', 'Service created successfully');
-      reset();
-      setPreviewImage("")
+      // reset();
+      // setPreviewImage("")
     }
   };
-
+  const createTag = (e:any)=>{
+    setTagName(e.target.value) 
+  }
+  // const tagwrapper= document.getElementsByClassName('tag-wrapper')!;
+  const addTag = (e:any) =>{
+  if( e.key === 'Enter' ){
+    if(tagName !== ""){
+    setValue('tags', [...(getValues('tags')) as string[],tagName])
+    console.log([...(getValues('tags')) as string[],tagName])
+    setTagName("")
+  } 
+  }
+  };
+  
+  const removeTag = (key:string) =>{
+    setValue('tags',  (getValues('tags') as string[]).filter(tag=> tag !== key ))
+    setTagName("")
+  };
   const uploadBg = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files;
     if (file && file.length > 0) {
@@ -94,8 +124,8 @@ const CreateServiceForm = () => {
                       className="form-control"
                       {...register('status')}
                     >
-                      <option value="active">Active</option>
-                      <option value="inactive">Inactive</option>
+                      <option value="ACTIVE">Active</option>
+                      <option value="INACTIVE">Inactive</option>
                     </select>
                   </div>
 
@@ -108,16 +138,43 @@ const CreateServiceForm = () => {
                     />
                     {errors.description && <div className="invalid-feedback">{errors.description.message}</div>}
                   </div>
-
+                  <div className="col-12 my-5">
+                <label
+                  htmlFor="postTag"
+                  className="block text-sm font-medium text-gray"
+                >
+                  Tags {/* <span className="required"> * </span> */}
+                </label> 
+                <div className="mt-1 d-flex rounded-md shadow-sm align-items-stretch overflow-hidden h-100">
+                  <span className="d-flex w-10 align-items-center rounded-l-md border border-r-0  bg-secondary bg-opacity-10 px-3 text-xl ">
+                 <IoMdPricetags fontSize={'1.5rem'}/> </span>
+                   <div className="mt-1 rounded-md shadow-sm p-1 border-2 border-secondary rounded-sm d-flex flex-wrap align-items-center m-0 w-100">
+                      {getValues('tags')?.map((tagName:string,i:number)=>{
+                   return(<div className="p-1 font-xs border border-secondary rounded-sm d-flex align-items-center bg-gray-light mx-1" key={i}>
+                      <span >{tagName}</span>
+                      <IoIosClose className="text-sm ml-1.5" onClick={(e)=>removeTag(tagName)}/>
+                      </div>)})
+                      }
+                    <input 
+                      className="d-flex font-16 bg-transparent p-2 outline-none border-0 w-100 form-control" 
+                      name="tag-input"
+                      value={tagName}
+                      onChange={createTag}
+                      onKeyDown={addTag} 
+                      type="text" />
+                  </div>
+                </div>
+              </div>
+              
                   <div className="col-md-6">
-                 <FileUpload onChange={uploadBg}/>
+                 <FileUpload  onChange={uploadBg}/>
 
                     {errors.image && <div className="invalid-feedback">Background image is required</div>}
                   </div>
 
                   <div className="col-md-6">
-                    <label className="form-label block w-100">Preview </label>
-                    {previewImage && <img src={previewImage} alt="Preview" width="240" />}
+                    <label className="form-label block w-100 position-relative">Preview </label>
+                    {previewImage && <img className='img-responsive position-relative w-100' src={previewImage} alt="Preview" />}
                   </div>
 
                   <div className="col-12">
@@ -133,6 +190,8 @@ const CreateServiceForm = () => {
                         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                       }}
                     />
+                   {errors.body && <div className="invalid-feedback">{errors.body.message}</div>}
+
                   </div>
                 </div>
               </div>

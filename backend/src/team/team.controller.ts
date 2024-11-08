@@ -16,7 +16,7 @@ export class TeamController {
   constructor(private readonly teamService: TeamService) {}
 
   @Post()
-  create(@Body() createTeamDto: CreateTeamDto & CreateTeamDto) {
+  create(@Body() createTeamDto: CreateTeamDto) {
     return this.teamService.create(createTeamDto);
   }
 

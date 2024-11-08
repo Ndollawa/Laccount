@@ -42,7 +42,7 @@
           const [deleteService, {
             isSuccess: isDelSuccess,
             isError: isDelError,
-            error: delerror
+            error: delError
         }]:any = useDeleteServiceMutation()
     
           const showEditForm = (modalData: ModalDataProps<ServiceProps>["modalData"]) => {
@@ -61,7 +61,7 @@
             }).then(async (result) => {
               if (result.isConfirmed) {
                    await deleteService({ id: id })
-                 if (isDelError) return showToast('error', JSON.stringify(delError?.data));
+                 if (isDelError) return showToast('error', delError?.data.message);
                 Swal.fire('Deleted!', 'Service record has been deleted.', 'success');
               } else if (result.dismiss === Swal.DismissReason.cancel) {
                 Swal.fire('Cancelled', 'Operation aborted, entry is safe :)', 'error');
@@ -91,13 +91,10 @@
                 </a>
               </LightGallery>
             ),
-            // 4: (data: any, row: any) => (
-            //   <div className="text-wrap text-left w-40" dangerouslySetInnerHTML={{ __html: row.body }}></div>
-            // ),
             5: (data, row) => <div>
                     {row.status ? renderServiceStatus(row.status) : 'No Status Available'}
                   </div>, 
-            7: (data: any, row: any) => (
+            6: (data: any, row: any) => (
               <div className="d-flex">
                 <button type="button" className="btn btn-info light shadow btn-xs sharp me-1" onClick={() => showEditForm({ data: row.service, showModal: true })}>
                   <i className="fas fa-pencil-alt"></i>
@@ -134,7 +131,7 @@
                   ],
               autoWidth: true,
               processing: true,
-              responsive: true,
+              // responsive: true,
               scrollX: true,
               scrollY: 'true',
               stateSave: true,

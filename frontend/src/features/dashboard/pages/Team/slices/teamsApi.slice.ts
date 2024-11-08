@@ -33,10 +33,10 @@ export const teamsApiSlice = apiSlice.injectEndpoints({
             providesTags: (result, error, arg) => {
                 if (result?.ids) {
                     return [
-                        { type: 'Team', id: 'LIST' },
+                        { type: 'Teams', id: 'LIST' },
                         ...result.ids.map((id:string) => ({ type: 'Teams', id }))
                     ]
-                } else return [{ type: 'Team', id: 'LIST' }]
+                } else return [{ type: 'Teams', id: 'LIST' }]
             }
         }),
         addNewTeam: builder.mutation({
@@ -46,7 +46,7 @@ export const teamsApiSlice = apiSlice.injectEndpoints({
                 body: team
             }),
             invalidatesTags: [
-                { type: 'Team', id: "LIST" }
+                { type: 'Teams', id: "LIST" }
             ]
         }),
         updateTeam: builder.mutation({
@@ -57,7 +57,7 @@ export const teamsApiSlice = apiSlice.injectEndpoints({
                 
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Team', id: arg.id }
+                { type: 'Teams', id: arg.id }
             ]
         }),
         deleteTeam: builder.mutation({
@@ -67,7 +67,7 @@ export const teamsApiSlice = apiSlice.injectEndpoints({
                 body: { id }
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Team', id: arg.id }
+                { type: 'Teams', id: arg.id }
             ]
         }),
     }),

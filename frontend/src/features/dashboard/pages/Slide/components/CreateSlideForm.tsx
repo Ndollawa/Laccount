@@ -20,8 +20,10 @@ interface FormInputs {
   description: string;
   body: string;
   status: string;
-  cto_text?: string;
-  link?: string;
+  cto:{
+    cto_text?: string;
+    link?: string;
+  }
   image: File | null;
 }
 
@@ -40,7 +42,7 @@ const CreateSlideForm = () => {
       title: '',
       description: '',
       body: '',
-      status: 'active',
+      status: 'ACTIVE',
       image: null,
       cto:{
         cto_text: '',
@@ -66,14 +68,12 @@ const CreateSlideForm = () => {
 
   const updateSettings: SubmitHandler<FieldValues> = async (formFields, e) => {
     e?.preventDefault()
-console.log(formFields.image)
 const formData = new FormData();
     formData.append("id", id);
     formData.append("type", "create");
     formData.append("image", formFields.image);
     formData.append("slide", JSON.stringify(formFields));
    
-      // await updateSlideSetting({id, type:"create", slide:formFields, file: formFields.image});
     await updateSlideSetting(formData);
      };
 

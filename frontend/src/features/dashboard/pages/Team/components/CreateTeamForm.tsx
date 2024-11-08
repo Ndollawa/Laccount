@@ -38,23 +38,23 @@ const CreateTeamForm = () => {
     e?.preventDefault()
     const formData = new FormData();
     
-    formDataToSend.append('firstName', formFields.firstName);
-    formDataToSend.append('lastName', formFields.lastName);
-    formDataToSend.append('email', formFields.email);
-    formDataToSend.append('position', formFields.position);
-    formDataToSend.append('phone', formFields.phone);
-    formDataToSend.append('bio', formFields.bio);
-    formDataToSend.append('status', formFields.status);
-    formDataToSend.append('socialMedia', JSON.stringify(formFields.socialMedia));
+    formData.append('firstName', formFields.firstName);
+    formData.append('lastName', formFields.lastName);
+    formData.append('email', formFields.email);
+    formData.append('position', formFields.position);
+    formData.append('phone', formFields.phone);
+    formData.append('bio', formFields.bio);
+    formData.append('status', formFields.status);
+    formData.append('socialMedia', JSON.stringify(formFields.socialMedia));
     
-    if (data.userImage && data.userImage.length > 0) {
-      formData.append("file", data.userImage[0]);
+    if (formFields.userImage && formFields.userImage.length > 0) {
+      formData.append("file", formFields.userImage[0]);
     }
 
     await addNewTeam(formData);
 
     if (isError) {
-      showToast("error", JSON.stringify(error?.data?.message));
+      showToast("error", error?.data?.message);
     } else if (isSuccess) {
       showToast("success", "Team member created successfully");
       reset();

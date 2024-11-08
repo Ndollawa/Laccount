@@ -5,6 +5,7 @@ export default interface ServiceProps{
     body:string;
     image:string;
     icon:string;
+    tags?:string[];
     status:string;
     createdAt?:Date;
     updatedAt?:Date;

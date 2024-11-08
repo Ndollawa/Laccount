@@ -5,7 +5,6 @@ import useImportScript from '@hooks/useImportScript';
 const Js:React.FC = () => {
   const javascript = [
     "assets/vendors/jquery/jquery-3.6.0.min.js",
-    "assets/vendors/bootstrap/js/bootstrap.bundle.min.js",
     "assets/vendors/jarallax/jarallax.min.js",
     "assets/vendors/jquery-ajaxchimp/jquery.ajaxchimp.min.js",
     "assets/vendors/jquery-appear/jquery.appear.min.js",
@@ -14,8 +13,6 @@ const Js:React.FC = () => {
     "assets/vendors/jquery-validate/jquery.validate.min.js",
     "assets/vendors/nouislider/nouislider.min.js",
     "assets/vendors/odometer/odometer.min.js",
-    "assets/vendors/swiper/swiper.min.js",
-    "assets/vendors/owl-carousel/owl.carousel.min.js",
     "assets/vendors/wnumb/wNumb.min.js",
     "assets/vendors/wow/wow.js",
     "assets/vendors/isotope/isotope.js",

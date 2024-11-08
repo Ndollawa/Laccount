@@ -21,8 +21,10 @@ interface FormInputs {
   description: string;
   body: string;
   status: string;
-  cto_text?: string;
+ cto:{
+   cto_text?: string;
   link?: string;
+ }
   image: File | null;
 }
 
@@ -32,7 +34,7 @@ const EditSlideModal = ({ modalData: { data, showModal } }: ModalDataProps<HomeS
   const [previewImage, setPreviewImage] = useState<string>('');
   const [show, setShow] = useState(false);
   const {width} = useWindowSize()
-
+console.log(show)
   const handleOpen = useCallback(() => setShow(true), [show]);
   const handleClose = useCallback(() => setShow(false), [show]);
 
@@ -42,7 +44,7 @@ const EditSlideModal = ({ modalData: { data, showModal } }: ModalDataProps<HomeS
       description: '',
       body: '',
       status: '',
-      cto: {},
+      cto: {link:"",cto_text:""},
       image: null,
     },
   });
@@ -51,12 +53,12 @@ const EditSlideModal = ({ modalData: { data, showModal } }: ModalDataProps<HomeS
   useEffect(() => {
     // When `data` is available, reset form fields with the new default values
     if (data) {
-      setShow(true)
+      setShow(showModal)
       reset({
         title: data.title || '',
         description: data.description || '',
         body: data.body || '',
-        status: data.status || 'active',
+        status: data.status || 'ACTIVE',
         cto: data.cto || {},
         image: null,
       });

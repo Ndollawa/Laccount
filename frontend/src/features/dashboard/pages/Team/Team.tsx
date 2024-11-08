@@ -72,11 +72,11 @@ import showToast from '@utils/showToast';
       const tableHead = ["S/N", "Image","Name", "Position", "Bio",  "Status","Date Created", "Action"];
       const renderTeamStatus = (status: string) => {
         switch (status) {
-          case 'pending':
+          case 'PENDING':
             return <span className="badge badge-primary">{status}</span>;
-          case 'active':
+          case 'ACTIVE':
             return <span className="badge badge-success">{status}</span>;
-          case 'inactive':
+          case 'INACTIVE':
             return <span className="badge badge-warning">{status}</span>;
           default:
             return null;

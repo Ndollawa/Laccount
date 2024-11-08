@@ -1,4 +1,5 @@
-import { PublishStatus } from '@prisma/client';
+import { ActiveStatus } from '@prisma/client';
+import { Transform } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
@@ -23,16 +24,14 @@ export class CreateServiceDto {
 
   @IsArray()
   @IsOptional()
+  @IsString({each:true})
+  @Transform(({ value }) => (typeof value === 'string'? value.split(',') : value))
   tags: string[];
 
   @IsString()
   @IsOptional()
   icon: string;
 
-  @IsEnum(PublishStatus)
-  status: PublishStatus;
-
-  @IsOptional()
-  @IsMimeType()
-  image: string;
+  @IsEnum(ActiveStatus)
+  status: ActiveStatus;
 }
