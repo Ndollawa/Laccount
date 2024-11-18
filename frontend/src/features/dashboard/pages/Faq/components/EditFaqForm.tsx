@@ -5,6 +5,8 @@ import { Editor } from '@tinymce/tinymce-react';
 import { PulseLoader } from 'react-spinners';
 import { useUpdateFaqMutation } from '../slices/faqApi.slice';
 import showToast from '@utils/showToast';
+import handleApiErrors from '@utils/handleApiErrors';
+import tinyMCEInit from '@configs/tinymce.config';
 import FaqProps from '@props/FaqProps';
 import useWindowSize from '@hooks/useWindowSize';
 import ModalComponent from '@dashboard/components/Modal';
@@ -21,16 +23,22 @@ const EditFaqModal = ({ modalData: { data, showModal } }: ModalDataProps<FaqProp
   const [updateFaq, { isLoading, isSuccess, isError, error }] = useUpdateFaqMutation();
   const {width} = useWindowSize()
 
-  const [show, setShow] = useState(showModal);
+  const [show, setShow] = useState(false);
   const handleOpen = useCallback(() => setShow(true), [show]);
   const handleClose = useCallback(() => setShow(false), [show]);
-  const { register, handleSubmit, setValue, reset, formState: { errors, isSubmitting }, watch } = useForm<FormInputs>({
-    defaultValues: {
+  const { register, handleSubmit, setError, setValue, reset, formState: { errors, isSubmitting }, watch } = useForm<FormInputs>();
+  useEffect(() => {
+    // When `data` is available, reset form fields with the new default values
+    if (data) {
+      setShow(showModal)
+      // setId(data.id)
+      reset({
       question: data?.question,
       response: data?.response,
       status: data?.status,
-    },
-  });
+         });
+        }
+  }, [data, reset]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -38,13 +46,13 @@ const EditFaqModal = ({ modalData: { data, showModal } }: ModalDataProps<FaqProp
       showToast('success', 'Faq updated successfully');
     }
     if (isError) {
-      showToast('error', error?.message);
+      handleApiErrors(error, setError);
     }
   }, [isSuccess, isError, reset, error]);
 
   const onSubmit: SubmitHandler<FieldValues> = async (formFields, e) => {
     e?.preventDefault()
-    await updateFaq(formFields);
+    await updateFaq({...formFields, id:data.id});
   };
 
   return (
@@ -79,19 +87,7 @@ const EditFaqModal = ({ modalData: { data, showModal } }: ModalDataProps<FaqProp
                 tinymceScriptSrc="/tinymce/tinymce.min.js"
                 onEditorChange={(newValue) => setValue('response', newValue)}
                 value={watch('response')}
-                init={{
-                  height: 400,
-                  menubar: true,
-                  plugins: [
-                    'advlist autolink lists link image charmap print preview anchor',
-                    'searchreplace visualblocks code fullscreen',
-                    'insertdatetime media table paste code help wordcount',
-                  ],
-                  toolbar: 'undo redo | formatselect | bold italic backcolor | \
-                            alignleft aligncenter alignright alignjustify | \
-                            bullist numlist outdent indent | removeformat | help',
-                  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                }}
+                init={tinyMCEInit}
               />
             </div>
           </div>

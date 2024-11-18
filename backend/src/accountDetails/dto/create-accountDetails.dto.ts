@@ -10,7 +10,7 @@ import {
 export class CreateAccountDetailsDto {
   @IsUUID()
   @IsNotEmpty()
-  category: string;
+  categoryId: string;
 
   @IsString()
   @IsNotEmpty()

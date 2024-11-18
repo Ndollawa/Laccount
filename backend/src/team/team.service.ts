@@ -35,8 +35,11 @@ export class TeamService {
       handleError(error);
     }
   }
-  async create(createTeamData: CreateTeamDto): Promise<Team> {
-    const { firstName, lastName } = createTeamData;
+  async create(
+    createTeamData: CreateTeamDto,
+    file: Express.Multer.File,
+  ): Promise<Team> {
+    const { firstName, lastName, socialMedia } = createTeamData;
 
     try {
       const existingTeam = await this.teamRepository.exists({
@@ -50,26 +53,58 @@ export class TeamService {
         );
       }
 
-      const TeamData = {
-        ...createTeamData,
-      };
-
+      const data = !file
+        ? {
+            ...createTeamData,
+            socialMedia:
+              typeof socialMedia === 'string'
+                ? JSON.parse(socialMedia)
+                : socialMedia,
+          }
+        : {
+            ...createTeamData,
+            socialMedia:
+              typeof socialMedia === 'string'
+                ? JSON.parse(socialMedia)
+                : socialMedia,
+            image: file.filename,
+          };
+      // return
       const newTeam = await this.teamRepository.create({
-        data: TeamData,
+        data,
       });
-      Logger.debug(newTeam);
       return newTeam;
     } catch (error) {
-      Logger.log(error);
       handleError(error);
     }
   }
 
-  async update(id: string, updateTeamData: UpdateTeamDto) {
+  async update(
+    id: string,
+    updateTeamData: UpdateTeamDto,
+    file: Express.Multer.File,
+  ) {
     try {
+      const data = !file
+        ? {
+            ...updateTeamData,
+            socialMedia:
+              typeof updateTeamData.socialMedia === 'string'
+                ? JSON.parse(updateTeamData.socialMedia)
+                : updateTeamData.socialMedia,
+          }
+        : {
+            ...updateTeamData,
+            socialMedia:
+              typeof updateTeamData.socialMedia === 'string'
+                ? JSON.parse(updateTeamData.socialMedia)
+                : updateTeamData.socialMedia,
+            image: file.filename,
+          };
+      console.log(data, file);
       return await this.teamRepository.update({
         where: { id },
-        data: updateTeamData,
+        data,
       });
     } catch (error) {
       handleError(error);

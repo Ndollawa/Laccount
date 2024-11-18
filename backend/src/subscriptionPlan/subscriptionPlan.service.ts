@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import {
   SubscriptionPlan,
   PlanType,
-  PlanStatus,
   PaymentFrequency,
 } from '@prisma/client';
 import { handleError } from '@app/common';

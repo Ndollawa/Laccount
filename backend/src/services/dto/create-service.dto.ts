@@ -24,8 +24,10 @@ export class CreateServiceDto {
 
   @IsArray()
   @IsOptional()
-  @IsString({each:true})
-  @Transform(({ value }) => (typeof value === 'string'? value.split(',') : value))
+  @IsString({ each: true })
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value.split(',') : value,
+  )
   tags: string[];
 
   @IsString()

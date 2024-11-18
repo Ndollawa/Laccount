@@ -2,13 +2,16 @@ import React , { useEffect, useState, useCallback } from 'react';
 import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 import { Button } from 'react-bootstrap';
 import { PulseLoader } from 'react-spinners';
+import { IoIosClose, IoMdPricetags } from 'react-icons/io';
 import { Editor } from '@tinymce/tinymce-react';
 import { useAddNewServiceMutation } from '../slices/servicesApi.slice';
 import showToast from '@utils/showToast';
+import handleApiErrors from '@utils/handleApiErrors';
+import { checkKeyDown } from '@utils/form.hook';
 import useWindowSize from '@hooks/useWindowSize';
 import ModalComponent from '@dashboard/components/Modal';
 import FileUpload from '@components/FileUpload';
-import { IoIosClose, IoMdPricetags } from 'react-icons/io';
+import tinyMCEInit from '@configs/tinymce.config';
 
 type FormValues = {
   title: string;
@@ -17,11 +20,11 @@ type FormValues = {
   body: string;
   status: string;
   tags?: string[];
-  image: FileList;
+  image: File | null;
 };
 
 const CreateServiceForm = () => {
-  const { register, handleSubmit, watch, setValue, getValues, reset, formState: { errors, isSubmitting } } = useForm<FormValues>({
+  const { register, handleSubmit, watch, setError, setValue, getValues, reset, formState: { errors, isSubmitting } } = useForm<FormValues>({
     defaultValues: {
     title: "",
     icon: "",
@@ -38,27 +41,24 @@ const CreateServiceForm = () => {
   const [show, setShow] = useState(false);
   const handleOpen = useCallback(() => setShow(true), [show]);
   const handleClose = useCallback(() => setShow(false), [show]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      reset();
+      showToast('success', 'Service created successfully');
+      setPreviewImage('');
+    }
+    if (isError) {
+      handleApiErrors(error, setError);
+    }
+  }, [isSuccess, isError, reset, error]);
+
+
   const onSubmit: SubmitHandler<FieldValues> = async (formFields, e) => {
     e?.preventDefault()
-    const formData = new FormData();
-    formData.append("title", formFields.title);
-    formData.append("icon", formFields.icon);
-    formData.append("description", formFields.description);
-    formData.append("body", formFields.body);
-    formData.append("tags", formFields.tags);
-    formData.append("status", formFields.status);
-    formData.append("file", formFields.image);
-    
-    await addNewService(formData);
-    
-    if (isError) {
-      showToast('error', error?.data?.message);
-    } else {
-      showToast('success', 'Service created successfully');
-      // reset();
-      // setPreviewImage("")
-    }
-  };
+    await addNewService(formFields);
+     };
+
   const createTag = (e:any)=>{
     setTagName(e.target.value) 
   }
@@ -67,24 +67,21 @@ const CreateServiceForm = () => {
   if( e.key === 'Enter' ){
     if(tagName !== ""){
     setValue('tags', [...(getValues('tags')) as string[],tagName])
-    console.log([...(getValues('tags')) as string[],tagName])
     setTagName("")
-  } 
-  }
-  };
+  }}};
   
   const removeTag = (key:string) =>{
     setValue('tags',  (getValues('tags') as string[]).filter(tag=> tag !== key ))
     setTagName("")
   };
+
   const uploadBg = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files;
     if (file && file.length > 0) {
-      setValue("image", file);
+      setValue("image", file[0]);
       const fileUrl = URL.createObjectURL(file[0]);
       setPreviewImage(fileUrl);
-    }
-  };
+    }};
 
   return (
     <>
@@ -94,7 +91,7 @@ const CreateServiceForm = () => {
 
           <ModalComponent {...{size:((width as  number)< 600)? "xl": "lg", header:{show:true,title:'Add New Service'},modalStates:{show,handleOpen,handleClose}}} >
 					
-        <form onSubmit={(e) => handleSubmit(onSubmit)(e) } encType="multipart/form-data">
+        <form onKeyDown={checkKeyDown} onSubmit={(e) => handleSubmit(onSubmit)(e) } encType="multipart/form-data">
             <div className="card-body">
               <div className="basic-form">
                 <div className="row">
@@ -182,13 +179,7 @@ const CreateServiceForm = () => {
                     <Editor
                       tinymceScriptSrc="/tinymce/tinymce.min.js"
                       onEditorChange={(newValue) => setValue("body", newValue)}
-                      init={{
-                        height: 400,
-                        menubar: false,
-                        plugins: ['advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'anchor', 'searchreplace', 'code', 'fullscreen', 'insertdatetime', 'media', 'table', 'preview', 'help'],
-                        toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | removeformat',
-                        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                      }}
+                      init={tinyMCEInit}
                     />
                    {errors.body && <div className="invalid-feedback">{errors.body.message}</div>}
 

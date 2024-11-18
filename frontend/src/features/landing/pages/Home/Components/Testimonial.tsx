@@ -1,10 +1,43 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+
+import 'jquery';
+import OwlCarousel from 'react-owl-carousel'; // Importing OwlCarousel from react-owl-carousel
+import 'owl.carousel/dist/assets/owl.carousel.css'; // OwlCarousel CSS
+import 'owl.carousel/dist/assets/owl.theme.default.css'; // OwlCarousel default theme CSS
 import { useLandingConfig } from '@dashboard/pages/Settings/slices/settings.slice';
 
 
 const Testimonial = ()  => {
 const {settings:{landingPageConfig:{testimonialStyle}={}}={}} = useSelector(useLandingConfig)
+  const carouselOptions = {
+    loop: true,
+    autoplay: true,
+    autoplayTimeout: 7000,
+    smartSpeed: 500,
+    items: 1,
+    lazyLoad: true,
+    lazyContent: true,
+    animateOut: 'fadeOut',
+    animateIn: 'fadeIn',
+    nav: false,
+    dots: true,
+    autoplayHoverPause: true,
+    autoplayTimeout: 5000,
+    margin: 30,
+    responsive: {
+        "0": {
+            "items": 1
+        },
+        "768": {
+            "items": 1
+        },
+        "992": {
+            "items": 1
+        }
+    }
+  };
+              
 let testimonialSection;
 switch (testimonialStyle) {
   case 1:
@@ -61,29 +94,8 @@ switch (testimonialStyle) {
                     </div>
                     <div className="testimonials-three__carousel">
                         <div className="testimonials-three__carousel__line"></div>
-                        
-                        <div className="thm-owl__carousel owl-carousel owl-theme owl-dot-style-one" data-owl-options='{
-                "loop": true,
-                "items": 1,
-                "autoplay": true,
-                "autoplayHoverPause": true,
-                "autoplayTimeout": 5000,
-                "smartSpeed": 500,
-                "nav": false,
-                "dots": true,
-                "margin": 30,
-                "responsive": {
-                    "0": {
-                        "items": 1
-                    },
-                    "768": {
-                        "items": 1
-                    },
-                    "992": {
-                        "items": 1
-                    }
-                }
-            }'>
+          
+        <OwlCarousel className="owl-theme" {...carouselOptions}>
                       
                           
                             <div className="item">
@@ -115,7 +127,7 @@ switch (testimonialStyle) {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            </OwlCarousel>
                     </div>
                 </div>
             </div>

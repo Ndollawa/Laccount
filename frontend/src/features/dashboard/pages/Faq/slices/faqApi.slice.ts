@@ -45,21 +45,17 @@ export const faqsApiSlice = apiSlice.injectEndpoints({
             query: initialFaq => ({
                 url: '/faqs',
                 method: 'POST',
-                body: {
-                    ...initialFaq,
-                }
+                body: initialFaq,
             }),
             invalidatesTags: [
                 { type: 'Faqs', id: "LIST" }
             ]
         }),
         updateFaq: builder.mutation({
-            query: initialFaq => ({
-                url: '/faqs',
+            query: ({id, ...initialFaq}) => ({
+                url: `/faqs/${ id }`,
                 method: 'PATCH',
-                body: {
-                    ...initialFaq,
-                }
+                body:initialFaq,
             }),
             invalidatesTags: (result, error, arg) => [
                 { type: 'Faqs', id: arg.id }
@@ -67,9 +63,8 @@ export const faqsApiSlice = apiSlice.injectEndpoints({
         }),
         deleteFaq: builder.mutation({
             query: ({ id }) => ({
-                url: `/faqs`,
+                url: `/faqs/${ id }`,
                 method: 'DELETE',
-                body: { id }
             }),
             invalidatesTags: (result, error, arg) => [
                 { type: 'Faqs', id: arg.id }

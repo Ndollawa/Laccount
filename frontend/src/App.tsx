@@ -29,7 +29,7 @@ const DashboardFaq = React.lazy(() => import('./features/dashboard/pages/Faq/Faq
 const DashboardTeam = React.lazy(() => import('./features/dashboard/pages/Team/Team'));
 const DashboardService = React.lazy(() => import('./features/dashboard/pages/Service/Services'));
 const DashboardPost = React.lazy(() => import('./features/dashboard/pages/Post/Post'));
-const DashboardPostCategory = React.lazy(() => import('./features/dashboard/pages/PostCategory/PostCategory'));
+const DashboardCategory = React.lazy(() => import('./features/dashboard/pages/Category/Category'));
 const DashboardSlider = React.lazy(() => import('./features/dashboard/pages/Slide/Slide'));
 
 // settings
@@ -60,12 +60,7 @@ const Login = React.lazy(() => import('./features/auth/Login'));
 const Register = React.lazy(() => import('./features/auth/Register'));
 
 // Error pages
-const Error400 = React.lazy(() => import( './features/errorPages/Error400'));
-const Error401 = React.lazy(() => import( './features/errorPages/Error401'));
-const Error403 = React.lazy(() => import( './features/errorPages/Error403'));
-const Error404 = React.lazy(() => import( './features/errorPages/Error404'));
-const Error500 = React.lazy(() => import( './features/errorPages/Error500'));
-const Error503 = React.lazy(() => import( './features/errorPages/Error503'));
+const Error = React.lazy(() => import( './features/errorPages/Error'));
  const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
 const Preloader = ()=>{
@@ -104,14 +99,15 @@ const bgImage = `${BRAND_ASSETS}${pagesBg}`
 
   const errorRoutes = useMemo(() => (
     <>
-      <Route path="error" element={<DashboardLayout pageData={{ pageTitle: "Dashboard" }} />}>
-        <Route index element={<Error404 />} />
-        <Route path="400" element={<Error400 />} />
-        <Route path="401" element={<Error401 />} />
-        <Route path="403" element={<Error403 />} />
-        <Route path="404" element={<Error404 />} />
-        <Route path="500" element={<Error500 />} />
-        <Route path="503" element={<Error503 />} />
+      <Route path="error" element={<DashboardLayout pageData={{ pageTitle: "Error" }} />}>
+        <Route index element={<Error statusCode="ERR_404" />} />
+        <Route path="400" element={<Error statusCode="ERR_400" />} />
+        <Route path="401" element={<Error statusCode="ERR_401" />} />
+        <Route path="403" element={<Error statusCode="ERR_403" />} />
+        <Route path="404" element={<Error statusCode="ERR_404" />} />
+        <Route path="500" element={<Error statusCode="ERR_500" />} />
+        <Route path="502" element={<Error statusCode="ERR_502" />} />
+        <Route path="503" element={<Error statusCode="ERR_503" />} />
       </Route>
     </>
   ), []);
@@ -153,7 +149,7 @@ const bgImage = `${BRAND_ASSETS}${pagesBg}`
                      <Route index element={<DashboardPost pageData={{ pageTitle: "Users", coverImage:bgImage }} />} />
                      <Route path=":postId" element={<User pageData={{ pageTitle: "User", coverImage:bgImage }} />} />
               </Route>
-                     <Route path="category" element={<DashboardPostCategory pageData={{ pageTitle: "Post Category", coverImage:bgImage }} />} />
+                     <Route path="category" element={<DashboardCategory pageData={{ pageTitle: "Category", coverImage:bgImage }} />} />
             </Route>
           <Route path="dashboard/settings/" element={<SiteSettings pageData={{ pageTitle:"Settings", coverImage:bgImage }}/>} >
                       <Route index element={<GeneralSettings/>} />

@@ -1,14 +1,14 @@
 import React from 'react'
-import { useGetPostCategoryQuery } from '@dashboard/pages/PostCategory/slices/postCategoryApi.slice'
+import { useGetCategoriesQuery } from '@dashboard/pages/Category/slices/categoryApi.slice'
 import { useGetUsersQuery } from '@dashboard/pages/Users/slices/usersApi.slice'
 import { useGetPostCommentQuery } from '@dashboard/pages/Post/postCommentApiSlice'
 import PostProps from '@props/postProps'
-import PostCategoryProps from '@props/postCategoryProps'
+import CategoryProps from '@props/categoryProps'
 import PostCommentProps from '@props/postCommentProps'
 const BLOG_ASSETS =  import.meta.env.VITE_BLOG_ASSETS
 
 const PostList = ({post}:{post:PostProps}) => {
-    const { category } = useGetPostCategoryQuery("categoryList", {
+    const { category } = useGetCategoriesQuery("categoryList", {
         selectFromResult: ({ data }) => ({
           category: data?.entities[post?.category]	 
         }),

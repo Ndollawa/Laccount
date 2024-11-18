@@ -3,14 +3,17 @@ import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 import { Button } from 'react-bootstrap';
 import { Editor } from '@tinymce/tinymce-react';
 import { PulseLoader } from 'react-spinners';
+import { IoIosClose, IoMdPricetags } from 'react-icons/io';
 import { useUpdateServiceMutation } from '../slices/servicesApi.slice';
 import showToast from '@utils/showToast';
+import handleApiErrors from '@utils/handleApiErrors';
 import ServiceProps from '@props/ServiceProps';
 import useWindowSize from '@hooks/useWindowSize';
 import ModalComponent from '@dashboard/components/Modal';
 import FileUpload from '@components/FileUpload';
 import { ModalDataProps } from '@props';
-import { IoIosClose, IoMdPricetags } from 'react-icons/io';
+import { checkKeyDown } from '@utils/form.hook';
+import tinyMCEInit from '@configs/tinymce.config';
 
 const SERVICE_ASSETS = import.meta.env.VITE_SERVICE_ASSETS;
 
@@ -27,14 +30,13 @@ interface FormInputs {
 
 const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps<ServiceProps>) => {
   const [previewImage, setPreviewImage] = useState<string>(`${SERVICE_ASSETS}${data?.image}`);
-  const [updateService, { isLoading, isSuccess, isError, error }] = useUpdateServiceMutation();
+  const [updateService, { isSuccess, isError, error }] = useUpdateServiceMutation();
   const [tagName, setTagName] = useState("")
-  const [id, setId] = useState("")
   const [show, setShow] = useState(false);
   const {width} = useWindowSize()
   const handleOpen = useCallback(() => setShow(true), [show]);
   const handleClose = useCallback(() => setShow(false), [show]);
-  const { register, handleSubmit, setValue, getValues, reset, formState: { errors, isSubmitting }, watch } = useForm<FormInputs>();
+  const { register, handleSubmit, setValue, getValues, reset, setError, formState: { errors, isSubmitting }, watch } = useForm<FormInputs>();
   const createTag = (e:any)=>{
     setTagName(e.target.value) 
   }
@@ -55,7 +57,6 @@ const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps<Ser
     // When `data` is available, reset form fields with the new default values
     if (data) {
       setShow(showModal)
-      setId(data.id)
       reset({
       title: data?.title,
       icon: data?.icon,
@@ -71,7 +72,7 @@ const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps<Ser
       }
     }
   }, [data, reset]);
- 
+
   useEffect(() => {
     if (isSuccess) {
       reset();
@@ -79,7 +80,7 @@ const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps<Ser
       setPreviewImage('');
     }
     if (isError) {
-      showToast('error', error?.message);
+      handleApiErrors(error, setError)
     }
   }, [isSuccess, isError, reset, error]);
 
@@ -99,21 +100,12 @@ const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps<Ser
 
   const onSubmit: SubmitHandler<FieldValues> = async (formFields, e) => {
     e?.preventDefault()
-    const formData = new FormData();
-    formData.append('title', formFields.title);
-    formData.append('icon', formFields.icon);
-    formData.append('description', formFields.description);
-    formData.append('body', formFields.body);
-    formData.append('tags', JSON.stringify(formFields.tags));
-    formData.append('status', formFields.status);
-    formData.append('file', formFields.image!);
-
-    await updateService({id, formData});
+    await updateService({id:data.id, ...formFields});
   };
 
   return (
     <ModalComponent {...{size:((width as number) < 600)? "xl": "lg", header:{show:true,title:'Edit Service'},modalStates:{show,handleOpen,handleClose}}} >
-      <form onSubmit={(e) => handleSubmit(onSubmit)(e) } encType="multipart/form-data">
+      <form onKeyDown={checkKeyDown} onSubmit={(e) => handleSubmit(onSubmit)(e) } encType="multipart/form-data">
           <div className="row">
             <div className="mb-3 col-md-7">
               <label className="form-label"><strong>Name or Title</strong></label>
@@ -200,19 +192,7 @@ const EditServiceModal = ({ modalData: { data, showModal } }: ModalDataProps<Ser
                 tinymceScriptSrc="/tinymce/tinymce.min.js"
                 onEditorChange={(newValue) => setValue('body', newValue)}
                 value={watch('body')}
-                init={{
-                  height: 400,
-                  menubar: true,
-                  plugins: [
-                    'advlist autolink lists link image charmap print preview anchor',
-                    'searchreplace visualblocks code fullscreen',
-                    'insertdatetime media table paste code help wordcount',
-                  ],
-                  toolbar: 'undo redo | formatselect | bold italic backcolor | \
-                            alignleft aligncenter alignright alignjustify | \
-                            bullist numlist outdent indent | removeformat | help',
-                  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                }}
+                init={tinyMCEInit}
               />
             </div>
           </div>

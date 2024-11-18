@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Comment, CommentStatus } from '@prisma/client';
+import { Comment, PublishStatus } from '@prisma/client';
 import { handleError } from '@app/common';
 import { CreateCommentDto, UpdateCommentDto } from './dto';
 import { CommentRepository } from './comment.repository';
@@ -52,7 +52,7 @@ export class CommentService {
 
       const commentData = {
         ...createCommentData,
-        status: CommentStatus.PUBLISHED,
+        status: PublishStatus.PUBLISHED,
         authorType: authorId ? 'guest' : 'user',
         postId: '',
         parentId: '',

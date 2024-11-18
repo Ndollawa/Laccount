@@ -1,5 +1,4 @@
 import {
-  MailerTemplateStatus,
   MailerTemplateEnum,
   ActiveStatus,
 } from '@prisma/client';
@@ -55,6 +54,6 @@ export class CreateMailTemplateDto {
   @IsObject()
   context: any;
 
-  @IsEnum(MailerTemplateStatus)
-  status: MailerTemplateStatus;
+  @IsEnum(ActiveStatus)
+  status: ActiveStatus;
 }

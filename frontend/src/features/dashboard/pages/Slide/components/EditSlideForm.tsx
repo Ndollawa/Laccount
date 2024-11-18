@@ -6,6 +6,8 @@ import { PulseLoader } from 'react-spinners';
 import { Button } from 'react-bootstrap';
 import { BsToggleOff, BsToggleOn } from 'react-icons/bs';
 import showToast from '@utils/showToast';
+import handleApiErrors from '@utils/handleApiErrors';
+import tinyMCEInit from '@configs/tinymce.config';
 import { HomeSlide } from '@props/settingsProps';
 import { useUpdateSlideSettingMutation } from '../../Settings/slices/settingApi.slice';
 import { useLandingConfig } from '../../Settings/slices/settings.slice';
@@ -34,11 +36,10 @@ const EditSlideModal = ({ modalData: { data, showModal } }: ModalDataProps<HomeS
   const [previewImage, setPreviewImage] = useState<string>('');
   const [show, setShow] = useState(false);
   const {width} = useWindowSize()
-console.log(show)
   const handleOpen = useCallback(() => setShow(true), [show]);
   const handleClose = useCallback(() => setShow(false), [show]);
 
-  const { register, handleSubmit, formState: { errors, isSubmitting }, setValue, reset, watch } = useForm<FormInputs>({
+  const { register, handleSubmit, setError, formState: { errors, isSubmitting }, setValue, reset, watch } = useForm<FormInputs>({
     defaultValues: {
       title: '',
       description: '',
@@ -80,7 +81,7 @@ console.log(show)
       
       }
       if (isError) {
-        showToast('error', error?.message);
+        handleApiErrors(error, setError)
       }
       }, [isSuccess, isError]);
   const updateSettings: SubmitHandler<FieldValues> = useCallback(async (formFields, e) => {
@@ -182,15 +183,7 @@ console.log(show)
               tinymceScriptSrc="/tinymce/tinymce.min.js"
               onEditorChange={(newValue) => setValue('body', newValue)}
               value={watch('body')}
-              init={{
-                height: 400,
-                menubar: false,
-                plugins: [
-                  'advlist autolink lists link image charmap anchor searchreplace visualblocks code fullscreen insertdatetime media table preview help wordcount',
-                ],
-                toolbar: 'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-              }}
+              init={tinyMCEInit}
             />
           </div>
           <div className="d-flex gap-2 my-3 justify-content-end">

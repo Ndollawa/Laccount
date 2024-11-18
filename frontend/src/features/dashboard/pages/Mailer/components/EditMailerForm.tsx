@@ -5,6 +5,8 @@ import { Editor } from '@tinymce/tinymce-react';
 import { PulseLoader } from 'react-spinners';
 import { useUpdateMailerMutation } from '../slices/mailersApi.slice';
 import showToast from '@utils/showToast';
+import handleApiErrors from '@utils/handleApiErrors';
+import tinyMCEInit from '@configs/tinymce.config';
 import MailerProps from '@props/MailerProps';
 import useWindowSize from '@hooks/useWindowSize';
 import ModalComponent from '@dashboard/components/Modal';
@@ -54,7 +56,7 @@ const EditMailerModal = ({ modalData: { data, showModal } }: ModalDataProps) => 
       setPreviewImage('');
     }
     if (isError) {
-      showToast('error', error?.message);
+      handleApiErrors(error, setError);
     }
   }, [isSuccess, isError, reset, error]);
 
@@ -148,19 +150,7 @@ const EditMailerModal = ({ modalData: { data, showModal } }: ModalDataProps) => 
                 tinymceScriptSrc="/tinymce/tinymce.min.js"
                 onEditorChange={(newValue) => setValue('body', newValue)}
                 value={watch('body')}
-                init={{
-                  height: 400,
-                  menubar: true,
-                  plugins: [
-                    'advlist autolink lists link image charmap print preview anchor',
-                    'searchreplace visualblocks code fullscreen',
-                    'insertdatetime media table paste code help wordcount',
-                  ],
-                  toolbar: 'undo redo | formatselect | bold italic backcolor | \
-                            alignleft aligncenter alignright alignjustify | \
-                            bullist numlist outdent indent | removeformat | help',
-                  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                }}
+                init={tinyMCEInit}
               />
             </div>
           </div>

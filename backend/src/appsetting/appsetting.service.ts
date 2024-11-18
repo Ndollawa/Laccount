@@ -3,6 +3,7 @@ import {
   Injectable,
   Logger,
   ConflictException,
+  HttpException,
 } from '@nestjs/common';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { AppSettings, SettingsType } from '@prisma/client';
@@ -171,7 +172,7 @@ export class AppSettingService {
     file: any;
   }) {
     const destination = join('../../', 'uploads/settings/slides');
-    if (!file) return;
+    if (!file) throw new HttpException('No file Uploaded', 422);
 
     try {
       const result = await this.getSettingsByIdOrType(id, SettingsType.LANDING);

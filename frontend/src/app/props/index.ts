@@ -15,6 +15,6 @@ export * from './settingsProps';
 export * from './teamProps';
 export * from './userProps';
 export * from './postProps';
-export * from './postCategoryProps';
+export * from './categoryProps';
 export * from './postCommentProps';
 // export * from './postProps';

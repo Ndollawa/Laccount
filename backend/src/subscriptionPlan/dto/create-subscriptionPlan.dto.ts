@@ -1,4 +1,4 @@
-import { PaymentFrequency, PlanStatus, PlanType } from '@prisma/client';
+import { PaymentFrequency, ActiveStatus, PlanType } from '@prisma/client';
 import {
   IsString,
   IsNotEmpty,
@@ -23,8 +23,8 @@ export class CreateSubscriptionPlanDto {
   @IsEnum(PlanType)
   planType: PlanType;
 
-  @IsEnum(PlanStatus)
-  status: PlanStatus;
+  @IsEnum(ActiveStatus)
+  status: ActiveStatus;
 
   @IsDecimal()
   price: number;

@@ -12,7 +12,6 @@ export class ServiceService {
     try {
       return await this.serviceRepository.find({
         where: { id },
-        // include: { author: true },
       });
     } catch (error) {
       handleError(error);
@@ -40,28 +39,24 @@ export class ServiceService {
     file: Express.Multer.File,
   ): Promise<Service> {
     const { title } = createServiceData;
-
     try {
       const existingService = await this.serviceRepository.exists({
         where: { title },
       });
 
       if (existingService) {
-        throw new ConflictException('Service with credentials already exists.');
+        throw new ConflictException(`Service with ${title} already exists.`);
       }
 
-      const serviceData = {
-        ...createServiceData,
-        image: file.filename,
-      };
+      const data = !file
+        ? createServiceData
+        : { ...createServiceData, image: file.filename };
 
       const newService = await this.serviceRepository.create({
-        data: serviceData,
+        data,
       });
-      Logger.debug(newService);
       return newService;
     } catch (error) {
-      Logger.log(error);
       handleError(error);
     }
   }
@@ -71,9 +66,9 @@ export class ServiceService {
     updateServiceData: UpdateServiceDto,
     file: Express.Multer.File,
   ) {
-    const data = file
-    ? updateServiceData
-      : { ...updateServiceData, image: file.filename }
+    const data = !file
+      ? updateServiceData
+      : { ...updateServiceData, image: file.filename };
     try {
       return await this.serviceRepository.update({
         where: { id },

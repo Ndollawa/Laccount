@@ -40,31 +40,56 @@ export const teamsApiSlice = apiSlice.injectEndpoints({
             }
         }),
         addNewTeam: builder.mutation({
-            query: team => ({
+            query: team =>{
+                const formData = new FormData();
+                formData.append('firstName', team.firstName);
+                formData.append('lastName', team.lastName);
+                formData.append('email', team.email);
+                formData.append('position', team.position);
+                formData.append('contact', team.contact);
+                formData.append('bio', team.bio);
+                formData.append('status', team.status);
+                formData.append('socialMedia', JSON.stringify(team.socialMedia));
+                if (team.image ) formData.append("file", team.image);
+                return({
                 url: '/teams',
                 method: 'POST',
-                body: team
-            }),
+                body: formData,
+            })
+        },
+              
             invalidatesTags: [
                 { type: 'Teams', id: "LIST" }
             ]
         }),
         updateTeam: builder.mutation({
-            query: team => ({
-                url: '/teams',
+            query: ({id, image, ...team}) => {
+                const formData = new FormData();
+                formData.append('id', id);
+                formData.append('firstName', team.firstName);
+                formData.append('lastName', team.lastName);
+                formData.append('email', team.email);
+                formData.append('position', team.position);
+                formData.append('contact', team.contact);
+                formData.append('bio', team.bio);
+                formData.append('status', team.status);
+                formData.append('socialMedia', JSON.stringify(team.socialMedia));
+                if (image) formData.append('file', image);
+            
+                return ({
+                url: `/teams/${id}`,
                 method: 'PATCH',
-                body: team,
-                
-            }),
+                body: JSON.stringify(formData),
+                formData: true,
+               })},
             invalidatesTags: (result, error, arg) => [
                 { type: 'Teams', id: arg.id }
             ]
         }),
         deleteTeam: builder.mutation({
             query: ({ id }) => ({
-                url: `/teams`,
+                url: `/teams/${id}`,
                 method: 'DELETE',
-                body: { id }
             }),
             invalidatesTags: (result, error, arg) => [
                 { type: 'Teams', id: arg.id }
@@ -95,4 +120,4 @@ export const {
     selectById: selectTeamById,
     selectIds: selectTeamIds
     // Pass in a selector that returns the notes slice of state
-} = teamsAdapter.getSelectors((state:any) => selectTeamsData(state) ?? initialState)
+} = teamsAdapter.getSelectors((state:RootState) => selectTeamsData(state) ?? initialState)

@@ -7,6 +7,7 @@ import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { useUpdateSettingMutation } from '../slices/settingApi.slice';
 import { setLandingSetting } from '../slices/settings.slice';
 import showToast from '@utils/showToast';
+import { toCamelCase } from '@utils/stringFormat';
 
 const HomePageSettings = () => {
   const dispatch = useDispatch();
@@ -23,13 +24,7 @@ const HomePageSettings = () => {
   } = useForm({
     defaultValues: initialState,
   });
-  const toCamelCase = (str) =>
-    str
-      .split(' ')
-      .map((word, index) =>
-        index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1)
-      )
-      .join('');
+ 
   // Watching the toggle states independently
   // const affiliateToggle = watch("landingPageConfig.showAffiliate", false);
   const blogToggle = watch("landingPageConfig.showBlog", landingPageConfig.showBlog);

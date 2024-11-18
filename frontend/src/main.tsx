@@ -23,8 +23,8 @@ console.error(error);
   return (
     <>
     <OtherBody>
-  <div className="vh-100" id="body">
-   <div className="container row justify-content-center h-100 align-items-center" style={{width:'100%',height:'100vh'}}>
+  <div className="vh-100 w-100" id="body">
+   <div className="w-100 row justify-content-center h-100 align-items-center">
        <div className="row justify-content-center h-100 align-items-center">
            <div className="col-md-7">
                <div className="form-input-content text-center error-page">

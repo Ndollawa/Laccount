@@ -10,10 +10,10 @@ import {
   ParseFilePipe,
   UploadedFile,
 } from '@nestjs/common';
-import { ServiceService } from './service.service';
-import { CreateServiceDto, UpdateServiceDto } from './dto';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { FileOptions2 } from '@app/common';
+import { ServiceService } from './service.service';
+import { CreateServiceDto, UpdateServiceDto } from './dto';
 
 @Controller('services')
 export class ServiceController {
@@ -40,7 +40,11 @@ export class ServiceController {
 
   @Get()
   findAll() {
-    return this.serviceService.findAll({});
+    return this.serviceService.findAll({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
   }
 
   @Get(':id')
@@ -61,11 +65,12 @@ export class ServiceController {
           // new MaxFileSizeValidator({ maxSize: 1000 }),
           // new FileTypeValidator({ fileType: 'image/jpeg' }),
         ],
-        fileIsRequired: false
+        fileIsRequired: false,
       }),
     )
     file: Express.Multer.File,
   ) {
+    console.log(updateServiceDto, file);
     return this.serviceService.update(id, updateServiceDto, file);
   }
 

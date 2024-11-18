@@ -3,8 +3,8 @@ import { useSearchParams,useNavigate } from 'react-router-dom'
 import RecentPostList from '../../components/RecentPostList'
 import PostProps from '@props/PostProps'
 import { useGetPostsQuery } from '@dashboard/pages/Post/slices/postApi.slice'
-import { useGetPostCategoryQuery } from '@dashboard/pages/PostCategory/slices/postCategoryApi.slice'	
-import PostCategoryProps from '@props/postCategoryProps'
+import { useGetCategoriesQuery } from '@dashboard/pages/Category/slices/categoryApi.slice'	
+import CategoryProps from '@props/categoryProps'
 import useDebounce from '@hooks/useDebounce'
 
 
@@ -23,9 +23,9 @@ const [search, setSearch] = useState('')
     const [searchParams, setSearchParams] = useSearchParams()
 
         // console.log(tags) 
-     const { category } = useGetPostCategoryQuery("categoryList", {
+     const { category } = useGetCategoriesQuery("categoryList", {
 selectFromResult: ({ data }) => ({
-  category: data?.ids?.map((id:string)=>data?.entities[id])?.filter((c:PostCategoryProps) => c?.status === 'active')		 
+  category: data?.ids?.map((id:string)=>data?.entities[id])?.filter((c:CategoryProps) => c?.status === 'active')		 
 }),
 }) 
 const { allPosts } = useGetPostsQuery("postsList", {
@@ -88,7 +88,7 @@ const searchPost = (e:FormEvent)=>{
       <h3 className="blog-sidebar__title">Categories</h3>
       <ul>
         {
-           category?.map((c:PostCategoryProps,i:number)=> ( 
+           category?.map((c:CategoryProps,i:number)=> ( 
            <li className={`cat-item cat-item-${i}`} key={c?.id}>
           <a href={`/our-blog/posts?category=${c?.title}`}>
             {c?.title}

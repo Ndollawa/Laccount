@@ -4,6 +4,7 @@ export default interface TeamProps{
     lastName: string;
     email: string;
     image: string;
+    contact: string;
     status: string;
     bio: string;
     socialMedia:{

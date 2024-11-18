@@ -6,14 +6,14 @@ import Button from 'react-bootstrap/Button';
 import { useSelector } from 'react-redux';
 import { BsToggleOff, BsToggleOn } from 'react-icons/bs';
 import showToast from '@utils/showToast';
+import handleApiErrors from '@utils/handleApiErrors';
 import useWindowSize from '@hooks/useWindowSize';
-import { useUpdateSlideSettingMutation } from '../../Settings/slices/settingApi.slice';
-import { useLandingConfig } from '../../Settings/slices/settings.slice';
+import tinyMCEInit from '@configs/tinymce.config';
+import { useUpdateSlideSettingMutation } from '@dashboard/pages/Settings/slices/settingApi.slice';
+import { useLandingConfig } from '@dashboard/pages/Settings/slices/settings.slice';
 import ModalComponent from '@dashboard/components/Modal';
 import FileUpload from '@components/FileUpload';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;
 
 interface FormInputs {
   title: string;
@@ -197,13 +197,7 @@ const formData = new FormData();
                       tinymceScriptSrc={'/tinymce/tinymce.min.js'}
                       onEditorChange={(newValue) => setValue('body', newValue)}
                       value={watch('body')}
-                      init={{
-                        height: 400,
-                        menubar: false,
-                        plugins: ['advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media', 'table', 'preview', 'help', 'wordcount'],
-                        toolbar: 'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-                        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-                      }}
+                      init={tinyMCEInit}
                     />
                   </div>
                 </div>

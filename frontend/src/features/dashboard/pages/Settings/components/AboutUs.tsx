@@ -2,11 +2,12 @@ import React, { useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux';
+import { BsInfoCircleFill } from 'react-icons/bs';
+import { PulseLoader } from 'react-spinners';
 import { useUpdateSettingMutation } from '../slices/settingApi.slice';
 import { setLandingSetting, useLandingConfig } from '../slices/settings.slice';
 import showToast from '@utils/showToast';
-import { BsInfoCircleFill } from 'react-icons/bs';
-import { PulseLoader } from 'react-spinners';
+import tinyMCEInit from '@configs/tinymce.config';
 
 const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;
 
@@ -66,20 +67,7 @@ const AboutUs = () => {
                   onEditorChange={(newValue) => {
                     setValue('aboutUs', newValue); // Update the form value when editor content changes
                   }}
-                  init={{
-                    height: 500,
-                    menubar: true,
-                    plugins: [
-                      'advlist', 'autolink', 'lists', 'link', 'image', 'charmap',
-                      'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                      'insertdatetime', 'media', 'table', 'preview', 'help', 'wordcount'
-                    ],
-                    toolbar: 'undo redo | blocks | ' +
-                      'bold italic forecolor | alignleft aligncenter ' +
-                      'alignright alignjustify | bullist numlist outdent indent | ' +
-                      'removeformat | help',
-                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-                  }}
+                  init={tinyMCEInit}
                 />
                 <div>
                   {errors?.aboutUs && (

@@ -2,7 +2,7 @@ import React, {ChangeEvent,FormEvent,useState,useEffect} from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import {IoMdPricetags,IoIosList,IoMdColorWand,IoIosCreate,IoIosClose} from 'react-icons/io'
 import { useUpdatePostMutation} from '../slices/postApi.slice'
-import { useGetPostCategoryQuery } from '../../PostCategory/slices/postCategoryApi.slice'
+import { useGetCategoriesQuery } from '@dashboard/pages/Category/slices/categoryApi.slice'
 import {Modal} from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import showToast from '@utils/showToast'
@@ -11,14 +11,7 @@ import PostProps from '@props/postProps'
 const BLOG_ASSETS = import.meta.env.VITE_BLOG_ASSETS
 
 
-
-interface modalDataProps {
-  modalData:{
-     data:PostProps | null,
-    showModal:boolean,
-  } 
-  }
-const EditPostForm = ({modalData:{data,showModal}}:modalDataProps) => {
+const EditPostForm = ({modalData:{data,showModal}}:ModalDataProps<postProps>) => {
 
   // const author = useSelector(selectCurrentUser);
   const [title, setTitle] = useState('')
@@ -56,7 +49,7 @@ setBody(data?.body!)
 setCategory(data?.category!)
 setStatus(data?.status!)
 setTags(data?.tags!)
-setPreviewImage(BLOG_ASSETS+data?.coverImage!)
+setPreviewImage(BLOG_ASSETS+data?.image!)
   setShow(showModal)
     return () => {
       setShow(false)
@@ -80,28 +73,31 @@ React.useEffect(() => {
   }
 }, [isSuccess])
 const {
-  data:postCategory,
-  isLoading:postCategoryIsLoading,
-  isSuccess:postCategoryIsSuccess,
-  isError:postCategoryIsError,
-  error:postCategoryError
-} = useGetPostCategoryQuery('categoriesList', {
+  data:categories,
+  isLoading:categoriesIsLoading,
+  isSuccess:categoriesIsSuccess,
+  isError:categoriesIsError,
+  error:categoriesError
+} = useGetCategoriesQuery('categoriesList', {
   pollingInterval: 15000,
   refetchOnFocus: true,
   refetchOnMountOrArgChange: true
 })
 let categoryOptions;
-if(postCategory){
-const {entities} = postCategory
+if(categories){
+const {entities} = categories
  categoryOptions = Object.values(entities).map((category:any,i:number)=><option key={i} value={category.id}>{category.title}</option>)
 }
 const canSave = [title, description, body,status].every(Boolean);
 
 const handleSubmit = async(e:FormEvent)=>{
 e.preventDefault();
+  if (e.key === 'Enter') {
+      e.preventDefault();
+    }
  if (canSave) {
 
-      await updatePost({_id:data?.id!,title,body,description,tags,category,status,coverImage:postBg})
+      await updatePost({id:data?.id!,title,body,description,tags,category,status,image:postBg})
       if(isError)return  showToast('error',JSON.stringify(error?.data?.message))
      showToast('success', 'Post updated successfully')
   }

@@ -5,6 +5,8 @@ import { PulseLoader } from 'react-spinners';
 import { Editor } from '@tinymce/tinymce-react';
 import { useAddNewMailerMutation } from '../slices/mailerApi.slice';
 import showToast from '@utils/showToast';
+import handleApiErrors from '@utils/handleApiErrors';
+import tinyMCEInit from '@configs/tinymce.config';
 import useWindowSize from '@hooks/useWindowSize';
 import ModalComponent from '@dashboard/components/Modal';
 import FileUpload from '@components/FileUpload';
@@ -19,13 +21,26 @@ type FormValues = {
 };
 
 const CreateMailerForm = () => {
-  const { register, handleSubmit, watch, setValue, reset, formState: { errors, isSubmitting } } = useForm<FormValues>();
+  const { register, handleSubmit, watch, setValue, setError, reset, formState: { errors, isSubmitting } } = useForm<FormValues>();
   const [addNewMailer, { isLoading, isSuccess, isError, error }] = useAddNewMailerMutation();
   const [previewImage, setPreviewImage] = React.useState<string>("");
   const {width} = useWindowSize()
   const [show, setShow] = useState(false);
   const handleOpen = useCallback(() => setShow(true), [show]);
   const handleClose = useCallback(() => setShow(false), [show]);
+
+
+    useEffect(() => {
+    if (isSuccess) {
+      reset();
+      setPreviewImage("")
+      showToast('success', 'Mailer created successfully');
+    }
+    if (isError) {
+      handleApiErrors(error, setError);
+    }
+  }, [isSuccess, isError, reset, error]);
+
   const onSubmit: SubmitHandler<FieldValues> = async (formFields, e) => {
     e?.preventDefault()
     const formData = new FormData();
@@ -37,14 +52,6 @@ const CreateMailerForm = () => {
     formData.append("file", formFields.image[0]);
 
     await addNewMailer(formData);
-
-    if (isError) {
-      showToast('error', JSON.stringify(error?.data?.message));
-    } else {
-      showToast('success', 'Mailer created successfully');
-      reset();
-      setPreviewImage("")
-    }
   };
 
   const uploadBg = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,13 +132,7 @@ const CreateMailerForm = () => {
                     <Editor
                       tinymceScriptSrc="/tinymce/tinymce.min.js"
                       onEditorChange={(newValue) => setValue("body", newValue)}
-                      init={{
-                        height: 400,
-                        menubar: false,
-                        plugins: ['advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'anchor', 'searchreplace', 'code', 'fullscreen', 'insertdatetime', 'media', 'table', 'preview', 'help'],
-                        toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | removeformat',
-                        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                      }}
+                      init={tinyMCEInit}
                     />
                   </div>
                 </div>

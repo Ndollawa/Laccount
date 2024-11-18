@@ -38,6 +38,12 @@
           "@hooks/*": [
             "src/app/hooks/*" 
           ],
+          "@configs/*": [
+            "src/app/configs/*" 
+          ],
+          "@enums/*": [
+            "src/app/enums/*" 
+          ],
           "@props/*": [
             "src/app/props/*" 
           ],

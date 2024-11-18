@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import { RootState } from '@store/store';
-import { CompanyInfo, DashboardConfig, LandingConfig, LandingPageConfig, Settings, SettingsState, SettingsType, Styles } from '@props/settingsProps';
-
+import { CompanyInfo, DashboardConfig, LandingConfig, LandingPageConfig, Settings, SettingsState, Styles } from '@props/settingsProps';
+import { SettingsType } from "@enums/index"
 
        const landingConfig :LandingConfig ={
         landingPageConfig:{

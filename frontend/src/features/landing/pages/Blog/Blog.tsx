@@ -3,8 +3,8 @@ import { FaListAlt } from 'react-icons/fa'
 import { IoGridOutline } from 'react-icons/io5'
 import { useSearchParams } from 'react-router-dom'
 import useToggle from '@hooks/useToggle'
-import { useGetPostCategoryQuery } from '../../../dashboard/pages/PostCategory/slices/postCategoryApi.slice'
-import { useGetPostsQuery } from '../../../dashboard/pages/Post/slices/postApi.slice'		
+import { useGetCategoriesQuery } from '@dashboard/pages/Category/slices/categoryApi.slice'
+import { useGetPostsQuery } from '@dashboard/pages/Post/slices/postApi.slice'		
 import PageProps from '@props/PageProps'
 import PostProps from '@props/PostProps'
 import Breadcrum from '../../components/Breadcrum'
@@ -52,7 +52,7 @@ const Blog:React.FC<PageProps> = ({pageData}:PageProps) => {
               posts: (data?.ids?.map((id:string)=>data?.entities[id]))?.filter((post:PostProps) => post.status === 'published')		 
             }),
             }) 
-  const { cat } = useGetPostCategoryQuery("categoriesList", {
+  const { cat } = useGetCategoriesQuery("categoriesList", {
             selectFromResult: ({ data }) => ({
               cat: (data?.ids?.map((id:string)=>data?.entities[id]))?.find((c:PostCategoryProps) => c.title === category && c?.status === 'active')		 
             }),

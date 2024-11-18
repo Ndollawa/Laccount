@@ -17,7 +17,7 @@ import * as grpc from '@grpc/grpc-js';
 import {
   Mailer,
   MailerTemplateEnum,
-  MailerTemplateStatus,
+  ActiveStatus,
 } from '@prisma/client';
 import { hashData, handleError } from '@app/common';
 import { MailerRepository } from './mailer.repository';

@@ -1,4 +1,4 @@
-import { CategoryForEnum, PublishStatus } from '@prisma/client';
+import { CategoryForEnum, ActiveStatus , CategoryIconType } from '@prisma/client';
 import {
   IsString,
   IsNotEmpty,
@@ -13,21 +13,20 @@ export class CreateCategoryDto {
   name: string;
 
   @IsOptional()
-  image?: string;
+  icon?: string;
+
+  @IsOptional()
+  @IsEnum(CategoryIconType)
+  iconType?: CategoryIconType;
 
   @IsString()
-  @IsOptional()
   @IsUUID()
+  @IsOptional()
   parentId?: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @IsUUID()
-  targetId: string;
-
-  @IsEnum(PublishStatus)
-  status: PublishStatus;
+  @IsEnum(ActiveStatus)
+  status: ActiveStatus;
 
   @IsEnum(CategoryForEnum)
-  targetType: CategoryForEnum;
+  for: CategoryForEnum;
 }

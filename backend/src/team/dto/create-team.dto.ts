@@ -1,5 +1,14 @@
 import { ActiveStatus } from '@prisma/client';
-import { IsEmail, IsEnum, IsObject, IsOptional, IsString } from 'class-validator';
+import {
+  IsAlpha,
+  IsEmail,
+  IsEnum,
+  IsJSON,
+  IsObject,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+} from 'class-validator';
 
 export class CreateTeamDto {
   @IsString()
@@ -7,6 +16,10 @@ export class CreateTeamDto {
 
   @IsString()
   lastName: string;
+
+  @IsString()
+  // @IsPhoneNumber()
+  contact: string;
 
   @IsEmail()
   email: string;
@@ -18,7 +31,8 @@ export class CreateTeamDto {
   bio: string;
 
   @IsOptional()
-  @IsObject()
+  // @IsObject()
+  @IsJSON()
   socialMedia: {
     facebookHandle: string;
     twitterHandle: string;

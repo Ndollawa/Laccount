@@ -6,7 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  ParseFilePipe,
+  UploadedFile,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express/multer';
+import { FileOptions2 } from '@app/common';
 import { CategoryService } from './category.service';
 import { UpdateCategoryDto, CreateCategoryDto } from './dto';
 
@@ -15,7 +20,22 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto) {
+  @UseInterceptors(
+    FileInterceptor('icon', FileOptions2('./uploads/settings/services')),
+  )
+  create(
+    @Body() createCategoryDto: CreateCategoryDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          // new MaxFileSizeValidator({ maxSize: 1000 }),
+          // new FileTypeValidator({ fileType: 'image/jpeg' }),
+        ],
+        fileIsRequired: false,
+      }),
+    )
+    file: Express.Multer.File,) {
+    console.log(createCategoryDto,file)
     return this.categoryService.create(createCategoryDto);
   }
 
@@ -30,9 +50,22 @@ export class CategoryController {
   }
 
   @Patch(':id')
+  @UseInterceptors(
+    FileInterceptor('icon', FileOptions2('./uploads/settings/services')),
+  )
   update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
+     @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          // new MaxFileSizeValidator({ maxSize: 1000 }),
+          // new FileTypeValidator({ fileType: 'image/jpeg' }),
+        ],
+        fileIsRequired: false,
+      }),
+    )
+    file: Express.Multer.File,
   ) {
     return this.categoryService.update(id, updateCategoryDto);
   }

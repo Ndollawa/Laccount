@@ -113,7 +113,7 @@
             options: {
             columns: [
                     { data: 'i', name: 'i', width:'5%' },
-                    { data: 'question',name:'question', width:'15%'  },
+                    { data: 'question',name:'question', width:'25%'  },
                     { data: 'response',name:'response', width:'50%'  },
                     { data: 'status',name:'status', width:'5%'  },
                     { data: 'createdAt',name:'createdAt', width:'5%'  },
@@ -121,7 +121,6 @@
                   ],
               autoWidth: true,
               processing: true,
-              responsive: true,
               scrollX: true,
               scrollY: 'true',
               stateSave: true,
@@ -142,7 +141,7 @@
                             <CreateFaqForm/>
                         </div>
                             <EditFaqForm modalData={modalData}/>
-                        <div className="table-responsive table-scrollable">
+                        <div className="table-responsive table-scrollable user-select-none">
                           {isPending ? <GeneralPreloader /> : <DataTableComponent tableHead={tableHead} dataTableProps={tprops} />}
                         </div>
                       </div>

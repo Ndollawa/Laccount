@@ -40,22 +40,42 @@ export const servicesApiSlice = apiSlice.injectEndpoints({
             }
         }),
         addNewService: builder.mutation({
-            query: service => ({
+            query: (service) => {
+            
+    const formData = new FormData();
+    formData.append("title", service.title);
+    formData.append("icon", service.icon);
+    formData.append("description", service.description);
+    formData.append("body", service.body);
+    formData.append("status", service.status);
+    formData.append("tags", service.tags);
+    if(service.image) formData.append("file", service.image);  
+                
+                return ({
                 url: '/services',
                 method: 'POST',
-                body: service
-            }),
+                body: formData
+            })},
             invalidatesTags: [
                 { type: 'Services', id: "LIST" }
             ]
         }),
         updateService: builder.mutation({
-            query: ({id, ...service}) => ({
-                url: `/services/${service.id}`,
+            query: ({id, image, ...service}) =>{
+              
+    const formData = new FormData();
+    formData.append("title", service.title);
+    formData.append("icon", service.icon);
+    formData.append("description", service.description);
+    formData.append("body", service.body);
+    formData.append("status", service.status);
+    formData.append("tags", service.tags);
+    if(image) formData.append("file", image);  
+           return ({
+                url: `/services/${id}`,
                 method: 'PATCH',
-                body: service,
-                
-            }),
+                body: formData,
+            }) },
             invalidatesTags: (result, error, arg) => [
                 { type: 'Services', id: arg.id }
             ]
@@ -95,4 +115,4 @@ export const {
     selectById: selectServiceById,
     selectIds: selectServiceIds
     // Pass in a selector that returns the notes slice of state
-} = servicesAdapter.getSelectors((state:any) => selectServicesData(state) ?? initialState)
+} = servicesAdapter.getSelectors((state:RootState) => selectServicesData(state) ?? initialState)

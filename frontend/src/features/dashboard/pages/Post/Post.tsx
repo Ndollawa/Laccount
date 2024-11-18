@@ -135,7 +135,6 @@ import showToast from '@utils/showToast';
               ],
           autoWidth: true,
           processing: true,
-          responsive: true,
           scrollX: true,
           scrollY: 'true',
           stateSave: true,

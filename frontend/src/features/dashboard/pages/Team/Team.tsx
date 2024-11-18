@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import lgThumbnail from 'lightgallery/plugins/thumbnail';
 import lgZoom from 'lightgallery/plugins/zoom';
 import MainBody from '../../components/MainBody'
-import CreateTeamModal from './components/CreateTeamForm'
+import CreateTeamForm from './components/CreateTeamForm'
 import EditTeamForm from './components/EditTeamForm'
 import {useGetTeamsQuery,useDeleteTeamMutation } from './slices/teamsApi.slice'
 import { setPreloader } from '@components/preloader/slices/preloader.slice'
@@ -41,7 +41,7 @@ import showToast from '@utils/showToast';
       const [deleteTeam, {
         isSuccess: isDelSuccess,
         isError: isDelError,
-        error: delerror
+        error: delError
     }]:any = useDeleteTeamMutation()
 
       const showEditForm = (modalData: ModalDataProps<TeamProps>["modalData"]) => {
@@ -136,7 +136,6 @@ import showToast from '@utils/showToast';
               ],
           autoWidth: true,
           processing: true,
-          responsive: true,
           scrollX: true,
           scrollY: 'true',
           stateSave: true,
@@ -154,7 +153,7 @@ import showToast from '@utils/showToast';
                   </div>
                   <div className="card-body">
                     <div className="mb-5 d-flex">                                    
-                        <CreateTeamModal/>
+                        <CreateTeamForm/>
                     </div>
                         <EditTeamForm modalData={modalData}/>
                     <div className="table-responsive table-scrollable">

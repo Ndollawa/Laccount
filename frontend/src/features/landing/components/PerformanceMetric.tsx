@@ -13,7 +13,7 @@ const PerformanceMetric = () => {
                         </span>%
                     </div>
                      {/* <!-- /.fact-one__count --> */}
-                    <h3 className="fact-one__title">Loans Approve</h3>
+                    <h3 className="fact-one__title">Successful Transactions</h3>
                      {/* <!-- /.fact-one__title --> */}
                 </div>
                  {/* <!-- /.fact-one__item --> */}
@@ -25,7 +25,7 @@ const PerformanceMetric = () => {
                             <span className="count-text" data-stop="90" data-speed="1500"></span>
                         </span>k</div>
                          {/* <!-- /.fact-one__count --> */}
-                    <h3 className="fact-one__title">Daily Payments</h3>
+                    <h3 className="fact-one__title">Payments</h3>
                      {/* <!-- /.fact-one__title --> */}
                 </div>
                  {/* <!-- /.fact-one__item --> */}

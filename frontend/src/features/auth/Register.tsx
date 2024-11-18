@@ -115,7 +115,7 @@ const Register: React.FC = () => {
                               },
                               validate: async (value) => {
                                 const { data } = await checkDuplicateUser({ user: value });
-                                return data.message === 'available' || 'Username already taken';
+                                return data.message  || 'Username already taken';
                               },
                             })}
                           />
@@ -144,7 +144,7 @@ const Register: React.FC = () => {
                               },
                               validate: async (value) => {
                                 const { data } = await checkDuplicateUser({ user: value });
-                                return data.message === 'available' || 'Email already in use';
+                                return data.message  || 'Email already in use';
                               },
                             })}
                           />

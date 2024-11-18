@@ -27,7 +27,6 @@
             showModal: false,
           });
           const [isPending, startTransition] = useTransition();
-          const dispatch = useDispatch();
           const {
             data:services,
             isLoading,
@@ -69,7 +68,7 @@
             });
           };
      
-          const tableHead = ["S/N", "Image","Title", "Description", "Status","Date Created", "Action"];
+          const tableHead = ["S/N", "Image","Title", "Description","Body", "Status","Date Created", "Action"];
           const renderServiceStatus = (status: string) => {
             switch (status) {
             //   case '':
@@ -94,7 +93,7 @@
             5: (data, row) => <div>
                     {row.status ? renderServiceStatus(row.status) : 'No Status Available'}
                   </div>, 
-            6: (data: any, row: any) => (
+            7: (data: any, row: any) => (
               <div className="d-flex">
                 <button type="button" className="btn btn-info light shadow btn-xs sharp me-1" onClick={() => showEditForm({ data: row.service, showModal: true })}>
                   <i className="fas fa-pencil-alt"></i>
@@ -111,6 +110,7 @@
             image:service.image,
             title:service?.title,
             description:service.description,
+            body:service.body,
             status:service.status,
             createdAt:  new Date(service?.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year:'numeric' }),
             service:service
@@ -121,13 +121,14 @@
             slots,
             options: {
             columns: [
-                    { data: 'i', name: 'i', width:'5%' },
-                    { data: 'image',name:'image', width:'15%' },
-                    { data: 'title',name:'title', width:'15%'  },
-                    { data: 'description',name:'description', width:'35%'  },
-                    { data: 'status',name:'status', width:'5%'  },
-                    { data: 'createdAt',name:'createdAt', width:'5%'  },
-                    { data: 'service', name:'actions', width:'10%' },
+                    { data: 'i', name: 'i', width:'2%' },
+                    { data: 'image',name:'image', width:'5%' },
+                    { data: 'title',name:'title', width:'10%'  },
+                    { data: 'description',name:'description', width:'25%'  },
+                    { data: 'body',name:'body', width:'35%'  },
+                    { data: 'status',name:'status', width:'3%'  },
+                    { data: 'createdAt',name:'createdAt', width:'8%'  },
+                    { data: 'service', name:'actions', width:'7%' },
                   ],
               autoWidth: true,
               processing: true,

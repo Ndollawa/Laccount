@@ -1,8 +1,4 @@
-export enum SettingsType {
-    DASHBOARD = "DASHBOARD",
-    LANDING =   "LANDING",
-    COMPANY_INFO  = "COMPANY_INFO",
-  }
+import { SettingsType } from "../enums"
 
  export enum Styles {
     STYLE_1 = 1,
