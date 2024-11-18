@@ -12,7 +12,7 @@ import useWindowSize from '@hooks/useWindowSize';
 import ModalComponent from '@dashboard/components/Modal';
 import FileUpload from '@components/FileUpload';
 import { ModalDataProps } from '@props';
-import { checkKeyDown } from '@utils/form.hook';
+import { checkKeyDown } from '@utils/form.utils';
 import tinyMCEInit from '@configs/tinymce.config';
 
 const SERVICE_ASSETS = import.meta.env.VITE_SERVICE_ASSETS;

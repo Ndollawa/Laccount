@@ -1,5 +1,5 @@
 export * from './compareDate';
-export * from './form.hook';
+export * from './form.utils';
 export * from './getUserImage';
 export * from './getUserName';
 export * from './getDeviceThemeMode';

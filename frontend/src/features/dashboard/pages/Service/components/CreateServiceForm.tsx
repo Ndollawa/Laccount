@@ -7,7 +7,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import { useAddNewServiceMutation } from '../slices/servicesApi.slice';
 import showToast from '@utils/showToast';
 import handleApiErrors from '@utils/handleApiErrors';
-import { checkKeyDown } from '@utils/form.hook';
+import { checkKeyDown } from '@utils/form.utils';
 import useWindowSize from '@hooks/useWindowSize';
 import ModalComponent from '@dashboard/components/Modal';
 import FileUpload from '@components/FileUpload';
