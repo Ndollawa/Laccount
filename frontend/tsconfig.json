@@ -1,0 +1,9 @@
+{
+  "files": [],
+  "types":["node"],
+  "exclude": ["node_modules", "dist"], // Ensure these are excluded from compilation
+    "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
+}
