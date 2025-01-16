@@ -57,7 +57,7 @@ export const settingsApiSlice = apiSlice.injectEndpoints({
         }
       },
       transformResponse: ({data}: ResponseProps) => {
-        const loadedSettings =data?.map((setting: Settings<LandingConfig | DashboardConfig | CompanyInfo>) => {
+        const loadedSettings = data?.map((setting: Settings<LandingConfig | DashboardConfig | CompanyInfo>) => {
           return setting;
         });
         // Use the entity adapter to normalize the response data

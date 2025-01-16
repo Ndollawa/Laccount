@@ -67,7 +67,7 @@ export class ServiceService {
     updateServiceData: UpdateServiceDto,
     file: Express.Multer.File,
   ) {
-     const destination = join('../../', 'uploads/settings/services');
+    const destination = join('../../', 'uploads/settings/services');
     const data = !file
       ? updateServiceData
       : { ...updateServiceData, image: file.filename };
@@ -75,29 +75,35 @@ export class ServiceService {
       const rec = await this.serviceRepository.update({
         where: { id },
         data,
-        select:{image:true}
+        select: { image: true },
       });
 
-Logger.debug(rec.image)
-      await deleteItem(destination,rec.image)
-      return {message:"Record updated successfully."}
+      Logger.debug(rec.image);
+      await deleteItem(destination, rec.image);
+      return { message: 'Record updated successfully.' };
     } catch (error) {
       handleError(error);
     }
   }
 
-  async upsert(id: string, updateServiceData: UpdateServiceDto) {
-     const destination = join('../../', 'uploads/settings/services');
- 
+  async upsert(
+    id: string,
+    updateServiceData: UpdateServiceDto,
+    file: Express.Multer.File,
+  ) {
+    const destination = join('../../', 'uploads/settings/services');
+    const data = !file
+      ? updateServiceData
+      : { ...updateServiceData, image: file.filename };
 
     try {
       const rec = await this.serviceRepository.upsert({
         where: { id },
         data: updateServiceData,
-        select:{image:true}
+        select: { image: true },
       });
-      await deleteItem(destination,rec.image)
-      return {message:"Success"}
+      await deleteItem(destination, rec.image);
+      return { message: 'Success' };
     } catch (error) {
       handleError(error);
     }

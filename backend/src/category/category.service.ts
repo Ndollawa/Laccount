@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Category, PublishStatus } from '@prisma/client';
+import { join } from 'path';
 import { handleError, deleteItem } from '@app/common';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto';
 import { CategoryRepository } from './category.repository';
@@ -30,16 +31,21 @@ export class CategoryService {
     try {
       const rec = await this.categoryRepository.delete({
         where: { id },
-        select:{icon:true}
+        select: { icon: true },
       });
-      return 
+      return;
     } catch (error) {
       handleError(error);
     }
   }
-  async create(createCategoryData: CreateCategoryDto): Promise<Category> {
+  async create(
+    createCategoryData: CreateCategoryDto,
+    file: Express.Multer.File,
+  ): Promise<Category> {
     // const { authorId } = createCategoryData;
-
+    const data = !file
+      ? createCategoryData
+      : { ...createCategoryData, icon: file.filename };
     try {
       // const existingCategory = await this.categoryRepository.exists({
       //   where: { categoryId },
@@ -50,11 +56,8 @@ export class CategoryService {
       //     HttpStatus.CONFLICT,
       //   );
       // }
-      const categoryData = {
-        ...createCategoryData,
-      };
       const newCategory = await this.categoryRepository.create({
-        data: categoryData,
+        data,
       });
       return newCategory;
     } catch (error) {
@@ -62,14 +65,23 @@ export class CategoryService {
     }
   }
 
-  async update(id: string, updateCategoryData: UpdateCategoryDto) {
+  async update(
+    id: string,
+    updateCategoryData: UpdateCategoryDto,
+    file: Express.Multer.File,
+  ) {
+    const destination = join('../../', 'uploads/categories');
+    console.log(updateCategoryData);
+    const data = !file
+      ? updateCategoryData
+      : { ...updateCategoryData, icon: file.filename };
+
     try {
       const rec = await this.categoryRepository.update({
         where: { id },
-        data: updateCategoryData,
-        select:{icon:true}
+        data,
+        select: { icon: true, iconType: true },
       });
-
     } catch (error) {
       handleError(error);
     }

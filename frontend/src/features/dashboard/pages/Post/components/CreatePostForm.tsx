@@ -31,19 +31,26 @@ const CreatePostForm = () => {
     defaultValues: {
     title: "",
     description: "",
-    category: "",
+    categoryId: "",
     body: "",
     tags: [],
     status: 'PUBLISHED',
     image: undefined,
   },});
   const [addNewPost, { isLoading, isError, error, isSuccess }] = useAddNewPostMutation();
-
-  const { data: categories } = useGetCategoriesQuery('categoriesList', {
-    pollingInterval: 15000,
-    refetchOnFocus: true,
-    refetchOnMountOrArgChange: true,
-  });
+ const {
+        data:allCategories,
+       
+    } = useGetCategoriesQuery('categoriesList', {
+        refetchOnFocus: true,
+        refetchOnReconnect: true,
+        refetchOnMountOrArgChange: true
+    }) 
+  const { categories } = useGetCategoriesQuery("categoriesList", {
+              selectFromResult: ({ data }) => ({
+                categories: data?.entities && Object.values(data?.entities)?.filter((cat:string)=>cat?.for === "POST" )
+              }),
+              })
 
   React.useEffect(() => {
     if (isSuccess) {
@@ -70,10 +77,10 @@ const CreatePostForm = () => {
       formData.append('title', data.title);
       formData.append('description', data.description);
       formData.append('body', data.body);
-      formData.append('tags', JSON.stringify(tags));
-      formData.append('category', data.category);
+      formData.append('tags', JSON.stringify(data.tags));
+      formData.append('categoryId', data.categoryId);
       formData.append('status', data.status);
-      formData.append('image', postBg);
+      formData.append('file', postBg);
 
       await addNewPost(formData);
     }
@@ -102,7 +109,8 @@ const CreatePostForm = () => {
       setPreviewImage(URL.createObjectURL(file));
     }
   };
-
+  const status = watch("status")
+const btnLabel = capitalizeFirstLetter(status.toLowerCase());
   return (
     <>
         <button type="button" className="btn btn-primary mb-2" onClick={handleOpen}>
@@ -142,16 +150,14 @@ const CreatePostForm = () => {
                   {errors.description && <p className="text-danger">Description is required</p>}
                 </div>
                 <div className="col-12 row">
-                 {categories && (
-                      <><RecursiveCategorySelector
-                          categories={Object.values(categories.entities)}
+                 <RecursiveCategorySelector
+                          categories={categories}
                           depth={0} // Start at the root level (depth 0)
                           name="categoryId" // Base name for dynamic keys
                           control={control}
                           errors={errors}
                           register={register}
                         />
-                      </>)}
                               
 
                 </div>
@@ -209,7 +215,7 @@ const CreatePostForm = () => {
              <div className="d-flex gap-2 my-3 justify-content-end">
             <Button variant="primary" size="sm" onClick={handleClose}>Close</Button>
           <Button variant="secondary" size="sm" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? <PulseLoader loading={isSubmitting} color="#ffffff" size="0.7rem" /> : `${capitalizeFirstLetter(getValues('status'))} Post`}
+            {isSubmitting ? <PulseLoader loading={isSubmitting} color="#ffffff" size="0.7rem" /> : `${btnLabel === "Published"? "Publish" : btnLabel} Post`}
           </Button>
           </div>
         </form>

@@ -6,10 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { CreateCartItemDto, UpdateCartItemDto } from './dto';
+import { JwtAuthGuard } from '@app/common/guards/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('cart')
 export class CartController {
   constructor(private readonly cartService: CartService) {}

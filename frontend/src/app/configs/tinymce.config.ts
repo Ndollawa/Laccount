@@ -1,5 +1,5 @@
  const tinyMCEInit = {
-    height: 500,
+    height: 400,
     menubar: false,
     plugins: [
     'advlist', 'autolink', 'lists', 'link', 'image', 'charmap',

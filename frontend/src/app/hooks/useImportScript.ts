@@ -36,7 +36,7 @@ const useImportScript = (resourceUrls: string[], jsType = "javascript") => {
         }
       });
     };
-  }, [resourceUrls, jsType]); // Only re-run if URLs or type changes
+  }); //, [resourceUrls, jsType] Only re-run if URLs or type changes
 };
 
 export default useImportScript;

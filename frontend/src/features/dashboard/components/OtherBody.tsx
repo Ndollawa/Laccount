@@ -32,6 +32,7 @@ useEffect(() => {
     // Apply layout settings from the Redux state
     body.setAttribute("data-typography", typography as string);
     body.setAttribute("data-theme-version", themeMode as string);
+    body.setAttribute("data-bs-theme", themeMode as string);
     body.setAttribute("data-layout", layout as string);
     body.setAttribute("data-nav-headerbg", navheaderBg as string);
     body.setAttribute("data-headerbg", headerBg as string);

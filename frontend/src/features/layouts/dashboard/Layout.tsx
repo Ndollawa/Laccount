@@ -8,7 +8,6 @@ import PageProps from '@props/pageProps';
 import {  setPreloader } from '@components/preloader/slices/preloader.slice';
 import Js from '@dashboard/components/Js';
 import Css from '@dashboard/components/Css';
-// import './Zenix.css'
 
 
 

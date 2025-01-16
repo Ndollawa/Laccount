@@ -7,6 +7,8 @@ import Header from "./Header";
 import SideBar from "./SideBar";
 import Chatbox from "./ChatBox";
 import Footer from "./Footer";
+import Head from '@dashboard/components/Head';
+import Css from '@dashboard/components/Css';
 import { useCompanyInfo, useDashboardConfig, useLandingConfig } from '@dashboard/pages/Settings/slices/settings.slice';
 import { selectCurrentUser } from "@auth/slices/auth.slice";
 import useWindowSize from "@hooks/useWindowSize";
@@ -51,6 +53,7 @@ const MainBody = ({ children }: { children: ReactNode }) => {
           // Apply layout settings from the Redux state
           body.setAttribute("data-typography", typography as string);
           body.setAttribute("data-theme-version", themeMode as string);
+          body.setAttribute("data-bs-theme", themeMode as string);
           body.setAttribute("data-layout", layout as string);
           body.setAttribute("data-nav-headerbg", navheaderBg as string);
           body.setAttribute("data-headerbg", headerBg as string);
@@ -131,6 +134,9 @@ const MainBody = ({ children }: { children: ReactNode }) => {
 
     return (
         <>
+        
+    <Css/>
+        <Head pageData={{title:"Dashboard"}}/>
             <div id="body">
                 <Preloader />
                 <div id="main-wrapper" className={menuWrapperStyle}>

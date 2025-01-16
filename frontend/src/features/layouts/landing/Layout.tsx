@@ -10,7 +10,6 @@ import Css from '@landing/components/Css';
 import MobileNav from '@landing/components/MobileNav';
 import Search from '@landing/components/Search';
 import PageProps from "@props/pageProps";
-// import './Finlon.css'
 const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
 const Home: React.FC<PageProps> = ({ pageData }: PageProps) => {
@@ -65,7 +64,7 @@ const Home: React.FC<PageProps> = ({ pageData }: PageProps) => {
   return (
     <>
 
-      {/* <Css/> */}
+      <Css/>
       <Head pageData={pageData} />
       <div className="custom-cursor">
         <div className="custom-cursor__cursor"></div>

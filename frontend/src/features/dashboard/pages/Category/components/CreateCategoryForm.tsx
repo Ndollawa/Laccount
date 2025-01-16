@@ -2,7 +2,6 @@ import React, { useState, useCallback } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { PulseLoader } from "react-spinners";
 import Button from "react-bootstrap/Button";
-import { useSelector } from "react-redux";
 import { BsToggleOff, BsToggleOn } from "react-icons/bs";
 import { Editor } from "@tinymce/tinymce-react";
 import tinyMCEInit from "@configs/tinymce.config";
@@ -13,12 +12,12 @@ import handleApiErrors from "@utils/handleApiErrors";
 import useWindowSize from "@hooks/useWindowSize";
 import CategoryProps from "@Props/categoryProps";
 import {
-  useAddNewCategoryMutation,
-  useGetCategoriesQuery,
+ useGetCategoriesQuery, useAddNewCategoryMutation,
 } from "../slices/categoryApi.slice";
 import ModalComponent from "@dashboard/components/Modal";
 import FileUpload from "@components/FileUpload";
 
+    
 interface FormInputs {
   name: string;
   parentId: string;
@@ -30,7 +29,11 @@ interface FormInputs {
 
 const CreateCategoryForm = () => {
   const { width } = useWindowSize();
-  const [categories, setCategories] = useState<CategoryProps[]>([]);
+     const { categories } = useGetCategoriesQuery("categoriesList", {
+              selectFromResult: ({ data }) => ({
+                categories: data?.ids?.map((id:string)=>data?.entities[id])
+              }),
+              })
   const [addIcon, setAddIcon] = useState(false);
   const [previewImage, setPreviewImage] = useState<string>("");
 
@@ -67,7 +70,6 @@ const CreateCategoryForm = () => {
   const iconType = watch("iconType");
   const categoryFor = watch("for");
   // Reset form when successfully submitted
-
 
   React.useEffect(() => {
     if (isSuccess) {

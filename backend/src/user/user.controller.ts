@@ -10,9 +10,11 @@ import {
   Patch,
   Post,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { EMAIL_REGEX, handleError, hashData } from '@app/common';
+import { JwtAuthGuard } from '@app/common/guards/jwt-auth.guard';
 import * as grpc from '@grpc/grpc-js';
 import { User, WalletType, WalletStatus } from '@prisma/client';
 import { CreateUserDto, UpdateUserDto } from './dto';
@@ -26,6 +28,7 @@ export class UserController {
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
   ) {}
+
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     const { firstName, lastName, username, email, password, confirmPassword } =
@@ -136,6 +139,7 @@ export class UserController {
     return await this.userService.find(query);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -144,6 +148,7 @@ export class UserController {
     return await this.userService.update(id, data);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<User> {
     return await this.userService.remove(id);

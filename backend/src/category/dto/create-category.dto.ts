@@ -1,4 +1,8 @@
-import { CategoryForEnum, ActiveStatus , CategoryIconType } from '@prisma/client';
+import {
+  CategoryForEnum,
+  ActiveStatus,
+  CategoryIconType,
+} from '@prisma/client';
 import {
   IsString,
   IsNotEmpty,

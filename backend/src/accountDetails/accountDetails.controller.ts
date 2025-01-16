@@ -6,15 +6,18 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { AccountDetailsService } from './accountDetails.service';
 import { CreateAccountDetailsDto, UpdateAccountDetailsDto } from './dto/';
 import { CreateListingDto } from 'src/listing/dto';
+import { JwtAuthGuard } from '@app/common/guards/jwt-auth.guard';
 
 @Controller('account-details')
 export class AccountDetailsController {
   constructor(private readonly accountDetailsService: AccountDetailsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(
     @Body() createAccountDetailsDto: CreateAccountDetailsDto & CreateListingDto,

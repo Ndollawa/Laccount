@@ -12,7 +12,7 @@ export class CommentService {
     try {
       return await this.commentRepository.find({
         where: { id },
-        include: { author: true },
+        include: { user: true },
       });
     } catch (error) {
       handleError(error);
@@ -36,7 +36,7 @@ export class CommentService {
     }
   }
   async create(createCommentData: CreateCommentDto): Promise<Comment> {
-    const { authorId } = createCommentData;
+    const { userId } = createCommentData;
 
     try {
       // const existingComment = await this.commentRepository.exists({
@@ -53,7 +53,7 @@ export class CommentService {
       const commentData = {
         ...createCommentData,
         status: PublishStatus.PUBLISHED,
-        authorType: authorId ? 'guest' : 'user',
+        userType: userId ? 'guest' : 'user',
         postId: '',
         parentId: '',
         firstName: '',

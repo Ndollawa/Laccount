@@ -6,10 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { RoomService } from './room.service';
 import { CreateRoomDto, UpdateRoomDto } from './dto';
+import { JwtAuthGuard } from '@app/common/guards/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('rooms')
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}

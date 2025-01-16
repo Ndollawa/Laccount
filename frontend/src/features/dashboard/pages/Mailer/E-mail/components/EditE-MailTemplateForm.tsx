@@ -3,24 +3,26 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button } from 'react-bootstrap';
 import { Editor } from '@tinymce/tinymce-react';
 import { PulseLoader } from 'react-spinners';
-import { useUpdateMailerMutation } from '../slices/mailersApi.slice';
+import { useUpdateEMailTemplateMutation } from '../../slices/mailerApi.slice';
 import showToast from '@utils/showToast';
 import handleApiErrors from '@utils/handleApiErrors';
 import tinyMCEInit from '@configs/tinymce.config';
-import MailerProps from '@props/MailerProps';
+import {MailerProps} from '@props/MailerProps';
 import useWindowSize from '@hooks/useWindowSize';
 import ModalComponent from '@dashboard/components/Modal';
 import FileUpload from '@components/FileUpload';
+import { ActiveStatus, MailerTemplateEnum } from '@app/app/enums';
 
 const SERVICE_ASSETS = import.meta.env.VITE_SERVICE_ASSETS;
 
 interface FormInputs {
-  title: string;
-  icon: string;
-  description: string;
-  body: string;
-  status: string;
-  image: File | null;
+  type   :   MailerTemplateEnum;
+  templateId : string;
+  body   :   string;
+  name    :  string;
+  context :  object[];
+  status  :  ActiveStatus;  
+  // image: FileList;
 }
 
 interface ModalDataProps {
@@ -32,7 +34,7 @@ interface ModalDataProps {
 
 const EditMailerModal = ({ modalData: { data, showModal } }: ModalDataProps) => {
   const [previewImage, setPreviewImage] = useState<string>(`${SERVICE_ASSETS}${data?.image}`);
-  const [updateMailer, { isLoading, isSuccess, isError, error }] = useUpdateMailerMutation();
+  const [updateEMailTemplate, { isLoading, isSuccess, isError, error }] = useUpdateEMailTemplateMutation();
   const {width} = useWindowSize()
 
   const [show, setShow] = useState(false);
@@ -85,7 +87,7 @@ const EditMailerModal = ({ modalData: { data, showModal } }: ModalDataProps) => 
     formData.append('status', formFields.status);
     formData.append('file', formFields.image!);
 
-    await updateMailer(formData);
+    await updateEMailTemplate(formData);
   };
 
   return (

@@ -9,7 +9,7 @@ export class StripePaymentGateway implements PaymentGateway {
     this.stripe = new Stripe(
       this.configService?.get('STRIPE_SECRET_KEY') ||
         (process.env.STRIPE_SECRET_KEY as string),
-      { apiVersion: `2024-09-30.acacia` },
+      { apiVersion: null },
     );
   }
 

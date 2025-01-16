@@ -34,8 +34,9 @@
             isError,
             error
         } = useGetServicesQuery('serviceList', {
-            pollingInterval: 15000,
+            // pollingInterval: 1500,
             refetchOnFocus: true,
+            refetchOnReconnect: true,
             refetchOnMountOrArgChange: true
         })   
           const [deleteService, {

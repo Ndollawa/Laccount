@@ -9,9 +9,10 @@ import {
   UseInterceptors,
   ParseFilePipe,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
-import { FileOptions2 } from '@app/common';
+import { FileOptions2, JwtAuthGuard } from '@app/common';
 import { ServiceService } from './service.service';
 import { CreateServiceDto, UpdateServiceDto } from './dto';
 
@@ -19,6 +20,7 @@ import { CreateServiceDto, UpdateServiceDto } from './dto';
 export class ServiceController {
   constructor(private readonly serviceService: ServiceService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @UseInterceptors(
     FileInterceptor('file', FileOptions2('./uploads/settings/services')),
@@ -52,6 +54,7 @@ export class ServiceController {
     return this.serviceService.find(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   @UseInterceptors(
     FileInterceptor('file', FileOptions2('./uploads/settings/services')),
@@ -70,10 +73,10 @@ export class ServiceController {
     )
     file: Express.Multer.File,
   ) {
-    console.log(updateServiceDto, file);
     return this.serviceService.update(id, updateServiceDto, file);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.serviceService.remove(id);

@@ -49,7 +49,20 @@ export const faqsApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: [
                 { type: 'Faqs', id: "LIST" }
-            ]
+            ],
+             // Optimistic update: directly add the new faq before server response
+            async onQueryStarted(faq, { dispatch, queryFulfilled }) {
+                const patchResult = dispatch(
+                    faqsApiSlice.util.updateQueryData('getFaqs', 'Faqs', draft => {
+                        faqsAdapter.addOne(draft, faq);
+                    })
+                );
+                try {
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo();
+                }
+            },
         }),
         updateFaq: builder.mutation({
             query: ({id, ...initialFaq}) => ({
@@ -59,7 +72,20 @@ export const faqsApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: (result, error, arg) => [
                 { type: 'Faqs', id: arg.id }
-            ]
+            ],
+            // Optimistic update: directly update the faq in cache
+            async onQueryStarted({ id, ...faq }, { dispatch, queryFulfilled }) {
+                const patchResult = dispatch(
+                    faqsApiSlice.util.updateQueryData('getFaqs', 'Faqs', draft => {
+                        faqsAdapter.updateOne(draft, { id, changes: faq });
+                    })
+                );
+                try {
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo();
+                }
+            },
         }),
         deleteFaq: builder.mutation({
             query: ({ id }) => ({
@@ -68,7 +94,20 @@ export const faqsApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: (result, error, arg) => [
                 { type: 'Faqs', id: arg.id }
-            ]
+            ],
+            // Optimistic update: remove the faq before server response
+            async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+                const patchResult = dispatch(
+                    faqsApiSlice.util.updateQueryData('getFaqs', 'Faqs', draft => {
+                        faqsAdapter.removeOne(draft, id);
+                    })
+                );
+                try {
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo();
+                }
+            },
         }),
     }),
 })

@@ -9,9 +9,10 @@ import {
   UseInterceptors,
   ParseFilePipe,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
-import { FileOptions2 } from '@app/common';
+import { FileOptions2, JwtAuthGuard } from '@app/common';
 import { CategoryService } from './category.service';
 import { UpdateCategoryDto, CreateCategoryDto } from './dto';
 
@@ -19,6 +20,7 @@ import { UpdateCategoryDto, CreateCategoryDto } from './dto';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @UseInterceptors(
     FileInterceptor('icon', FileOptions2('./uploads/categories')),
@@ -34,14 +36,19 @@ export class CategoryController {
         fileIsRequired: false,
       }),
     )
-    file: Express.Multer.File,) {
-    console.log(createCategoryDto,file)
-    return this.categoryService.create(createCategoryDto);
+    file: Express.Multer.File,
+  ) {
+    console.log(createCategoryDto, file);
+    return this.categoryService.create(createCategoryDto, file);
   }
 
   @Get()
   findAll() {
-    return this.categoryService.findAll({});
+    return this.categoryService.findAll({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
   }
 
   @Get(':id')
@@ -49,6 +56,7 @@ export class CategoryController {
     return this.categoryService.find(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   @UseInterceptors(
     FileInterceptor('icon', FileOptions2('./uploads/categories')),
@@ -56,7 +64,7 @@ export class CategoryController {
   update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
-     @UploadedFile(
+    @UploadedFile(
       new ParseFilePipe({
         validators: [
           // new MaxFileSizeValidator({ maxSize: 1000 }),
@@ -67,9 +75,10 @@ export class CategoryController {
     )
     file: Express.Multer.File,
   ) {
-    return this.categoryService.update(id, updateCategoryDto);
+    return this.categoryService.update(id, updateCategoryDto, file);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.categoryService.remove(id);

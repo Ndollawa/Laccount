@@ -6,11 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { SavedItemService } from './savedItem.service';
 import { CreateSavedItemDto, UpdateSavedItemDto } from './dto';
+import { JwtAuthGuard } from '@app/common/guards/jwt-auth.guard';
 
 @Controller('savedItems')
+@UseGuards(JwtAuthGuard)
 export class SavedItemController {
   constructor(private readonly savedItemService: SavedItemService) {}
 

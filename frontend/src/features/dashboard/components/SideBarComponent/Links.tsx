@@ -8,6 +8,7 @@ import {TfiLayoutMediaCenter} from 'react-icons/tfi'
 import { HiOutlineBanknotes } from "react-icons/hi2";
 import { BsBank } from "react-icons/bs";
 import {HiOutlineChatBubbleLeftRight , HiOutlineUsers} from 'react-icons/hi2'
+import { MdOutlineMarkEmailUnread } from 'react-icons/md'
 
 export type sideBarLink ={
     id:number;
@@ -178,6 +179,14 @@ export type sideBarLink ={
         isActive:false,
         isOpen:false
     }],
+    },
+     {
+        id:10,
+        title:'Mail Service',
+        icon:<MdOutlineMarkEmailUnread fontSize={"2rem"}/>,
+        isOpen:false,
+        path: '/dashboard/mailer'
+
+       
     }
-    
     ]

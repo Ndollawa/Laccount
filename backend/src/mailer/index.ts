@@ -1,4 +1,4 @@
 export * from './mailer.controller';
 export * from './mailer.module';
-export * from './mailer.service';
-export * from './mailer.repository';
+export * from './services';
+export * from './repositories';

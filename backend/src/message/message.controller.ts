@@ -6,11 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDto, UpdateMessageDto } from './dto';
 import { ConversationService } from 'src/conversation';
+import { JwtAuthGuard } from '@app/common/guards/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('messages')
 export class MessageController {
   constructor(

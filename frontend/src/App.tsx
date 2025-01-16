@@ -11,6 +11,7 @@ import './App.css'
 // Lazy Load components
 const StripeElement = React.lazy(() => import('./features/dashboard/components/StripeElement'));
 const PaymentStatus = React.lazy(() => import('./features/dashboard/components/PaymentStatus'));
+const GeneralPreloader = React.lazy(() => import('./features/components/preloader/GeneralPreloader'));
 
 const PersistLogin = React.lazy(() => import('./features/components/PersistLogin'));
 const RequireAuth = React.lazy(() => import('./features/components/RequireAuth'));
@@ -26,6 +27,7 @@ const DashboardHome = React.lazy(() => import('./features/dashboard/pages/Home/H
 const Profile = React.lazy(() => import('./features/dashboard/pages/Profile/Profile'));
 const ProfileEdit = React.lazy(() => import('./features/dashboard/pages/Profile/ProfileEdit'));
 const DashboardFaq = React.lazy(() => import('./features/dashboard/pages/Faq/Faq'));
+const Mailer = React.lazy(() => import('./features/dashboard/pages/Mailer/Mailer'));
 const DashboardTeam = React.lazy(() => import('./features/dashboard/pages/Team/Team'));
 const DashboardService = React.lazy(() => import('./features/dashboard/pages/Service/Services'));
 const DashboardPost = React.lazy(() => import('./features/dashboard/pages/Post/Post'));
@@ -63,17 +65,7 @@ const Register = React.lazy(() => import('./features/auth/Register'));
 const Error = React.lazy(() => import( './features/errorPages/Error'));
  const BRAND_ASSETS = import.meta.env.VITE_BRAND_ASSETS;
 
-const Preloader = ()=>{
-  return (
-    <div id="preloader" >
-            <div className="sk-three-bounce">
-                <div className="sk-child sk-bounce1"></div>
-                <div className="sk-child sk-bounce2"></div>
-                <div className="sk-child sk-bounce3"></div>
-            </div>
-        </div>
-  )
-}
+
 
 const App = () => {
   // const [pageTitle, setPageTitle] = useState("Home");
@@ -141,13 +133,17 @@ const bgImage = `${BRAND_ASSETS}${pagesBg}`
             <Route path="dashboard/sliders" element={<DashboardSlider pageData={{ pageTitle: "Users", coverImage:bgImage }}  />} />
            <Route path="dashboard/users">
               <Route index element={<Users pageData={{ pageTitle: "Users", coverImage:bgImage }} />} />
-              <Route path=":userId" element={<User pageData={{ pageTitle: "User", coverImage:bgImage }} />} />
+              <Route path=":id" element={<User pageData={{ pageTitle: "User", coverImage:bgImage }} />} />
+            </Route>
+           <Route path="dashboard/mailer">
+              <Route index element={<Mailer pageData={{ pageTitle: "Users", coverImage:bgImage }} />} />
+              {/* <Route path=":userId" element={<User pageData={{ pageTitle: "User", coverImage:bgImage }} />} /> */}
             </Route>
            <Route path="dashboard/blog">
               <Route index element={<DashboardPost pageData={{ pageTitle: "Posts", coverImage:bgImage }} />} />
               <Route path="posts"  >
                      <Route index element={<DashboardPost pageData={{ pageTitle: "Users", coverImage:bgImage }} />} />
-                     <Route path=":postId" element={<User pageData={{ pageTitle: "User", coverImage:bgImage }} />} />
+                     <Route path=":id" element={<User pageData={{ pageTitle: "User", coverImage:bgImage }} />} />
               </Route>
                      <Route path="category" element={<DashboardCategory pageData={{ pageTitle: "Category", coverImage:bgImage }} />} />
             </Route>
@@ -169,7 +165,7 @@ const bgImage = `${BRAND_ASSETS}${pagesBg}`
   return (
     <>
       <ToastContainer />
-      {isPending ? <Preloader /> :
+      {isPending ? <GeneralPreloader /> :
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<LandingLayout pageData={{ pageTitle:"Home", coverImage:bgImage }}/> }>
@@ -198,7 +194,7 @@ const bgImage = `${BRAND_ASSETS}${pagesBg}`
          
         </Route>
          <Route path="payment-status" element={<DashboardLayout pageData={{ pageTitle: "Dashboard" }} />}>
-          <Route index element={ isPending ? <Preloader /> :<StripeElement><PaymentStatus /></StripeElement>} />
+          <Route index element={ isPending ? <GeneralPreloader /> :<StripeElement><PaymentStatus /></StripeElement>} />
          </Route>
          <Route path="auth" element={<DashboardLayout pageData={{ pageTitle: "Dashboard" }} />}>
           <Route index element={currentToken ? <Navigate  to="/dashboard" /> : <Login />} />

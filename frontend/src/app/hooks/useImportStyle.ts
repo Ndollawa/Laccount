@@ -1,33 +1,37 @@
 import React, { useLayoutEffect, useCallback } from 'react';
 
 const useImportStyle = (resourceUrls: string[], cssType = 'css') => {
-  // Add styles immediately before component mount
-  const addStyles =  useCallback(()=>{ const existingLinks = new Set(
-    Array.from(document.head.getElementsByTagName('link')).map((link) => link.href)
-  );
+  // Add styles before component mounts
+  const addStyles = useCallback(() => {
+    // Use a Set to track existing <link> tags and avoid duplicates
+    const existingLinks = new Set(
+      Array.from(document.head.getElementsByTagName('link')).map((link) => link.href)
+    );
 
-  resourceUrls.forEach((url) => {
-    if (!existingLinks.has(url)) {
-      const styleTag = document.createElement('link');
-      styleTag.href = url;
-      styleTag.rel = 'stylesheet';
-      styleTag.media = 'all';
-      styleTag.type = `text/${cssType}`;
+    resourceUrls.forEach((url) => {
+      if (!existingLinks.has(url)) {
+        const linkTag = document.createElement('link');
+        linkTag.href = url;
+        linkTag.rel = 'stylesheet';
+        linkTag.media = 'all';
+        linkTag.type = `text/${cssType}`;
 
-      styleTag.onerror = () => {
-        console.error('Error occurred while loading styles');
-      };
+        // Error handling for loading failures
+        linkTag.onerror = () => {
+          console.error(`Error occurred while loading stylesheet: ${url}`);
+        };
 
-      document.head.appendChild(styleTag);
-      existingLinks.add(url); // Avoid future duplicates
-    }
-  });
-},[resourceUrls])
-
-
-  // Cleanup styles on component unmount
+        document.head.appendChild(linkTag);
+      }
+    });
+  }, [resourceUrls, cssType]);
+ // Add the styles when component mounts
+    addStyles();
+  // Cleanup styles on component unmount or resource URL changes
   useLayoutEffect(() => {
-    addStyles()
+   
+
+    // Cleanup function to remove the specific <link> tags
     return () => {
       resourceUrls.forEach((url) => {
         const linkToRemove = Array.from(document.head.getElementsByTagName('link')).find(
@@ -38,7 +42,7 @@ const useImportStyle = (resourceUrls: string[], cssType = 'css') => {
         }
       });
     };
-  }, [resourceUrls]); // Cleanup on unmount or if URLs change
+  }); //, [resourceUrls, addStyles] Ensure that useEffect runs when resourceUrls change
 };
 
 export default useImportStyle;

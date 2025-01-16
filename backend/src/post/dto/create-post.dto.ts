@@ -2,10 +2,12 @@ import {
   IsString,
   IsNotEmpty,
   IsOptional,
+  IsEnum,
   IsArray,
   ValidateNested,
   IsUUID,
 } from 'class-validator';
+import { PublishStatus } from "@prisma/client";
 import { Type } from 'class-transformer';
 import { CreateCommentDto } from '../../comment/dto/create-comment.dto';
 
@@ -22,27 +24,21 @@ export class CreatePostDto {
   @IsNotEmpty()
   description: string;
 
-  @IsString()
-  @IsNotEmpty()
-  tags: string;
+  @IsEnum(PublishStatus)
+  status: PublishStatus;
 
   @IsString()
   @IsNotEmpty()
-  image: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @IsUUID()
-  authorId: string;
+  tags: string[];
 
   @IsString()
   @IsNotEmpty()
   @IsUUID()
   categoryId: string;
 
+  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreateCommentDto)
-  @IsOptional()
   comments?: CreateCommentDto[];
 }

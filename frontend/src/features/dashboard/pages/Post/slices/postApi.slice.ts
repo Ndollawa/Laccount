@@ -46,7 +46,20 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: [
                 { type: 'Posts', id: "LIST" }
-            ]
+            ],
+            // Optimistic update: directly add the new post before server response
+            async onQueryStarted(post, { dispatch, queryFulfilled }) {
+                const patchResult = dispatch(
+                    postsApiSlice.util.updateQueryData('getPosts', 'Posts', draft => {
+                        postsAdapter.addOne(draft, post);
+                    })
+                );
+                try {
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo();
+                }
+            },
         }),
         updatePost: builder.mutation({
             query: post => ({
@@ -57,7 +70,20 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: (result, error, arg) => [
                 { type: 'Posts', id: arg.id }
-            ]
+            ],
+            // Optimistic update: directly update the post in cache
+            async onQueryStarted({ id, ...post }, { dispatch, queryFulfilled }) {
+                const patchResult = dispatch(
+                    postsApiSlice.util.updateQueryData('getPosts', 'Posts', draft => {
+                        postsAdapter.updateOne(draft, { id, changes: post });
+                    })
+                );
+                try {
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo();
+                }
+            },
         }),
         deletePost: builder.mutation({
             query: ({ id }) => ({
@@ -67,7 +93,20 @@ export const postsApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: (result, error, arg) => [
                 { type: 'Posts', id: arg.id }
-            ]
+            ],
+            // Optimistic update: remove the post before server response
+            async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+                const patchResult = dispatch(
+                    postsApiSlice.util.updateQueryData('getPosts', 'Posts', draft => {
+                        postsAdapter.removeOne(draft, id);
+                    })
+                );
+                try {
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo();
+                }
+            },
         }),
     }),
 })

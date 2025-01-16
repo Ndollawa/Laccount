@@ -23,7 +23,6 @@ console.error(error);
   return (
     <>
     <OtherBody>
-  <div className="vh-100 w-100" id="body">
    <div className="w-100 row justify-content-center h-100 align-items-center">
        <div className="row justify-content-center h-100 align-items-center">
            <div className="col-md-7">
@@ -38,7 +37,6 @@ console.error(error);
                </div>
            </div>
        </div>
-   </div>
    </div>
    </OtherBody>
    </>

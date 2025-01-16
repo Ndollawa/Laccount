@@ -60,7 +60,20 @@ export const teamsApiSlice = apiSlice.injectEndpoints({
               
             invalidatesTags: [
                 { type: 'Teams', id: "LIST" }
-            ]
+            ],
+            // Optimistic update: directly add the new team before server response
+            async onQueryStarted(team, { dispatch, queryFulfilled }) {
+                const patchResult = dispatch(
+                    teamsApiSlice.util.updateQueryData('getTeams', 'Teams', draft => {
+                        teamsAdapter.addOne(draft, team);
+                    })
+                );
+                try {
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo();
+                }
+            },
         }),
         updateTeam: builder.mutation({
             query: ({id, image, ...team}) => {
@@ -84,7 +97,21 @@ export const teamsApiSlice = apiSlice.injectEndpoints({
                })},
             invalidatesTags: (result, error, arg) => [
                 { type: 'Teams', id: arg.id }
-            ]
+            ],
+            // Optimistic update: directly update the team in cache
+            async onQueryStarted({ id, ...team }, { dispatch, queryFulfilled }) {
+                const patchResult = dispatch(
+                    teamsApiSlice.util.updateQueryData('getTeams', 'Teams', draft => {
+                        teamsAdapter.updateOne(draft, { id, changes: team });
+                    })
+                );
+                try {
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo();
+                }
+            },
+        }),
         }),
         deleteTeam: builder.mutation({
             query: ({ id }) => ({
@@ -93,9 +120,21 @@ export const teamsApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: (result, error, arg) => [
                 { type: 'Teams', id: arg.id }
-            ]
+            ],
+            // Optimistic update: remove the team before server response
+            async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+                const patchResult = dispatch(
+                    teamsApiSlice.util.updateQueryData('getTeams', 'Teams', draft => {
+                        teamsAdapter.removeOne(draft, id);
+                    })
+                );
+                try {
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo();
+                }
+            },
         }),
-    }),
 })
 
 export const {

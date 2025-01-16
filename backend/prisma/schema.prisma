@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "windows"]
 }
 
@@ -256,6 +256,7 @@ model User {
   savedItems             SavedItem[]
   vendor                 Vendor?
   cart                   Cart?
+  contacts               Contact?
 }
 
 model RefreshToken {
@@ -337,7 +338,7 @@ model Team {
   status      ActiveStatus @default(ACTIVE)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt()
-  deletedAt  DateTime? 
+  deletedAt   DateTime?
 }
 
 model Listing {
@@ -347,7 +348,7 @@ model Listing {
   price         Float
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt()
-  deletedAt  DateTime? 
+  deletedAt     DateTime?
 
   // Relations
   seller         Vendor          @relation(fields: [sellerId], references: [id])
@@ -357,7 +358,7 @@ model Listing {
 }
 
 model AccountDetails {
-  id              String  @id @default(uuid())
+  id              String    @id @default(uuid())
   categoryId      String
   username        String
   url             String
@@ -367,12 +368,12 @@ model AccountDetails {
   averageComments Int
   bio             String?
   description     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
-  deletedAt  DateTime? 
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt()
+  deletedAt       DateTime?
   // Relations
-  listingId String?  @unique
-  listing   Listing? @relation(fields: [listingId], references: [id])
+  listingId       String?   @unique
+  listing         Listing?  @relation(fields: [listingId], references: [id])
 }
 
 model Cart {
@@ -384,7 +385,6 @@ model Cart {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
-  
 }
 
 model CartItem {
@@ -463,7 +463,7 @@ model Role {
   code      String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt()
-  deletedAt  DateTime? 
+  deletedAt DateTime?
 
   // Relations
   user   User   @relation(fields: [userId], references: [id])
@@ -472,19 +472,27 @@ model Role {
   @@index([role, code])
 }
 
+model Contact {
+  id       String   @id @default(uuid())
+  contacts String[]
+  // Relations
+  userId   String   @unique
+  user     User     @relation(fields: [userId], references: [id])
+}
+
 model Post {
   id          String        @id @default(uuid())
   title       String        @unique
   body        String        @db.Text
   description String        @db.Text
   image       String
-  tags        String
+  tags        String[]
   status      PublishStatus @default(PUBLISHED)
   readCount   BigInt
   readingTime String
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt()
-  deletedAt  DateTime? 
+  deletedAt   DateTime?
 
   // Relations
   categoryId String
@@ -496,27 +504,27 @@ model Post {
 }
 
 model Comment {
-  id         String        @id @default(uuid())
-  subject    String
-  status     PublishStatus @default(PUBLISHED)
-  comment    String
-  firstName  String?
-  lastName   String?
-  email      String?
-  phoneNo    String?
-  for        String
-  parentId   String?
-  authorId   String
-  authorType String
-  postId     String
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @updatedAt()
-  deletedAt  DateTime? 
+  id        String        @id @default(uuid())
+  subject   String
+  status    PublishStatus @default(PUBLISHED)
+  comment   String
+  firstName String?
+  lastName  String?
+  email     String?
+  phoneNo   String?
+  for       String
+  parentId  String?
+  userId    String
+  userType  String
+  postId    String
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt()
+  deletedAt DateTime?
 
   // Relations
   parent   Comment?  @relation("commentToComment", fields: [parentId], references: [id], onDelete: Cascade)
   children Comment[] @relation("commentToComment")
-  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   post     Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
@@ -529,7 +537,7 @@ model Category {
   parentId  String?
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt()
-  deletedAt  DateTime? 
+  deletedAt DateTime?
   for       CategoryForEnum // Enum to differentiate between types of entities (e.g., Post, Message, etc.)
 
   // Relations
@@ -539,13 +547,13 @@ model Category {
 }
 
 model Attachment {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   fileName  String
   fileType  String
   fileUrl   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
-  deletedAt  DateTime? 
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt()
+  deletedAt DateTime?
 
   // Polymorphic fields
   targetId   String // The ID of the related entity (e.g., postId, messageId, etc.)
@@ -563,7 +571,7 @@ model Testimonial {
   status    ActiveStatus @default(ACTIVE)
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt()
-  deletedAt  DateTime? 
+  deletedAt DateTime?
 }
 
 model Service {
@@ -577,7 +585,7 @@ model Service {
   status      ActiveStatus @default(ACTIVE)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt()
-  deletedAt  DateTime? 
+  deletedAt   DateTime?
 
   // Relations
   // attachments Attachment[]
@@ -593,7 +601,7 @@ model Notification {
   // attachments  Attachment[]
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt()
-  deletedAt  DateTime? 
+  deletedAt    DateTime?
   // Relations
   receiver     User             @relation(fields: [receiverId], references: [id], onDelete: Cascade)
 }
@@ -603,7 +611,7 @@ model Conversation {
   status    ActiveStatus @default(ACTIVE)
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt()
-  deletedAt  DateTime? 
+  deletedAt DateTime?
   // Relations
   messages  Message[]
   members   User[]
@@ -617,7 +625,7 @@ model Message {
   receiverId String
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt()
-  deletedAt  DateTime?  
+  deletedAt  DateTime?
 
   // Relations
   conversationId String
@@ -635,7 +643,7 @@ model RoomMessage {
   roomId    String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt()
-  deletedAt  DateTime? 
+  deletedAt DateTime?
 
   // Relations
   sender User @relation(fields: [senderId], references: [id])
@@ -644,12 +652,12 @@ model RoomMessage {
 }
 
 model Room {
-  id          String   @id @default(uuid())
-  name        String   @unique
+  id          String    @id @default(uuid())
+  name        String    @unique
   description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt()
-  deletedAt  DateTime? 
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  deletedAt   DateTime?
 
   // Relations
   messages     RoomMessage[]
@@ -671,26 +679,29 @@ model Wallet {
   user      User         @relation(fields: [userId], references: [id])
 }
 
-model Mailer {
-  id        String             @id @default(uuid())
-  type      MailerTemplateEnum
-  template  String
-  body      String
-  name      String
-  context   Json
-  status    ActiveStatus       @default(ACTIVE)
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @updatedAt()
-  deletedAt  DateTime? 
+model MailTemplate {
+  id             String          @id @default(uuid())
+  template       String
+  name           String
+  status         ActiveStatus    @default(ACTIVE)
+  emailTemplates EMailTemplate[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt()
+  deletedAt      DateTime?
 }
 
-model MailTemplate {
-  id        String   @id @default(uuid())
-  body      String
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
-  deletedAt  DateTime? 
+model EMailTemplate {
+  id         String             @id @default(uuid())
+  type       MailerTemplateEnum
+  template   MailTemplate       @relation(fields: [templateId], references: [id])
+  templateId String
+  body       String
+  name       String
+  context    Json
+  status     ActiveStatus       @default(ACTIVE)
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt()
+  deletedAt  DateTime?
 }
 
 model AppSettings {
@@ -724,7 +735,7 @@ model Subscription {
   type          SubscriptionType
   createdAt     DateTime           @default(now())
   updatedAt     DateTime           @updatedAt()
-  deletedAt  DateTime? 
+  deletedAt     DateTime?
 }
 
 model SubscriptionPlan {
@@ -738,7 +749,7 @@ model SubscriptionPlan {
   frequency     PaymentFrequency
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt()
-  deletedAt  DateTime? 
+  deletedAt     DateTime?
 }
 
 model PaymentGateway {
@@ -754,7 +765,7 @@ model PaymentGateway {
   country             String? // Country-specific configuration (optional)
   createdAt           DateTime    @default(now())
   updatedAt           DateTime    @updatedAt()
-  deletedAt  DateTime? 
+  deletedAt           DateTime?
 }
 
 model SupportTicket {
@@ -772,7 +783,7 @@ model SupportTicket {
   resolvedAt   DateTime? // Timestamp for when the ticket was resolved
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  deletedAt  DateTime? 
+  deletedAt    DateTime?
 }
 
 model Faq {
@@ -782,5 +793,5 @@ model Faq {
   status    ActiveStatus
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt()
-  deletedAt  DateTime? 
+  deletedAt DateTime?
 }

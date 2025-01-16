@@ -14,7 +14,7 @@ export class WebhookController {
     const stripe: Stripe = new Stripe(
       this.configService?.get('STRIPE_SECRET_KEY') ||
         (process.env.STRIPE_SECRET_KEY as string),
-      { apiVersion: `2024-09-30.acacia` },
+      { apiVersion: null },
     );
     const endpointSecret =
       this.configService?.get('WEBHOOK_SIGNING_SECRET') ||

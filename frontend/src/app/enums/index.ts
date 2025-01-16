@@ -179,6 +179,7 @@ export enum RolesEnum {
   DEV = "DEV",
 }
 
+
 export enum MailerTemplateEnum {
   SIGNUP_CONFIRMATION = "SIGNUP_CONFIRMATION",
   LOGIN_CONFIRMATION = "LOGIN_CONFIRMATION",

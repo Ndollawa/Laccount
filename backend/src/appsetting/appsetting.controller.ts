@@ -11,6 +11,7 @@ import {
   ParseFilePipe,
   MaxFileSizeValidator,
   FileTypeValidator,
+  UseGuards,
 } from '@nestjs/common';
 import { join } from 'path';
 import { AppSettingService } from './appsetting.service';
@@ -23,10 +24,13 @@ import {
 } from './dto';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { FileOptions2 } from '@app/common/helpers/file-filter.helper';
+import { JwtAuthGuard } from '@app/common/guards/jwt-auth.guard';
 
 @Controller('app-settings')
 export class AppSettingController {
   constructor(private readonly appSettingsService: AppSettingService) {}
+
+  // @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createAppSettingsDto: CreateAppSettingsDto) {
     return this.appSettingsService.create(createAppSettingsDto);
@@ -47,6 +51,7 @@ export class AppSettingController {
     return this.appSettingsService.find({ type });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -55,6 +60,7 @@ export class AppSettingController {
     return this.appSettingsService.update(id, updateAppSettingsDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.appSettingsService.remove(id);
@@ -110,6 +116,7 @@ export class AppSettingController {
     return this.appSettingsService.upload({ id, type, file });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('remove-uploads')
   removeUploadeFile(@Body() { type, id, file }: SettingFileUploadDto) {
     console.log(file);

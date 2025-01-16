@@ -15,6 +15,7 @@ import showToast from '@utils/showToast';
 const CATEGORY_ASSETS = import.meta.env.VITE_CATEGORY_ASSETS;
 import { setPreloader } from '@components/preloader/slices/preloader.slice';
 import PageProps from '@props/pageProps';
+import { CategoryIconType, CategoryForEnum } from "@enums/index";
 import CategoryProps from '@props/categoryProps';
 import { ModalDataProps } from '@props/modalProps';
 import GeneralPreloader from '@components/preloader/GeneralPreloader';
@@ -36,7 +37,7 @@ const Category = ({ pageData }: PageProps) => {
     isError,
     error,
   } = useGetCategoriesQuery("categoryList", {
-    pollingInterval: 55000,
+    // pollingInterval: 1500,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -107,24 +108,36 @@ const Category = ({ pageData }: PageProps) => {
     };
   const slots = {
     1: (data: any, row: any) =>
-      row.icon ? (
-        <LightGallery plugins={[lgZoom]}>
-          <a
-            href={`${CATEGORY_ASSETS}${row.icon}`}
-            data-lightbox={`icon-${row.id}`}
-            data-exthumbicon={CATEGORY_ASSETS + row.icon}
-            data-src={CATEGORY_ASSETS + row.icon}
-            data-name={row.name}
-          >
-            <img
-              src={`${CATEGORY_ASSETS}${row.icon}`}
-              alt={row.name}
-              width="150"
-            />
-          </a>
-        </LightGallery>
-      ) : (
+        
+        (
+          row.icon &&  (row.iconType === CategoryIconType.IMAGE) ? (
+            <LightGallery plugins={[lgZoom]}>
+              <a
+                href={`${CATEGORY_ASSETS}${row.icon}`}
+                data-lightbox={`icon-${row.id}`}
+                data-exthumbicon={CATEGORY_ASSETS + row.icon}
+                data-src={CATEGORY_ASSETS + row.icon}
+                data-name={row.name}
+              >
+                <img
+                  src={`${CATEGORY_ASSETS}${row.icon}`}
+                  alt={row.name}
+                  width="150"
+                />
+              </a>
+            </LightGallery>
+          ) : row.icon && (row.iconType === CategoryIconType.ICON) ? (
+            <span>
+              <i className={row.icon}></i>
+            </span>
+          ) : 
+            row.icon && (row.iconType === CategoryIconType.SVG) ? (
+  <span>{row.icon}</span>
+
+ )     : (
         <p></p>
+      )
+       
       ),
     // 4: (data: any, row: any) => (
     //   <div className="text-wrap text-left w-40" dangerouslySetInnerHTML={{ __html: row.body }}></div>
@@ -159,7 +172,7 @@ const Category = ({ pageData }: PageProps) => {
       Object.values(allCategories?.entities)?.map(
         (category: CategoryProps | unknown, i: number) => ({
           i: i + 1,
-          icon: category.icon,
+          icon: category,
           name: category?.name,
           parentId: ParentCategoryName(category.id)?.name ?? "",
           for: category.for,

@@ -47,7 +47,20 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: [
                 { type: 'Users', id: "LIST" }
-            ]
+            ],
+                        // Optimistic update: directly add the new user before server response
+                        async onQueryStarted(user, { dispatch, queryFulfilled }) {
+                            const patchResult = dispatch(
+                                usersApiSlice.util.updateQueryData('getUsers', 'Users', draft => {
+                                    usersAdapter.addOne(draft, user);
+                                })
+                            );
+                            try {
+                                await queryFulfilled;
+                            } catch {
+                                patchResult.undo();
+                            }
+                        },
         }),
         updateUser: builder.mutation({
             query: data => ({
@@ -57,7 +70,20 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: (result, error, arg) => [
                 { type: 'Users', id: arg.id }
-            ]
+            ],
+                        // Optimistic update: directly update the user in cache
+                        async onQueryStarted({ id, ...user }, { dispatch, queryFulfilled }) {
+                            const patchResult = dispatch(
+                                usersApiSlice.util.updateQueryData('getUsers', 'Users', draft => {
+                                    usersAdapter.updateOne(draft, { id, changes: user });
+                                })
+                            );
+                            try {
+                                await queryFulfilled;
+                            } catch {
+                                patchResult.undo();
+                            }
+                        },
         }),
         checkDuplicateUser: builder.mutation({
             query: userInfo => ({
@@ -97,7 +123,20 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: (result, error, arg) => [
                 { type: 'Users', id: arg.id }
-            ]
+            ],
+                        // Optimistic update: remove the user before server response
+                        async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+                            const patchResult = dispatch(
+                                usersApiSlice.util.updateQueryData('getUsers', 'Users', draft => {
+                                    usersAdapter.removeOne(draft, id);
+                                })
+                            );
+                            try {
+                                await queryFulfilled;
+                            } catch {
+                                patchResult.undo();
+                            }
+                        },
         }),
     }),
 })

@@ -5,7 +5,7 @@ const FileUpload = ({onChange}:{onChange:React.InputHTMLAttributes<HTMLInputElem
     <div className="d-flex align-items-center justify-content-center w-100 my-3">
                       <label
                         htmlFor="dropzone-file"
-                        className="d-flex flex-column p-3 align-items-center justify-content-center w-100 rounded cursor-pointer bg-light"
+                        className="d-flex flex-column p-3 align-items-center justify-content-center w-100 rounded cursor-pointer bg-transparent"
                         style={{ height: '16rem', border: "2px dashed" }}
                       >
                         <div className="d-flex flex-column align-items-center justify-content-center py-3">

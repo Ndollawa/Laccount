@@ -35,6 +35,7 @@ import { SubscriptionModule } from './subscription';
 import { SupportTicketModule } from './support';
 import { TestimonialModule } from './testimonial';
 import { ConversationModule } from './conversation';
+import { ContactModule } from './contact';
 import { CategoryModule } from './category';
 import { SubscriptionPlanModule } from './subscriptionPlan';
 import { SeederModule } from '@app/common/seeder/seeder.module';
@@ -94,6 +95,7 @@ import { AppGateway } from './app.gateway';
     RoomModule,
     ServiceModule,
     SubscriptionPlanModule,
+    ContactModule,
     ConversationModule,
     TestimonialModule,
     FaqModule,

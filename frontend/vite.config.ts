@@ -35,6 +35,7 @@ export default defineConfig({
       '@configs/*': path.resolve(__dirname, '/src/app/configs/'),
       '@enums/*': path.resolve(__dirname, '/src/app/enums/'),
       '@props/*': path.resolve(__dirname, '/src/app/props/'),
+      '@routes/*': path.resolve(__dirname, '/src/app/routes/'),
       '@interfaces/*': path.resolve(__dirname, '/src/app/interfaces/'),
       '@types/*': path.resolve(__dirname, '/src/app/types/'),
       '@api/*': path.resolve(__dirname, '/src/app/api/'),

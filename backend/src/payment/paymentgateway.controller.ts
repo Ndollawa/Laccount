@@ -6,10 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { PaymentGatewayService } from './paymentgateway.service';
 import { CreatePaymentGatewayDto, UpdatePaymentGatewayDto } from './dto/';
+import { JwtAuthGuard } from '@app/common/guards/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('payments')
 export class PaymentGatewayController {
   constructor(private readonly paymentGatewayService: PaymentGatewayService) {}

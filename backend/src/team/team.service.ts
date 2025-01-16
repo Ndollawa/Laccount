@@ -105,7 +105,7 @@ export class TeamService {
       const rec = await this.teamRepository.update({
         where: { id },
         data,
-        select:{image:true}
+        select: { image: true },
       });
     } catch (error) {
       handleError(error);
@@ -117,7 +117,7 @@ export class TeamService {
       const rec = await this.teamRepository.upsert({
         where: { id },
         data: updateTeamData,
-        select:{image: true}
+        select: { image: true },
       });
     } catch (error) {
       handleError(error);

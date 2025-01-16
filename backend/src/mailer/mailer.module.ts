@@ -3,8 +3,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailerModule as NestMailerModule } from '@nestjs-modules/mailer';
 import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { MailerService } from './mailer.service';
-import { MailerRepository } from './mailer.repository';
+import { MailTemplateService, EMailTemplateService } from './services';
+import {
+  MailTemplateRepository,
+  EMailTemplateRepository,
+} from './repositories';
 import { MailerController } from './mailer.controller';
 import { PrismaModule } from '@app/prisma';
 
@@ -53,7 +56,12 @@ import { PrismaModule } from '@app/prisma';
     PrismaModule,
   ],
   controllers: [MailerController],
-  providers: [MailerService, MailerRepository],
-  exports: [MailerService],
+  providers: [
+    MailTemplateService,
+    EMailTemplateService,
+    MailTemplateRepository,
+    EMailTemplateRepository,
+  ],
+  exports: [MailTemplateService, EMailTemplateService],
 })
 export class MailerModule {}
