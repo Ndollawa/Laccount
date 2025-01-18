@@ -1,4 +1,4 @@
-import React, {useRef} from 'react'
+import React, {useEffect, useRef} from 'react'
 import { Outlet } from 'react-router-dom';
 import { useDispatch} from 'react-redux';
 import { Helmet } from 'react-helmet';
@@ -12,10 +12,12 @@ import Css from '@dashboard/components/Css';
 
 
 const Layout:React.FC<PageProps> = ({pageData}:PageProps) => { 
- const styles = useRef(null);
-   const dispatch = useDispatch()
 
-  React.useEffect(() => {
+   useEffect(() => {
+       const mainStyles = document.getElementById(
+         "main-styles"
+       )! as HTMLLinkElement;
+       mainStyles.href = "dashboard-assets/css/zenix.css";
 
       // Hide the preloader after 4.5 seconds
       // setTimeout(() => dispatch(setPreloader(false)), 500);
@@ -34,17 +36,14 @@ const Layout:React.FC<PageProps> = ({pageData}:PageProps) => {
       toggleChatbox('.chatbox-close', 'active', 'remove');
     
 
-        styles.current = <Css />;
-
-return ()=>{
-
-}
-  }, [])
-
+     return () => {
+      mainStyles.href = "assets/css/finlon.css";
+     };
+   }, [])
   return (
     <>
     {/* {styles.current} */}
-    <Css/>
+    {/* <Css/> */}
         <Head pageData={pageData}/>
           <Outlet/>
         <Js/>

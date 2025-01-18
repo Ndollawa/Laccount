@@ -44,8 +44,20 @@ const Home: React.FC<PageProps> = ({ pageData }: PageProps) => {
     } else {
       scrollToTop?.classList.remove('visible');
     }
+      
+     
   }, []);
 
+
+   useEffect(() => {
+       const mainStyles = document.getElementById(
+         "main-styles"
+       )! as HTMLLinkElement;
+       mainStyles.href = "assets/css/finlon.css";
+     return () => {
+      mainStyles.href = "dashboard-assets/css/zenix.css";
+     };
+   }, [])
   useEffect(() => {
     if (preloaderRef.current) {
       preloaderRef.current.style.display = 'none';
@@ -64,7 +76,7 @@ const Home: React.FC<PageProps> = ({ pageData }: PageProps) => {
   return (
     <>
 
-      <Css/>
+      {/* <Css/> */}
       <Head pageData={pageData} />
       <div className="custom-cursor">
         <div className="custom-cursor__cursor"></div>

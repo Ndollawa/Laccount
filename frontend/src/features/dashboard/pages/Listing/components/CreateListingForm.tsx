@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback, ChangeEvent } from "react";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
-import { useAddNewPostMutation } from "../slices/postApi.slice";
+import { useAddNewListingMutation } from "../slices/listingApi.slice";
 import { Button } from "react-bootstrap";
 import { PulseLoader } from "react-spinners";
 import { IoIosClose, IoMdPricetags } from "react-icons/io";
@@ -17,11 +17,12 @@ import useWindowSize from "@hooks/useWindowSize";
 import ModalComponent from "@dashboard/components/Modal";
 import FileUpload from "@components/FileUpload";
 import tinyMCEInit from "@configs/tinymce.config";
+import { ListingStatus } from "@app/app/enums";
 import CategoryProps from "@app/app/props/categoryProps";
 
-const CreatePostForm = () => {
+const CreateListingForm = () => {
   const [tagName, setTagName] = useState("");
-  const [postBg, setPostBg] = useState<File | null>(null);
+  const [listingBg, setListingBg] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState("");
   const { width } = useWindowSize();
   const [show, setShow] = useState(false);
@@ -41,27 +42,28 @@ const CreatePostForm = () => {
   } = useForm({
     defaultValues: {
       title: "",
-      description: "",
-      categoryId: "",
-      body: "",
       tags: [],
-      status: "PUBLISHED",
-      image: undefined,
+      description: "",
+      url: "",
+      categoryId: "",
+      price: 0,
+      status: ListingStatus.ACTIVE,
+      attachments: [],
     },
   });
-  const [addNewPost, { isLoading, isError, error, isSuccess }] =
-    useAddNewPostMutation();
+  const [addNewListing, { isLoading, isError, error, isSuccess }] =
+    useAddNewListingMutation();
   const { data: allCategories } = useGetCategoriesQuery("categoriesList", {
     refetchOnFocus: true,
     refetchOnReconnect: true,
     refetchOnMountOrArgChange: true,
   });
-  const { categories } = useGetCategoriesQuery("categoriesList", {
+ const { categories } = useGetCategoriesQuery("categoriesList", {
     selectFromResult: ({ data }) => ({
       categories:
         data?.entities &&
         (Object.values(data?.entities) as CategoryProps[])?.filter(
-          (cat: CategoryProps) => cat?.for === "POST"
+          (cat: CategoryProps) => cat?.for === "LISTING"
         ),
     }),
   });
@@ -75,7 +77,7 @@ const CreatePostForm = () => {
   useEffect(() => {
     if (isSuccess) {
       reset();
-      showToast("success", "Post created successfully");
+      showToast("success", "Listing created successfully");
       setPreviewImage("");
     }
     if (isError) {
@@ -84,7 +86,7 @@ const CreatePostForm = () => {
   }, [isSuccess, isError, reset, error]);
 
   const onSubmit = async (data: any) => {
-    if (postBg) {
+    if (listingBg) {
       const formData = new FormData();
       formData.append("title", data.title);
       formData.append("description", data.description);
@@ -92,9 +94,9 @@ const CreatePostForm = () => {
       formData.append("tags", JSON.stringify(data.tags));
       formData.append("categoryId", data.categoryId);
       formData.append("status", data.status);
-      formData.append("file", postBg);
+      formData.append("file", listingBg);
 
-      await addNewPost(formData);
+      await addNewListing(formData);
     }
   };
 
@@ -107,7 +109,7 @@ const CreatePostForm = () => {
       if (tagName !== "") {
         setValue("tags", [
           ...(getValues("tags") as string[]),
-          capitalizeFirstLetter(tagName) as string,
+          capitalizeFirstLetter(tagName),
         ]);
         setTagName("");
       }
@@ -125,7 +127,7 @@ const CreatePostForm = () => {
   const uploadBg = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setPostBg(file);
+      setListingBg(file);
       setPreviewImage(URL.createObjectURL(file));
     }
   };
@@ -144,7 +146,7 @@ const CreatePostForm = () => {
       <ModalComponent
         {...{
           size: (width as number) < 600 ? "xl" : "lg",
-          header: { show: true, title: "Add New Post" },
+          header: { show: true, title: "Add New Listing" },
           modalStates: { show, handleOpen, handleClose },
         }}
       >
@@ -179,27 +181,12 @@ const CreatePostForm = () => {
                   }`}
                 >
                   <option value="PUBLISHED">Publish</option>
-                  <option value="DRAFT">Draft</option>
                 </select>
                 {errors.status && (
                   <p className="text-danger">status is required</p>
                 )}
               </div>
-              <div className="mb-3 col-md-12">
-                <label className="form-label">
-                  <strong>Description</strong>
-                </label>
-                <input
-                  {...register("description", { required: true })}
-                  type="text"
-                  className={`form-control ${
-                    errors.description ? "is-invalid" : ""
-                  }`}
-                />
-                {errors.description && (
-                  <p className="text-danger">Description is required</p>
-                )}
-              </div>
+
               <div className="col-12 row">
                 <RecursiveCategorySelector
                   categories={categories}
@@ -213,7 +200,7 @@ const CreatePostForm = () => {
               </div>
               <div className="col-12 my-5">
                 <label
-                  htmlFor="postTag"
+                  htmlFor="listingTag"
                   className="block text-sm font-medium text-gray"
                 >
                   Tags {/* <span className="required"> * </span> */}
@@ -252,7 +239,7 @@ const CreatePostForm = () => {
               <div className="col-md-6">
                 <FileUpload onChange={uploadBg} />
 
-                {errors.image && (
+                {errors.attachments && (
                   <div className="invalid-feedback">
                     Background image is required
                   </div>
@@ -278,11 +265,25 @@ const CreatePostForm = () => {
                 </label>
                 <Editor
                   tinymceScriptSrc="/tinymce/tinymce.min.js"
-                  onEditorChange={(newValue) => setValue("body", newValue)}
+                  onEditorChange={(newValue) =>
+                    setValue("description", newValue)
+                  }
                   init={tinyMCEInit}
+                  initialValue={` 
+                    username        String
+                    url             String
+                    followers       Int
+                    engagementRate  Float
+                    averageLikes    Int
+                    averageComments Int
+                    bio             String?
+                    description     String?
+                    `}
                 />
-                {errors.body && (
-                  <div className="invalid-feedback">{errors.body.message}</div>
+                {errors.description && (
+                  <div className="invalid-feedback">
+                    {errors.description.message}
+                  </div>
                 )}
               </div>
             </div>
@@ -304,7 +305,7 @@ const CreatePostForm = () => {
                   size="0.7rem"
                 />
               ) : (
-                `${btnLabel === "Published" ? "Publish" : btnLabel} Post`
+                `${btnLabel === "Published" ? "Publish" : btnLabel} Listing`
               )}
             </Button>
           </div>
@@ -314,4 +315,4 @@ const CreatePostForm = () => {
   );
 };
 
-export default React.memo(CreatePostForm);
+export default React.memo(CreateListingForm);

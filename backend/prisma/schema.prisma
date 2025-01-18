@@ -343,6 +343,10 @@ model Team {
 
 model Listing {
   id            String        @id @default(uuid())
+  categoryId    String
+  title         String
+  url           String
+  description   String?
   listingStatus ListingStatus @default(LISTED)
   sellerId      String
   price         Float
@@ -351,29 +355,9 @@ model Listing {
   deletedAt     DateTime?
 
   // Relations
-  seller         Vendor          @relation(fields: [sellerId], references: [id])
-  orders         Order[]
+  seller Vendor  @relation(fields: [sellerId], references: [id])
+  orders Order[]
   // attachments    Attachment[]
-  accountDetails AccountDetails?
-}
-
-model AccountDetails {
-  id              String    @id @default(uuid())
-  categoryId      String
-  username        String
-  url             String
-  followers       Int
-  engagementRate  Float
-  averageLikes    Int
-  averageComments Int
-  bio             String?
-  description     String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt()
-  deletedAt       DateTime?
-  // Relations
-  listingId       String?   @unique
-  listing         Listing?  @relation(fields: [listingId], references: [id])
 }
 
 model Cart {

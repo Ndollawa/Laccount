@@ -386,57 +386,7 @@ useEffect(() => {
 											<option data-thumbnail="dashboard-assets/images/svg/btc.svg">Bitcoin</option>
 										</select>
 										<div className="table-responsive">
-											<table className="table text-center bg-info-hover tr-rounded order-tbl">
-												<thead>
-													<tr>
-														<th className="text-left">Price</th>
-														<th className="text-center">Amount</th>
-														<th className="text-right">Total</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<td className="text-left">82.3</td>
-														<td>0.15</td>
-														<td className="text-right">$134,12</td>
-													</tr>
-													<tr>
-														<td className="text-left">83.9</td>
-														<td>0.18</td>
-														<td className="text-right">$237,31</td>
-													</tr>
-													<tr>
-														<td className="text-left">84.2</td>
-														<td>0.25</td>
-														<td className="text-right">$252,58</td>
-													</tr>
-													<tr>
-														<td className="text-left">86.2</td>
-														<td>0.35</td>
-														<td className="text-right">$126,26</td>
-													</tr>
-													<tr>
-														<td className="text-left">91.6</td>
-														<td>0.75</td>
-														<td className="text-right">$46,92</td>
-													</tr>
-													<tr>
-														<td className="text-left">92.6</td>
-														<td>0.21</td>
-														<td className="text-right">$123,27</td>
-													</tr>
-													<tr>
-														<td className="text-left">93.9</td>
-														<td>0.55</td>
-														<td className="text-right">$212,56</td>
-													</tr>
-													<tr>
-														<td className="text-left">94.2</td>
-														<td>0.18</td>
-														<td className="text-right">$129,26</td>
-													</tr>
-												</tbody>
-											</table>
+										<Listing/>
 										</div>
 									</div>
 									<div className="card-footer border-0 p-0 caret">
